@@ -376,7 +376,7 @@ if(!class_exists('popoveradmin')) {
 						}
 
 						//$popover_count
-						if(!isset($popover_count)) {
+						if(!isset($popover_check['count'])) {
 							$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
 						}
 
@@ -438,7 +438,7 @@ if(!class_exists('popoveradmin')) {
 									}
 
 									//$popover_count
-									if(isset($popover_count)) {
+									if(isset($popover_check['count'])) {
 										$this->admin_sidebar('count','Popover shown less than', true);
 									} else {
 										$this->admin_sidebar('count','Popover shown less than', false);
