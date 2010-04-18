@@ -16,6 +16,10 @@ if(!class_exists('popoveradmin')) {
 
 			add_action( 'admin_menu', array(&$this, 'add_menu_pages' ) );
 
+			// Header actions
+			add_action('load-wpmu-admin_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
+			add_action('load-settings_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
+
 		}
 
 		function popoveradmin() {
@@ -40,7 +44,374 @@ if(!class_exists('popoveradmin')) {
 			return $arrayin;
 		}
 
+		function update_admin_header_popover() {
+
+		}
+
+		function add_admin_header_popover() {
+
+			wp_enqueue_script('popoveradminjs', popover_url('popoverincludes/js/popoveradmin.js'), array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ), $this->build);
+			wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popoveradmin.css'), array('widgets'), $this->build);
+
+			$this->update_admin_header_popover();
+		}
+
 		function handle_admin_panel() {
+
+			global $page;
+
+			if(function_exists('get_site_option') && defined('PO_GLOBAL')) {
+				$updateoption = 'update_site_option';
+				$getoption = 'get_site_option';
+			} else {
+				$updateoption = 'update_option';
+				$getoption = 'get_option';
+			}
+
+			$popover_content = stripslashes($getoption('popover_content', ''));
+			$popover_size = $getoption('popover_size', array('width' => '500px', 'height' => '200px'));
+			$popover_location = $getoption('popover_location', array('left' => '100px', 'top' => '100px'));
+			$popover_colour = $getoption('popover_colour', array('back' => 'FFFFFF', 'fore' => '000000'));
+			$popover_margin = $getoption('popover_margin', array('left' => '0px', 'top' => '0px', 'right' => '0px', 'bottom' => '0px'));
+
+			$popover_size = $this->sanitise_array($popover_size);
+			$popover_location = $this->sanitise_array($popover_location);
+			$popover_colour = $this->sanitise_array($popover_colour);
+			$popover_margin = $this->sanitise_array($popover_margin);
+
+			$popover_check = $getoption('popover_check', array());
+			$popover_ereg = $getoption('popover_ereg', '');
+			$popover_count = $getoption('popover_count', '3');
+
+			$popover_usejs = $getoption('popover_usejs', 'no' );
+
+			?>
+			<div class='wrap nosubsub'>
+				<div class="icon32" id="icon-themes"><br></div>
+				<h2><?php echo __('Pop Over content settings','popover'); ?></h2>
+
+				<?php
+				if ( isset($_GET['msg']) ) {
+					echo '<div id="message" class="updated fade"><p>' . $messages[(int) $_GET['msg']] . '</p></div>';
+					$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
+				}
+				?>
+
+				<div class='popover-liquid-left'>
+
+					<div id='popover-left'>
+						<form action='?page=<?php echo $page; ?>' name='popoveredit' method='post'>
+
+							<input type='hidden' name='beingdragged' id='beingdragged' value='' />
+
+
+						<div id='edit-popover' class='popover-holder-wrap'>
+							<div class='sidebar-name no-movecursor'>
+								<h3><?php echo _e('Edit Popover settings','popover'); ?></h3>
+							</div>
+							<div class='popover-holder'>
+								<div class='popover-details'>
+								<label for='popovercontent'><?php _e('Popover content','popover'); ?></label><br/>
+								<textarea name='popovercontent' id='popovercontent' style='width: 98%' rows='5' cols='10'><?php echo stripslashes($popover_content); ?></textarea>
+
+								</div>
+
+								<h3><?php _e('Active rules','popover'); ?></h3>
+								<p class='description'><?php _e('These are the rules that will determine if a popover should show when a visitor arrives at your website.','popover'); ?></p>
+								<div id='positive-rules-holder'>
+									<?php
+										//admin_main
+										if(isset($popover_check['isloggedin'])) {
+											$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
+										}
+
+										if(isset($popover_check['loggedin'])) {
+											$this->admin_main('loggedin','Visitor is not logged in', 'Shows the popover if the user is <strong>not</strong> logged in to your site.', true);
+										}
+
+										if(isset($popover_check['commented'])) {
+											$this->admin_main('commented','Visitor has never commented', 'Shows the popover if the user has never left a comment.', true);
+										}
+
+										if(isset($popover_check['searchengine'])) {
+											$this->admin_main('searchengine','Visit via a search engine', 'Shows the popover if the user arrived via a search engine.', true);
+										}
+
+										if(isset($popover_check['internal'])) {
+											$this->admin_main('internal','Visit not via an Internal link', 'Shows the popover if the user did not arrive on this page via another page on your site.', true);
+										}
+
+										if(isset($popover_check['referrer'])) {
+											$this->admin_main('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', true);
+										}
+
+										//$popover_count
+										if(isset($popover_count)) {
+											$this->admin_main('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', true);
+										}
+									?>
+								</div>
+								<div id='positive-rules' class='droppable-rules popovers-sortable'>
+									<?php _e('Drop here','membership'); ?>
+								</div>
+
+
+								<h3><?php _e('Appearance settings','popover'); ?></h3>
+								<table class='form-table' style=''>
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'><?php _e('Pop Over Size','popover'); ?></th>
+										<td valign='top'>
+											<?php _e('Width:','popover'); ?>&nbsp;
+											<input type='text' name='popoverwidth' id='popoverwidth' style='width: 5em;' value='<?php echo $popover_size['width']; ?>' />&nbsp;
+											<?php _e('Height:','popover'); ?>&nbsp;
+											<input type='text' name='popoverheight' id='popoverheight' style='width: 5em;' value='<?php echo $popover_size['height']; ?>' />
+										</td>
+									</tr>
+
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'><?php _e('Pop Over Position','popover'); ?></th>
+										<td valign='top'>
+											<?php _e('Left:','popover'); ?>&nbsp;
+											<input type='text' name='popoverleft' id='popoverleft' style='width: 5em;' value='<?php echo $popover_location['left']; ?>' />&nbsp;
+											<?php _e('Top:','popover'); ?>&nbsp;
+											<input type='text' name='popovertop' id='popovertop' style='width: 5em;' value='<?php echo $popover_location['top']; ?>' />
+										</td>
+									</tr>
+
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'><?php _e('Pop Over Margins','popover'); ?></th>
+										<td valign='top'>
+											<?php _e('Left:','popover'); ?>&nbsp;
+											<input type='text' name='popovermarginleft' style='width: 5em;' value='<?php echo $popover_margin['left']; ?>' />&nbsp;
+											<?php _e('Right:','popover'); ?>&nbsp;
+											<input type='text' name='popovermarginright' style='width: 5em;' value='<?php echo $popover_margin['right']; ?>' /><br/>
+											<?php _e('Top:','popover'); ?>&nbsp;
+											<input type='text' name='popovermargintop' style='width: 5em;' value='<?php echo $popover_margin['top']; ?>' />&nbsp;
+											<?php _e('Bottom:','popover'); ?>&nbsp;
+											<input type='text' name='popovermarginbottom' style='width: 5em;' value='<?php echo $popover_margin['bottom']; ?>' />
+										</td>
+									</tr>
+
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'>&nbsp;</th>
+										<td valign='top'>
+											<?php _e('or just override the above with JS','popover'); ?>&nbsp;<input type='checkbox' name='popoverusejs' id='popoverusejs' value='yes' <?php if($popover_usejs == 'yes') echo "checked='checked'"; ?> />
+										</td>
+									</tr>
+
+									</table>
+									<table class='form-table'>
+
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'><?php _e('Background Colour','popover'); ?></th>
+										<td valign='top'>
+											<?php _e('Hex:','popover'); ?>&nbsp;#
+											<input type='text' name='popoverbackground' id='popoverbackground' style='width: 10em;' value='<?php echo $popover_colour['back']; ?>' />
+										</td>
+									</tr>
+
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'><?php _e('Font Colour','popover'); ?></th>
+										<td valign='top'>
+											<?php _e('Hex:','popover'); ?>&nbsp;#
+											<input type='text' name='popoverforeground' id='popoverforeground' style='width: 10em;' value='<?php echo $popover_colour['fore']; ?>' />
+										</td>
+									</tr>
+
+								</table>
+
+
+								<div class='buttons'>
+										<?php
+										wp_original_referer_field(true, 'previous'); wp_nonce_field('update-' . $popover->id);
+										?>
+										<input type='submit' value='<?php _e('Update', 'membership'); ?>' class='button' />
+										<input type='hidden' name='action' value='updated' />
+								</div>
+
+							</div>
+						</div>
+						</form>
+					</div>
+
+
+					<div id='hiden-actions'>
+					<?php
+
+						if(!isset($popover_check['isloggedin'])) {
+							$this->admin_main('isloggedin','Visitor is logged in', true);
+						}
+
+						if(!isset($popover_check['loggedin'])) {
+							$this->admin_main('loggedin','Visitor is not logged in', true);
+						}
+
+						if(!isset($popover_check['commented'])) {
+							$this->admin_main('commented','Visitor has never commented', true);
+						}
+
+						if(!isset($popover_check['searchengine'])) {
+							$this->admin_main('searchengine','Visit via a search engine', true);
+						}
+
+						if(!isset($popover_check['internal'])) {
+							$this->admin_main('internal','Visit not via an Internal link', true);
+						}
+
+						if(!isset($popover_check['referrer'])) {
+							$this->admin_main('referrer','Visit via specific referer', true);
+						}
+
+						//$popover_count
+						if(!isset($popover_count)) {
+							$this->admin_main('count','Popover shown less than', true);
+						}
+
+					?>
+					</div> <!-- hidden-actions -->
+
+				</div> <!-- popover-liquid-left -->
+
+				<div class='popover-liquid-right'>
+					<div class="popover-holder-wrap">
+
+						<div class="sidebar-name no-movecursor">
+							<h3><?php _e('Rules', 'popover'); ?></h3>
+						</div>
+						<div class="section-holder" id="sidebar-rules" style="min-height: 98px;">
+							<ul class='popovers popovers-draggable'>
+								<?php
+									if(isset($popover_check['isloggedin'])) {
+										$this->admin_sidebar('isloggedin','Visitor is logged in', true);
+									} else {
+										$this->admin_sidebar('isloggedin','Visitor is logged in', false);
+									}
+
+									if(isset($popover_check['loggedin'])) {
+										$this->admin_sidebar('loggedin','Visitor is not logged in', true);
+									} else {
+										$this->admin_sidebar('loggedin','Visitor is not logged in', false);
+									}
+
+									if(isset($popover_check['commented'])) {
+										$this->admin_sidebar('commented','Visitor has never commented', true);
+									} else {
+										$this->admin_sidebar('commented','Visitor has never commented', false);
+									}
+
+									if(isset($popover_check['searchengine'])) {
+										$this->admin_sidebar('searchengine','Visit via a search engine', true);
+									} else {
+										$this->admin_sidebar('searchengine','Visit via a search engine', false);
+									}
+
+									if(isset($popover_check['internal'])) {
+										$this->admin_sidebar('internal','Visit not via an Internal link', true);
+									} else {
+										$this->admin_sidebar('internal','Visit not via an Internal link', false);
+									}
+
+									if(isset($popover_check['referrer'])) {
+										$this->admin_sidebar('referrer','Visit via specific referer', true);
+									} else {
+										$this->admin_sidebar('referrer','Visit via specific referer', false);
+									}
+
+									//$popover_count
+									if(isset($popover_count)) {
+										$this->admin_sidebar('count','Popover shown less than', true);
+									} else {
+										$this->admin_sidebar('count','Popover shown less than', false);
+									}
+
+									/*
+										<tr>
+											<td valign='middle' style='width: 5%;'>
+												<input type='checkbox' name='popovercheck[isloggedin]' <?php if(isset($popover_check['isloggedin'])) echo "checked='checked'"; ?> />
+											</td>
+											<th valign='bottom' scope='row'><?php _e('Visitor is logged in.','popover'); ?></th>
+										</tr>
+										<tr>
+											<td valign='middle' style='width: 5%;'>
+												<input type='checkbox' name='popovercheck[loggedin]' <?php if(isset($popover_check['loggedin'])) echo "checked='checked'"; ?> />
+											</td>
+											<th valign='bottom' scope='row'><?php _e('Visitor is not logged in.','popover'); ?></th>
+										</tr>
+										<tr>
+											<td valign='middle' style='width: 5%;'>
+												<input type='checkbox' name='popovercheck[commented]' <?php if(isset($popover_check['commented'])) echo "checked='checked'"; ?> />
+											</td>
+											<th valign='bottom' scope='row'><?php _e('Visitor has never commented here before.','popover'); ?></th>
+										</tr>
+										<tr>
+											<td valign='middle' style='width: 5%;'>
+												<input type='checkbox' name='popovercheck[searchengine]' <?php if(isset($popover_check['searchengine'])) echo "checked='checked'"; ?> />
+											</td>
+											<th valign='bottom' scope='row'><?php _e('Visitor came from a search engine.','popover'); ?></th>
+										</tr>
+										<tr>
+											<td valign='middle' style='width: 5%;'>
+												<input type='checkbox' name='popovercheck[internal]' <?php if(isset($popover_check['internal'])) echo "checked='checked'"; ?> />
+											</td>
+											<th valign='bottom' scope='row'><?php _e('Visitor did not come from an internal page.','popover'); ?></th>
+										</tr>
+										<tr>
+											<td valign='middle' style='width: 5%;'>
+												<input type='checkbox' name='popovercheck[referrer]' <?php if(isset($popover_check['referrer'])) echo "checked='checked'"; ?> />
+											</td>
+											<th valign='bottom' scope='row'><?php _e('Visitor referrer matches','popover'); ?>&nbsp;
+											<input type='text' name='popoverereg' id='popoverereg' style='width: 10em;' value='<?php echo htmlentities($popover_ereg,ENT_QUOTES, 'UTF-8'); ?>' />
+											</th>
+										</tr>
+
+										</table>
+
+										<p><?php _e('And the visitor has seen the pop over less than','popover'); ?>&nbsp;
+										<input type='text' name='popovercount' id='popovercount' style='width: 2em;' value='<?php echo htmlentities($popover_count,ENT_QUOTES, 'UTF-8'); ?>' />&nbsp;
+										<?php _e('times','popover'); ?></p>
+										*/
+
+
+
+								?>
+							</ul>
+						</div>
+
+					</div> <!-- popover-holder-wrap -->
+
+				</div> <!-- popover-liquid-left -->
+
+			</div> <!-- wrap -->
+
+			<?php
+		}
+
+		function admin_sidebar($id, $title, $data = false) {
+			?>
+			<li class='popover-draggable' id='<?php echo $id; ?>' <?php if($data === true) echo "style='display:none;'"; ?>>
+				<div class='action action-draggable'>
+					<div class='action-top'>
+					<?php _e($title,'popover'); ?>
+					</div>
+				</div>
+			</li>
+			<?php
+		}
+
+		function admin_main($id, $title, $message, $data = false) {
+			if(!$data) $data = array();
+			?>
+			<div class='popover-operation' id='main-<?php echo $id; ?>'>
+				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
+				<div class='inner-operation'>
+					<p><? _e($message, 'popover'); ?></p>
+					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
+				</div>
+			</div>
+			<?php
+		}
+
+		function handle_admin_panelold() {
 
 			global $allowedposttags;
 
