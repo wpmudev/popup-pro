@@ -33,15 +33,6 @@ function popoverReady() {
 				}
 	});
 
-	jQuery('#positive-rules-holder').sortable({
-		opacity: 0.7,
-		helper: 'clone',
-		placeholder: 'placeholder-rules',
-		update: function(event, ui) {
-				jQuery('#in-positive-rules').val(',' + jQuery('#positive-rules-holder').sortable('toArray').join(',').replace(/main-/gi, ''));
-			}
-	});
-
 	jQuery('a.removelink').click(popoverremoveaction);
 
 
