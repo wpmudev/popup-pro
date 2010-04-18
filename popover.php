@@ -4,7 +4,7 @@ Plugin Name: Popover plugin
 Plugin URI: http://premium.wpmudev.org
 Description: This plugin adds a customisable popover to a site. The content, size, position can be changed and rules determining if the popover should show or not.
 Author: Barry (Incsub)
-Version: 1.6
+Version: 2.0 beta
 Author URI: http://caffeinatedb.com
 WDP ID: 123
 

@@ -46,6 +46,103 @@ if(!class_exists('popoveradmin')) {
 
 		function update_admin_header_popover() {
 
+			global $action, $page;
+
+			wp_reset_vars( array('action', 'page') );
+
+			if($action == 'updated') {
+				check_admin_referer('update-popover');
+
+				if(function_exists('get_site_option') && defined('PO_GLOBAL')) {
+					$updateoption = 'update_site_option';
+					$getoption = 'get_site_option';
+				} else {
+					$updateoption = 'update_option';
+					$getoption = 'get_option';
+				}
+
+				if(isset($_POST['popovercontent'])) {
+					if(defined('PO_USEKSES')) {
+						$updateoption('popover_content', wp_kses($_POST['popovercontent'], $allowedposttags));
+					} else {
+						$updateoption('popover_content', $_POST['popovercontent']);
+					}
+
+				}
+
+				if(isset($_POST['popoverwidth']) || isset($_POST['popoverheight'])) {
+
+					$width = $_POST['popoverwidth'];
+					$height = $_POST['popoverheight'];
+
+					if($width == '') $width = '500px';
+					if($height == '') $height = '200px';
+
+					$updateoption('popover_size', array("width" => $width, "height" => $height));
+				}
+
+				if(isset($_POST['popoverleft']) || isset($_POST['popovertop'])) {
+
+					$left = $_POST['popoverleft'];
+					$top = $_POST['popovertop'];
+
+					if($left == '') $left = '100px';
+					if($top == '') $top = '100px';
+
+					$updateoption('popover_location', array("left" => $left, "top" => $top));
+				}
+
+				if(isset($_POST['popovermargintop']) || isset($_POST['popovermarginleft']) || isset($_POST['popovermarginright']) || isset($_POST['popovermarginbottom'])) {
+
+					$mleft = $_POST['popovermarginleft'];
+					$mtop = $_POST['popovermargintop'];
+					$mright = $_POST['popovermarginright'];
+					$mbottom = $_POST['popovermarginbottom'];
+
+					if($mleft == '') $mleft = '0px';
+					if($mtop == '') $mtop = '0px';
+					if($mright == '') $mright = '0px';
+					if($mbottom == '') $mbottom = '0px';
+
+					$updateoption('popover_margin', array('left' => $mleft, 'top' => $mtop, 'right' => $mright, 'bottom' => $mbottom));
+
+				}
+
+				if(isset($_POST['popoverbackground']) || isset($_POST['popoverforeground'])) {
+
+					$back = $_POST['popoverbackground'];
+					$fore = $_POST['popoverforeground'];
+
+					if($back == '') $back = 'FFFFFF';
+					if($fore == '') $fore = '000000';
+
+					$updateoption('popover_colour', array("back" => $back, "fore" => $fore));
+				}
+
+				if(isset($_POST['popovercheck'])) {
+
+					$updateoption('popover_check', $_POST['popovercheck']);
+
+					if(isset($_POST['popoverereg'])) {
+						$updateoption('popover_ereg', $_POST['popoverereg']);
+					}
+
+					if(isset($_POST['popovercount'])) {
+						$updateoption('popover_count', intval($_POST['popovercount']) );
+					}
+
+				}
+
+				if(isset($_POST['popoverusejs'])) {
+					$updateoption('popover_usejs', 'yes' );
+				} else {
+					$updateoption('popover_usejs', 'no' );
+				}
+
+				wp_safe_redirect( add_query_arg( 'msg', 1, 'admin.php?page=' . $page ) );
+
+			}
+
 		}
 
 		function add_admin_header_popover() {
@@ -84,6 +181,10 @@ if(!class_exists('popoveradmin')) {
 			$popover_count = $getoption('popover_count', '3');
 
 			$popover_usejs = $getoption('popover_usejs', 'no' );
+
+			$messages = array();
+
+			$messages[1] = __('Your settings have been saved.','popover');
 
 			?>
 			<div class='wrap nosubsub'>
@@ -142,12 +243,12 @@ if(!class_exists('popoveradmin')) {
 										}
 
 										if(isset($popover_check['referrer'])) {
-											$this->admin_main('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', true);
+											$this->admin_referer('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', $popover_ereg);
 										}
 
 										//$popover_count
 										if(isset($popover_count)) {
-											$this->admin_main('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', true);
+											$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
 										}
 									?>
 								</div>
@@ -223,7 +324,7 @@ if(!class_exists('popoveradmin')) {
 
 								<div class='buttons'>
 										<?php
-										wp_original_referer_field(true, 'previous'); wp_nonce_field('update-' . $popover->id);
+										wp_original_referer_field(true, 'previous'); wp_nonce_field('update-popover');
 										?>
 										<input type='submit' value='<?php _e('Update', 'membership'); ?>' class='button' />
 										<input type='hidden' name='action' value='updated' />
@@ -259,12 +360,12 @@ if(!class_exists('popoveradmin')) {
 						}
 
 						if(!isset($popover_check['referrer'])) {
-							$this->admin_main('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', true);
+							$this->admin_referer('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', $popover_ereg);
 						}
 
 						//$popover_count
 						if(!isset($popover_count)) {
-							$this->admin_main('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', true);
+							$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
 						}
 
 					?>
@@ -356,6 +457,35 @@ if(!class_exists('popoveradmin')) {
 				<h2 class='sidebar-name no-movecursor'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
 				<div class='inner-operation'>
 					<p><? _e($message, 'popover'); ?></p>
+					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
+				</div>
+			</div>
+			<?php
+		}
+
+		function admin_referer($id, $title, $message, $data = false) {
+			if(!$data) $data = array();
+			?>
+			<div class='popover-operation' id='main-<?php echo $id; ?>'>
+				<h2 class='sidebar-name no-movecursor'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
+				<div class='inner-operation'>
+					<p><? _e($message, 'popover'); ?></p>
+					<input type='text' name='popoverereg' id='popoverereg' style='width: 10em;' value='<?php echo esc_html($data); ?>' />
+					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
+				</div>
+			</div>
+			<?php
+		}
+
+		function admin_viewcount($id, $title, $message, $data = false) {
+			if(!$data) $data = array();
+			?>
+			<div class='popover-operation' id='main-<?php echo $id; ?>'>
+				<h2 class='sidebar-name no-movecursor'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
+				<div class='inner-operation'>
+					<p><? _e($message, 'popover'); ?></p>
+					<input type='text' name='popovercount' id='popovercount' style='width: 2em;' value='<?php echo esc_html($data); ?>' />&nbsp;
+					<?php _e('times','popover'); ?>
 					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
 				</div>
 			</div>
