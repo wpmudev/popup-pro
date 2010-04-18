@@ -16,10 +16,12 @@ if(!class_exists('popoveradmin')) {
 
 			add_action( 'admin_menu', array(&$this, 'add_menu_pages' ) );
 
-			// Header actions
+			// Header actions - WPMU 2.9.x in Site admin menu
 			add_action('load-wpmu-admin_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
+			// WP2.9.X / WP3.x in settings admin menu
 			add_action('load-settings_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
-
+			// WP3 in "System Admin" menu
+			add_action('load-ms-admin_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
 		}
 
 		function popoveradmin() {
