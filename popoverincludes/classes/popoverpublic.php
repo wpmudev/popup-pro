@@ -5,7 +5,7 @@ if(!class_exists('popoverpublic')) {
 	class popoverpublic {
 
 		var $mylocation = '';
-		var $build = 1;
+		var $build = 3;
 
 		function __construct() {
 
@@ -40,7 +40,7 @@ if(!class_exists('popoverpublic')) {
 				foreach($order as $key) {
 					switch ($key) {
 
-						case "notsupporter":
+						case "supporter":
 											if(function_exists('is_supporter') && !is_supporter()) {
 												$show = true;
 											} else {

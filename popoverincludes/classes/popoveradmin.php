@@ -4,7 +4,7 @@ if(!class_exists('popoveradmin')) {
 
 	class popoveradmin {
 
-		var $build = 2;
+		var $build = 3;
 
 		var $db;
 
@@ -46,7 +46,7 @@ if(!class_exists('popoveradmin')) {
 
 		function update_admin_header_popover() {
 
-			global $action, $page;
+			global $action, $page, $allowedposttags;
 
 			wp_reset_vars( array('action', 'page') );
 
@@ -235,6 +235,9 @@ if(!class_exists('popoveradmin')) {
 
 											switch($key) {
 
+												case 'supporter':		if( function_exists('is_supporter') ) $this->admin_main('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', true);
+																		break;
+
 												case 'isloggedin':		$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
 																		break;
 												case 'loggedin':		$this->admin_main('loggedin','Visitor is not logged in', 'Shows the popover if the user is <strong>not</strong> logged in to your site.', true);
@@ -344,6 +347,10 @@ if(!class_exists('popoveradmin')) {
 					<div id='hiden-actions'>
 					<?php
 
+						if(!isset($popover_check['supporter']) && function_exists('is_supporter')) {
+							$this->admin_main('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', true);
+						}
+
 						if(!isset($popover_check['isloggedin'])) {
 							$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
 						}
@@ -387,6 +394,13 @@ if(!class_exists('popoveradmin')) {
 						<div class="section-holder" id="sidebar-rules" style="min-height: 98px;">
 							<ul class='popovers popovers-draggable'>
 								<?php
+									if(isset($popover_check['supporter']) && function_exists('is_supporter')) {
+										$this->admin_sidebar('supporter','Blog is not a supporter', true);
+									} elseif(function_exists('is_supporter')) {
+										$this->admin_sidebar('supporter','Blog is not a supporter', false);
+									}
+
+
 									if(isset($popover_check['isloggedin'])) {
 										$this->admin_sidebar('isloggedin','Visitor is logged in', true);
 									} else {
