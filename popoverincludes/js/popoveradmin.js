@@ -8,6 +8,12 @@ function popoverremoveaction() {
 	return false;
 }
 
+function popoverremovemessage() {
+
+	jQuery('#upmessage').remove();
+	return false;
+}
+
 function popoverReady() {
 
 	jQuery('.popover-draggable').draggable({
@@ -34,6 +40,7 @@ function popoverReady() {
 	});
 
 	jQuery('a.removelink').click(popoverremoveaction);
+	jQuery('a#closemessage').click(popoverremovemessage);
 
 
 }

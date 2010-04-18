@@ -139,7 +139,7 @@ if(!class_exists('popoveradmin')) {
 					$updateoption('popover_usejs', 'no' );
 				}
 
-				wp_safe_redirect( add_query_arg( 'msg', 1, 'admin.php?page=' . $page ) );
+				wp_safe_redirect( add_query_arg( 'msg', 1, wp_get_referer() ) );
 
 			}
 
@@ -191,12 +191,7 @@ if(!class_exists('popoveradmin')) {
 				<div class="icon32" id="icon-themes"><br></div>
 				<h2><?php echo __('Pop Over content settings','popover'); ?></h2>
 
-				<?php
-				if ( isset($_GET['msg']) ) {
-					echo '<div id="message" class="updated fade"><p>' . $messages[(int) $_GET['msg']] . '</p></div>';
-					$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
-				}
-				?>
+
 
 				<div class='popover-liquid-left'>
 
@@ -211,7 +206,18 @@ if(!class_exists('popoveradmin')) {
 								<h3><?php echo _e('Edit Popover settings','popover'); ?></h3>
 							</div>
 							<div class='popover-holder'>
+
 								<div class='popover-details'>
+
+									<?php
+									if ( isset($_GET['msg']) ) {
+										echo '<div id="upmessage" class="updatedmessage"><p>' . $messages[(int) $_GET['msg']];
+										echo '<a href="#close" id="closemessage">' . __('close', 'popover') . '</a>';
+										echo '</p></div>';
+										$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
+									}
+									?>
+
 								<label for='popovercontent'><?php _e('Popover content','popover'); ?></label><br/>
 								<textarea name='popovercontent' id='popovercontent' style='width: 98%' rows='5' cols='10'><?php echo stripslashes($popover_content); ?></textarea>
 

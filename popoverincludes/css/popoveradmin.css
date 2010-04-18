@@ -1,3 +1,5 @@
+/* @override http://dev.site/wp-content/plugins/popover/popoverincludes/css/popoveradmin.css?ver=2 */
+
 div.popover-liquid-left {
 	float: left;
 	clear: left;
@@ -131,7 +133,7 @@ input.wide {
 }
 
 .droppable-rules {
-	width: 95%;
+	margin-right: 15px;
 	margin-left: 15px;
 	margin-bottom: 20px;
 	-moz-border-radius: 5px;
@@ -198,8 +200,7 @@ input.wide {
 }
 
 div.popover-operation {
-	float: left;
-	width: 95%;
+	margin-right: 15px;
 	margin-left: 15px;
 	margin-bottom: 20px;
 	-moz-border-radius: 8px;
@@ -207,6 +208,12 @@ div.popover-operation {
 	-khtml-border-radius: 8px;
 	border-radius: 8px;
 	border: 1px solid #ddd;
+}
+
+#upmessage p a {
+	text-decoration: none;
+	float:right; 
+	cursor: pointer;
 }
 
 h2.sidebar-name span {
@@ -274,3 +281,13 @@ div.buttons a.cancellink {
 .no-movecursor {
 	cursor: auto !Important;
 }
+
+#upmessage p {
+	padding: 5px;
+	margin-top: 0;
+	margin-bottom: 10px;
+	background-color: #ffffe0;
+	border: 1px solid #e6db55;
+	margin-right: 15px;
+}
+
