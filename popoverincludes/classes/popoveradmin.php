@@ -200,6 +200,7 @@ if(!class_exists('popoveradmin')) {
 
 							<input type='hidden' name='beingdragged' id='beingdragged' value='' />
 
+							<input type='hidden' name='popovercheck[order]' id='in-positive-rules' value='<? echo esc_attr($popover_check['order']); ?>' />
 
 						<div id='edit-popover' class='popover-holder-wrap'>
 							<div class='sidebar-name no-movecursor'>
@@ -227,35 +228,33 @@ if(!class_exists('popoveradmin')) {
 								<p class='description'><?php _e('These are the rules that will determine if a popover should show when a visitor arrives at your website.','popover'); ?></p>
 								<div id='positive-rules-holder'>
 									<?php
-										//admin_main
-										if(isset($popover_check['isloggedin'])) {
-											$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
+
+										$order = explode(',', $popover_check['order']);
+
+										foreach($order as $key) {
+
+											switch($key) {
+
+												case 'isloggedin':		$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
+																		break;
+												case 'loggedin':		$this->admin_main('loggedin','Visitor is not logged in', 'Shows the popover if the user is <strong>not</strong> logged in to your site.', true);
+																		break;
+												case 'commented':		$this->admin_main('commented','Visitor has never commented', 'Shows the popover if the user has never left a comment.', true);
+																		break;
+												case 'searchengine':	$this->admin_main('searchengine','Visit via a search engine', 'Shows the popover if the user arrived via a search engine.', true);
+																		break;
+												case 'internal':		$this->admin_main('internal','Visit not via an Internal link', 'Shows the popover if the user did not arrive on this page via another page on your site.', true);
+																		break;
+												case 'referrer':		$this->admin_referer('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', $popover_ereg);
+																		break;
+												case 'count':			$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
+																		break;
+
+											}
+
 										}
 
-										if(isset($popover_check['loggedin'])) {
-											$this->admin_main('loggedin','Visitor is not logged in', 'Shows the popover if the user is <strong>not</strong> logged in to your site.', true);
-										}
 
-										if(isset($popover_check['commented'])) {
-											$this->admin_main('commented','Visitor has never commented', 'Shows the popover if the user has never left a comment.', true);
-										}
-
-										if(isset($popover_check['searchengine'])) {
-											$this->admin_main('searchengine','Visit via a search engine', 'Shows the popover if the user arrived via a search engine.', true);
-										}
-
-										if(isset($popover_check['internal'])) {
-											$this->admin_main('internal','Visit not via an Internal link', 'Shows the popover if the user did not arrive on this page via another page on your site.', true);
-										}
-
-										if(isset($popover_check['referrer'])) {
-											$this->admin_referer('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', $popover_ereg);
-										}
-
-										//$popover_count
-										if(isset($popover_count)) {
-											$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
-										}
 									?>
 								</div>
 								<div id='positive-rules' class='droppable-rules popovers-sortable'>
@@ -460,7 +459,7 @@ if(!class_exists('popoveradmin')) {
 			if(!$data) $data = array();
 			?>
 			<div class='popover-operation' id='main-<?php echo $id; ?>'>
-				<h2 class='sidebar-name no-movecursor'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
+				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
 				<div class='inner-operation'>
 					<p><? _e($message, 'popover'); ?></p>
 					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
@@ -473,7 +472,7 @@ if(!class_exists('popoveradmin')) {
 			if(!$data) $data = array();
 			?>
 			<div class='popover-operation' id='main-<?php echo $id; ?>'>
-				<h2 class='sidebar-name no-movecursor'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
+				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
 				<div class='inner-operation'>
 					<p><? _e($message, 'popover'); ?></p>
 					<input type='text' name='popoverereg' id='popoverereg' style='width: 10em;' value='<?php echo esc_html($data); ?>' />
@@ -487,7 +486,7 @@ if(!class_exists('popoveradmin')) {
 			if(!$data) $data = array();
 			?>
 			<div class='popover-operation' id='main-<?php echo $id; ?>'>
-				<h2 class='sidebar-name no-movecursor'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
+				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
 				<div class='inner-operation'>
 					<p><? _e($message, 'popover'); ?></p>
 					<input type='text' name='popovercount' id='popovercount' style='width: 2em;' value='<?php echo esc_html($data); ?>' />&nbsp;

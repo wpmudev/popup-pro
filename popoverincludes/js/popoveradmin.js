@@ -5,6 +5,9 @@ function popoverremoveaction() {
 	jQuery('#main-' + sectionname).appendTo('#hiden-actions');
 	jQuery('#' + sectionname).show();
 
+	// Move from the fields
+	jQuery('#in-positive-rules').val( jQuery('#in-positive-rules').val().replace(',' + sectionname, ''));
+
 	return false;
 }
 
@@ -35,8 +38,20 @@ function popoverReady() {
 					if(moving != '') {
 						jQuery('#main-' + moving).appendTo('#' + ruleplace + '-holder');
 						jQuery('#' + moving).hide();
+
+						// put the name in the relevant holding input field
+						jQuery('#in-' + ruleplace).val( jQuery('#in-' + ruleplace).val() + ',' + moving );
 					}
 				}
+	});
+
+	jQuery('#positive-rules-holder').sortable({
+		opacity: 0.7,
+		helper: 'clone',
+		placeholder: 'placeholder-rules',
+		update: function(event, ui) {
+				jQuery('#in-positive-rules').val(',' + jQuery('#positive-rules-holder').sortable('toArray').join(',').replace(/main-/gi, ''));
+			}
 	});
 
 	jQuery('a.removelink').click(popoverremoveaction);

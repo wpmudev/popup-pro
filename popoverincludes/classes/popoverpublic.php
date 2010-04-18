@@ -29,62 +29,73 @@ if(!class_exists('popoverpublic')) {
 				$getoption = 'get_option';
 			}
 
-			if($this->mylocation == 'mu-plugins') {
-				$getoption = 'get_site_option';
-				$location = WPMU_PLUGIN_URL;
-			} else {
-				$getoption = 'get_option';
-				if($this->mylocation == 'plugins') {
-					$location = WP_PLUGIN_URL;
-				} else {
-					$location = WP_PLUGIN_URL . "/" . $this->mylocation;
-				}
-			}
-
 			$popover_check = $getoption('popover_check', array());
 
 			$show = false;
 
 			if(!empty($popover_check)) {
-				foreach($popover_check as $key => $value) {
+
+				$order = explode(',', $popover_check['order']);
+
+				foreach($order as $key) {
 					switch ($key) {
 
 						case "notsupporter":
 											if(function_exists('is_supporter') && !is_supporter()) {
 												$show = true;
+											} else {
+												return false;
 											}
 											break;
 
 						case "loggedin":	if(!$this->is_loggedin()) {
 												$show = true;
+											} else {
+												return false;
 											}
 											break;
 
 						case "isloggedin":	if($this->is_loggedin()) {
 												$show = true;
+											} else {
+												return false;
 											}
 											break;
 
 						case "commented":	if(!$this->has_commented()) {
 												$show = true;
+											} else {
+												return false;
 											}
 											break;
 
 						case "searchengine":
 											if($this->is_fromsearchengine()) {
 												$show = true;
+											} else {
+												return false;
 											}
 											break;
 
 						case "internal":	$internal = str_replace('http://','',get_option('siteurl'));
 											if(!$this->referrer_matches(addcslashes($internal,"/"))) {
 												$show = true;
+											} else {
+												return false;
 											}
 											break;
 
 						case "referrer":	$match = $getoption('popover_ereg','');
 											if($this->is_fromsearchengine(addcslashes($match,"/"))) {
 												$show = true;
+											} else {
+												return false;
+											}
+											break;
+
+						case "count":		$popover_count = $getoption('popover_count', '3');
+											if($this->has_reached_limit($popover_count)) {
+												return false;;
 											}
 											break;
 
@@ -93,10 +104,6 @@ if(!class_exists('popoverpublic')) {
 			}
 
 			if($show == true) {
-				$popover_count = $getoption('popover_count', '3');
-				if($this->has_reached_limit($popover_count)) {
-					$show = false;
-				}
 
 				if($this->clear_forever()) {
 					$show = false;
@@ -106,11 +113,11 @@ if(!class_exists('popoverpublic')) {
 
 			if($show == true) {
 				// Show the advert
-				wp_enqueue_style('popovercss', popover_url('/popoverincludes/popover.css'), array(), $this->build);
-				wp_enqueue_script('popoverjs', popover_url('/popoverincludes/popover.js'), array('jquery'), $this->build);
+				wp_enqueue_style('popovercss', popover_url('popoverincludes/css/popover.css'), array(), $this->build);
+				wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
 
 				if($getoption('popover_usejs', 'no') == 'yes') {
-					wp_enqueue_script('popoveroverridejs', popover_url('/popoverincludes/popoversizing.js'), array('jquery'), $this->build);
+					wp_enqueue_script('popoveroverridejs', popover_url('popoverincludes/js/popoversizing.js'), array('jquery'), $this->build);
 				}
 
 				add_action('wp_footer', array(&$this, 'page_footer'));
