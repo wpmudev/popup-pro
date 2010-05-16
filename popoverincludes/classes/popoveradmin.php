@@ -16,6 +16,8 @@ if(!class_exists('popoveradmin')) {
 
 			add_action( 'admin_menu', array(&$this, 'add_menu_pages' ) );
 
+			add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
+
 			// Header actions - WPMU 2.9.x in Site admin menu
 			add_action('load-wpmu-admin_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
 			// WP2.9.X / WP3.x in settings admin menu
@@ -28,11 +30,21 @@ if(!class_exists('popoveradmin')) {
 			$this->__construct();
 		}
 
+		function load_textdomain() {
+
+			$locale = apply_filters( 'popover_locale', get_locale() );
+			$mofile = popover_dir( "popoverincludes/popover-$locale.mo" );
+
+			if ( file_exists( $mofile ) )
+				load_textdomain( 'popover', $mofile );
+
+		}
+
 		function add_menu_pages() {
 			if(is_multisite() && defined('PO_GLOBAL')) {
-				add_submenu_page('ms-admin.php', __('Pop Overs'), __('Pop Overs'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
+				add_submenu_page('ms-admin.php', __('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
 			} else {
-				add_submenu_page('options-general.php', __('Pop Overs'), __('Pop Overs'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
+				add_submenu_page('options-general.php', __('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
 			}
 
 		}
