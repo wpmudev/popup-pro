@@ -29,10 +29,10 @@ if(!class_exists('popoveradmin')) {
 		}
 
 		function add_menu_pages() {
-			if(function_exists('is_site_admin') && defined('PO_GLOBAL')) {
-				add_submenu_page('wpmu-admin.php', __('Pop Overs'), __('Pop Overs'), 10, 'popoverssadmin', array(&$this,'handle_admin_panel'));
+			if(is_multisite() && defined('PO_GLOBAL')) {
+				add_submenu_page('ms-admin.php', __('Pop Overs'), __('Pop Overs'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
 			} else {
-				add_submenu_page('options-general.php', __('Pop Overs'), __('Pop Overs'), 10, 'popoverssadmin', array(&$this,'handle_admin_panel'));
+				add_submenu_page('options-general.php', __('Pop Overs'), __('Pop Overs'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
 			}
 
 		}
@@ -55,6 +55,8 @@ if(!class_exists('popoveradmin')) {
 			if($action == 'updated') {
 				check_admin_referer('update-popover');
 
+				$usemsg = 1;
+
 				if(function_exists('get_site_option') && defined('PO_GLOBAL')) {
 					$updateoption = 'update_site_option';
 					$getoption = 'get_site_option';
@@ -65,6 +67,9 @@ if(!class_exists('popoveradmin')) {
 
 				if(isset($_POST['popovercontent'])) {
 					if(defined('PO_USEKSES')) {
+						if(wp_kses($_POST['popovercontent'], $allowedposttags) != $_POST['popovercontent']) {
+							$usemsg = 2;
+						}
 						$updateoption('popover_content', wp_kses($_POST['popovercontent'], $allowedposttags));
 					} else {
 						$updateoption('popover_content', $_POST['popovercontent']);
@@ -141,7 +146,7 @@ if(!class_exists('popoveradmin')) {
 					$updateoption('popover_usejs', 'no' );
 				}
 
-				wp_safe_redirect( add_query_arg( 'msg', 1, wp_get_referer() ) );
+				wp_safe_redirect( add_query_arg( array('msg' => $usemsg), wp_get_referer() ) );
 
 			}
 
@@ -187,6 +192,7 @@ if(!class_exists('popoveradmin')) {
 			$messages = array();
 
 			$messages[1] = __('Your settings have been saved.','popover');
+			$messages[2] = __('Your popover content has been modified by the built in filter, you can disable this in the plugin file.','popover');
 
 			?>
 			<div class='wrap nosubsub'>
@@ -517,7 +523,7 @@ if(!class_exists('popoveradmin')) {
 
 			global $allowedposttags;
 
-			if(function_exists('get_site_option') && defined('PO_GLOBAL')) {
+			if(is_multisite() && defined('PO_GLOBAL')) {
 				$updateoption = 'update_site_option';
 				$getoption = 'get_site_option';
 			} else {

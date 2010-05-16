@@ -23,7 +23,7 @@ if(!class_exists('popoverpublic')) {
 
 		function selective_message_display() {
 
-			if(function_exists('get_site_option') && defined('PO_GLOBAL')) {
+			if(is_multisite() && defined('PO_GLOBAL')) {
 				$getoption = 'get_site_option';
 			} else {
 				$getoption = 'get_option';
@@ -147,7 +147,7 @@ if(!class_exists('popoverpublic')) {
 
 		function page_footer() {
 
-			if(function_exists('get_site_option') && defined('PO_GLOBAL')) {
+			if(is_multisite() && defined('PO_GLOBAL')) {
 				$getoption = 'get_site_option';
 			} else {
 				$getoption = 'get_option';
