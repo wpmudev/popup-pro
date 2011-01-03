@@ -95,7 +95,7 @@ if(!class_exists('popoverpublic')) {
 
 						case "count":		$popover_count = $getoption('popover_count', '3');
 											if($this->has_reached_limit($popover_count)) {
-												return false;;
+												return false;
 											}
 											break;
 
