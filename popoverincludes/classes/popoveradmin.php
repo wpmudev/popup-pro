@@ -15,15 +15,13 @@ if(!class_exists('popoveradmin')) {
 			$this->db =& $wpdb;
 
 			add_action( 'admin_menu', array(&$this, 'add_menu_pages' ) );
+			add_action( 'network_admin_menu', array(&$this, 'add_menu_pages' ) );
 
 			add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
 
-			// Header actions - WPMU 2.9.x in Site admin menu
-			add_action('load-wpmu-admin_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
-			// WP2.9.X / WP3.x in settings admin menu
+			// Add header files
 			add_action('load-settings_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
-			// WP3 in "System Admin" menu
-			add_action('load-ms-admin_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
+			add_action('load-tools_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
 		}
 
 		function popoveradmin() {
@@ -33,7 +31,7 @@ if(!class_exists('popoveradmin')) {
 		function load_textdomain() {
 
 			$locale = apply_filters( 'popover_locale', get_locale() );
-			$mofile = popover_dir( "popoverincludes/popover-$locale.mo" );
+			$mofile = popover_dir( "popoverincludes/languages/popover-$locale.mo" );
 
 			if ( file_exists( $mofile ) )
 				load_textdomain( 'popover', $mofile );
@@ -42,7 +40,13 @@ if(!class_exists('popoveradmin')) {
 
 		function add_menu_pages() {
 			if(is_multisite() && defined('PO_GLOBAL')) {
-				add_submenu_page('ms-admin.php', __('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
+				if(function_exists('is_network_admin') && is_network_admin()) {
+					// On 3.1 and in the network admin area.
+					add_submenu_page('settings.php', __('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
+				} else {
+					// Not on 3.1
+					add_submenu_page('ms-admin.php', __('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
+				}
 			} else {
 				add_submenu_page('options-general.php', __('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
 			}
@@ -78,7 +82,7 @@ if(!class_exists('popoveradmin')) {
 				}
 
 				if(isset($_POST['popovercontent'])) {
-					if(defined('PO_USEKSES')) {
+					if ( !current_user_can('unfiltered_html') ) {
 						if(wp_kses($_POST['popovercontent'], $allowedposttags) != $_POST['popovercontent']) {
 							$usemsg = 2;
 						}
@@ -204,7 +208,7 @@ if(!class_exists('popoveradmin')) {
 			$messages = array();
 
 			$messages[1] = __('Your settings have been saved.','popover');
-			$messages[2] = __('Your popover content has been modified by the built in filter, you can disable this in the plugin file.','popover');
+			$messages[2] = __('Your popover content has been modified by the built in filter, you need to allow unfiltered html.','popover');
 
 			?>
 			<div class='wrap nosubsub'>

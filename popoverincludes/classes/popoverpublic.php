@@ -12,6 +12,8 @@ if(!class_exists('popoverpublic')) {
 			add_action('init', array(&$this, 'selective_message_display'), 1);
 			add_action('wp_footer', array(&$this, 'selective_message_display'));
 
+			add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
+
 			$directories = explode(DIRECTORY_SEPARATOR,dirname(__FILE__));
 			$this->mylocation = $directories[count($directories)-1];
 
@@ -19,6 +21,16 @@ if(!class_exists('popoverpublic')) {
 
 		function popoverpublic() {
 			$this->__construct();
+		}
+
+		function load_textdomain() {
+
+			$locale = apply_filters( 'popover_locale', get_locale() );
+			$mofile = popover_dir( "popoverincludes/languages/popover-$locale.mo" );
+
+			if ( file_exists( $mofile ) )
+				load_textdomain( 'popover', $mofile );
+
 		}
 
 		function selective_message_display() {
