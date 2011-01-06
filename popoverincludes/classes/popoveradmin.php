@@ -168,19 +168,7 @@ if(!class_exists('popoveradmin')) {
 
 		}
 
-		function wdp_un_check() {
-		    if ( !class_exists( 'WPMUDEV_Update_Notifications' ) && current_user_can( 'edit_users' ) )
-		      echo '<div class="error fade"><p>' . __('Please install the latest version of <a href="http://premium.wpmudev.org/project/update-notifications/" title="Download Now &raquo;">our free Update Notifications plugin</a> which helps you stay up-to-date with the most stable, secure versions of WPMU DEV themes and plugins. <a href="http://premium.wpmudev.org/wpmu-dev/update-notifications-plugin-information/">More information &raquo;</a>', 'wpmudev') . '</a></p></div>';
-		  }
-
 		function add_admin_header_popover() {
-
-			/* -------------------- Update Notifications Notice -------------------- */
-			if ( method_exists( $this, 'wdp_un_check' ) ) {
-			  add_action( 'admin_notices', array(&$this, 'wdp_un_check'), 5 );
-			  add_action( 'network_admin_notices', array(&$this, 'wdp_un_check'), 5 );
-			}
-			/* --------------------------------------------------------------------- */
 
 			wp_enqueue_script('popoveradminjs', popover_url('popoverincludes/js/popoveradmin.js'), array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ), $this->build);
 			wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popoveradmin.css'), array('widgets'), $this->build);
