@@ -39,16 +39,17 @@ if(!class_exists('popoveradmin')) {
 		}
 
 		function add_menu_pages() {
-			if(is_multisite() && defined('PO_GLOBAL')) {
-				if(function_exists('is_network_admin') && is_network_admin()) {
-					// On 3.1 and in the network admin area.
-					add_submenu_page('settings.php', __('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
+
+			if(function_exists('is_multisite') && is_multisite() && defined('PO_GLOBAL')) {
+				if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popoverpremium/popover.php')) {
+					if(function_exists('is_network_admin') && is_network_admin()) {
+						add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options',  'popoverssadmin', array(&$this,'handle_admin_panel'), popover_url('popoverincludes/images/window.png'));
+					}
 				} else {
-					// Not on 3.1
-					add_submenu_page('ms-admin.php', __('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
+					add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options',  'popoverssadmin', array(&$this,'handle_admin_panel'), popover_url('popoverincludes/images/window.png'));
 				}
 			} else {
-				add_submenu_page('options-general.php', __('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options', 'popoverssadmin', array(&$this,'handle_admin_panel'));
+				add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options',  'popoverssadmin', array(&$this,'handle_admin_panel'), popover_url('popoverincludes/images/window.png'));
 			}
 
 		}

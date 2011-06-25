@@ -55,4 +55,56 @@ function popover_dir($extended) {
 
 
 }
+
+function get_popover_plugins() {
+	if ( is_dir( popover_dir('popoverincludes/plugins') ) ) {
+		if ( $dh = opendir( popover_dir('popoverincludes/plugins') ) ) {
+			$pop_plugins = array ();
+			while ( ( $plugin = readdir( $dh ) ) !== false )
+				if ( substr( $plugin, -4 ) == '.php' )
+					$pop_plugins[] = $plugin;
+			closedir( $dh );
+			sort( $pop_plugins );
+
+			return apply_filters('autoblog_available_plugins', $pop_plugins);
+
+		}
+	}
+
+	return false;
+}
+
+function load_popover_plugins() {
+
+	$plugins = get_option('popover_activated_plugins', array());
+
+	if ( is_dir( popover_dir('popoverincludes/plugins') ) ) {
+		if ( $dh = opendir( popover_dir('popoverincludes/plugins') ) ) {
+			$pop_plugins = array ();
+			while ( ( $plugin = readdir( $dh ) ) !== false )
+				if ( substr( $plugin, -4 ) == '.php' )
+					$pop_plugins[] = $plugin;
+			closedir( $dh );
+			sort( $pop_plugins );
+			foreach( $pop_plugins as $pop_plugin )
+				include_once( popover_dir('popoverincludes/plugins/' . $pop_plugin) );
+		}
+	}
+}
+
+function load_all_popover_plugins() {
+	if ( is_dir( popover_dir('popoverincludes/plugins') ) ) {
+		if ( $dh = opendir( popover_dir('popoverincludes/plugins') ) ) {
+			$pop_plugins = array ();
+			while ( ( $plugin = readdir( $dh ) ) !== false )
+				if ( substr( $plugin, -4 ) == '.php' )
+					$pop_plugins[] = $plugin;
+			closedir( $dh );
+			sort( $pop_plugins );
+			foreach( $pop_plugins as $pop_plugin )
+				include_once( popover_dir('popoverincludes/plugins/' . $pop_plugin) );
+		}
+	}
+}
+
 ?>
