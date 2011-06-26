@@ -16,10 +16,10 @@ function set_popover_url($base) {
 
 	if(defined('WPMU_PLUGIN_URL') && defined('WPMU_PLUGIN_DIR') && file_exists(WPMU_PLUGIN_DIR . '/' . basename($base))) {
 		$popover_url = trailingslashit(WPMU_PLUGIN_URL);
-	} elseif(defined('WP_PLUGIN_URL') && defined('WP_PLUGIN_DIR') && file_exists(WP_PLUGIN_DIR . '/popover/' . basename($base))) {
-		$popover_url = trailingslashit(WP_PLUGIN_URL . '/popover');
+	} elseif(defined('WP_PLUGIN_URL') && defined('WP_PLUGIN_DIR') && file_exists(WP_PLUGIN_DIR . '/popoverpremium/' . basename($base))) {
+		$popover_url = trailingslashit(WP_PLUGIN_URL . '/popoverpremium');
 	} else {
-		$popover_url = trailingslashit(WP_PLUGIN_URL . '/popover');
+		$popover_url = trailingslashit(WP_PLUGIN_URL . '/popoverpremium');
 	}
 
 }
@@ -30,10 +30,10 @@ function set_popover_dir($base) {
 
 	if(defined('WPMU_PLUGIN_DIR') && file_exists(WPMU_PLUGIN_DIR . '/' . basename($base))) {
 		$popover_dir = trailingslashit(WPMU_PLUGIN_URL);
-	} elseif(defined('WP_PLUGIN_DIR') && file_exists(WP_PLUGIN_DIR . '/popover/' . basename($base))) {
-		$popover_dir = trailingslashit(WP_PLUGIN_DIR . '/popover');
+	} elseif(defined('WP_PLUGIN_DIR') && file_exists(WP_PLUGIN_DIR . '/popoverpremium/' . basename($base))) {
+		$popover_dir = trailingslashit(WP_PLUGIN_DIR . '/popoverpremium');
 	} else {
-		$popover_dir = trailingslashit(WP_PLUGIN_DIR . '/popover');
+		$popover_dir = trailingslashit(WP_PLUGIN_DIR . '/popoverpremium');
 	}
 
 
@@ -56,6 +56,20 @@ function popover_dir($extended) {
 
 }
 
+function popover_db_prefix(&$wpdb, $table) {
+
+	if( defined('PO_GLOBAL') && PO_GLOBAL == true ) {
+		if(!empty($wpdb->base_prefix)) {
+			return $wpdb->base_prefix . $table;
+		} else {
+			return $wpdb->prefix . $table;
+		}
+	} else {
+		return $wpdb->prefix . $table;
+	}
+
+}
+
 function get_popover_plugins() {
 	if ( is_dir( popover_dir('popoverincludes/plugins') ) ) {
 		if ( $dh = opendir( popover_dir('popoverincludes/plugins') ) ) {
@@ -66,7 +80,7 @@ function get_popover_plugins() {
 			closedir( $dh );
 			sort( $pop_plugins );
 
-			return apply_filters('autoblog_available_plugins', $pop_plugins);
+			return apply_filters('popover_available_plugins', $pop_plugins);
 
 		}
 	}
