@@ -1,0 +1,25 @@
+/* @override http://dev.site/wp-content/plugins/popover/popoverincludes/css/popovermenu.css?ver=3 */
+
+tr.draghandle a.draganchor {
+	float: left;
+	display: inline;
+	width: 20px;
+	display: block;
+	text-decoration: none;
+	width: 16px;
+	height: 16px;
+	background: url(../images/drag.png) no-repeat center;
+	cursor: move;
+	padding: 0;
+	margin: 0;
+}
+
+tr.draghandle th.check-drag {
+	vertical-align: top;
+	padding: 5px 2px 0;
+}
+
+tr.draghandle th.check-column {
+	vertical-align: top;
+	padding: 5px 2px 0;
+}

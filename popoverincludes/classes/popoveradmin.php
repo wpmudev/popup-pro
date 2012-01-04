@@ -27,7 +27,7 @@ if(!class_exists('popoveradmin')) {
 			add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
 
 			// Add header files
-			//add_action('load-toplevel_page_popover', array(&$this, 'add_admin_header_popover'));
+			add_action('load-toplevel_page_popover', array(&$this, 'add_admin_header_popover_menu'));
 
 			//add_action('load-autoblog_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog_admin'));
 			//add_action('load-autoblog_page_autoblog_options', array(&$this, 'add_admin_header_autoblog_options'));
@@ -58,11 +58,13 @@ if(!class_exists('popoveradmin')) {
 					add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options',  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
 				}
 			} else {
-				add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options',  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
+				if(!function_exists('is_network_admin') || !is_network_admin()) {
+					add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options',  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
+				}
 			}
 
-			add_submenu_page('popover', __('Popover Plugins','popover'), __('Edit Plugins','autoblog'), 'manage_options', "popoversplugins", array(&$this,'handle_plugins_panel'));
-
+			add_submenu_page('popover', __('Create New Pop Over','popover'), __('Create New','popover'), 'manage_options', "popovernew", array(&$this,'handle_addnewpopover_panel'));
+			add_submenu_page('popover', __('Manage Add-ons Plugins','popover'), __('Add-ons','popover'), 'manage_options', "popoversaddons", array(&$this,'handle_addons_panel'));
 
 		}
 
@@ -181,6 +183,10 @@ if(!class_exists('popoveradmin')) {
 
 		}
 
+		function add_admin_header_popover_menu() {
+			wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popovermenu.css'), array(), $this->build);
+		}
+
 		function add_admin_header_popover() {
 
 			global $wp_version;
@@ -246,10 +252,10 @@ if(!class_exists('popoveradmin')) {
 
 				<div class="alignleft actions">
 				<select name="action">
-				<option selected="selected" value=""><?php _e('Bulk Actions'); ?></option>
-				<option value="toggle"><?php _e('Toggle activation'); ?></option>
+				<option selected="selected" value=""><?php _e('Bulk Actions', 'popover'); ?></option>
+				<option value="toggle"><?php _e('Toggle activation', 'popover'); ?></option>
 				</select>
-				<input type="submit" class="button-secondary action" id="doaction" name="doaction" value="<?php _e('Apply'); ?>">
+				<input type="submit" class="button-secondary action" id="doaction" name="doaction" value="<?php _e('Apply', 'popover'); ?>">
 
 				</div>
 
@@ -264,7 +270,7 @@ if(!class_exists('popoveradmin')) {
 					wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-plugins');
 
 					$columns = array(	"name"		=>	__('Pop Over Name', 'popover'),
-										"rules" 		=> 	__('Rules','popover'),
+										"rules" 	=> 	__('Rules','popover'),
 										"active"	=>	__('Active','popover')
 									);
 
@@ -277,7 +283,8 @@ if(!class_exists('popoveradmin')) {
 				<table cellspacing="0" class="widefat fixed">
 					<thead>
 					<tr>
-					<th style="" class="manage-column column-cb check-column" id="cb" scope="col"></th>
+					<th style="" class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox"></th>
+					<th style="width: 20px;" class="manage-column column-drag" id="cb" scope="col"></th>
 					<?php
 						foreach($columns as $key => $col) {
 							?>
@@ -290,7 +297,8 @@ if(!class_exists('popoveradmin')) {
 
 					<tfoot>
 					<tr>
-					<th style="" class="manage-column column-cb check-column" scope="col"></th>
+					<th style="" class="manage-column column-cb check-column" scope="col"><input type="checkbox"></th>
+					<th style="" class="manage-column column-drag" scope="col"></th>
 					<?php
 						reset($columns);
 						foreach($columns as $key => $col) {
@@ -310,16 +318,19 @@ if(!class_exists('popoveradmin')) {
 								$p = maybe_unserialize($popover->popover_settings);
 
 								?>
-								<tr valign="middle" class="alternate" id="popover-<?php echo $popover->id; ?>">
-									<th class="check-column" scope="row"></th>
+								<tr valign="middle" class="alternate draghandle" id="popover-<?php echo $popover->id; ?>">
+									<th class="check-column" scope="row"><input type="checkbox"></th>
+									<th class="check-drag" scope="row">
+										<a class='draganchor' href='#move' title='<?php _e('Drag to reorder Pop Overs', 'popover'); ?>'>&nbsp;</a>
+									</th>
 									<td class="column-name">
-										<strong><?php echo esc_html($p['name']); ?></strong>
+										<strong><?php echo esc_html($popover->popover_title); ?></strong>
 										<?php
 											$actions = array();
-											if(in_array($plugin, $active)) {
-												$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;popover=" . $popover->id . "", 'toggle-popover-' . $popover->id) . "'>" . __('Deactivate') . "</a></span>";
+											if($popover->popover_active) {
+												$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;popover=" . $popover->id . "", 'toggle-popover-' . $popover->id) . "'>" . __('Deactivate', 'popover') . "</a></span>";
 											} else {
-												$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=activate&amp;popover=" . $popover->id . "", 'toggle-popover-' . $popover->id) . "'>" . __('Activate') . "</a></span>";
+												$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=activate&amp;popover=" . $popover->id . "", 'toggle-popover-' . $popover->id) . "'>" . __('Activate', 'popover') . "</a></span>";
 											}
 										?>
 										<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>
@@ -330,7 +341,7 @@ if(!class_exists('popoveradmin')) {
 										</td>
 									<td class="column-active">
 										<?php
-											if(in_array($plugin, $active)) {
+											if($popover->popover_active) {
 												echo "<strong>" . __('Active', 'popover') . "</strong>";
 											} else {
 												echo __('Inactive', 'popover');
@@ -341,10 +352,10 @@ if(!class_exists('popoveradmin')) {
 								<?php
 							}
 						} else {
-							$columncount = count($columns) + 1;
+							$columncount = count($columns) + 2;
 							?>
 							<tr valign="middle" class="alternate" >
-								<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Plugns where found for this install.','popover'); ?></td>
+								<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Pop Overs were found.','popover'); ?></td>
 						    </tr>
 							<?php
 						}
@@ -358,10 +369,10 @@ if(!class_exists('popoveradmin')) {
 
 				<div class="alignleft actions">
 				<select name="action2">
-					<option selected="selected" value=""><?php _e('Bulk Actions'); ?></option>
-					<option value="toggle"><?php _e('Toggle activation'); ?></option>
+					<option selected="selected" value=""><?php _e('Bulk Actions', 'popover'); ?></option>
+					<option value="toggle"><?php _e('Toggle activation', 'popover'); ?></option>
 				</select>
-				<input type="submit" class="button-secondary action" id="doaction2" name="doaction2" value="Apply">
+				<input type="submit" class="button-secondary action" id="doaction2" name="doaction2" value="<?php _e('Apply', 'popover'); ?>">
 				</div>
 				<div class="alignright actions"></div>
 				<br class="clear">
