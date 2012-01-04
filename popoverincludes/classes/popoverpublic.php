@@ -111,6 +111,15 @@ if(!class_exists('popoverpublic')) {
 											}
 											break;
 
+						default:			if(has_filter('popover_process_rule_' . $key)) {
+												if(apply_filters( 'popover_process_rule_' . $key, false )) {
+													$show = true;
+												} else {
+													return false;
+												}
+											}
+											break;
+
 					}
 				}
 			}

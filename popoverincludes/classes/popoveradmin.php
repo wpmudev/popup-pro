@@ -53,12 +53,8 @@ if(!class_exists('popoveradmin')) {
 
 		function add_menu_pages() {
 
-			if(function_exists('is_multisite') && is_multisite() && defined('PO_GLOBAL')) {
-				if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popoverpremium/popover.php')) {
-					if(function_exists('is_network_admin') && is_network_admin()) {
-						add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options',  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
-					}
-				} else {
+			if(is_multisite() && (defined('PO_GLOBAL') && PO_GLOBAL == true)) {
+				if(function_exists('is_network_admin') && is_network_admin()) {
 					add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options',  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
 				}
 			} else {
@@ -90,7 +86,7 @@ if(!class_exists('popoveradmin')) {
 
 				$usemsg = 1;
 
-				if(function_exists('get_site_option') && defined('PO_GLOBAL')) {
+				if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
 					$updateoption = 'update_site_option';
 					$getoption = 'get_site_option';
 				} else {
@@ -187,8 +183,15 @@ if(!class_exists('popoveradmin')) {
 
 		function add_admin_header_popover() {
 
+			global $wp_version;
+
 			wp_enqueue_script('popoveradminjs', popover_url('popoverincludes/js/popoveradmin.js'), array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ), $this->build);
-			wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popoveradmin.css'), array('widgets'), $this->build);
+
+			if(version_compare( preg_replace('/-.*$/', '', $wp_version), "3.3", '<')) {
+				wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popoveradmin.css'), array('widgets'), $this->build);
+			} else {
+				wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popoveradmin.css'), array(), $this->build);
+			}
 
 			$this->update_admin_header_popover();
 		}
@@ -375,7 +378,7 @@ if(!class_exists('popoveradmin')) {
 
 			global $page;
 
-			if(function_exists('get_site_option') && defined('PO_GLOBAL')) {
+			if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
 				$updateoption = 'update_site_option';
 				$getoption = 'get_site_option';
 			} else {
@@ -470,6 +473,10 @@ if(!class_exists('popoveradmin')) {
 												case 'referrer':		$this->admin_referer('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', $popover_ereg);
 																		break;
 												case 'count':			$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
+																		break;
+
+												default:				do_action('popover_active_rule_' . $key);
+																		do_action('popover_active_rule', $key);
 																		break;
 
 											}
@@ -598,6 +605,8 @@ if(!class_exists('popoveradmin')) {
 						if(!isset($popover_check['count'])) {
 							$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
 						}
+
+						do_action('popover_additional_rules');
 
 					?>
 					</div> <!-- hidden-actions -->
