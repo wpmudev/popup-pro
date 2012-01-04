@@ -16,10 +16,18 @@ tr.draghandle a.draganchor {
 
 tr.draghandle th.check-drag {
 	vertical-align: top;
-	padding: 5px 2px 0;
+	padding: 5px 2px 0 5px;
 }
 
 tr.draghandle th.check-column {
 	vertical-align: top;
-	padding: 5px 2px 0;
+	padding: 5px 2px 0 0;
+}
+
+tr.draghandle:hover a.draganchor {
+	visibility: visible;
+}
+
+tr.draghandle a.draganchor {
+	visibility: hidden;
 }

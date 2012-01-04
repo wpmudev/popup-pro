@@ -184,7 +184,13 @@ if(!class_exists('popoveradmin')) {
 		}
 
 		function add_admin_header_popover_menu() {
+
+			wp_enqueue_script('popoveradminjs', popover_url('popoverincludes/js/popovermenu.js'), array('jquery', 'jquery-form', 'jquery-ui-draggable', 'jquery-ui-droppable', 'jquery-ui-sortable' ), $this->build);
+
 			wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popovermenu.css'), array(), $this->build);
+
+			$this->update_popover_admin();
+
 		}
 
 		function add_admin_header_popover() {
@@ -214,10 +220,14 @@ if(!class_exists('popoveradmin')) {
 
 		}
 
-		function handle_popover_admin() {
+		function update_popover_admin() {
 			global $action, $page;
 
 			wp_reset_vars( array('action', 'page') );
+		}
+
+		function handle_popover_admin() {
+			global $action, $page;
 
 			$messages = array();
 			$messages[1] = __('Pop Over updated.','popover');
@@ -267,7 +277,7 @@ if(!class_exists('popoveradmin')) {
 				<div class="clear"></div>
 
 				<?php
-					wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-plugins');
+					wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-popovers');
 
 					$columns = array(	"name"		=>	__('Pop Over Name', 'popover'),
 										"rules" 	=> 	__('Rules','popover'),
@@ -280,11 +290,13 @@ if(!class_exists('popoveradmin')) {
 
 				?>
 
-				<table cellspacing="0" class="widefat fixed">
+				<table cellspacing="0" class="widefat fixed" id="dragtable">
 					<thead>
 					<tr>
-					<th style="" class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox"></th>
+
 					<th style="width: 20px;" class="manage-column column-drag" id="cb" scope="col"></th>
+					<th style="" class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox"></th>
+
 					<?php
 						foreach($columns as $key => $col) {
 							?>
@@ -297,8 +309,10 @@ if(!class_exists('popoveradmin')) {
 
 					<tfoot>
 					<tr>
-					<th style="" class="manage-column column-cb check-column" scope="col"><input type="checkbox"></th>
+
 					<th style="" class="manage-column column-drag" scope="col"></th>
+					<th style="" class="manage-column column-cb check-column" scope="col"><input type="checkbox"></th>
+
 					<?php
 						reset($columns);
 						foreach($columns as $key => $col) {
@@ -310,19 +324,22 @@ if(!class_exists('popoveradmin')) {
 					</tr>
 					</tfoot>
 
-					<tbody>
+					<tbody class='dragbody'>
 						<?php
 						if($popovers) {
+							$popovercount = 0;
 							foreach($popovers as $key => $popover) {
 
 								$p = maybe_unserialize($popover->popover_settings);
 
 								?>
 								<tr valign="middle" class="alternate draghandle" id="popover-<?php echo $popover->id; ?>">
-									<th class="check-column" scope="row"><input type="checkbox"></th>
+
 									<th class="check-drag" scope="row">
 										<a class='draganchor' href='#move' title='<?php _e('Drag to reorder Pop Overs', 'popover'); ?>'>&nbsp;</a>
 									</th>
+									<th class="check-column" scope="row"><input type="checkbox"></th>
+
 									<td class="column-name">
 										<strong><?php echo esc_html($popover->popover_title); ?></strong>
 										<?php
@@ -334,6 +351,9 @@ if(!class_exists('popoveradmin')) {
 											}
 										?>
 										<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>
+
+										<input type='hidden' name='popover_order' value='<?php echo $popovercount++; ?>' />
+
 										</td>
 
 									<td class="column-name">
