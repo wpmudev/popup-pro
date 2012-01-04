@@ -194,7 +194,7 @@ if(!class_exists('popoverpublic')) {
 			<div id='messagebox' class='visiblebox' style='<?php echo $style; ?>'>
 				<a href='' id='closebox' title='Close this box'></a>
 				<div id='message' style='<?php echo $box; ?>'>
-					<?php echo $content; ?>
+					<?php echo do_shortcode($content); ?>
 					<div class='clear'></div>
 					<div class='claimbutton hide'><a href='#' id='clearforever'><?php _e('Never see this message again.','popover'); ?></a></div>
 				</div>
@@ -206,7 +206,7 @@ if(!class_exists('popoverpublic')) {
 		function is_fromsearchengine() {
 			$ref = $_SERVER['HTTP_REFERER'];
 
-			$SE = array('/search?', 'images.google.', 'web.info.com', 'search.', 'del.icio.us/search', 'soso.com', '/search/', '.yahoo.' );
+			$SE = array('/search?', '.google.', 'web.info.com', 'search.', 'del.icio.us/search', 'soso.com', '/search/', '.yahoo.', '.bing.' );
 
 			foreach ($SE as $url) {
 				if (strpos($ref,$url)!==false) return true;

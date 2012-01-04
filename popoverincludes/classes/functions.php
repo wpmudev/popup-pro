@@ -16,10 +16,10 @@ function set_popover_url($base) {
 
 	if(defined('WPMU_PLUGIN_URL') && defined('WPMU_PLUGIN_DIR') && file_exists(WPMU_PLUGIN_DIR . '/' . basename($base))) {
 		$popover_url = trailingslashit(WPMU_PLUGIN_URL);
-	} elseif(defined('WP_PLUGIN_URL') && defined('WP_PLUGIN_DIR') && file_exists(WP_PLUGIN_DIR . '/popoverpremium/' . basename($base))) {
-		$popover_url = trailingslashit(WP_PLUGIN_URL . '/popoverpremium');
+	} elseif(defined('WP_PLUGIN_URL') && defined('WP_PLUGIN_DIR') && file_exists(WP_PLUGIN_DIR . '/popover/' . basename($base))) {
+		$popover_url = trailingslashit(WP_PLUGIN_URL . '/popover');
 	} else {
-		$popover_url = trailingslashit(WP_PLUGIN_URL . '/popoverpremium');
+		$popover_url = trailingslashit(WP_PLUGIN_URL . '/popover');
 	}
 
 }
@@ -30,10 +30,10 @@ function set_popover_dir($base) {
 
 	if(defined('WPMU_PLUGIN_DIR') && file_exists(WPMU_PLUGIN_DIR . '/' . basename($base))) {
 		$popover_dir = trailingslashit(WPMU_PLUGIN_URL);
-	} elseif(defined('WP_PLUGIN_DIR') && file_exists(WP_PLUGIN_DIR . '/popoverpremium/' . basename($base))) {
-		$popover_dir = trailingslashit(WP_PLUGIN_DIR . '/popoverpremium');
+	} elseif(defined('WP_PLUGIN_DIR') && file_exists(WP_PLUGIN_DIR . '/popover/' . basename($base))) {
+		$popover_dir = trailingslashit(WP_PLUGIN_DIR . '/popover');
 	} else {
-		$popover_dir = trailingslashit(WP_PLUGIN_DIR . '/popoverpremium');
+		$popover_dir = trailingslashit(WP_PLUGIN_DIR . '/popover');
 	}
 
 
@@ -70,17 +70,17 @@ function popover_db_prefix(&$wpdb, $table) {
 
 }
 
-function get_popover_plugins() {
-	if ( is_dir( popover_dir('popoverincludes/plugins') ) ) {
-		if ( $dh = opendir( popover_dir('popoverincludes/plugins') ) ) {
-			$pop_plugins = array ();
-			while ( ( $plugin = readdir( $dh ) ) !== false )
-				if ( substr( $plugin, -4 ) == '.php' )
-					$pop_plugins[] = $plugin;
+function get_popover_addons() {
+	if ( is_dir( popover_dir('popoverincludes/addons') ) ) {
+		if ( $dh = opendir( popover_dir('popoverincludes/addons') ) ) {
+			$pop_addons = array ();
+			while ( ( $addon = readdir( $dh ) ) !== false )
+				if ( substr( $addon, -4 ) == '.php' )
+					$pop_addons[] = $addon;
 			closedir( $dh );
-			sort( $pop_plugins );
+			sort( $pop_addons );
 
-			return apply_filters('popover_available_plugins', $pop_plugins);
+			return apply_filters('popover_available_addons', $pop_addons);
 
 		}
 	}
@@ -88,35 +88,38 @@ function get_popover_plugins() {
 	return false;
 }
 
-function load_popover_plugins() {
+function load_popover_addons() {
 
-	$plugins = get_option('popover_activated_plugins', array());
+	$addons = get_option('popover_activated_addons', array());
 
-	if ( is_dir( popover_dir('popoverincludes/plugins') ) ) {
-		if ( $dh = opendir( popover_dir('popoverincludes/plugins') ) ) {
-			$pop_plugins = array ();
-			while ( ( $plugin = readdir( $dh ) ) !== false )
-				if ( substr( $plugin, -4 ) == '.php' )
-					$pop_plugins[] = $plugin;
+	if ( is_dir( popover_dir('popoverincludes/addons') ) ) {
+		if ( $dh = opendir( popover_dir('popoverincludes/addons') ) ) {
+			$pop_addons = array ();
+			while ( ( $addon = readdir( $dh ) ) !== false )
+				if ( substr( $addon, -4 ) == '.php' )
+					$pop_addons[] = $addon;
 			closedir( $dh );
-			sort( $pop_plugins );
-			foreach( $pop_plugins as $pop_plugin )
-				include_once( popover_dir('popoverincludes/plugins/' . $pop_plugin) );
+			sort( $pop_addons );
+
+			$pop_addons = apply_filters('popover_available_addons', $pop_addons);
+
+			foreach( $pop_addons as $pop_addon )
+				include_once( popover_dir('popoverincludes/addons/' . $pop_addon) );
 		}
 	}
 }
 
-function load_all_popover_plugins() {
-	if ( is_dir( popover_dir('popoverincludes/plugins') ) ) {
-		if ( $dh = opendir( popover_dir('popoverincludes/plugins') ) ) {
-			$pop_plugins = array ();
-			while ( ( $plugin = readdir( $dh ) ) !== false )
-				if ( substr( $plugin, -4 ) == '.php' )
-					$pop_plugins[] = $plugin;
+function load_all_popover_addons() {
+	if ( is_dir( popover_dir('popoverincludes/addons') ) ) {
+		if ( $dh = opendir( popover_dir('popoverincludes/addons') ) ) {
+			$pop_addons = array ();
+			while ( ( $addon = readdir( $dh ) ) !== false )
+				if ( substr( $addon, -4 ) == '.php' )
+					$pop_addons[] = $addon;
 			closedir( $dh );
-			sort( $pop_plugins );
-			foreach( $pop_plugins as $pop_plugin )
-				include_once( popover_dir('popoverincludes/plugins/' . $pop_plugin) );
+			sort( $pop_addons );
+			foreach( $pop_addons as $pop_addon )
+				include_once( popover_dir('popoverincludes/addons/' . $pop_addon) );
 		}
 	}
 }
