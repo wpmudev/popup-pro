@@ -1,5 +1,9 @@
 /* @override http://dev.site/wp-content/plugins/popover/popoverincludes/css/popovermenu.css?ver=3 */
 
+td.check-drag {
+	
+}
+
 tr.draghandle a.draganchor {
 	float: left;
 	display: inline;
@@ -14,20 +18,29 @@ tr.draghandle a.draganchor {
 	margin: 0;
 }
 
-tr.draghandle th.check-drag {
+td.check-drag {
 	vertical-align: top;
 	padding: 5px 2px 0 5px;
 }
 
-tr.draghandle th.check-column {
+td.check-column {
 	vertical-align: top;
-	padding: 5px 2px 0 0;
+	padding: 3px 2px 0 0 !Important;
 }
 
-tr.draghandle:hover a.draganchor {
-	visibility: visible;
+td.check-column input {
+	margin: 0 0 0 8px;
 }
 
-tr.draghandle a.draganchor {
-	visibility: hidden;
+tr.draghandle:hover td.check-drag {
+	background: url(../images/drag.png) no-repeat 5px 7px;
+	cursor: move;
+}
+
+tr.draghandle td.check-drag {
+	background: transparent;
+}
+
+tr.dragging {
+	background-color: #edf3fe;
 }
