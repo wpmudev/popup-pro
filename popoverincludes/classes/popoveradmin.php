@@ -205,18 +205,22 @@ if(!class_exists('popoveradmin')) {
 
 		function add_admin_header_popover_menu() {
 
-			wp_enqueue_script('popoverdragadminjs', popover_url('popoverincludes/js/jquery.tablednd_0_5.js'), array('jquery'), $this->build);
-			wp_enqueue_script('popoveradminjs', popover_url('popoverincludes/js/popovermenu.js'), array('jquery', 'popoverdragadminjs' ), $this->build);
+			if($_GET['action'] == 'edit') {
+				$this->add_admin_header_popover();
+			} else {
+				wp_enqueue_script('popoverdragadminjs', popover_url('popoverincludes/js/jquery.tablednd_0_5.js'), array('jquery'), $this->build);
+				wp_enqueue_script('popoveradminjs', popover_url('popoverincludes/js/popovermenu.js'), array('jquery', 'popoverdragadminjs' ), $this->build);
 
-			wp_localize_script('popoveradminjs', 'popover', array(	'ajaxurl'		=>	admin_url( 'admin-ajax.php' ),
-			 														'ordernonce'	=>	wp_create_nonce('popover_order'),
-																	'dragerror'		=>	__('An error occured updating the Pop Over order.','popover'),
-																	'deletepopover'	=>	__('Are you sure you want to delete this Pop Over?','popover')
-																));
+				wp_localize_script('popoveradminjs', 'popover', array(	'ajaxurl'		=>	admin_url( 'admin-ajax.php' ),
+				 														'ordernonce'	=>	wp_create_nonce('popover_order'),
+																		'dragerror'		=>	__('An error occured updating the Pop Over order.','popover'),
+																		'deletepopover'	=>	__('Are you sure you want to delete this Pop Over?','popover')
+																	));
 
-			wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popovermenu.css'), array(), $this->build);
+				wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popovermenu.css'), array(), $this->build);
 
-			$this->update_popover_admin();
+				$this->update_popover_admin();
+			}
 
 		}
 
@@ -254,7 +258,7 @@ if(!class_exists('popoveradmin')) {
 		}
 
 		function get_popover( $id ) {
-
+			return $this->db->get_row( $this->db->prepare("SELECT * FROM {$this->popover} WHERE id = %d", $id) );
 		}
 
 		function activate_popover( $id ) {
@@ -476,11 +480,11 @@ if(!class_exists('popoveradmin')) {
 									<td class="check-column" scope="row"><input type="checkbox" value="<?php echo $popover->id; ?>" name="popovercheck[]"></td>
 
 									<td class="column-name">
-										<strong><a href=''><?php echo esc_html($popover->popover_title); ?></a></strong>
+										<strong><a href='<?php echo "?page=" . $page . "&amp;action=edit&amp;popover=" . $popover->id . ""; ?>'><?php echo esc_html($popover->popover_title); ?></a></strong>
 										<?php
 											$actions = array();
 
-											$actions['edit'] = "<span class='edit'><a href=''>" . __('Edit', 'popover') . "</a></span>";
+											$actions['edit'] = "<span class='edit'><a href='?page=" . $page . "&amp;action=edit&amp;popover=" . $popover->id . "'>" . __('Edit', 'popover') . "</a></span>";
 
 											if($popover->popover_active) {
 												$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;popover=" . $popover->id . "", 'toggle-popover-' . $popover->id) . "'>" . __('Deactivate', 'popover') . "</a></span>";
@@ -557,12 +561,19 @@ if(!class_exists('popoveradmin')) {
 
 			if(!empty($id)) {
 				$popover = $this->get_popover( $id );
+
 				$popover->popover_settings = unserialize($popover->popover_settings);
 			} else {
 				$popover = new stdClass;
 				$popover->popover_title = __('New Pop Over','popover');
 				$popover->popover_content = "";
+			}
 
+			$popover_title = stripslashes($popover->popover_title);
+
+			$popover_content = stripslashes($popover->popover_content);
+
+			if(empty($popover->popover_settings)) {
 				$popover->popover_settings = array(	'popover_size'		=>	array('width' => '500px', 'height' => '200px'),
 													'popover_location'	=>	array('left' => '100px', 'top' => '100px'),
 													'popover_colour'	=>	array('back' => 'FFFFFF', 'fore' => '000000'),
@@ -572,13 +583,7 @@ if(!class_exists('popoveradmin')) {
 													'popover_count'		=>	3,
 													'popover_usejs'		=>	'no'
 													);
-
 			}
-
-
-
-
-			$popover_content = stripslashes($popover->popover_content);
 
 			$popover_size = $popover->popover_settings['popover_size'];
 			$popover_location = $popover->popover_settings['popover_location'];
@@ -604,8 +609,11 @@ if(!class_exists('popoveradmin')) {
 			?>
 			<div class='wrap nosubsub'>
 				<div class="icon32" id="icon-themes"><br></div>
-				<h2><?php echo __('Pop Over content settings','popover'); ?></h2>
-
+				<?php if($id !== false) { ?>
+					<h2><?php echo __('Edit Pop Over','popover'); ?></h2>
+				<?php } else { ?>
+					<h2><?php echo __('Add Pop Over','popover'); ?></h2>
+				<?php } ?>
 				<div class='popover-liquid-left'>
 
 					<div id='popover-left'>
@@ -617,7 +625,7 @@ if(!class_exists('popoveradmin')) {
 
 						<div id='edit-popover' class='popover-holder-wrap'>
 							<div class='sidebar-name no-movecursor'>
-								<h3><?php echo _e('Edit Popover settings','popover'); ?></h3>
+								<h3><?php echo __('Pop Over Settings','popover'); ?></h3>
 							</div>
 							<div class='popover-holder'>
 
@@ -631,6 +639,9 @@ if(!class_exists('popoveradmin')) {
 										$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
 									}
 									?>
+
+								<label for='popover_title'><?php _e('Popover title','popover'); ?></label><br/>
+								<input name='popover_title' id='popover_title' style='width: 97%; border: 1px solid; border-color: #DFDFDF;' value='<?php echo stripslashes($popover_title); ?>' /><br/><br/>
 
 								<label for='popovercontent'><?php _e('Popover content','popover'); ?></label><br/>
 								<textarea name='popovercontent' id='popovercontent' style='width: 98%' rows='5' cols='10'><?php echo stripslashes($popover_content); ?></textarea>
