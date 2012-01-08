@@ -95,8 +95,6 @@ if(!class_exists('popoverpublic')) {
 
 					if(!empty($popover_check)) {
 
-						print_r($popover_check);
-
 						$order = explode(',', $popover_check['order']);
 
 						foreach($order as $key) {
