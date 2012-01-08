@@ -874,7 +874,7 @@ if(!class_exists('popoveradmin')) {
 									<tr>
 										<th valign='top' scope='row' style='width: 25%;'>&nbsp;</th>
 										<td valign='top'>
-											<?php _e('or just override the above with JS','popover'); ?>&nbsp;<input type='checkbox' name='popoverusejs' id='popoverusejs' value='yes' <?php if($popover_usejs == 'yes') echo "checked='checked'"; ?> />
+											<?php _e('or use Javascript to center the popover','popover'); ?>&nbsp;<input type='checkbox' name='popoverusejs' id='popoverusejs' value='yes' <?php if($popover_usejs == 'yes') echo "checked='checked'"; ?> />
 										</td>
 									</tr>
 
@@ -906,7 +906,7 @@ if(!class_exists('popoveradmin')) {
 									<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Use Style','popover'); ?></strong></th>
 									<td valign='top'>
 										<?php
-										$availablestyles = apply_filters( 'popover_available_styles', array( 'Default' => popover_dir('css/default')) );
+										$availablestyles = apply_filters( 'popover_available_styles_directory', array( 'Default' => popover_dir('popoverincludes/css/default')) );
 										?>
 										<select name='popoverstyle'>
 										<?php

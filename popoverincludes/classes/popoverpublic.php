@@ -6,10 +6,22 @@ if(!class_exists('popoverpublic')) {
 
 		var $mylocation = '';
 		var $build = 3;
+		var $db;
+
+		var $tables = array( 'popover' );
+		var $popover;
 
 		var $activepopover = false;
 
 		function __construct() {
+
+			global $wpdb;
+
+			$this->db =& $wpdb;
+
+			foreach($this->tables as $table) {
+				$this->$table = popover_db_prefix($this->db, $table);
+			}
 
 			add_action('init', array(&$this, 'selective_message_display'), 1);
 
@@ -83,6 +95,8 @@ if(!class_exists('popoverpublic')) {
 
 					if(!empty($popover_check)) {
 
+						print_r($popover_check);
+
 						$order = explode(',', $popover_check['order']);
 
 						foreach($order as $key) {
@@ -96,7 +110,8 @@ if(!class_exists('popoverpublic')) {
 													}
 													break;
 
-								case "loggedin":	if(!$this->is_loggedin()) {
+								case "loggedin":
+													if(!$this->is_loggedin()) {
 														$show = true;
 													} else {
 														return false;
@@ -169,8 +184,17 @@ if(!class_exists('popoverpublic')) {
 					}
 
 					if($show == true) {
+
+						// Store the active popover so we know what we are using in the footer.
+						$this->activepopover = $popover;
+
+						$availablestyles = apply_filters( 'popover_available_styles_url', array( 'Default' => popover_url('popoverincludes/css/default')) );
+
+						if( in_array($popoverstyle, array_keys($availablestyles)) ) {
+							wp_enqueue_style('popovercss', trailingslashit($availablestyles[$popoverstyle]) . 'style.css', array(), $this->build);
+						}
+
 						// Show the advert
-						wp_enqueue_style('popovercss', popover_url('popoverincludes/css/popover.css'), array(), $this->build);
 						wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
 
 						if($popover_usejs == 'yes') {
@@ -190,8 +214,6 @@ if(!class_exists('popoverpublic')) {
 						}
 						if(!headers_sent()) setcookie('popover_view_'.COOKIEHASH, $count , time() + 30000000, COOKIEPATH, COOKIE_DOMAIN);
 
-						// Store the active popover so we know what we are using in the footer.
-						$this->activepopover = $popover;
 						break;
 					}
 
@@ -221,7 +243,6 @@ if(!class_exists('popoverpublic')) {
 
 			$popover_title = stripslashes($popover->popover_title);
 			$popover_content = stripslashes($popover->popover_content);
-			$popover->popover_settings = unserialize($popover->popover_settings);
 
 			$popover_size = $popover->popover_settings['popover_size'];
 			$popover_location = $popover->popover_settings['popover_location'];
@@ -242,28 +263,34 @@ if(!class_exists('popoverpublic')) {
 			$popoverstyle = $popover->popover_settings['popover_style'];
 
 			if($popover_usejs == 'yes') {
-				$style = '';
+				$style = 'z-index:999999;';
 				$box = 'color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
 
 			} else {
-				$style =  'left: ' . $popover_location['left'] . '; top: ' . $popover_location['top'] . ';';
+				$style =  'left: ' . $popover_location['left'] . '; top: ' . $popover_location['top'] . ';' . ' z-index:999999;';
 				$style .= 'margin-top: ' . $popover_margin['top'] . '; margin-bottom: ' . $popover_margin['bottom'] . '; margin-right: ' . $popover_margin['right'] . '; margin-left: ' . $popover_margin['left'] . ';';
 
 				$box = 'width: ' . $popover_size['width'] . '; height: ' . $popover_size['height'] . '; color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
 
 			}
 
-			?>
-			<div id='messagebox' class='visiblebox' style='<?php echo $style; ?>'>
-				<a href='' id='closebox' title='Close this box'></a>
-				<div id='message' style='<?php echo $box; ?>'>
-					<?php echo do_shortcode($content); ?>
-					<div class='clear'></div>
-					<div class='claimbutton hide'><a href='#' id='clearforever'><?php _e('Never see this message again.','popover'); ?></a></div>
-				</div>
-				<div class='clear'></div>
-			</div>
-			<?php
+			$availablestyles = apply_filters( 'popover_available_styles_directory', array( 'Default' => popover_dir('popoverincludes/css/default')) );
+
+			if( in_array($popoverstyle, array_keys($availablestyles)) ) {
+				?>
+					<div id='messagebox' class='visiblebox' style='<?php echo $style; ?>'>
+						<a href='' id='closebox' title='Close this box'></a>
+						<div id='message' style='<?php echo $box; ?>'>
+							<?php echo do_shortcode($popover_content); ?>
+							<div class='clear'></div>
+							<div class='claimbutton hide'><a href='#' id='clearforever'><?php _e('Never see this message again.','popover'); ?></a></div>
+						</div>
+						<div class='clear'></div>
+					</div>
+				<?php
+			}
+
+
 		}
 
 		function is_fromsearchengine() {
