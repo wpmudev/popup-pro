@@ -594,9 +594,6 @@ if(!class_exists('popoveradmin')) {
 						if($popovers) {
 							$popovercount = 0;
 							foreach($popovers as $key => $popover) {
-
-								$p = maybe_unserialize($popover->popover_settings);
-
 								?>
 								<tr valign="middle" class="alternate draghandle" id="<?php echo $popover->id; ?>">
 
@@ -624,7 +621,45 @@ if(!class_exists('popoveradmin')) {
 										</td>
 
 									<td class="column-name">
-										<?php echo esc_html($plugin); ?>
+										<?php
+											$p = maybe_unserialize($popover->popover_settings);
+											$rules = $p['popover_check'];
+											foreach( (array) $rules as $key => $value ) {
+												if($key == 'order') {
+													continue;
+												}
+												switch($key) {
+
+													case 'supporter':		_e('Blog is not a supporter', 'popover');
+																			break;
+
+													case 'isloggedin':		_e('Visitor is logged in', 'popover');
+																			break;
+
+													case 'loggedin':		_e('Visitor is not logged in', 'popover');
+																			break;
+
+													case 'commented':		_e('Visitor has never commented', 'popover');
+																			break;
+
+													case 'searchengine':	_e('Visit via a search engine', 'popover');
+																			break;
+
+													case 'internal':		_e('Visit not via an Internal link', 'popover');
+																			break;
+
+													case 'referrer':		_e('Visit via specific referer', 'popover');
+																			break;
+
+													case 'count':			_e('Popover shown less than', 'popover');
+																			break;
+
+													default:				echo apply_filters('popover_nice_rule_name', $key);
+																			break;
+											}
+											echo "<br/>";
+										}
+										?>
 										</td>
 									<td class="column-active">
 										<?php
