@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Test Head Footer
+Addon Name: Test Head Footer
 Plugin URI:  http://gist.github.com/378450
 Description: Tests for the existence and functionality of wp_head and wp_footer in the active theme
 Author:      Matt Martz

@@ -28,13 +28,7 @@ if(!class_exists('popoveradmin')) {
 
 			// Add header files
 			add_action('load-toplevel_page_popover', array(&$this, 'add_admin_header_popover_menu'));
-
-			//add_action('load-autoblog_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog_admin'));
-			//add_action('load-autoblog_page_autoblog_options', array(&$this, 'add_admin_header_autoblog_options'));
-			add_action('load-popover_page_popoversplugins', array(&$this, 'add_admin_header_popover_plugins'));
-
-			//add_action('load-settings_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
-			//add_action('load-tools_page_popoverssadmin', array(&$this, 'add_admin_header_popover'));
+			add_action('load-pop-overs_page_popoveraddons', array(&$this, 'add_admin_header_popover_addons'));
 
 			// Ajax calls
 			add_action( 'wp_ajax_popover_update_order', array(&$this, 'ajax_update_popover_order') );
@@ -69,7 +63,7 @@ if(!class_exists('popoveradmin')) {
 			}
 
 			$addnew = add_submenu_page('popover', __('Create New Pop Over','popover'), __('Create New','popover'), 'manage_options', "popover&amp;action=add", array(&$this,'handle_addnewpopover_panel'));
-			add_submenu_page('popover', __('Manage Add-ons Plugins','popover'), __('Add-ons','popover'), 'manage_options', "popoversaddons", array(&$this,'handle_addons_panel'));
+			add_submenu_page('popover', __('Manage Add-ons Plugins','popover'), __('Add-ons','popover'), 'manage_options', "popoveraddons", array(&$this,'handle_addons_panel'));
 
 		}
 
@@ -241,8 +235,8 @@ if(!class_exists('popoveradmin')) {
 			$this->update_admin_header_popover();
 		}
 
-		function add_admin_header_popover_plugins() {
-			$this->handle_plugins_panel_updates();
+		function add_admin_header_popover_addons() {
+			$this->handle_addons_panel_updates();
 		}
 
 		function reorder_popovers( $popover_id, $order ) {
@@ -1407,7 +1401,7 @@ if(!class_exists('popoveradmin')) {
 			<?php
 		}
 
-		function handle_plugins_panel_updates() {
+		function handle_addons_panel_updates() {
 			global $action, $page;
 
 			wp_reset_vars( array('action', 'page') );
@@ -1418,18 +1412,18 @@ if(!class_exists('popoveradmin')) {
 				}
 			}
 
-			$active = get_option('popover_activated_plugins', array());
+			$active = get_option('popover_activated_addons', array());
 
 			switch(addslashes($action)) {
 
-				case 'deactivate':	$key = addslashes($_GET['plugin']);
+				case 'deactivate':	$key = addslashes($_GET['addon']);
 									if(!empty($key)) {
-										check_admin_referer('toggle-plugin-' . $key);
+										check_admin_referer('toggle-addon-' . $key);
 
 										$found = array_search($key, $active);
 										if($found !== false) {
 											unset($active[$found]);
-											update_option('popover_activated_plugins', array_unique($active));
+											update_option('popover_activated_addons', array_unique($active));
 											wp_safe_redirect( add_query_arg( 'msg', 5, wp_get_referer() ) );
 										} else {
 											wp_safe_redirect( add_query_arg( 'msg', 6, wp_get_referer() ) );
@@ -1437,13 +1431,13 @@ if(!class_exists('popoveradmin')) {
 									}
 									break;
 
-				case 'activate':	$key = addslashes($_GET['plugin']);
+				case 'activate':	$key = addslashes($_GET['addon']);
 									if(!empty($key)) {
-										check_admin_referer('toggle-plugin-' . $key);
+										check_admin_referer('toggle-addon-' . $key);
 
 										if(!in_array($key, $active)) {
 											$active[] = $key;
-											update_option('popover_activated_plugins', array_unique($active));
+											update_option('popover_activated_addons', array_unique($active));
 											wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
 										} else {
 											wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
@@ -1452,8 +1446,8 @@ if(!class_exists('popoveradmin')) {
 									break;
 
 				case 'bulk-toggle':
-									check_admin_referer('bulk-plugins');
-									foreach($_GET['plugincheck'] AS $key) {
+									check_admin_referer('bulk-addons');
+									foreach($_GET['addoncheck'] AS $key) {
 										$found = array_search($key, $active);
 										if($found !== false) {
 											unset($active[$found]);
@@ -1461,34 +1455,34 @@ if(!class_exists('popoveradmin')) {
 											$active[] = $key;
 										}
 									}
-									update_option('popover_activated_plugins', array_unique($active));
+									update_option('popover_activated_addons', array_unique($active));
 									wp_safe_redirect( add_query_arg( 'msg', 7, wp_get_referer() ) );
 									break;
 
 			}
 		}
 
-		function handle_plugins_panel() {
+		function handle_addons_panel() {
 			global $action, $page;
 
 			wp_reset_vars( array('action', 'page') );
 
 			$messages = array();
-			$messages[1] = __('Plugin updated.','popover');
-			$messages[2] = __('Plugin not updated.','popover');
+			$messages[1] = __('Add-on updated.','popover');
+			$messages[2] = __('Add-on not updated.','popover');
 
-			$messages[3] = __('Plugin activated.','popover');
-			$messages[4] = __('Plugin not activated.','popover');
+			$messages[3] = __('Add-on activated.','popover');
+			$messages[4] = __('Add-on not activated.','popover');
 
-			$messages[5] = __('Plugin deactivated.','popover');
-			$messages[6] = __('Plugin not deactivated.','popover');
+			$messages[5] = __('Add-on deactivated.','popover');
+			$messages[6] = __('Add-on not deactivated.','popover');
 
-			$messages[7] = __('Plugin activation toggled.','popover');
+			$messages[7] = __('Add-on activation toggled.','popover');
 
 			?>
 			<div class='wrap'>
 				<div class="icon32" id="icon-plugins"><br></div>
-				<h2><?php _e('Edit Plugins','popover'); ?></h2>
+				<h2><?php _e('Edit Add-ons','popover'); ?></h2>
 
 				<?php
 				if ( isset($_GET['msg']) ) {
@@ -1506,10 +1500,10 @@ if(!class_exists('popoveradmin')) {
 
 				<div class="alignleft actions">
 				<select name="action">
-				<option selected="selected" value=""><?php _e('Bulk Actions'); ?></option>
-				<option value="toggle"><?php _e('Toggle activation'); ?></option>
+				<option selected="selected" value=""><?php _e('Bulk Actions', 'popover'); ?></option>
+				<option value="toggle"><?php _e('Toggle activation', 'popover'); ?></option>
 				</select>
-				<input type="submit" class="button-secondary action" id="doaction" name="doaction" value="<?php _e('Apply'); ?>">
+				<input type="submit" class="button-secondary action" id="doaction" name="doaction" value="<?php _e('Apply', 'popover'); ?>">
 
 				</div>
 
@@ -1521,18 +1515,18 @@ if(!class_exists('popoveradmin')) {
 				<div class="clear"></div>
 
 				<?php
-					wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-plugins');
+					wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-addons');
 
-					$columns = array(	"name"		=>	__('Plugin Name', 'membership'),
-										"file" 		=> 	__('Plugin File','membership'),
-										"active"	=>	__('Active','membership')
+					$columns = array(	"name"		=>	__('Add-on Name', 'popover'),
+										"file" 		=> 	__('Add-on File','popover'),
+										"active"	=>	__('Active','popover')
 									);
 
-					$columns = apply_filters('popover_plugincolumns', $columns);
+					$columns = apply_filters('popover_addoncolumns', $columns);
 
-					$plugins = get_popover_plugins();
+					$addons = get_popover_addons();
 
-					$active = get_option('popover_activated_plugins', array());
+					$active = get_option('popover_activated_addons', array());
 
 				?>
 
@@ -1566,47 +1560,47 @@ if(!class_exists('popoveradmin')) {
 
 					<tbody>
 						<?php
-						if($plugins) {
-							foreach($plugins as $key => $plugin) {
+						if($addons) {
+							foreach($addons as $key => $addon) {
 								$default_headers = array(
-									                'Name' => 'Plugin Name',
+									                'Name' => 'Addon Name',
 													'Author' => 'Author',
 													'Description'	=>	'Description',
 													'AuthorURI' => 'Author URI'
 									        );
 
-								$plugin_data = get_file_data( popover_dir('popoverincludes/plugins/' . $plugin), $default_headers, 'plugin' );
+								$addon_data = get_file_data( popover_dir('popoverincludes/addons/' . $addon), $default_headers, 'plugin' );
 
-								if(empty($plugin_data['Name'])) {
+								if(empty($addon_data['Name'])) {
 									continue;
 								}
 
 								?>
-								<tr valign="middle" class="alternate" id="plugin-<?php echo $plugin; ?>">
-									<th class="check-column" scope="row"><input type="checkbox" value="<?php echo esc_attr($plugin); ?>" name="plugincheck[]"></th>
+								<tr valign="middle" class="alternate" id="addon-<?php echo $addon; ?>">
+									<th class="check-column" scope="row"><input type="checkbox" value="<?php echo esc_attr($addon); ?>" name="addoncheck[]"></th>
 									<td class="column-name">
-										<strong><?php echo esc_html($plugin_data['Name']) . "</strong>" . __(' by ', 'popover') . "<a href='" . esc_attr($plugin_data['AuthorURI']) . "'>" . esc_html($plugin_data['Author']) . "</a>"; ?>
-										<?php if(!empty($plugin_data['Description'])) {
-											?><br/><?php echo esc_html($plugin_data['Description']);
+										<strong><?php echo esc_html($addon_data['Name']) . "</strong>" . __(' by ', 'popover') . "<a href='" . esc_attr($addon_data['AuthorURI']) . "'>" . esc_html($addon_data['Author']) . "</a>"; ?>
+										<?php if(!empty($addon_data['Description'])) {
+											?><br/><?php echo esc_html($addon_data['Description']);
 											}
 
 											$actions = array();
 
-											if(in_array($plugin, $active)) {
-												$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;plugin=" . $plugin . "", 'toggle-plugin-' . $plugin) . "'>" . __('Deactivate') . "</a></span>";
+											if(in_array($addon, $active)) {
+												$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;addon=" . $addon . "", 'toggle-addon-' . $addon) . "'>" . __('Deactivate', 'popover') . "</a></span>";
 											} else {
-												$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=activate&amp;plugin=" . $plugin . "", 'toggle-plugin-' . $plugin) . "'>" . __('Activate') . "</a></span>";
+												$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=activate&amp;addon=" . $addon . "", 'toggle-addon-' . $addon) . "'>" . __('Activate', 'popover') . "</a></span>";
 											}
 										?>
 										<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>
 										</td>
 
 									<td class="column-name">
-										<?php echo esc_html($plugin); ?>
+										<?php echo esc_html($addon); ?>
 										</td>
 									<td class="column-active">
 										<?php
-											if(in_array($plugin, $active)) {
+											if(in_array($addon, $active)) {
 												echo "<strong>" . __('Active', 'popover') . "</strong>";
 											} else {
 												echo __('Inactive', 'popover');
@@ -1620,7 +1614,7 @@ if(!class_exists('popoveradmin')) {
 							$columncount = count($columns) + 1;
 							?>
 							<tr valign="middle" class="alternate" >
-								<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Plugns where found for this install.','popover'); ?></td>
+								<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Add-ons where found for this install.','popover'); ?></td>
 						    </tr>
 							<?php
 						}
@@ -1634,10 +1628,10 @@ if(!class_exists('popoveradmin')) {
 
 				<div class="alignleft actions">
 				<select name="action2">
-					<option selected="selected" value=""><?php _e('Bulk Actions'); ?></option>
-					<option value="toggle"><?php _e('Toggle activation'); ?></option>
+					<option selected="selected" value=""><?php _e('Bulk Actions', 'popover'); ?></option>
+					<option value="toggle"><?php _e('Toggle activation', 'popover'); ?></option>
 				</select>
-				<input type="submit" class="button-secondary action" id="doaction2" name="doaction2" value="Apply">
+				<input type="submit" class="button-secondary action" id="doaction2" name="doaction2" value="<?php _e('Apply', 'popover'); ?>">
 				</div>
 				<div class="alignright actions"></div>
 				<br class="clear">

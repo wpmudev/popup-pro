@@ -45,5 +45,7 @@ if(is_admin()) {
 	$popover = new popoverpublic();
 }
 
+load_popover_addons();
+
 
 ?>
