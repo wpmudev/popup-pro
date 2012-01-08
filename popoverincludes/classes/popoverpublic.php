@@ -7,10 +7,11 @@ if(!class_exists('popoverpublic')) {
 		var $mylocation = '';
 		var $build = 3;
 
+		var $activepopover = false;
+
 		function __construct() {
 
 			add_action('init', array(&$this, 'selective_message_display'), 1);
-			add_action('wp_footer', array(&$this, 'selective_message_display'));
 
 			add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
 
@@ -33,126 +34,170 @@ if(!class_exists('popoverpublic')) {
 
 		}
 
+		function get_active_popovers() {
+			$sql = $this->db->prepare( "SELECT * FROM {$this->popover} WHERE popover_active = 1 ORDER BY popover_order ASC" );
+
+			return $this->db->get_results( $sql );
+		}
+
 		function selective_message_display() {
 
-			if(is_multisite() && defined('PO_GLOBAL')) {
+			if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
+				$updateoption = 'update_site_option';
 				$getoption = 'get_site_option';
 			} else {
+				$updateoption = 'update_option';
 				$getoption = 'get_option';
 			}
 
-			$popover_check = $getoption('popover_check', array());
+			$popovers = $this->get_active_popovers();
 
-			$show = false;
+			if(!empty($popovers)) {
 
-			if(!empty($popover_check)) {
+				foreach( (array) $popovers as $popover ) {
 
-				$order = explode(',', $popover_check['order']);
+					// We have an active popover so extract the information and test it
+					$popover_title = stripslashes($popover->popover_title);
+					$popover_content = stripslashes($popover->popover_content);
+					$popover->popover_settings = unserialize($popover->popover_settings);
 
-				foreach($order as $key) {
-					switch ($key) {
+					$popover_size = $popover->popover_settings['popover_size'];
+					$popover_location = $popover->popover_settings['popover_location'];
+					$popover_colour = $popover->popover_settings['popover_colour'];
+					$popover_margin = $popover->popover_settings['popover_margin'];
 
-						case "supporter":
-											if(function_exists('is_supporter') && !is_supporter()) {
-												$show = true;
-											} else {
-												return false;
-											}
-											break;
+					$popover_size = $this->sanitise_array($popover_size);
+					$popover_location = $this->sanitise_array($popover_location);
+					$popover_colour = $this->sanitise_array($popover_colour);
+					$popover_margin = $this->sanitise_array($popover_margin);
 
-						case "loggedin":	if(!$this->is_loggedin()) {
-												$show = true;
-											} else {
-												return false;
-											}
-											break;
+					$popover_check = $popover->popover_settings['popover_check'];
+					$popover_ereg = $popover->popover_settings['popover_ereg'];
+					$popover_count = $popover->popover_settings['popover_count'];
 
-						case "isloggedin":	if($this->is_loggedin()) {
-												$show = true;
-											} else {
-												return false;
-											}
-											break;
+					$popover_usejs = $popover->popover_settings['popover_usejs'];
 
-						case "commented":	if(!$this->has_commented()) {
-												$show = true;
-											} else {
-												return false;
-											}
-											break;
+					$popoverstyle = $popover->popover_settings['popover_style'];
 
-						case "searchengine":
-											if($this->is_fromsearchengine()) {
-												$show = true;
-											} else {
-												return false;
-											}
-											break;
+					$show = false;
 
-						case "internal":	$internal = str_replace('http://','',get_option('siteurl'));
-											if(!$this->referrer_matches(addcslashes($internal,"/"))) {
-												$show = true;
-											} else {
-												return false;
-											}
-											break;
+					if(!empty($popover_check)) {
 
-						case "referrer":	$match = $getoption('popover_ereg','');
-											if($this->is_fromsearchengine(addcslashes($match,"/"))) {
-												$show = true;
-											} else {
-												return false;
-											}
-											break;
+						$order = explode(',', $popover_check['order']);
 
-						case "count":		$popover_count = $getoption('popover_count', '3');
-											if($this->has_reached_limit($popover_count)) {
-												return false;
-											}
-											break;
+						foreach($order as $key) {
+							switch ($key) {
 
-						default:			if(has_filter('popover_process_rule_' . $key)) {
-												if(apply_filters( 'popover_process_rule_' . $key, false )) {
-													$show = true;
-												} else {
-													return false;
-												}
-											}
-											break;
+								case "supporter":
+													if(function_exists('is_supporter') && !is_supporter()) {
+														$show = true;
+													} else {
+														return false;
+													}
+													break;
+
+								case "loggedin":	if(!$this->is_loggedin()) {
+														$show = true;
+													} else {
+														return false;
+													}
+													break;
+
+								case "isloggedin":	if($this->is_loggedin()) {
+														$show = true;
+													} else {
+														return false;
+													}
+													break;
+
+								case "commented":	if(!$this->has_commented()) {
+														$show = true;
+													} else {
+														return false;
+													}
+													break;
+
+								case "searchengine":
+													if($this->is_fromsearchengine()) {
+														$show = true;
+													} else {
+														return false;
+													}
+													break;
+
+								case "internal":	$internal = str_replace('http://','',get_option('siteurl'));
+													if(!$this->referrer_matches(addcslashes($internal,"/"))) {
+														$show = true;
+													} else {
+														return false;
+													}
+													break;
+
+								case "referrer":	$match = $popover_ereg;
+													if($this->is_fromsearchengine(addcslashes($match,"/"))) {
+														$show = true;
+													} else {
+														return false;
+													}
+													break;
+
+								case "count":
+													if($this->has_reached_limit($popover_count)) {
+														return false;
+													}
+													break;
+
+								default:			if(has_filter('popover_process_rule_' . $key)) {
+														if(apply_filters( 'popover_process_rule_' . $key, false )) {
+															$show = true;
+														} else {
+															return false;
+														}
+													}
+													break;
+
+							}
+						}
+					}
+
+					if($show == true) {
+
+						if($this->clear_forever()) {
+							$show = false;
+						}
 
 					}
+
+					if($show == true) {
+						// Show the advert
+						wp_enqueue_style('popovercss', popover_url('popoverincludes/css/popover.css'), array(), $this->build);
+						wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
+
+						if($popover_usejs == 'yes') {
+							wp_enqueue_script('popoveroverridejs', popover_url('popoverincludes/js/popoversizing.js'), array('jquery'), $this->build);
+						}
+
+						add_action('wp_footer', array(&$this, 'page_footer'));
+						wp_enqueue_script('jquery');
+
+						// Add the cookie
+						if ( isset($_COOKIE['popover_view_'.COOKIEHASH]) ) {
+							$count = intval($_COOKIE['popover_view_'.COOKIEHASH]);
+							if(!is_numeric($count)) $count = 0;
+							$count++;
+						} else {
+							$count = 1;
+						}
+						if(!headers_sent()) setcookie('popover_view_'.COOKIEHASH, $count , time() + 30000000, COOKIEPATH, COOKIE_DOMAIN);
+
+						// Store the active popover so we know what we are using in the footer.
+						$this->activepopover = $popover;
+						break;
+					}
+
+
 				}
-			}
 
-			if($show == true) {
-
-				if($this->clear_forever()) {
-					$show = false;
-				}
-
-			}
-
-			if($show == true) {
-				// Show the advert
-				wp_enqueue_style('popovercss', popover_url('popoverincludes/css/popover.css'), array(), $this->build);
-				wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
-
-				if($getoption('popover_usejs', 'no') == 'yes') {
-					wp_enqueue_script('popoveroverridejs', popover_url('popoverincludes/js/popoversizing.js'), array('jquery'), $this->build);
-				}
-
-				add_action('wp_footer', array(&$this, 'page_footer'));
-				wp_enqueue_script('jquery');
-
-				// Add the cookie
-				if ( isset($_COOKIE['popover_view_'.COOKIEHASH]) ) {
-					$count = intval($_COOKIE['popover_view_'.COOKIEHASH]);
-					if(!is_numeric($count)) $count = 0;
-					$count++;
-				} else {
-					$count = 1;
-				}
-				if(!headers_sent()) setcookie('popover_view_'.COOKIEHASH, $count , time() + 30000000, COOKIEPATH, COOKIE_DOMAIN);
 			}
 
 		}
@@ -168,25 +213,35 @@ if(!class_exists('popoverpublic')) {
 
 		function page_footer() {
 
-			if(is_multisite() && defined('PO_GLOBAL')) {
-				$getoption = 'get_site_option';
-			} else {
-				$getoption = 'get_option';
+			if(!$this->activepopover) {
+				return;
 			}
 
-			$content = stripslashes($getoption('popover_content', ''));
+			$popover = $this->activepopover;
 
-			$popover_size = $getoption('popover_size', array('width' => '500px', 'height' => '200px'));
-			$popover_location = $getoption('popover_location', array('left' => '100px', 'top' => '100px'));
-			$popover_colour = $getoption('popover_colour', array('back' => 'FFFFFF', 'fore' => '000000'));
-			$popover_margin = $getoption('popover_margin', array('left' => '0px', 'top' => '0px', 'right' => '0px', 'bottom' => '0px'));
+			$popover_title = stripslashes($popover->popover_title);
+			$popover_content = stripslashes($popover->popover_content);
+			$popover->popover_settings = unserialize($popover->popover_settings);
+
+			$popover_size = $popover->popover_settings['popover_size'];
+			$popover_location = $popover->popover_settings['popover_location'];
+			$popover_colour = $popover->popover_settings['popover_colour'];
+			$popover_margin = $popover->popover_settings['popover_margin'];
 
 			$popover_size = $this->sanitise_array($popover_size);
 			$popover_location = $this->sanitise_array($popover_location);
 			$popover_colour = $this->sanitise_array($popover_colour);
 			$popover_margin = $this->sanitise_array($popover_margin);
 
-			if($getoption('popover_usejs', 'no') == 'yes') {
+			$popover_check = $popover->popover_settings['popover_check'];
+			$popover_ereg = $popover->popover_settings['popover_ereg'];
+			$popover_count = $popover->popover_settings['popover_count'];
+
+			$popover_usejs = $popover->popover_settings['popover_usejs'];
+
+			$popoverstyle = $popover->popover_settings['popover_style'];
+
+			if($popover_usejs == 'yes') {
 				$style = '';
 				$box = 'color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
 
@@ -197,7 +252,6 @@ if(!class_exists('popoverpublic')) {
 				$box = 'width: ' . $popover_size['width'] . '; height: ' . $popover_size['height'] . '; color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
 
 			}
-
 
 			?>
 			<div id='messagebox' class='visiblebox' style='<?php echo $style; ?>'>
