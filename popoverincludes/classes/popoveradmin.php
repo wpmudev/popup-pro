@@ -32,10 +32,37 @@ if(!class_exists('popoveradmin')) {
 
 			// Ajax calls
 			add_action( 'wp_ajax_popover_update_order', array(&$this, 'ajax_update_popover_order') );
+
+			$installed = get_option('popover_installed', false);
+
+			if($installed === false || $installed != $this->build) {
+				$this->install();
+
+				update_option('popover_installed', $this->build);
+			}
 		}
 
 		function popoveradmin() {
 			$this->__construct();
+		}
+
+		function install() {
+
+			if($this->db->get_var( "SHOW TABLES LIKE '" . $this->popover . "' ") != $this->popover) {
+				 $sql = "CREATE TABLE `" . $this->popover . "` (
+				  	`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+					  `popover_title` varchar(250) DEFAULT NULL,
+					  `popover_content` text,
+					  `popover_settings` text,
+					  `popover_order` bigint(20) DEFAULT '0',
+					  `popover_active` int(11) DEFAULT '0',
+					  PRIMARY KEY (`id`)
+					)";
+
+				$this->db->query($sql);
+
+			}
+
 		}
 
 		function load_textdomain() {

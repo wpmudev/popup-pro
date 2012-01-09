@@ -27,8 +27,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 // a true setting for PO_GLOBAL means that this plugin operates on a global site-admin basis
-// commenting out this line means that the plugin operates on a blog by blog basis
-define('PO_GLOBAL', true);
+// setting this to false means that the plugin operates on a blog by blog basis
+define('PO_GLOBAL', false);
 
 require_once('popoverincludes/classes/functions.php');
 // Set up my location
