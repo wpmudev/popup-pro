@@ -819,7 +819,7 @@ if(!class_exists('popoveradmin')) {
 								</div>
 
 								<h3><?php _e('Active rules','popover'); ?></h3>
-								<p class='description'><?php _e('These are the rules that will determine if a popover should show when a visitor arrives at your website.','popover'); ?></p>
+								<p class='description'><?php _e('These are the rules that will determine if a popover should show when a visitor arrives at your website ALL rules must be true for the popover to show.','popover'); ?></p>
 								<div id='positive-rules-holder'>
 									<?php
 
