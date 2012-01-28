@@ -926,30 +926,44 @@ if(!class_exists('popoveradmin')) {
 
 								</table>
 
-								<h3><?php _e('Pop Over Style','popover'); ?></h3>
-								<table class='form-table'>
+								<?php
+								$availablestyles = apply_filters( 'popover_available_styles_directory', array( 'Default' => popover_dir('popoverincludes/css/default')) );
 
-								<tr>
-									<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Use Style','popover'); ?></strong></th>
-									<td valign='top'>
-										<?php
-										$availablestyles = apply_filters( 'popover_available_styles_directory', array( 'Default' => popover_dir('popoverincludes/css/default')) );
+								if(count($availablestyles) > 1) {
+									?>
+									<h3><?php _e('Pop Over Style','popover'); ?></h3>
+									<table class='form-table'>
+
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Use Style','popover'); ?></strong></th>
+										<td valign='top'>
+											<?php
+											$availablestyles = apply_filters( 'popover_available_styles_directory', array( 'Default' => popover_dir('popoverincludes/css/default')) );
+											?>
+											<select name='popoverstyle'>
+											<?php
+											foreach( (array) $availablestyles as $key => $location ) {
+													?>
+													<option value='<?php echo $key; ?>' <?php selected($key, $popoverstyle); ?>><?php echo $key; ?></option>
+													<?php
+											}
+											?>
+											</select>
+
+										</td>
+									</tr>
+
+									</table>
+									<?php
+								} else {
+									foreach( (array) $availablestyles as $key => $location ) {
+										// There's only one - but it's easy to get the key this way :)
 										?>
-										<select name='popoverstyle'>
+										<input type='hidden' name='popoverstyle' value='<?php echo $key; ?>' />
 										<?php
-										foreach( (array) $availablestyles as $key => $location ) {
-												?>
-												<option value='<?php echo $key; ?>' <?php selected($key, $popoverstyle); ?>><?php echo $key; ?></option>
-												<?php
-										}
-										?>
-										</select>
-
-									</td>
-								</tr>
-
-							</table>
-
+									}
+								}
+								?>
 								<div class='buttons'>
 										<?php
 										wp_original_referer_field(true, 'previous'); wp_nonce_field('update-popover');

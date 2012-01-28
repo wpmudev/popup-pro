@@ -30,7 +30,6 @@ function popoverclickactiontoggle() {
 function popoveraddtorules() {
 
 	moving = jQuery(this).parents('.popover-draggable').attr('id');
-	alert(moving);
 
 	if(moving != '') {
 		jQuery('#main-' + moving).appendTo('#positive-rules-holder');
