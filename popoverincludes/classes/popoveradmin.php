@@ -566,7 +566,7 @@ if(!class_exists('popoveradmin')) {
 					wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-popovers');
 
 					$columns = array(	"name"		=>	__('Pop Over Name', 'popover'),
-										"rules" 	=> 	__('Rules','popover'),
+										"rules" 	=> 	__('Conditions','popover'),
 										"active"	=>	__('Active','popover')
 									);
 
@@ -818,7 +818,7 @@ if(!class_exists('popoveradmin')) {
 
 								</div>
 
-								<h3><?php _e('Active rules','popover'); ?></h3>
+								<h3><?php _e('Active conditions','popover'); ?></h3>
 								<p class='description'><?php _e('These are the rules that will determine if a popover should show when a visitor arrives at your website ALL rules must be true for the popover to show.','popover'); ?></p>
 								<div id='positive-rules-holder'>
 									<?php
@@ -909,7 +909,7 @@ if(!class_exists('popoveradmin')) {
 									<table class='form-table'>
 
 									<tr>
-										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Background Colour','popover'); ?></strong></th>
+										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Background Color','popover'); ?></strong></th>
 										<td valign='top'>
 											<?php _e('Hex:','popover'); ?>&nbsp;#
 											<input type='text' name='popoverbackground' id='popoverbackground' style='width: 10em;' value='<?php echo $popover_colour['back']; ?>' />
@@ -917,7 +917,7 @@ if(!class_exists('popoveradmin')) {
 									</tr>
 
 									<tr>
-										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Font Colour','popover'); ?></strong></th>
+										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Font Color','popover'); ?></strong></th>
 										<td valign='top'>
 											<?php _e('Hex:','popover'); ?>&nbsp;#
 											<input type='text' name='popoverforeground' id='popoverforeground' style='width: 10em;' value='<?php echo $popover_colour['fore']; ?>' />
@@ -1032,7 +1032,7 @@ if(!class_exists('popoveradmin')) {
 					<div class="popover-holder-wrap">
 
 						<div class="sidebar-name no-movecursor">
-							<h3><?php _e('Rules', 'popover'); ?></h3>
+							<h3><?php _e('Conditions', 'popover'); ?></h3>
 						</div>
 						<div class="section-holder" id="sidebar-rules" style="min-height: 98px;">
 							<ul class='popovers popovers-draggable'>
