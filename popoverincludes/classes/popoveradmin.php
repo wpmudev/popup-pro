@@ -530,7 +530,7 @@ if(!class_exists('popoveradmin')) {
 			?>
 			<div class='wrap'>
 				<div class="icon32" id="icon-themes"><br></div>
-				<h2><?php _e('Edit Pop Overs','popover'); ?></h2>
+				<h2><?php _e('Edit Pop Overs','popover'); ?><a class="add-new-h2" href="admin.php?page=<?php echo $page; ?>&action=add"><?php _e('Add New','membership'); ?></a></h2>
 
 				<?php
 				if ( isset($_GET['msg']) ) {
@@ -829,7 +829,7 @@ if(!class_exists('popoveradmin')) {
 
 											switch($key) {
 
-												case 'supporter':		if( function_exists('is_supporter') ) $this->admin_main('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', true);
+												case 'supporter':		//if( function_exists('is_supporter') ) $this->admin_main('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', true);
 																		break;
 
 												case 'isloggedin':		$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
@@ -955,10 +955,10 @@ if(!class_exists('popoveradmin')) {
 										wp_original_referer_field(true, 'previous'); wp_nonce_field('update-popover');
 										?>
 										<?php if($id !== false) { ?>
-											<input type='submit' value='<?php _e('Update', 'popover'); ?>' class='button' />
+											<input type='submit' value='<?php _e('Update', 'popover'); ?>' class='button-primary' />
 											<input type='hidden' name='action' value='updated' />
 										<?php } else { ?>
-											<input type='submit' value='<?php _e('Add', 'popover'); ?>' class='button' />
+											<input type='submit' value='<?php _e('Add', 'popover'); ?>' class='button-primary' />
 											<input type='hidden' name='action' value='added' />
 										<?php } ?>
 
@@ -972,10 +972,11 @@ if(!class_exists('popoveradmin')) {
 
 					<div id='hiden-actions'>
 					<?php
-
+						/*
 						if(!isset($popover_check['supporter']) && function_exists('is_supporter')) {
 							$this->admin_main('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', true);
 						}
+						*/
 
 						if(!isset($popover_check['isloggedin'])) {
 							$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
@@ -1022,53 +1023,55 @@ if(!class_exists('popoveradmin')) {
 						<div class="section-holder" id="sidebar-rules" style="min-height: 98px;">
 							<ul class='popovers popovers-draggable'>
 								<?php
+									/*
 									if(isset($popover_check['supporter']) && function_exists('is_supporter')) {
-										$this->admin_sidebar('supporter','Blog is not a supporter', true);
+										$this->admin_sidebar('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', true);
 									} elseif(function_exists('is_supporter')) {
-										$this->admin_sidebar('supporter','Blog is not a supporter', false);
+										$this->admin_sidebar('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', false);
 									}
+									*/
 
 									if(isset($popover_check['isloggedin'])) {
-										$this->admin_sidebar('isloggedin','Visitor is logged in', true);
+										$this->admin_sidebar('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
 									} else {
-										$this->admin_sidebar('isloggedin','Visitor is logged in', false);
+										$this->admin_sidebar('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', false);
 									}
 
 									if(isset($popover_check['loggedin'])) {
-										$this->admin_sidebar('loggedin','Visitor is not logged in', true);
+										$this->admin_sidebar('loggedin','Visitor is not logged in', 'Shows the popover if the user is <strong>not</strong> logged in to your site.', true);
 									} else {
-										$this->admin_sidebar('loggedin','Visitor is not logged in', false);
+										$this->admin_sidebar('loggedin','Visitor is not logged in', 'Shows the popover if the user is <strong>not</strong> logged in to your site.', false);
 									}
 
 									if(isset($popover_check['commented'])) {
-										$this->admin_sidebar('commented','Visitor has never commented', true);
+										$this->admin_sidebar('commented','Visitor has never commented', 'Shows the popover if the user has never left a comment.', true);
 									} else {
-										$this->admin_sidebar('commented','Visitor has never commented', false);
+										$this->admin_sidebar('commented','Visitor has never commented', 'Shows the popover if the user has never left a comment.', false);
 									}
 
 									if(isset($popover_check['searchengine'])) {
-										$this->admin_sidebar('searchengine','Visit via a search engine', true);
+										$this->admin_sidebar('searchengine','Visit via a search engine', 'Shows the popover if the user arrived via a search engine.', true);
 									} else {
-										$this->admin_sidebar('searchengine','Visit via a search engine', false);
+										$this->admin_sidebar('searchengine','Visit via a search engine', 'Shows the popover if the user arrived via a search engine.', false);
 									}
 
 									if(isset($popover_check['internal'])) {
-										$this->admin_sidebar('internal','Visit not via an Internal link', true);
+										$this->admin_sidebar('internal','Visit not via an Internal link', 'Shows the popover if the user did not arrive on this page via another page on your site.', true);
 									} else {
-										$this->admin_sidebar('internal','Visit not via an Internal link', false);
+										$this->admin_sidebar('internal','Visit not via an Internal link', 'Shows the popover if the user did not arrive on this page via another page on your site.', false);
 									}
 
 									if(isset($popover_check['referrer'])) {
-										$this->admin_sidebar('referrer','Visit via specific referer', true);
+										$this->admin_sidebar('referrer','Visit via specific referer', 'Shows the popover if the user arrived via a specific referrer.', true);
 									} else {
-										$this->admin_sidebar('referrer','Visit via specific referer', false);
+										$this->admin_sidebar('referrer','Visit via specific referer', 'Shows the popover if the user arrived via a specific referrer.', false);
 									}
 
 									//$popover_count
 									if(isset($popover_check['count'])) {
-										$this->admin_sidebar('count','Popover shown less than', true);
+										$this->admin_sidebar('count','Popover shown less than', 'Shows the popover if the user has only seen it less than a specific number of times.', true);
 									} else {
-										$this->admin_sidebar('count','Popover shown less than', false);
+										$this->admin_sidebar('count','Popover shown less than', 'Shows the popover if the user has only seen it less than a specific number of times.', false);
 									}
 
 									do_action('popover_additional_rules_sidebar');
@@ -1085,14 +1088,27 @@ if(!class_exists('popoveradmin')) {
 			<?php
 		}
 
-		function admin_sidebar($id, $title, $data = false) {
+		function admin_sidebar($id, $title, $message, $data = false) {
 			?>
 			<li class='popover-draggable' id='<?php echo $id; ?>' <?php if($data === true) echo "style='display:none;'"; ?>>
+
 				<div class='action action-draggable'>
-					<div class='action-top'>
+					<div class='action-top closed'>
+					<a href="#available-actions" class="action-button hide-if-no-js"></a>
 					<?php _e($title,'popover'); ?>
 					</div>
+					<div class='action-body closed'>
+						<?php if(!empty($message)) { ?>
+							<p>
+								<?php _e($message, 'popover'); ?>
+							</p>
+						<?php } ?>
+						<p>
+							<a href='#addtopopover' class='action-to-popover' title='<?php _e('Add this rule to the popover.','popover'); ?>'><?php _e('Add this rule to the popover.','popover'); ?></a>
+						</p>
+					</div>
 				</div>
+
 			</li>
 			<?php
 		}

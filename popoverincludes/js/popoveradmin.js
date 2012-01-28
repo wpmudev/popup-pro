@@ -17,6 +17,32 @@ function popoverremovemessage() {
 	return false;
 }
 
+function popoverclickactiontoggle() {
+	if(jQuery(this).parent().hasClass('open')) {
+		jQuery(this).parent().removeClass('open').addClass('closed');
+		jQuery(this).parents('.action').find('.action-body').removeClass('open').addClass('closed');
+	} else {
+		jQuery(this).parent().removeClass('closed').addClass('open');
+		jQuery(this).parents('.action').find('.action-body').removeClass('closed').addClass('open');
+	}
+}
+
+function popoveraddtorules() {
+
+	moving = jQuery(this).parents('.popover-draggable').attr('id');
+	alert(moving);
+
+	if(moving != '') {
+		jQuery('#main-' + moving).appendTo('#positive-rules-holder');
+		jQuery('#' + moving).hide();
+
+		// put the name in the relevant holding input field
+		jQuery('#in-positive-rules').val( jQuery('#in-positive-rules').val() + ',' + moving );
+	}
+
+	return false;
+}
+
 function popoverReady() {
 
 	jQuery('.popover-draggable').draggable({
@@ -56,6 +82,10 @@ function popoverReady() {
 
 	jQuery('a.removelink').click(popoverremoveaction);
 	jQuery('a#closemessage').click(popoverremovemessage);
+
+	jQuery('.action .action-top .action-button').click(popoverclickactiontoggle);
+
+	jQuery('a.action-to-popover').click(popoveraddtorules);
 
 
 }
