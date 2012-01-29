@@ -228,6 +228,8 @@ if(!class_exists('popoveradmin')) {
 
 		function add_admin_header_popover_menu() {
 
+			$this->add_admin_header_core();
+
 			if(in_array($_GET['action'], array('edit', 'add'))) {
 				$this->add_admin_header_popover();
 			} else {
@@ -247,6 +249,13 @@ if(!class_exists('popoveradmin')) {
 
 		}
 
+		function add_admin_header_core() {
+			// Add in help pages
+			$screen = get_current_screen();
+			$help = new Popover_Help( $screen );
+			$help->attach();
+		}
+
 		function add_admin_header_popover() {
 
 			global $wp_version;
@@ -263,6 +272,9 @@ if(!class_exists('popoveradmin')) {
 		}
 
 		function add_admin_header_popover_addons() {
+
+			$this->add_admin_header_core();
+
 			$this->handle_addons_panel_updates();
 		}
 

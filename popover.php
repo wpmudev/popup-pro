@@ -36,6 +36,7 @@ set_popover_url(__FILE__);
 set_popover_dir(__FILE__);
 
 if(is_admin()) {
+	require_once('popoverincludes/classes/popover.help.php');
 	require_once('popoverincludes/classes/popoveradmin.php');
 
 	$popover = new popoveradmin();
