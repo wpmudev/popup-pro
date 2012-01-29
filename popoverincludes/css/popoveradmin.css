@@ -101,6 +101,10 @@ input.wide {
 	margin-bottom: 5px;
 }
 
+#wp-popover_content-wrap {
+	width: 98%;
+}
+
 .popover-holder h3 {
 	background-color: #efefef;
 	text-shadow: 0 1px 0 #FFFFFF;

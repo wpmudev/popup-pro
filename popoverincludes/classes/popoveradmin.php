@@ -814,8 +814,15 @@ if(!class_exists('popoveradmin')) {
 								<input name='popover_title' id='popover_title' style='width: 97%; border: 1px solid; border-color: #DFDFDF;' value='<?php echo stripslashes($popover_title); ?>' /><br/><br/>
 
 								<label for='popovercontent'><?php _e('Popover content','popover'); ?></label><br/>
+								<?php
+								$args = array("textarea_name" => "popover_content", "textarea_rows" => 5);
+								wp_editor( stripslashes($popover_content), "popover_content", $args );
+								/*
+								?>
 								<textarea name='popover_content' id='popover_content' style='width: 98%' rows='5' cols='10'><?php echo stripslashes($popover_content); ?></textarea>
-
+								<?php
+								*/
+								?>
 								</div>
 
 								<h3><?php _e('Active conditions','popover'); ?></h3>
