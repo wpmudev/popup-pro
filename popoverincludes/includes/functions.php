@@ -107,8 +107,12 @@ function load_popover_addons() {
 
 			$pop_addons = apply_filters('popover_available_addons', $pop_addons);
 
-			foreach( $pop_addons as $pop_addon )
-				include_once( popover_dir('popoverincludes/addons/' . $pop_addon) );
+			foreach( $pop_addons as $pop_addon ) {
+				if(in_array($pop_addon, (array) $addons)) {
+					include_once( popover_dir('popoverincludes/addons/' . $pop_addon) );
+				}
+			}
+
 		}
 	}
 }
