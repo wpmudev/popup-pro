@@ -898,7 +898,7 @@ if(!class_exists('popoveradmin')) {
 
 							<input type='hidden' name='id' id='id' value='<?php echo $id; ?>' />
 							<input type='hidden' name='beingdragged' id='beingdragged' value='' />
-							<input type='hidden' name='popovercheck[order]' id='in-positive-rules' value='<? echo esc_attr($popover_check['order']); ?>' />
+							<input type='hidden' name='popovercheck[order]' id='in-positive-rules' value='<?php echo esc_attr($popover_check['order']); ?>' />
 
 						<div id='edit-popover' class='popover-holder-wrap'>
 							<div class='sidebar-name no-movecursor'>
