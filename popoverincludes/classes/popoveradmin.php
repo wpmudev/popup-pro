@@ -4,7 +4,7 @@ if(!class_exists('popoveradmin')) {
 
 	class popoveradmin {
 
-		var $build = 3;
+		var $build = 4;
 
 		var $db;
 
