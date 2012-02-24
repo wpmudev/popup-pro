@@ -30,12 +30,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // setting this to false means that the plugin operates on a blog by blog basis
 define('PO_GLOBAL', false);
 
-require_once('popoverincludes/classes/functions.php');
+require_once('popoverincludes/includes/functions.php');
 // Set up my location
 set_popover_url(__FILE__);
 set_popover_dir(__FILE__);
 
 if(is_admin()) {
+	require_once('popoverincludes/includes/class_wd_help_tooltips.php');
 	require_once('popoverincludes/classes/popover.help.php');
 	require_once('popoverincludes/classes/popoveradmin.php');
 
