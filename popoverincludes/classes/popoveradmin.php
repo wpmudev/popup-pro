@@ -40,6 +40,7 @@ if(!class_exists('popoveradmin')) {
 
 				update_option('popover_installed', $this->build);
 			}
+
 		}
 
 		function popoveradmin() {
@@ -244,7 +245,87 @@ if(!class_exists('popoveradmin')) {
 
 				wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popovermenu.css'), array(), $this->build);
 
+				// Check for transfer
+				if(isset($_GET['transfer'])) {
+					$this->handle_popover_transfer();
+				}
+
+				// Check for existing popovers
+				if($this->has_existing_popover()) {
+					add_action('all_admin_notices', array(&$this, 'show_popover_transfer_offer'));
+				}
+
 				$this->update_popover_admin();
+			}
+
+		}
+
+		function has_existing_popover() {
+
+			if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
+				$getoption = 'get_site_option';
+			} else {
+				$getoption = 'get_option';
+			}
+
+			$popsexist = $this->db->get_var( "SELECT COUNT(*) FROM {$this->popover}");
+
+			if($popsexist == 0 && $getoption('popover_content','no') != 'no' && $getoption('popover_notranfers', 'no') == 'no') {
+				// No pops - and one set in the options
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		function show_popover_transfer_offer() {
+
+			echo '<div class="updated fade below-h2"><p>' . sprintf(__("Welcome to Popover, would you like to transfer your existing Popover to the new format? <a href='%s'>Yes please transfer it</a> / <a href='%s'>No thanks, I'll create a new one myself.</a>", 'popover'), wp_nonce_url('admin.php?page=popover&amp;transfer=yes', 'transferpopover'), wp_nonce_url('admin.php?page=popover&amp;transfer=no','notransferpopover') ) . '</p></div>';
+
+		}
+
+		function handle_popover_transfer() {
+
+			if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
+				$updateoption = 'update_site_option';
+				$getoption = 'get_site_option';
+			} else {
+				$updateoption = 'update_option';
+				$getoption = 'get_option';
+			}
+
+			switch($_GET['transfer']) {
+
+				case 'yes':		check_admin_referer('transferpopover');
+								$popover = array();
+
+								$popover['popover_title'] = __('Transferred Popover', 'popover');
+								$popover['popover_content'] = $getoption('popover_content');
+
+								$popover['popover_settings'] = array();
+								$popover['popover_settings']['popover_size'] = $getoption('popover_size');
+								$popover['popover_settings']['popover_location'] = $getoption('popover_location');;
+								$popover['popover_settings']['popover_colour'] = $getoption('popover_colour');
+								$popover['popover_settings']['popover_margin'] = $getoption('popover_margin');
+								$popover['popover_settings']['popover_check'] = $getoption('popover_check');
+
+								$popover['popover_settings']['popover_count'] = $getoption('popover_count');
+								$popover['popover_settings']['popover_usejs'] = $getoption('popover_usejs');
+
+								$popover['popover_settings']['popover_style'] = 'Default';
+
+								$popover['popover_settings'] = serialize($popover['popover_settings']);
+
+								$popover['popover_active'] = 1;
+
+								$this->db->insert( $this->popover, $popover );
+								wp_safe_redirect( remove_query_arg( 'transfer', remove_query_arg( '_wpnonce' ) ) );
+								break;
+
+				case 'no':		check_admin_referer('notransferpopover');
+								$updateoption('popover_notranfers', 'yes');
+								wp_safe_redirect( remove_query_arg( 'transfer', remove_query_arg( '_wpnonce' ) ) );
+								break;
 			}
 
 		}
@@ -254,6 +335,7 @@ if(!class_exists('popoveradmin')) {
 			$screen = get_current_screen();
 			$help = new Popover_Help( $screen );
 			$help->attach();
+
 		}
 
 		function add_admin_header_popover() {
@@ -920,7 +1002,7 @@ if(!class_exists('popoveradmin')) {
 									<tr>
 										<th valign='top' scope='row' style='width: 25%;'>&nbsp;</th>
 										<td valign='top'>
-											<?php _e('or use Javascript to center the popover','popover'); ?>&nbsp;<input type='checkbox' name='popoverusejs' id='popoverusejs' value='yes' <?php if($popover_usejs == 'yes') echo "checked='checked'"; ?> />
+											<?php _e('or use Javascript to resize and center the popover','popover'); ?>&nbsp;<input type='checkbox' name='popoverusejs' id='popoverusejs' value='yes' <?php if($popover_usejs == 'yes') echo "checked='checked'"; ?> />
 										</td>
 									</tr>
 
@@ -991,7 +1073,7 @@ if(!class_exists('popoveradmin')) {
 											<input type='submit' value='<?php _e('Update', 'popover'); ?>' class='button-primary' />
 											<input type='hidden' name='action' value='updated' />
 										<?php } else { ?>
-											<input type='submit' value='<?php _e('Add', 'popover'); ?>' class='button-primary' />
+											<input type='submit' value='<?php _e('Add', 'popover'); ?>' class='button-primary' />&nbsp;<input type='submit' value='<?php _e('Add and Activate', 'popover'); ?>' class='button-primary' />
 											<input type='hidden' name='action' value='added' />
 										<?php } ?>
 
