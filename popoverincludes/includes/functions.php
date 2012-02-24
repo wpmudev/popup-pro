@@ -56,6 +56,10 @@ function popover_dir($extended) {
 
 }
 
+function popover_helpimage( $image ) {
+	return popover_url('popoverincludes/help/images/' . $image);
+}
+
 function popover_db_prefix(&$wpdb, $table) {
 
 	if( defined('PO_GLOBAL') && PO_GLOBAL == true ) {
