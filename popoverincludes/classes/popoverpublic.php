@@ -138,7 +138,7 @@ if(!class_exists('popoverpublic')) {
 													}
 													break;
 
-								case "internal":	$internal = str_replace('http://','',get_option('siteurl'));
+								case "internal":	$internal = str_replace('http://','',get_option('home'));
 													if(!$this->referrer_matches(addcslashes($internal,"/"))) {
 														$show = true;
 													} else {
