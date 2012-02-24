@@ -1238,7 +1238,7 @@ if(!class_exists('popoveradmin')) {
 			<div class='popover-operation' id='main-<?php echo $id; ?>'>
 				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
 				<div class='inner-operation'>
-					<p><? _e($message, 'popover'); ?></p>
+					<p><?php _e($message, 'popover'); ?></p>
 					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
 				</div>
 			</div>
@@ -1251,7 +1251,7 @@ if(!class_exists('popoveradmin')) {
 			<div class='popover-operation' id='main-<?php echo $id; ?>'>
 				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
 				<div class='inner-operation'>
-					<p><? _e($message, 'popover'); ?></p>
+					<p><?php _e($message, 'popover'); ?></p>
 					<input type='text' name='popoverereg' id='popoverereg' style='width: 10em;' value='<?php echo esc_html($data); ?>' />
 					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
 				</div>
@@ -1265,7 +1265,7 @@ if(!class_exists('popoveradmin')) {
 			<div class='popover-operation' id='main-<?php echo $id; ?>'>
 				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
 				<div class='inner-operation'>
-					<p><? _e($message, 'popover'); ?></p>
+					<p><?php _e($message, 'popover'); ?></p>
 					<input type='text' name='popovercount' id='popovercount' style='width: 2em;' value='<?php echo esc_html($data); ?>' />&nbsp;
 					<?php _e('times','popover'); ?>
 					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
