@@ -443,6 +443,10 @@ if(!class_exists('popoveradmin')) {
 
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
+			if(isset($_POST['addandactivate'])) {
+				$popover['popover_active'] = 1;
+			}
+
 			return $this->db->insert( $this->popover, $popover );
 
 		}
@@ -1073,7 +1077,7 @@ if(!class_exists('popoveradmin')) {
 											<input type='submit' value='<?php _e('Update', 'popover'); ?>' class='button-primary' />
 											<input type='hidden' name='action' value='updated' />
 										<?php } else { ?>
-											<input type='submit' value='<?php _e('Add', 'popover'); ?>' class='button-primary' />&nbsp;<input type='submit' value='<?php _e('Add and Activate', 'popover'); ?>' class='button-primary' />
+											<input type='submit' value='<?php _e('Add', 'popover'); ?>' class='button' name='add' />&nbsp;<input type='submit' value='<?php _e('Add and Activate', 'popover'); ?>' class='button-primary' name='addandactivate' />
 											<input type='hidden' name='action' value='added' />
 										<?php } ?>
 
