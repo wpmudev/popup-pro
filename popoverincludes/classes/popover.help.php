@@ -67,7 +67,7 @@ if(!class_exists('Popover_Help')) {
 		function addons_help() {
 
 			ob_start();
-			include_once(popover_dir('popoverincludes/help/help.addons.php'));
+			include_once(popover_dir('popoverincludes/help/popoveraddons.help.php'));
 			$help = ob_get_clean();
 
 			$this->screen->add_help_tab( array(
