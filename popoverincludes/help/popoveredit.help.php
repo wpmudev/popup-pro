@@ -8,7 +8,7 @@
 	<li><?php _e('<strong>Active Conditions</strong> - You can determine the conditions that need to be fulfilled in order for this Pop Over to display by dragging the relevant conditions in the the <strong>Drop Here</strong> box. All of the conditions must be true in order for the Pop Over to display.','popover'); ?>
 	<p><?php popover_helpimage('popoverdragconditions.png'); ?></p>
 	</li>
-	<li><?php _e('<strong>Appearance Settings</strong> - You can set the size and position of the Pop Over by setting the Appearance options. If you want the Popover system to attempt to determine the size of the Pop Overs content and automatically resize the Pop Over and attempt to center it on your browser window.','popover'); ?>
+	<li><?php _e('<strong>Appearance Settings</strong> - You can set the size and position of the Pop Over by setting the Appearance options. If you want the Pop Over system to attempt to determine the size of the Pop Overs content and automatically resize the Pop Over and attempt to center it on your browser window.','popover'); ?>
 	<p><?php popover_helpimage('popoversettings.png'); ?></p>
 	</li>
 </ul>

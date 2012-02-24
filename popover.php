@@ -2,7 +2,7 @@
 /*
 Plugin Name: Popover plugin
 Plugin URI: http://premium.wpmudev.org
-Description: This plugin adds a customisable popover to a site. The content, size, position can be changed and rules determining if the popover should show or not.
+Description: Allows you to display a fancy popup (powered as a popover!) to visitors sitewide or per blog, a *very* effective way of advertising a mailing list, special offer or running a plain old ad.
 Author: Barry (Incsub)
 Version: 4.0
 Author URI: http://caffeinatedb.com
