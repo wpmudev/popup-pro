@@ -1,6 +1,6 @@
 div#messagebox {
 	position: absolute;
-	background: transparent url(images/opaque.png) repeat;
+	background: transparent url(%styleurl%images/opaque.png) repeat;
 	z-index: 999;
 	padding: 10px;
 	visibility: hidden;
@@ -11,7 +11,7 @@ div#messagebox div.claimbutton {
 	bottom: 0;
 	right: 0;
 	width: 100%;
-	background: transparent url(images/opaque.png) repeat;
+	background: transparent url(%styleurl%images/opaque.png) repeat;
 	text-align: right;
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -34,7 +34,7 @@ div#messagebox div.claimbutton a:visited, div#messagebox div.claimbutton a {
 	position: absolute;
 	width: 30px;
 	height: 29px;
-	background: transparent url(images/closemessagebland.png) no-repeat;
+	background: transparent url(%styleurl%images/closemessagebland.png) no-repeat;
 	top: -5px;
 	left: -5px;
 	z-index: 5;
@@ -49,7 +49,7 @@ div#message {
 }
 
 div#message.waiting {
-	background: #fff url(images/loading.gif) no-repeat center center;
+	background: #fff url(%styleurl%images/loading.gif) no-repeat center center;
 }
 
 div#message h2 {

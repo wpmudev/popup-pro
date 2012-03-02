@@ -171,6 +171,16 @@ if(!class_exists('popoverpublic')) {
 
 						wp_enqueue_script('jquery');
 
+						$popover_messagebox = 'messagebox-' . md5(date('d'));
+						// Show the advert
+						wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
+						wp_localize_script('popoverjs', 'popover', array(	'messagebox'		=>	'#' . $popover_messagebox
+																			));
+
+						if($popover_usejs == 'yes') {
+							wp_enqueue_script('popoveroverridejs', popover_url('popoverincludes/js/popoversizing.js'), array('jquery'), $this->build);
+						}
+
 						add_action('wp_head', array(&$this, 'page_header'));
 						add_action('wp_footer', array(&$this, 'page_footer'));
 
@@ -236,7 +246,8 @@ if(!class_exists('popoverpublic')) {
 
 			$popover_messagebox = 'messagebox-' . md5(date('d'));
 
-			$availablestyles = apply_filters( 'popover_available_styles_url', array( 'Default' => popover_dir('popoverincludes/css/default')) );
+			$availablestyles = apply_filters( 'popover_available_styles_directory', array( 'Default' => popover_dir('popoverincludes/css/default')) );
+			$availablestylesurl = apply_filters( 'popover_available_styles_url', array( 'Default' => popover_url('popoverincludes/css/default')) );
 
 			if( in_array($popoverstyle, array_keys($availablestyles)) ) {
 				// Add the styles
@@ -247,24 +258,15 @@ if(!class_exists('popoverpublic')) {
 					ob_end_clean();
 
 					echo "<style type='text/css'>\n";
-					echo str_replace('#messagebox', '#' . $popover_messagebox, $content);
+					$content = str_replace('#messagebox', '#' . $popover_messagebox, $content);
+					$content = str_replace('%styleurl%', trailingslashit($availablestylesurl[$popoverstyle]), $content);
+					echo $content;
 					echo "</style>\n";
 				}
 				// Add the JS
 
 				// Add extra js
 			}
-
-			// Show the advert
-			wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
-
-			if($popover_usejs == 'yes') {
-				wp_enqueue_script('popoveroverridejs', popover_url('popoverincludes/js/popoversizing.js'), array('jquery'), $this->build);
-			}
-
-			add_action('wp_head', array(&$this, 'page_header'));
-			add_action('wp_footer', array(&$this, 'page_footer'));
-			wp_enqueue_script('jquery');
 
 		}
 
