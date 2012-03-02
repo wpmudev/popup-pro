@@ -169,21 +169,10 @@ if(!class_exists('popoverpublic')) {
 						// Store the active popover so we know what we are using in the footer.
 						$this->activepopover = $popover;
 
-						$availablestyles = apply_filters( 'popover_available_styles_url', array( 'Default' => popover_url('popoverincludes/css/default')) );
-
-						if( in_array($popoverstyle, array_keys($availablestyles)) ) {
-							wp_enqueue_style('popovercss', trailingslashit($availablestyles[$popoverstyle]) . 'style.css', array(), $this->build);
-						}
-
-						// Show the advert
-						wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
-
-						if($popover_usejs == 'yes') {
-							wp_enqueue_script('popoveroverridejs', popover_url('popoverincludes/js/popoversizing.js'), array('jquery'), $this->build);
-						}
-
-						add_action('wp_footer', array(&$this, 'page_footer'));
 						wp_enqueue_script('jquery');
+
+						add_action('wp_head', array(&$this, 'page_header'));
+						add_action('wp_footer', array(&$this, 'page_footer'));
 
 						// Add the cookie
 						if ( isset($_COOKIE['popover_view_'.COOKIEHASH]) ) {
@@ -212,6 +201,71 @@ if(!class_exists('popoverpublic')) {
 			}
 
 			return $arrayin;
+		}
+
+		function page_header() {
+
+			if(!$this->activepopover) {
+				return;
+			}
+
+			$popover = $this->activepopover;
+
+			$popover_title = stripslashes($popover->popover_title);
+			$popover_content = stripslashes($popover->popover_content);
+
+			$popover_size = $popover->popover_settings['popover_size'];
+			$popover_location = $popover->popover_settings['popover_location'];
+			$popover_colour = $popover->popover_settings['popover_colour'];
+			$popover_margin = $popover->popover_settings['popover_margin'];
+
+			$popover_size = $this->sanitise_array($popover_size);
+			$popover_location = $this->sanitise_array($popover_location);
+			$popover_colour = $this->sanitise_array($popover_colour);
+			$popover_margin = $this->sanitise_array($popover_margin);
+
+			$popover_check = $popover->popover_settings['popover_check'];
+			$popover_ereg = $popover->popover_settings['popover_ereg'];
+			$popover_count = $popover->popover_settings['popover_count'];
+
+			$popover_usejs = $popover->popover_settings['popover_usejs'];
+
+			$popoverstyle = $popover->popover_settings['popover_style'];
+
+			$popover_hideforever = $popover->popover_settings['popoverhideforeverlink'];
+
+			$popover_messagebox = 'messagebox-' . md5(date('d'));
+
+			$availablestyles = apply_filters( 'popover_available_styles_url', array( 'Default' => popover_dir('popoverincludes/css/default')) );
+
+			if( in_array($popoverstyle, array_keys($availablestyles)) ) {
+				// Add the styles
+				if(file_exists(trailingslashit($availablestyles[$popoverstyle]) . 'style.css')) {
+					ob_start();
+					include_once( trailingslashit($availablestyles[$popoverstyle]) . 'style.css' );
+					$content = ob_get_contents();
+					ob_end_clean();
+
+					echo "<style type='text/css'>\n";
+					echo str_replace('#messagebox', '#' . $popover_messagebox, $content);
+					echo "</style>\n";
+				}
+				// Add the JS
+
+				// Add extra js
+			}
+
+			// Show the advert
+			wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
+
+			if($popover_usejs == 'yes') {
+				wp_enqueue_script('popoveroverridejs', popover_url('popoverincludes/js/popoversizing.js'), array('jquery'), $this->build);
+			}
+
+			add_action('wp_head', array(&$this, 'page_header'));
+			add_action('wp_footer', array(&$this, 'page_footer'));
+			wp_enqueue_script('jquery');
+
 		}
 
 		function page_footer() {
@@ -243,6 +297,8 @@ if(!class_exists('popoverpublic')) {
 
 			$popoverstyle = $popover->popover_settings['popover_style'];
 
+			$popover_hideforever = $popover->popover_settings['popoverhideforeverlink'];
+
 			if($popover_usejs == 'yes') {
 				$style = 'z-index:999999;';
 				$box = 'color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
@@ -258,17 +314,15 @@ if(!class_exists('popoverpublic')) {
 			$availablestyles = apply_filters( 'popover_available_styles_directory', array( 'Default' => popover_dir('popoverincludes/css/default')) );
 
 			if( in_array($popoverstyle, array_keys($availablestyles)) ) {
+				$popover_messagebox = 'messagebox-' . md5(date('d'));
 				?>
-					<div id='messagebox' class='visiblebox' style='<?php echo $style; ?>'>
-						<a href='' id='closebox' title='Close this box'></a>
-						<div id='message' style='<?php echo $box; ?>'>
-							<?php echo do_shortcode($popover_content); ?>
-							<div class='clear'></div>
-							<div class='claimbutton hide'><a href='#' id='clearforever'><?php _e('Never see this message again.','popover'); ?></a></div>
-						</div>
-						<div class='clear'></div>
-					</div>
+				<!-- <?php echo trailingslashit($availablestyles[$popoverstyle]) . 'popover.php'; ?> -->
 				<?php
+				if(file_exists(trailingslashit($availablestyles[$popoverstyle]) . 'popover.php')) {
+					ob_start();
+					include_once( trailingslashit($availablestyles[$popoverstyle]) . 'popover.php' );
+					ob_end_flush();
+				}
 			}
 
 
