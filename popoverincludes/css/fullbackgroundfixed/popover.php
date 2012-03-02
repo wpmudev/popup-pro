@@ -1,4 +1,4 @@
-<div id='<?php echo $popover_messagebox; ?>' class='visiblebox' style='position: fixed; <?php echo $style; ?>'>
+<div id='<?php echo $popover_messagebox; ?>' class='visiblebox' style='<?php echo $style; ?>'>
 	<a href='' id='closebox' title='Close this box'></a>
 	<div id='message' style='<?php echo $box; ?>'>
 		<?php echo do_shortcode($popover_content); ?>

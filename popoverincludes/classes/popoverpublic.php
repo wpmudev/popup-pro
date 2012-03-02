@@ -246,8 +246,8 @@ if(!class_exists('popoverpublic')) {
 
 			$popover_messagebox = 'messagebox-' . md5(date('d'));
 
-			$availablestyles = apply_filters( 'popover_available_styles_directory', array( 'Default' => popover_dir('popoverincludes/css/default')) );
-			$availablestylesurl = apply_filters( 'popover_available_styles_url', array( 'Default' => popover_url('popoverincludes/css/default')) );
+			$availablestyles = apply_filters( 'popover_available_styles_directory', array() );
+			$availablestylesurl = apply_filters( 'popover_available_styles_url', array() );
 
 			if( in_array($popoverstyle, array_keys($availablestyles)) ) {
 				// Add the styles
@@ -263,9 +263,7 @@ if(!class_exists('popoverpublic')) {
 					echo $content;
 					echo "</style>\n";
 				}
-				// Add the JS
 
-				// Add extra js
 			}
 
 		}
@@ -313,13 +311,11 @@ if(!class_exists('popoverpublic')) {
 
 			}
 
-			$availablestyles = apply_filters( 'popover_available_styles_directory', array( 'Default' => popover_dir('popoverincludes/css/default')) );
+			$availablestyles = apply_filters( 'popover_available_styles_directory', array() );
 
 			if( in_array($popoverstyle, array_keys($availablestyles)) ) {
 				$popover_messagebox = 'messagebox-' . md5(date('d'));
-				?>
-				<!-- <?php echo trailingslashit($availablestyles[$popoverstyle]) . 'popover.php'; ?> -->
-				<?php
+
 				if(file_exists(trailingslashit($availablestyles[$popoverstyle]) . 'popover.php')) {
 					ob_start();
 					include_once( trailingslashit($availablestyles[$popoverstyle]) . 'popover.php' );

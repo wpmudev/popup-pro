@@ -132,4 +132,25 @@ function load_all_popover_addons() {
 	}
 }
 
+function P_style_urls( $styles = array() ) {
+
+	$styles['Default'] = popover_url('popoverincludes/css/default');
+	$styles['Default Fixed'] = popover_url('popoverincludes/css/fixed');
+	$styles['Dark Background'] = popover_url('popoverincludes/css/fullbackground');
+	$styles['Dark Background Fixed'] = popover_url('popoverincludes/css/fullbackgroundfixed');
+
+	return $styles;
+}
+add_filter( 'popover_available_styles_url', 'P_style_urls');
+
+function P_style_dirs() {
+	$styles['Default'] = popover_dir('popoverincludes/css/default');
+	$styles['Default Fixed'] = popover_dir('popoverincludes/css/fixed');
+	$styles['Dark Background'] = popover_dir('popoverincludes/css/fullbackground');
+	$styles['Dark Background Fixed'] = popover_dir('popoverincludes/css/fullbackgroundfixed');
+
+	return $styles;
+}
+add_filter( 'popover_available_styles_directory', 'P_style_dirs');
+
 ?>
