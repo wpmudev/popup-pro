@@ -441,6 +441,12 @@ if(!class_exists('popoveradmin')) {
 
 			$popover['popover_settings']['popover_style'] = $_POST['popoverstyle'];
 
+			if($_POST['popoverhideforeverlink'] == 'yes') {
+				$popover['popover_settings']['popoverhideforeverlink'] = 'yes';
+			} else {
+				$popover['popover_settings']['popoverhideforeverlink'] = 'no';
+			}
+
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
 			if(isset($_POST['addandactivate'])) {
@@ -491,6 +497,12 @@ if(!class_exists('popoveradmin')) {
 			}
 
 			$popover['popover_settings']['popover_style'] = $_POST['popoverstyle'];
+
+			if($_POST['popoverhideforeverlink'] == 'yes') {
+				$popover['popover_settings']['popoverhideforeverlink'] = 'yes';
+			} else {
+				$popover['popover_settings']['popoverhideforeverlink'] = 'no';
+			}
 
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
@@ -883,6 +895,8 @@ if(!class_exists('popoveradmin')) {
 
 			$popoverstyle = $popover->popover_settings['popover_style'];
 
+			$popover_hideforever = $popover->popover_settings['popoverhideforeverlink'];
+
 			?>
 			<div class='wrap nosubsub'>
 				<div class="icon32" id="icon-themes"><br></div>
@@ -1069,6 +1083,17 @@ if(!class_exists('popoveradmin')) {
 									}
 								}
 								?>
+
+								<h3><?php _e('Remove Hide Forever Link','popover'); ?></h3>
+								<table class='form-table' style=''>
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Remove the "Never see this message again" link','popover'); ?></strong></th>
+										<td valign='top'>
+											<input type='checkbox' name='popoverhideforeverlink' id='popoverhideforeverlink' value='yes' <?php if($popover_hideforever == 'yes') { echo "checked='checked'"; } ?> />
+										</td>
+									</tr>
+								</table>
+
 								<div class='buttons'>
 										<?php
 										wp_original_referer_field(true, 'previous'); wp_nonce_field('update-popover');
