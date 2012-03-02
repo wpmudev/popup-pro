@@ -91,80 +91,63 @@ if(!class_exists('popoverpublic')) {
 
 					$popoverstyle = $popover->popover_settings['popover_style'];
 
-					$show = false;
+					$show = true;
 
 					if(!empty($popover_check)) {
 
 						$order = explode(',', $popover_check['order']);
 
 						foreach($order as $key) {
+
 							switch ($key) {
 
 								case "supporter":
 													if(function_exists('is_supporter') && !is_supporter()) {
 														$show = true;
-													} else {
-														return false;
 													}
 													break;
 
-								case "loggedin":
-													if(!$this->is_loggedin()) {
-														$show = true;
-													} else {
-														return false;
+								case "loggedin":	if($this->is_loggedin()) {
+														$show = false;
 													}
 													break;
 
-								case "isloggedin":	if($this->is_loggedin()) {
-														$show = true;
-													} else {
-														return false;
+								case "isloggedin":	if(!$this->is_loggedin()) {
+														$show = false;
 													}
 													break;
 
-								case "commented":	if(!$this->has_commented()) {
-														$show = true;
-													} else {
-														return false;
+								case "commented":	if($this->has_commented()) {
+														$show = false;
 													}
 													break;
 
 								case "searchengine":
-													if($this->is_fromsearchengine()) {
-														$show = true;
-													} else {
-														return false;
+													if(!$this->is_fromsearchengine()) {
+														$show = false;
 													}
 													break;
 
 								case "internal":	$internal = str_replace('http://','',get_option('home'));
-													if(!$this->referrer_matches(addcslashes($internal,"/"))) {
-														$show = true;
-													} else {
-														return false;
+													if($this->referrer_matches(addcslashes($internal,"/"))) {
+														$show = false;
 													}
 													break;
 
 								case "referrer":	$match = $popover_ereg;
-													if($this->is_fromsearchengine(addcslashes($match,"/"))) {
-														$show = true;
-													} else {
-														return false;
+													if(!$this->is_fromsearchengine(addcslashes($match,"/"))) {
+														$show = false;
 													}
 													break;
 
-								case "count":
-													if($this->has_reached_limit($popover_count)) {
-														return false;
+								case "count":		if($this->has_reached_limit($popover_count)) {
+														$show = false;
 													}
 													break;
 
 								default:			if(has_filter('popover_process_rule_' . $key)) {
-														if(apply_filters( 'popover_process_rule_' . $key, false )) {
-															$show = true;
-														} else {
-															return false;
+														if(!apply_filters( 'popover_process_rule_' . $key, false )) {
+															$show = false;
 														}
 													}
 													break;
