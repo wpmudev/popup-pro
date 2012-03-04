@@ -27,6 +27,7 @@ function boardReady() {
 
 	jQuery('#message').hover( function() {jQuery('.claimbutton').removeClass('hide');}, function() {jQuery('.claimbutton').addClass('hide');});
 	jQuery(popover.messagebox).css('visibility', 'visible');
+	jQuery('#messagebackground').css('visibility', 'visible');
 }
 
 jQuery(window).load(boardReady);

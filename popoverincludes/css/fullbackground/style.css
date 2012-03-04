@@ -6,6 +6,7 @@
 	left: 0;
 	height: 100%;
 	z-index: 99999;
+	visibility: hidden;
 }
 
 div#messagebox {

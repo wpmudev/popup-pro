@@ -102,8 +102,8 @@ if(!class_exists('popoverpublic')) {
 							switch ($key) {
 
 								case "supporter":
-													if(function_exists('is_supporter') && !is_supporter()) {
-														$show = true;
+													if(function_exists('is_pro_site') && is_pro_site()) {
+														$show = false;
 													}
 													break;
 

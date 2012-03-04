@@ -761,7 +761,7 @@ if(!class_exists('popoveradmin')) {
 												}
 												switch($key) {
 
-													case 'supporter':		_e('Blog is not a supporter', 'popover');
+													case 'supporter':		_e('Site is not a Pro-site', 'popover');
 																			break;
 
 													case 'isloggedin':		_e('Visitor is logged in', 'popover');
@@ -948,7 +948,7 @@ if(!class_exists('popoveradmin')) {
 
 											switch($key) {
 
-												case 'supporter':		//if( function_exists('is_supporter') ) $this->admin_main('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', true);
+												case 'supporter':		if( function_exists('is_pro_site') ) $this->admin_main('supporter','Site is not a Pro-site', 'Shows the popover if the site is not a Pro-site.', true);
 																		break;
 
 												case 'isloggedin':		$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
@@ -1113,11 +1113,9 @@ if(!class_exists('popoveradmin')) {
 
 					<div id='hiden-actions'>
 					<?php
-						/*
-						if(!isset($popover_check['supporter']) && function_exists('is_supporter')) {
-							$this->admin_main('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', true);
+						if(!isset($popover_check['supporter']) && function_exists('is_pro_site')) {
+							$this->admin_main('supporter','Site is not a Pro-site', 'Shows the popover if the site is not a Pro-site.', true);
 						}
-						*/
 
 						if(!isset($popover_check['isloggedin'])) {
 							$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
@@ -1164,13 +1162,12 @@ if(!class_exists('popoveradmin')) {
 						<div class="section-holder" id="sidebar-rules" style="min-height: 98px;">
 							<ul class='popovers popovers-draggable'>
 								<?php
-									/*
-									if(isset($popover_check['supporter']) && function_exists('is_supporter')) {
-										$this->admin_sidebar('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', true);
-									} elseif(function_exists('is_supporter')) {
-										$this->admin_sidebar('supporter','Blog is not a supporter', 'Shows the popover if the blog is not a supporter.', false);
+
+									if(isset($popover_check['supporter']) && function_exists('is_pro_site')) {
+										$this->admin_sidebar('supporter','Site is not a Pro-site', 'Shows the popover if the site is not a Pro-site.', true);
+									} elseif(function_exists('is_pro_site')) {
+										$this->admin_sidebar('supporter','Site is not a Pro-site', 'Shows the popover if the site is not a Pro-site.', false);
 									}
-									*/
 
 									if(isset($popover_check['isloggedin'])) {
 										$this->admin_sidebar('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);

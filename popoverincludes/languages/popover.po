@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PopOver\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-03 01:09+0100\n"
-"PO-Revision-Date: 2012-03-03 01:09+0100\n"
+"POT-Creation-Date: 2012-03-04 17:53+0100\n"
+"PO-Revision-Date: 2012-03-04 17:53+0100\n"
 "Last-Translator: Barry <barry@mapinated.com>\n"
 "Language-Team: Incsub <barry@incsub.com>\n"
 "MIME-Version: 1.0\n"
@@ -114,22 +114,22 @@ msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:661
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:825
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1687
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1815
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1684
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1812
 msgid "Bulk Actions"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:662
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:826
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1688
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1816
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1685
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1813
 msgid "Toggle activation"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:664
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:828
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1690
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1818
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1687
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1815
 msgid "Apply"
 msgstr ""
 
@@ -138,14 +138,14 @@ msgid "Pop Over Name"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:679
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1162
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1160
 msgid "Conditions"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:680
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:798
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1706
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1788
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1703
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1785
 msgid "Active"
 msgstr ""
 
@@ -154,12 +154,12 @@ msgid "Edit"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:744
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1774
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1771
 msgid "Deactivate"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:746
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1776
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1773
 msgid "Activate"
 msgstr ""
 
@@ -168,7 +168,7 @@ msgid "Delete"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:764
-msgid "Blog is not a supporter"
+msgid "Site is not a Pro-site"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:767
@@ -200,7 +200,7 @@ msgid "Popover shown less than"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:800
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1790
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1787
 msgid "Inactive"
 msgstr ""
 
@@ -249,51 +249,51 @@ msgid "Appearance settings"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:987
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1444
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1441
 msgid "Pop Over Size"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:989
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1446
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1443
 msgid "Width:"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:991
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1448
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1445
 msgid "Height:"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:997
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1454
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1451
 msgid "Pop Over Position"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:999
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1009
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1456
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1466
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1453
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1463
 msgid "Left:"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1001
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1013
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1458
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1470
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1455
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1467
 msgid "Top:"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1007
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1464
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1461
 msgid "Pop Over Margins"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1011
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1468
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1465
 msgid "Right:"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1015
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1472
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1469
 msgid "Bottom:"
 msgstr ""
 
@@ -307,8 +307,8 @@ msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1033
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1041
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1492
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1500
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1489
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1497
 msgid "Hex:"
 msgstr ""
 
@@ -344,158 +344,158 @@ msgstr ""
 msgid "Add and Activate"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1248
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1245
 msgid "Add this rule to the popover."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1261
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1274
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1288
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1258
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1271
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1285
 msgid "Remove"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1292
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1570
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1289
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1567
 msgid "times"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1393
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1390
 msgid "Your settings have been saved."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1422
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1419
 msgid "Pop Over content settings"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1423
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1420
 msgid "Use the settings below to modify the content of your pop over and the rules that will determine when, or if, it will be displayed."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1425
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1422
 msgid "Pop Over content"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1426
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1423
 msgid "Enter the content for your pop over in the text area below. HTML is allowed."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1430
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1427
 msgid "Update content"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1433
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1430
 msgid "Pop Over display settings"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1434
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1431
 msgid "Use the options below to determine the look, and display settings for the Pop Over."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1440
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1437
 msgid "Appearance Settings"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1480
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1477
 msgid "or just override the above with JS"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1490
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1487
 msgid "Background Colour"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1498
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1495
 msgid "Font Colour"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1510
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1507
 msgid "Display Rules"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1512
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1509
 msgid "Show the Pop Over if <strong>one</strong> of the following checked rules is true."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1522
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1519
 msgid "Visitor is not a supporter."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1531
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1528
 msgid "Visitor is logged in."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1537
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1534
 msgid "Visitor is not logged in."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1543
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1540
 msgid "Visitor has never commented here before."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1549
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1546
 msgid "Visitor came from a search engine."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1555
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1552
 msgid "Visitor did not come from an internal page."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1561
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1558
 msgid "Visitor referrer matches"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1568
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1565
 msgid "And the visitor has seen the pop over less than"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1578
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1575
 msgid "Update settings"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1655
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1652
 msgid "Add-on updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1656
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1653
 msgid "Add-on not updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1658
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1655
 msgid "Add-on activated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1659
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1656
 msgid "Add-on not activated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1661
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1658
 msgid "Add-on deactivated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1662
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1659
 msgid "Add-on not deactivated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1664
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1661
 msgid "Add-on activation toggled."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1669
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1666
 msgid "Edit Add-ons"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1704
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1701
 msgid "Add-on Name"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1705
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1702
 msgid "Add-on File"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1766
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1763
 msgid " by "
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1801
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1798
 msgid "No Add-ons where found for this install."
 msgstr ""
 
