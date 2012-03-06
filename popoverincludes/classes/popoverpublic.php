@@ -91,6 +91,8 @@ if(!class_exists('popoverpublic')) {
 
 					$popoverstyle = $popover->popover_settings['popover_style'];
 
+					$popover_delay = $popover->popover_settings['popoverdelay'];
+
 					$show = true;
 
 					if(!empty($popover_check)) {

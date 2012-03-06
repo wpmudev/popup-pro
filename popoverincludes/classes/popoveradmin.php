@@ -447,6 +447,8 @@ if(!class_exists('popoveradmin')) {
 				$popover['popover_settings']['popoverhideforeverlink'] = 'no';
 			}
 
+			$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
+
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
 			if(isset($_POST['addandactivate'])) {
@@ -503,6 +505,8 @@ if(!class_exists('popoveradmin')) {
 			} else {
 				$popover['popover_settings']['popoverhideforeverlink'] = 'no';
 			}
+
+			$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
 
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
@@ -897,6 +901,8 @@ if(!class_exists('popoveradmin')) {
 
 			$popover_hideforever = $popover->popover_settings['popoverhideforeverlink'];
 
+			$popover_delay = $popover->popover_settings['popoverdelay'];
+
 			?>
 			<div class='wrap nosubsub'>
 				<div class="icon32" id="icon-themes"><br></div>
@@ -1087,6 +1093,25 @@ if(!class_exists('popoveradmin')) {
 										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Remove the "Never see this message again" link','popover'); ?></strong></th>
 										<td valign='top'>
 											<input type='checkbox' name='popoverhideforeverlink' id='popoverhideforeverlink' value='yes' <?php if($popover_hideforever == 'yes') { echo "checked='checked'"; } ?> />
+										</td>
+									</tr>
+								</table>
+
+								<h3><?php _e('Pop over appearance delays','popover'); ?></h3>
+								<table class='form-table' style=''>
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Show Pop Over','popover'); ?></strong></th>
+										<td valign='top'>
+											<select name='popoverdelay'>
+												<option value='immediate' <?php selected('immediate', $popover_delay); ?>><?php _e('immediately','popover'); ?></option>
+												<?php
+													for($n=1; $n <= 120; $n++) {
+														?>
+														<option value='<?php echo $n; ?>' <?php selected($n, $popover_delay); ?>><?php echo __('after','popover') . ' ' . $n . ' ' . __('seconds', 'popover') ; ?></option>
+														<?php
+													}
+												?>
+											</select>
 										</td>
 									</tr>
 								</table>
