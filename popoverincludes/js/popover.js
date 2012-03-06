@@ -10,14 +10,14 @@ function createCookie(name,value,days) {
 
 function removeMessageBoxForever() {
 	jQuery(this).parents(popover.messagebox).removeClass('visiblebox').addClass('hiddenbox');
-	jQuery(this).parents('#messagebackground').addClass('hide');
+	jQuery(this).parents('#darkbackground').addClass('hide');
 	createCookie('popover_never_view', 'hidealways', 365);
 	return false;
 }
 
 function removeMessageBox() {
 	jQuery(this).parents(popover.messagebox).removeClass('visiblebox').addClass('hiddenbox');
-	jQuery(this).parents('#messagebackground').addClass('hide');
+	jQuery(this).parents('#darkbackground').addClass('hide');
 	return false;
 }
 
@@ -27,7 +27,7 @@ function boardReady() {
 
 	jQuery('#message').hover( function() {jQuery('.claimbutton').removeClass('hide');}, function() {jQuery('.claimbutton').addClass('hide');});
 	jQuery(popover.messagebox).css('visibility', 'visible');
-	jQuery('#messagebackground').css('visibility', 'visible');
+	jQuery('#darkbackground').css('visibility', 'visible');
 }
 
 jQuery(window).load(boardReady);

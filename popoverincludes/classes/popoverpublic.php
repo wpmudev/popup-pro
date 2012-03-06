@@ -171,7 +171,7 @@ if(!class_exists('popoverpublic')) {
 
 						wp_enqueue_script('jquery');
 
-						$popover_messagebox = 'messagebox-' . md5(date('d'));
+						$popover_messagebox = '' . md5(date('d')) . '-po';
 						// Show the advert
 						wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
 						wp_localize_script('popoverjs', 'popover', array(	'messagebox'		=>	'#' . $popover_messagebox
@@ -244,7 +244,7 @@ if(!class_exists('popoverpublic')) {
 
 			$popover_hideforever = $popover->popover_settings['popoverhideforeverlink'];
 
-			$popover_messagebox = 'messagebox-' . md5(date('d'));
+			$popover_messagebox = '' . md5(date('d')) . '-po';
 
 			$availablestyles = apply_filters( 'popover_available_styles_directory', array() );
 			$availablestylesurl = apply_filters( 'popover_available_styles_url', array() );
@@ -314,7 +314,7 @@ if(!class_exists('popoverpublic')) {
 			$availablestyles = apply_filters( 'popover_available_styles_directory', array() );
 
 			if( in_array($popoverstyle, array_keys($availablestyles)) ) {
-				$popover_messagebox = 'messagebox-' . md5(date('d'));
+				$popover_messagebox = '' . md5(date('d')) . '-po';
 
 				if(file_exists(trailingslashit($availablestyles[$popoverstyle]) . 'popover.php')) {
 					ob_start();
