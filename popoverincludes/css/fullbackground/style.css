@@ -6,7 +6,7 @@
 	left: 0;
 	height: 100%;
 	z-index: 99999;
-	visibility: hidden;
+	visibility: visible;
 }
 
 div#messagebox {
@@ -14,7 +14,7 @@ div#messagebox {
 	background: transparent url(%styleurl%images/opaque.png) repeat;
 	z-index: 999;
 	padding: 10px;
-	visibility: hidden;
+	visibility: visible;
 }
 
 div#messagebox div.claimbutton {

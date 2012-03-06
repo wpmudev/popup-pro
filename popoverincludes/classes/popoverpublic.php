@@ -246,6 +246,8 @@ if(!class_exists('popoverpublic')) {
 
 			$popover_hideforever = $popover->popover_settings['popoverhideforeverlink'];
 
+			$popover_delay = $popover->popover_settings['popoverdelay'];
+
 			$popover_messagebox = '' . md5(date('d')) . '-po';
 
 			$availablestyles = apply_filters( 'popover_available_styles_directory', array() );
@@ -300,6 +302,8 @@ if(!class_exists('popoverpublic')) {
 			$popoverstyle = $popover->popover_settings['popover_style'];
 
 			$popover_hideforever = $popover->popover_settings['popoverhideforeverlink'];
+
+			$popover_delay = $popover->popover_settings['popoverdelay'];
 
 			if($popover_usejs == 'yes') {
 				$style = 'z-index:999999;';
