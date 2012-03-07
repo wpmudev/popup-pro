@@ -21,13 +21,19 @@ function removeMessageBox() {
 	return false;
 }
 
+function showMessageBox() {
+	jQuery(popover.messagebox).css('visibility', 'visible');
+	jQuery('#darkbackground').css('visibility', 'visible');
+}
+
 function boardReady() {
 	jQuery('#clearforever').click(removeMessageBoxForever);
 	jQuery('#closebox').click(removeMessageBox);
 
 	jQuery('#message').hover( function() {jQuery('.claimbutton').removeClass('hide');}, function() {jQuery('.claimbutton').addClass('hide');});
-	jQuery(popover.messagebox).css('visibility', 'visible');
-	jQuery('#darkbackground').css('visibility', 'visible');
+
+	window.setTimeout( showMessageBox, popover.messagedelay );
+
 }
 
 jQuery(window).load(boardReady);

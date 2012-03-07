@@ -176,8 +176,16 @@ if(!class_exists('popoverpublic')) {
 						$popover_messagebox = '' . md5(date('d')) . '-po';
 						// Show the advert
 						wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
-						wp_localize_script('popoverjs', 'popover', array(	'messagebox'		=>	'#' . $popover_messagebox
-																			));
+						if(!empty($popover_delay) && $popover_delay != 'immediate') {
+							// Set the delay
+							wp_localize_script('popoverjs', 'popover', array(	'messagebox'		=>	'#' . $popover_messagebox,
+																				'messagedelay'		=>	$popover_delay * 1000
+																				));
+						} else {
+							wp_localize_script('popoverjs', 'popover', array(	'messagebox'		=>	'#' . $popover_messagebox,
+																				'messagedelay'		=>	0
+																				));
+						}
 
 						if($popover_usejs == 'yes') {
 							wp_enqueue_script('popoveroverridejs', popover_url('popoverincludes/js/popoversizing.js'), array('jquery'), $this->build);
@@ -305,16 +313,25 @@ if(!class_exists('popoverpublic')) {
 
 			$popover_delay = $popover->popover_settings['popoverdelay'];
 
+			$style = '';
+			$backgroundstyle = '';
+
 			if($popover_usejs == 'yes') {
 				$style = 'z-index:999999;';
 				$box = 'color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
-
+				$style .= 'left: -1000px; top: =100px;';
 			} else {
 				$style =  'left: ' . $popover_location['left'] . '; top: ' . $popover_location['top'] . ';' . ' z-index:999999;';
 				$style .= 'margin-top: ' . $popover_margin['top'] . '; margin-bottom: ' . $popover_margin['bottom'] . '; margin-right: ' . $popover_margin['right'] . '; margin-left: ' . $popover_margin['left'] . ';';
 
 				$box = 'width: ' . $popover_size['width'] . '; height: ' . $popover_size['height'] . '; color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
 
+			}
+
+			if(!empty($popover_delay) && $popover_delay != 'immediate') {
+				// Hide the popover initially
+				$style .= ' visibility: hidden;';
+				$backgroundstyle .= ' visibility: hidden;';
 			}
 
 			$availablestyles = apply_filters( 'popover_available_styles_directory', array() );

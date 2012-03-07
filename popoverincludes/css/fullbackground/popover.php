@@ -1,4 +1,4 @@
-<div id='darkbackground'>
+<div id='darkbackground' style='<?php echo $backgroundstyle; ?>'>
 <div id='<?php echo $popover_messagebox; ?>' class='visiblebox' style='<?php echo $style; ?>'>
 	<a href='' id='closebox' title='Close this box'></a>
 	<div id='message' style='<?php echo $box; ?>'>
