@@ -10,14 +10,14 @@ function createCookie(name,value,days) {
 
 function removeMessageBoxForever() {
 	jQuery(this).parents(popover.messagebox).removeClass('visiblebox').addClass('hiddenbox');
-	jQuery(this).parents('#darkbackground').addClass('hide');
+	jQuery(this).parents('#darkbackground').addClass('hide').css('display', 'none');
 	createCookie('popover_never_view', 'hidealways', 365);
 	return false;
 }
 
 function removeMessageBox() {
 	jQuery(this).parents(popover.messagebox).removeClass('visiblebox').addClass('hiddenbox');
-	jQuery(this).parents('#darkbackground').addClass('hide');
+	jQuery(this).parents('#darkbackground').addClass('hide').css('display', 'none');
 	return false;
 }
 
