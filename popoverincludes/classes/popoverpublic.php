@@ -137,7 +137,7 @@ if(!class_exists('popoverpublic')) {
 													break;
 
 								case "referrer":	$match = $popover_ereg;
-													if(!$this->is_fromsearchengine(addcslashes($match,"/"))) {
+													if(!$this->referrer_matches(addcslashes($match,"/"))) {
 														$show = false;
 													}
 													break;

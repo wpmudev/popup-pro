@@ -971,6 +971,10 @@ if(!class_exists('popoveradmin')) {
 																		break;
 												case 'count':			$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
 																		break;
+												case 'onurl':			$this->admin_urllist('onurl','On specific URL', 'Shows the popover if the user is on a certain URL', $popover_onurl);
+																		break;
+												case 'notonurl':		$this->admin_urllist('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL', $popover_notonurl);
+																		break;
 
 												default:				do_action('popover_active_rule_' . $key);
 																		do_action('popover_active_rule', $key);
@@ -1166,6 +1170,15 @@ if(!class_exists('popoveradmin')) {
 							$this->admin_referer('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', $popover_ereg);
 						}
 
+						if(!isset($popover_check['onurl'])) {
+							$this->admin_urllist('onurl','On specific URL', 'Shows the popover if the user is on a certain URL', $popover_onurl);
+						}
+
+						if(!isset($popover_check['notonurl'])) {
+							$this->admin_urllist('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL', $popover_notonurl);
+						}
+
+
 						//$popover_count
 						if(!isset($popover_check['count'])) {
 							$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
@@ -1230,11 +1243,22 @@ if(!class_exists('popoveradmin')) {
 										$this->admin_sidebar('referrer','Visit via specific referer', 'Shows the popover if the user arrived via a specific referrer.', false);
 									}
 
-									//$popover_count
 									if(isset($popover_check['count'])) {
 										$this->admin_sidebar('count','Popover shown less than', 'Shows the popover if the user has only seen it less than a specific number of times.', true);
 									} else {
 										$this->admin_sidebar('count','Popover shown less than', 'Shows the popover if the user has only seen it less than a specific number of times.', false);
+									}
+
+									if(isset($popover_check['onurl'])) {
+										$this->admin_sidebar('onurl','On specific URL', 'Shows the popover if the user is on a certain URL.', true);
+									} else {
+										$this->admin_sidebar('onurl','On specific URL', 'Shows the popover if the user is on a certain URL.', false);
+									}
+
+									if(isset($popover_check['notonurl'])) {
+										$this->admin_sidebar('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL.', true);
+									} else {
+										$this->admin_sidebar('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL.', false);
 									}
 
 									do_action('popover_additional_rules_sidebar');
@@ -1312,6 +1336,20 @@ if(!class_exists('popoveradmin')) {
 					<p><?php _e($message, 'popover'); ?></p>
 					<input type='text' name='popovercount' id='popovercount' style='width: 2em;' value='<?php echo esc_html($data); ?>' />&nbsp;
 					<?php _e('times','popover'); ?>
+					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
+				</div>
+			</div>
+			<?php
+		}
+
+		function admin_urllist($id, $title, $message, $data = false) {
+			if(!$data) $data = array();
+			?>
+			<div class='popover-operation' id='main-<?php echo $id; ?>'>
+				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
+				<div class='inner-operation'>
+					<p><?php _e($message, 'popover'); ?></p>
+					<textarea name='popover<?php echo $id; ?>' id='popover<?php echo $id; ?>' style=''><?php echo esc_html($data); ?></textarea>
 					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
 				</div>
 			</div>
