@@ -41,6 +41,10 @@ if(!class_exists('popoveradmin')) {
 				update_option('popover_installed', $this->build);
 			}
 
+			// Adding in Ajax calls - need to be in the admin area as it uses admin_url :/
+			add_action('wp_ajax_po_popover', array(&$this, 'selective_content') );
+			add_action('wp_ajax_nopriv_po_popover', array(&$this, 'selective_content') );
+
 		}
 
 		function popoveradmin() {
@@ -1906,6 +1910,11 @@ if(!class_exists('popoveradmin')) {
 
 			</div> <!-- wrap -->
 			<?php
+		}
+
+		// Ajax call stuff
+		function selective_content() {
+
 		}
 
 	}
