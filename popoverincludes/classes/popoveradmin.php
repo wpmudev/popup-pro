@@ -449,6 +449,9 @@ if(!class_exists('popoveradmin')) {
 
 			$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
 
+			$popover['popover_settings']['onurl'] = explode("\n", $_POST['popoveronurl']);
+			$popover['popover_settings']['notonurl'] = explode("\n", $_POST['popovernotonurl']);
+
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
 			if(isset($_POST['addandactivate'])) {
@@ -507,6 +510,9 @@ if(!class_exists('popoveradmin')) {
 			}
 
 			$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
+
+			$popover['popover_settings']['onurl'] = explode("\n", $_POST['popoveronurl']);
+			$popover['popover_settings']['notonurl'] = explode("\n", $_POST['popovernotonurl']);
 
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
@@ -786,7 +792,13 @@ if(!class_exists('popoveradmin')) {
 													case 'referrer':		_e('Visit via specific referer', 'popover');
 																			break;
 
-													case 'count':			_e('Popover shown less than', 'popover');
+													case 'count':			_e('Popover shown less than x times', 'popover');
+																			break;
+
+													case 'onurl':			_e('On specific URL', 'popover');
+																			break;
+
+													case 'notonurl':		_e('Not on specific URL', 'popover');
 																			break;
 
 													default:				echo apply_filters('popover_nice_rule_name', $key);
@@ -1340,7 +1352,7 @@ if(!class_exists('popoveradmin')) {
 				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
 				<div class='inner-operation'>
 					<p><?php _e($message, 'popover'); ?></p>
-					<input type='text' name='popovercount' id='popovercount' style='width: 2em;' value='<?php echo esc_html($data); ?>' />&nbsp;
+					<input type='text' name='popovercount' id='popovercount' style='width: 5em;' value='<?php echo esc_html($data); ?>' />&nbsp;
 					<?php _e('times','popover'); ?>
 					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
 				</div>

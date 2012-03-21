@@ -9,15 +9,15 @@ function createCookie(name,value,days) {
 }
 
 function removeMessageBoxForever() {
-	jQuery(this).parents(popover.messagebox).removeClass('visiblebox').addClass('hiddenbox');
-	jQuery(this).parents('#darkbackground').addClass('hide').css('display', 'none');
+	jQuery(this).parents(popover.messagebox).remove();
+	jQuery(this).parents('#darkbackground').remove();
 	createCookie('popover_never_view', 'hidealways', 365);
 	return false;
 }
 
 function removeMessageBox() {
-	jQuery(this).parents(popover.messagebox).removeClass('visiblebox').addClass('hiddenbox');
-	jQuery(this).parents('#darkbackground').addClass('hide').css('display', 'none');
+	jQuery(this).parents(popover.messagebox).remove();
+	jQuery(this).parents('#darkbackground').remove();
 	return false;
 }
 
