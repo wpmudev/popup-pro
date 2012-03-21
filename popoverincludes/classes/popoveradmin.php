@@ -903,6 +903,12 @@ if(!class_exists('popoveradmin')) {
 
 			$popover_delay = $popover->popover_settings['popoverdelay'];
 
+			$popover_onurl = $popover->popover_settings['onurl'];
+			$popover_notonurl = $popover->popover_settings['notonurl'];
+
+			$popover_onurl = $this->sanitise_array($popover_onurl);
+			$popover_notonurl = $this->sanitise_array($popover_notonurl);
+
 			?>
 			<div class='wrap nosubsub'>
 				<div class="icon32" id="icon-themes"><br></div>

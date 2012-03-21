@@ -93,6 +93,12 @@ if(!class_exists('popoverpublic')) {
 
 					$popover_delay = $popover->popover_settings['popoverdelay'];
 
+					$popover_onurl = $popover->popover_settings['onurl'];
+					$popover_notonurl = $popover->popover_settings['notonurl'];
+
+					$popover_onurl = $this->sanitise_array($popover_onurl);
+					$popover_notonurl = $this->sanitise_array($popover_notonurl);
+
 					$show = true;
 
 					if(!empty($popover_check)) {
@@ -256,6 +262,12 @@ if(!class_exists('popoverpublic')) {
 
 			$popover_delay = $popover->popover_settings['popoverdelay'];
 
+			$popover_onurl = $popover->popover_settings['onurl'];
+			$popover_notonurl = $popover->popover_settings['notonurl'];
+
+			$popover_onurl = $this->sanitise_array($popover_onurl);
+			$popover_notonurl = $this->sanitise_array($popover_notonurl);
+
 			$popover_messagebox = 'a' . md5(date('d')) . '-po';
 
 			$availablestyles = apply_filters( 'popover_available_styles_directory', array() );
@@ -312,6 +324,12 @@ if(!class_exists('popoverpublic')) {
 			$popover_hideforever = $popover->popover_settings['popoverhideforeverlink'];
 
 			$popover_delay = $popover->popover_settings['popoverdelay'];
+
+			$popover_onurl = $popover->popover_settings['onurl'];
+			$popover_notonurl = $popover->popover_settings['notonurl'];
+
+			$popover_onurl = $this->sanitise_array($popover_onurl);
+			$popover_notonurl = $this->sanitise_array($popover_notonurl);
 
 			$style = '';
 			$backgroundstyle = '';
