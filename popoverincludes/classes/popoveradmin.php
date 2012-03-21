@@ -971,9 +971,9 @@ if(!class_exists('popoveradmin')) {
 																		break;
 												case 'count':			$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
 																		break;
-												case 'onurl':			$this->admin_urllist('onurl','On specific URL', 'Shows the popover if the user is on a certain URL', $popover_onurl);
+												case 'onurl':			$this->admin_urllist('onurl','On specific URL', 'Shows the popover if the user is on a certain URL (enter one URL per line)', $popover_onurl);
 																		break;
-												case 'notonurl':		$this->admin_urllist('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL', $popover_notonurl);
+												case 'notonurl':		$this->admin_urllist('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL (enter one URL per line)', $popover_notonurl);
 																		break;
 
 												default:				do_action('popover_active_rule_' . $key);
@@ -1171,11 +1171,11 @@ if(!class_exists('popoveradmin')) {
 						}
 
 						if(!isset($popover_check['onurl'])) {
-							$this->admin_urllist('onurl','On specific URL', 'Shows the popover if the user is on a certain URL', $popover_onurl);
+							$this->admin_urllist('onurl','On specific URL', 'Shows the popover if the user is on a certain URL (enter one URL per line)', $popover_onurl);
 						}
 
 						if(!isset($popover_check['notonurl'])) {
-							$this->admin_urllist('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL', $popover_notonurl);
+							$this->admin_urllist('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL (enter one URL per line)', $popover_notonurl);
 						}
 
 
@@ -1314,7 +1314,7 @@ if(!class_exists('popoveradmin')) {
 		}
 
 		function admin_referer($id, $title, $message, $data = false) {
-			if(!$data) $data = array();
+			if(!$data) $data = ''
 			?>
 			<div class='popover-operation' id='main-<?php echo $id; ?>'>
 				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
@@ -1328,7 +1328,7 @@ if(!class_exists('popoveradmin')) {
 		}
 
 		function admin_viewcount($id, $title, $message, $data = false) {
-			if(!$data) $data = array();
+			if(!$data) $data = '';
 			?>
 			<div class='popover-operation' id='main-<?php echo $id; ?>'>
 				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
@@ -1344,6 +1344,9 @@ if(!class_exists('popoveradmin')) {
 
 		function admin_urllist($id, $title, $message, $data = false) {
 			if(!$data) $data = array();
+
+			$data = implode("\n", $data);
+
 			?>
 			<div class='popover-operation' id='main-<?php echo $id; ?>'>
 				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>

@@ -1,4 +1,4 @@
-/* @override http://dev.site/wp-content/plugins/popover/popoverincludes/css/popoveradmin.css?ver=3 */
+/* @override http://dev.site/wp-content/plugins/popover/popoverincludes/css/popoveradmin.css?ver=4 */
 
 div.popover-liquid-left {
 	float: left;
@@ -350,4 +350,10 @@ div.buttons a.cancellink {
 	border: 1px solid #e6db55;
 	margin-right: 15px;
 }
+
+#popovernotonurl, #popoveronurl {
+	width: 99%;
+	min-height: 10em;	
+}
+
 
