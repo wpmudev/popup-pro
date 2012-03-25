@@ -5,7 +5,7 @@ Plugin URI: http://premium.wpmudev.org
 Description: Allows you to display a fancy popup (powered as a popover!) to visitors sitewide or per blog, a *very* effective way of advertising a mailing list, special offer or running a plain old ad.
 Author: Barry (Incsub)
 Version: 4.3
-Author URI: http://caffeinatedb.com
+Author URI: http://premium.wpmudev.org
 WDP ID: 123
 
 Copyright 2007-2010 Incsub (http://incsub.com)

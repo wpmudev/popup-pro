@@ -153,6 +153,16 @@ if(!class_exists('popoverpublic')) {
 													}
 													break;
 
+								case 'onurl':		if(!$this->onurl( $popover_onurl )) {
+														$show = false;
+													}
+													break;
+
+								case 'notonurl':	if($this->onurl( $popover_notonurl )) {
+														$show = false;
+													}
+													break;
+
 								default:			if(has_filter('popover_process_rule_' . $key)) {
 														if(!apply_filters( 'popover_process_rule_' . $key, false )) {
 															$show = false;
@@ -402,6 +412,40 @@ if(!class_exists('popoverpublic')) {
 			} else {
 				return false;
 			}
+		}
+
+		function myURL() {
+
+		 	if ($_SERVER["HTTPS"] == "on") {
+				$url .= "https://";
+			} else {
+				$url = 'http://';
+			}
+
+			if ($_SERVER["SERVER_PORT"] != "80") {
+		  		$url .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+		 	} else {
+		  		$url .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+		 	}
+
+		 	return trailingslashit($url);
+		}
+
+		function onurl( $urllist = array() ) {
+
+			$urllist = array_map( 'trim', $urllist );
+
+			if(!empty($urllist)) {
+				if(in_array($this->myURL(), $urllist)) {
+					// we are on the list
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+
 		}
 
 		function clear_forever() {
