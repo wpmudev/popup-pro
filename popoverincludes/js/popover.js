@@ -26,6 +26,12 @@ function showMessageBox() {
 	jQuery('#darkbackground').css('visibility', 'visible');
 }
 
+function newShowMessageBox() {
+
+
+
+}
+
 function boardReady() {
 	jQuery('#clearforever').click(removeMessageBoxForever);
 	jQuery('#closebox').click(removeMessageBox);

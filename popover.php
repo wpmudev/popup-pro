@@ -36,12 +36,16 @@ if(is_admin()) {
 	require_once('popoverincludes/includes/class_wd_help_tooltips.php');
 	require_once('popoverincludes/classes/popover.help.php');
 	require_once('popoverincludes/classes/popoveradmin.php');
+	//require_once('popoverincludes/classes/popoverajax.php');
 
 	$popover = new popoveradmin();
+	//$popoverajax = new popoverajax();
 } else {
 	require_once('popoverincludes/classes/popoverpublic.php');
+	//require_once('popoverincludes/classes/popoverajax.php');
 
 	$popover = new popoverpublic();
+	//$popoverajax = new popoverajax();
 }
 
 load_popover_addons();
