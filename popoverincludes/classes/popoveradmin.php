@@ -97,7 +97,7 @@ if(!class_exists('popoveradmin')) {
 
 		function sanitise_array($arrayin) {
 
-			foreach($arrayin as $key => $value) {
+			foreach( (array) $arrayin as $key => $value) {
 				$arrayin[$key] = htmlentities(stripslashes($value) ,ENT_QUOTES, 'UTF-8');
 			}
 
