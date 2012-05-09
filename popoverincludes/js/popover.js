@@ -9,15 +9,15 @@ function createCookie(name,value,days) {
 }
 
 function removeMessageBoxForever() {
+	jQuery('#darkbackground').remove();
 	jQuery(this).parents(popover.messagebox).remove();
-	Query('#darkbackground').remove();
 	createCookie('popover_never_view', 'hidealways', 365);
 	return false;
 }
 
 function removeMessageBox() {
-	jQuery(this).parents(popover.messagebox).remove();
 	jQuery('#darkbackground').remove();
+	jQuery(this).parents(popover.messagebox).remove();
 	return false;
 }
 

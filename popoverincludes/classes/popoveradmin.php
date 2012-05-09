@@ -801,6 +801,12 @@ if(!class_exists('popoveradmin')) {
 													case 'notonurl':		_e('Not on specific URL', 'popover');
 																			break;
 
+													case 'incountry':		_e('In a specific country', 'popover');
+																			break;
+
+													case 'notincountry':	_e('Not in a specific country', 'popover');
+																			break;
+
 													default:				echo apply_filters('popover_nice_rule_name', $key);
 																			break;
 											}
@@ -992,6 +998,10 @@ if(!class_exists('popoveradmin')) {
 												case 'onurl':			$this->admin_urllist('onurl','On specific URL', 'Shows the popover if the user is on a certain URL (enter one URL per line)', $popover_onurl);
 																		break;
 												case 'notonurl':		$this->admin_urllist('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL (enter one URL per line)', $popover_notonurl);
+																		break;
+												case 'incountry':		$this->admin_countrylist('incountry','In a specific Country', 'Shows the popover if the user is in a certain country.', $popover_incountry);
+																		break;
+												case 'notincountry':	$this->admin_countrylist('notincountry','Not in a specific Country', 'Shows the popover if the user is not in a certain country.', $popover_notincountry);
 																		break;
 
 												default:				do_action('popover_active_rule_' . $key);
@@ -1196,6 +1206,13 @@ if(!class_exists('popoveradmin')) {
 							$this->admin_urllist('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL (enter one URL per line)', $popover_notonurl);
 						}
 
+						if(!isset($popover_check['incountry'])) {
+							$this->admin_countrylist('incountry','In a specific Country', 'Shows the popover if the user is in a certain country.', $popover_incountry);
+						}
+
+						if(!isset($popover_check['notincountry'])) {
+							$this->admin_countrylist('notincountry','Not in a specific Country', 'Shows the popover if the user is not in a certain country.', $popover_notincountry);
+						}
 
 						//$popover_count
 						if(!isset($popover_check['count'])) {
@@ -1277,6 +1294,18 @@ if(!class_exists('popoveradmin')) {
 										$this->admin_sidebar('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL.', true);
 									} else {
 										$this->admin_sidebar('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL.', false);
+									}
+
+									if(isset($popover_check['incountry'])) {
+										$this->admin_sidebar('incountry','In a specific Country', 'Shows the popover if the user is in a certain country.', true);
+									} else {
+										$this->admin_sidebar('incountry','In a specific Country', 'Shows the popover if the user is in a certain country.', false);
+									}
+
+									if(isset($popover_check['notincountry'])) {
+										$this->admin_sidebar('notincountry','Not in a specific Country', 'Shows the popover if the user is not in a certain country.', true);
+									} else {
+										$this->admin_sidebar('notincountry','Not in a specific Country', 'Shows the popover if the user is not in a certain country.', false);
 									}
 
 									do_action('popover_additional_rules_sidebar');
@@ -1371,6 +1400,25 @@ if(!class_exists('popoveradmin')) {
 				<div class='inner-operation'>
 					<p><?php _e($message, 'popover'); ?></p>
 					<textarea name='popover<?php echo $id; ?>' id='popover<?php echo $id; ?>' style=''><?php echo esc_html($data); ?></textarea>
+					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
+				</div>
+			</div>
+			<?php
+		}
+
+		function admin_countrylist($id, $title, $message, $data = false) {
+			if(!$data) $data = array();
+
+			$data = implode("\n", $data);
+
+			?>
+			<div class='popover-operation' id='main-<?php echo $id; ?>'>
+				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
+				<div class='inner-operation'>
+					<p><?php _e($message, 'popover'); ?></p>
+					<select name='popover<?php echo $id; ?>' id='popover<?php echo $id; ?>' style=''>
+					</select>
+					<!--<textarea name='popover<?php echo $id; ?>' id='popover<?php echo $id; ?>' style=''><?php echo esc_html($data); ?></textarea>-->
 					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
 				</div>
 			</div>
