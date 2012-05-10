@@ -452,6 +452,9 @@ if(!class_exists('popoveradmin')) {
 			$popover['popover_settings']['onurl'] = explode("\n", $_POST['popoveronurl']);
 			$popover['popover_settings']['notonurl'] = explode("\n", $_POST['popovernotonurl']);
 
+			$popover['popover_settings']['incountry'] = $_POST['popoverincountry'];
+			$popover['popover_settings']['notincountry'] = $_POST['popovernotincountry'];
+
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
 			if(isset($_POST['addandactivate'])) {
@@ -513,6 +516,9 @@ if(!class_exists('popoveradmin')) {
 
 			$popover['popover_settings']['onurl'] = explode("\n", $_POST['popoveronurl']);
 			$popover['popover_settings']['notonurl'] = explode("\n", $_POST['popovernotonurl']);
+
+			$popover['popover_settings']['incountry'] = $_POST['popoverincountry'];
+			$popover['popover_settings']['notincountry'] = $_POST['popovernotincountry'];
 
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
@@ -923,6 +929,9 @@ if(!class_exists('popoveradmin')) {
 
 			$popover_onurl = $popover->popover_settings['onurl'];
 			$popover_notonurl = $popover->popover_settings['notonurl'];
+
+			$popover_incountry = $popover->popover_settings['incountry'];
+			$popover_notincountry = $popover->popover_settings['notincountry'];
 
 			$popover_onurl = $this->sanitise_array($popover_onurl);
 			$popover_notonurl = $this->sanitise_array($popover_notonurl);
@@ -1407,18 +1416,25 @@ if(!class_exists('popoveradmin')) {
 		}
 
 		function admin_countrylist($id, $title, $message, $data = false) {
-			if(!$data) $data = array();
+			if(!$data) $data = '';
 
-			$data = implode("\n", $data);
 
 			?>
 			<div class='popover-operation' id='main-<?php echo $id; ?>'>
 				<h2 class='sidebar-name'><?php _e($title, 'popover');?><span><a href='#remove' class='removelink' id='remove-<?php echo $id; ?>' title='<?php _e("Remove $title tag from this rules area.",'popover'); ?>'><?php _e('Remove','popover'); ?></a></span></h2>
 				<div class='inner-operation'>
 					<p><?php _e($message, 'popover'); ?></p>
+					<?php $countries = P_CountryList(); ?>
 					<select name='popover<?php echo $id; ?>' id='popover<?php echo $id; ?>' style=''>
+						<option value='' <?php selected('', $data); ?>><?php _e('Select a country from the list below' , 'popover') ?></option>
+						<?php
+							foreach( (array) $countries as $code => $country ) {
+								?>
+								<option value='<?php echo $code; ?>' <?php selected($code, $data); ?>><?php echo $country; ?></option>
+								<?php
+							}
+						?>
 					</select>
-					<!--<textarea name='popover<?php echo $id; ?>' id='popover<?php echo $id; ?>' style=''><?php echo esc_html($data); ?></textarea>-->
 					<input type='hidden' name='popovercheck[<?php echo $id; ?>]' value='yes' />
 				</div>
 			</div>
