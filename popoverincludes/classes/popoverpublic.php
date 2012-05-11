@@ -8,8 +8,9 @@ if(!class_exists('popoverpublic')) {
 		var $build = 3;
 		var $db;
 
-		var $tables = array( 'popover' );
+		var $tables = array( 'popover', 'popover_ip_cache' );
 		var $popover;
+		var $popover_ip_cache;
 
 		var $activepopover = false;
 
@@ -164,6 +165,13 @@ if(!class_exists('popoverpublic')) {
 								case 'notonurl':	if($this->onurl( $popover_notonurl )) {
 														$show = false;
 													}
+													break;
+
+								case 'incountry':
+													break;
+
+								case 'notincountry':
+
 													break;
 
 								default:			if(has_filter('popover_process_rule_' . $key)) {
@@ -448,6 +456,36 @@ if(!class_exists('popoverpublic')) {
 			} else {
 				return true;
 			}
+
+		}
+
+		function incountry( $countrycode ) {
+			// Grab the users IP address
+			$ip = $_SERVER["REMOTE_ADDR"];
+
+			$country = $this->get_country_from_cache( $ip );
+			if(empty($country)) {
+				// No country to get from API
+				$country = $this->get_country_from_api( $ip );
+			}
+
+			if($country == $countrycode) {
+				return true;
+			} else {
+				return false;
+			}
+
+		}
+
+		function get_country_from_cache( $ip ) {
+
+			$country = $this->db->get_var( $this->db->prepare( "SELECT country FROM {$this->popover_ip_cache} WHERE IP = %s", $ip ) );
+
+			return $country;
+
+		}
+
+		function get_country_from_api( $ip ) {
 
 		}
 
