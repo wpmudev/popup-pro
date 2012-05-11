@@ -167,11 +167,15 @@ if(!class_exists('popoverpublic')) {
 													}
 													break;
 
-								case 'incountry':
+								case 'incountry':	if(!$this->incountry( $popover_incountry )) {
+														$show = false;
+													}
 													break;
 
 								case 'notincountry':
-
+													if($this->incountry( $popover_notincountry )) {
+														$show = false;
+													}
 													break;
 
 								default:			if(has_filter('popover_process_rule_' . $key)) {
