@@ -96,6 +96,9 @@ if(!class_exists('popoverpublic')) {
 					$popover_onurl = $popover->popover_settings['onurl'];
 					$popover_notonurl = $popover->popover_settings['notonurl'];
 
+					$popover_incountry = $popover->popover_settings['incountry'];
+					$popover_notincountry = $popover->popover_settings['notincountry'];
+
 					$popover_onurl = $this->sanitise_array($popover_onurl);
 					$popover_notonurl = $this->sanitise_array($popover_notonurl);
 

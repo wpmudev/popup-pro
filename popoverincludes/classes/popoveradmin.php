@@ -4,12 +4,13 @@ if(!class_exists('popoveradmin')) {
 
 	class popoveradmin {
 
-		var $build = 4;
+		var $build = 5;
 
 		var $db;
 
-		var $tables = array( 'popover' );
+		var $tables = array( 'popover', 'popover_ip_cache' );
 		var $popover;
+		var $popover_ip_cache;
 
 		function __construct() {
 
@@ -58,6 +59,20 @@ if(!class_exists('popoveradmin')) {
 					  `popover_order` bigint(20) DEFAULT '0',
 					  `popover_active` int(11) DEFAULT '0',
 					  PRIMARY KEY (`id`)
+					)";
+
+				$this->db->query($sql);
+
+			}
+
+			// Add in IP cache table
+			if($this->db->get_var( "SHOW TABLES LIKE '" . $this->popover_ip_cache . "' ") != $this->popover_ip_cache) {
+				 $sql = "CREATE TABLE `" . $this->popover_ip_cache . "` (
+				  	`IP` varchar(12) NOT NULL DEFAULT '',
+					  `country` varchar(2) DEFAULT NULL,
+					  `cached` bigint(20) DEFAULT NULL,
+					  PRIMARY KEY (`IP`),
+					  KEY `cached` (`cached`)
 					)";
 
 				$this->db->query($sql);
