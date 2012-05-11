@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PopOver\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-26 10:53+0100\n"
-"PO-Revision-Date: 2012-03-26 10:53+0100\n"
+"POT-Creation-Date: 2012-05-11 15:09+0100\n"
+"PO-Revision-Date: 2012-05-11 15:09+0100\n"
 "Last-Translator: Barry <barry@mapinated.com>\n"
 "Language-Team: Incsub <barry@incsub.com>\n"
 "MIME-Version: 1.0\n"
@@ -22,509 +22,522 @@ msgid "Adding / Editing"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popover.help.php:75
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:94
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:109
 msgid "Add-ons"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:85
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:89
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:100
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:104
 msgid "Pop Overs"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:93
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:108
 msgid "Create New Pop Over"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:93
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:108
 msgid "Create New"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:94
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:109
 msgid "Manage Add-ons Plugins"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:242
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:257
 msgid "An error occured updating the Pop Over order."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:243
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:258
 msgid "Are you sure you want to delete this Pop Over?"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:283
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:298
 #, php-format
 msgid "Welcome to Popover, would you like to transfer your existing Popover to the new format? <a href='%s'>Yes please transfer it</a> / <a href='%s'>No thanks, I'll create a new one myself.</a>"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:302
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:317
 msgid "Transferred Popover"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:634
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:655
 msgid "Pop Over updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:635
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:656
 msgid "Pop Over not updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:637
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:658
 msgid "Pop Over activated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:638
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:659
 msgid "Pop Over not activated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:640
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:661
 msgid "Pop Over deactivated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:641
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:662
 msgid "Pop Over not deactivated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:643
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:664
 msgid "Pop Over activation toggled."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:645
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:666
 msgid "Pop Over deleted."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:646
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:667
 msgid "Pop Over not deleted."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:648
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:669
 msgid "Pop Over added."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:649
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:670
 msgid "Pop Over not added."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:653
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:674
 msgid "Edit Pop Overs"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:653
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:674
 msgid "Add New"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:671
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:841
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1768
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1896
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:692
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:868
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1847
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1975
 msgid "Bulk Actions"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:672
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:842
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1769
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1897
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:693
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:869
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1848
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1976
 msgid "Toggle activation"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:674
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:844
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1771
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1899
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:695
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:871
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1850
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1978
 msgid "Apply"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:688
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:709
 msgid "Pop Over Name"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:689
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1216
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:710
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1257
 msgid "Conditions"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:690
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:814
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1787
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1869
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:711
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:841
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1866
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1948
 msgid "Active"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:751
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:772
 msgid "Edit"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:754
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1855
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:775
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1934
 msgid "Deactivate"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:756
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1857
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:777
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1936
 msgid "Activate"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:759
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:780
 msgid "Delete"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:774
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:795
 msgid "Site is not a Pro-site"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:777
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:798
 msgid "Visitor is logged in"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:780
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:801
 msgid "Visitor is not logged in"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:783
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:804
 msgid "Visitor has never commented"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:786
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:807
 msgid "Visit via a search engine"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:789
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:810
 msgid "Visit not via an Internal link"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:792
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:813
 msgid "Visit via specific referer"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:795
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:816
 msgid "Popover shown less than x times"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:798
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:819
 msgid "On specific URL"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:801
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:822
 msgid "Not on specific URL"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:816
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1871
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:825
+msgid "In a specific country"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:828
+msgid "Not in a specific country"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:843
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1950
 msgid "Inactive"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:827
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:854
 msgid "No Pop Overs were found."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:876
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:903
 msgid "New Pop Over"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:928
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:958
 msgid "Edit Pop Over"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:930
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:960
 msgid "Add Pop Over"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:943
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:973
 msgid "Pop Over Settings"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:949
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:979
 msgid "Popover title"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:952
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:982
 msgid "Popover content"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:964
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:994
 msgid "Active conditions"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:965
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:995
 msgid "These are the rules that will determine if a popover should show when a visitor arrives at your website ALL rules must be true for the popover to show."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1009
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1043
 msgid "Drop here"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1012
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1046
 msgid "Appearance settings"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1015
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1525
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1049
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1604
 msgid "Pop Over Size"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1017
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1527
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1051
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1606
 msgid "Width:"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1019
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1529
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1053
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1608
 msgid "Height:"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1025
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1535
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1059
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1614
 msgid "Pop Over Position"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1027
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1037
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1537
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1547
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1061
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1071
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1616
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1626
 msgid "Left:"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1029
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1041
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1539
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1551
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1063
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1075
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1618
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1630
 msgid "Top:"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1035
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1545
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1069
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1624
 msgid "Pop Over Margins"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1039
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1549
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1073
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1628
 msgid "Right:"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1043
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1553
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1077
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1632
 msgid "Bottom:"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1051
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1085
 msgid "or use Javascript to resize and center the popover"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1059
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1093
 msgid "Background Color"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1061
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1069
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1573
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1581
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1095
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1103
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1652
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1660
 msgid "Hex:"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1067
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1101
 msgid "Font Color"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1081
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1115
 msgid "Pop Over Style"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1085
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1119
 msgid "Use Style"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1112
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1146
 msgid "Remove Hide Forever Link"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1115
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1149
 msgid "Remove the \"Never see this message again\" link"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1122
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1156
 msgid "Pop over appearance delays"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1125
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1159
 msgid "Show Pop Over"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1128
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1162
 msgid "immediately"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1132
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1166
 msgid "after"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1132
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1166
 msgid "seconds"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1146
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1180
 msgid "Update"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1149
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1183
 msgid "Add"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1149
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1183
 msgid "Add and Activate"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1312
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1365
 msgid "Add this rule to the popover."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1325
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1338
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1352
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1370
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1378
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1391
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1405
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1423
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1439
 msgid "Remove"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1356
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1651
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1409
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1730
 msgid "times"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1474
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1444
+msgid "Select a country from the list below"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1553
 msgid "Your settings have been saved."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1503
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1582
 msgid "Pop Over content settings"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1504
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1583
 msgid "Use the settings below to modify the content of your pop over and the rules that will determine when, or if, it will be displayed."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1506
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1585
 msgid "Pop Over content"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1507
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1586
 msgid "Enter the content for your pop over in the text area below. HTML is allowed."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1511
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1590
 msgid "Update content"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1514
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1593
 msgid "Pop Over display settings"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1515
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1594
 msgid "Use the options below to determine the look, and display settings for the Pop Over."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1521
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1600
 msgid "Appearance Settings"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1561
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1640
 msgid "or just override the above with JS"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1571
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1650
 msgid "Background Colour"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1579
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1658
 msgid "Font Colour"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1591
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1670
 msgid "Display Rules"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1593
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1672
 msgid "Show the Pop Over if <strong>one</strong> of the following checked rules is true."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1603
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1682
 msgid "Visitor is not a supporter."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1612
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1691
 msgid "Visitor is logged in."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1618
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1697
 msgid "Visitor is not logged in."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1624
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1703
 msgid "Visitor has never commented here before."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1630
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1709
 msgid "Visitor came from a search engine."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1636
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1715
 msgid "Visitor did not come from an internal page."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1642
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1721
 msgid "Visitor referrer matches"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1649
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1728
 msgid "And the visitor has seen the pop over less than"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1659
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1738
 msgid "Update settings"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1736
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1815
 msgid "Add-on updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1737
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1816
 msgid "Add-on not updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1739
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1818
 msgid "Add-on activated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1740
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1819
 msgid "Add-on not activated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1742
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1821
 msgid "Add-on deactivated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1743
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1822
 msgid "Add-on not deactivated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1745
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1824
 msgid "Add-on activation toggled."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1750
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1829
 msgid "Edit Add-ons"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1785
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1864
 msgid "Add-on Name"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1786
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1865
 msgid "Add-on File"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1847
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1926
 msgid " by "
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1882
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:1961
 msgid "No Add-ons where found for this install."
 msgstr ""
 
@@ -614,5 +627,989 @@ msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:8
 msgid "Please install the latest version of <a href=\"http://premium.wpmudev.org/project/update-notifications/\" title=\"Download Now &raquo;\">our free Update Notifications plugin</a> which helps you stay up-to-date with the most stable, secure versions of WPMU DEV themes and plugins. <a href=\"http://premium.wpmudev.org/wpmu-dev/update-notifications-plugin-information/\">More information &raquo;</a>"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:160
+msgid "Australia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:161
+msgid "Afghanistan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:162
+msgid "Albania"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:163
+msgid "Algeria"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:164
+msgid "American Samoa"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:165
+msgid "Andorra"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:166
+msgid "Angola"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:167
+msgid "Anguilla"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:168
+msgid "Antarctica"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:169
+msgid "Antigua & Barbuda"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:170
+msgid "Argentina"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:171
+msgid "Armenia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:172
+msgid "Aruba"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:173
+msgid "Austria"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:174
+msgid "Azerbaijan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:175
+msgid "Bahamas"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:176
+msgid "Bahrain"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:177
+msgid "Bangladesh"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:178
+msgid "Barbados"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:179
+msgid "Belarus"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:180
+msgid "Belgium"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:181
+msgid "Belize"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:182
+msgid "Benin"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:183
+msgid "Bermuda"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:184
+msgid "Bhutan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:185
+msgid "Bolivia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:186
+msgid "Bosnia/Hercegovina"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:187
+msgid "Botswana"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:188
+msgid "Bouvet Island"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:189
+msgid "Brazil"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:190
+msgid "British Indian Ocean Territory"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:191
+msgid "Brunei Darussalam"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:192
+msgid "Bulgaria"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:193
+msgid "Burkina Faso"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:194
+msgid "Burundi"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:195
+msgid "Cambodia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:196
+msgid "Cameroon"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:197
+msgid "Canada"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:198
+msgid "Cape Verde"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:199
+msgid "Cayman Is"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:200
+msgid "Central African Republic"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:201
+msgid "Chad"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:202
+msgid "Chile"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:203
+msgid "China, People's Republic of"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:204
+msgid "Christmas Island"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:205
+msgid "Cocos Islands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:206
+msgid "Colombia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:207
+msgid "Comoros"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:208
+msgid "Congo"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:209
+msgid "Congo, Democratic Republic"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:210
+msgid "Cook Islands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:211
+msgid "Costa Rica"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:212
+msgid "Cote d'Ivoire"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:213
+msgid "Croatia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:214
+msgid "Cuba"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:215
+msgid "Cyprus"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:216
+msgid "Czech Republic"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:217
+msgid "Denmark"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:218
+msgid "Djibouti"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:219
+msgid "Dominica"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:220
+msgid "Dominican Republic"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:221
+msgid "East Timor"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:222
+msgid "Ecuador"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:223
+msgid "Egypt"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:224
+msgid "El Salvador"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:225
+msgid "Equatorial Guinea"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:226
+msgid "Eritrea"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:227
+msgid "Estonia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:228
+msgid "Ethiopia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:229
+msgid "Falkland Islands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:230
+msgid "Faroe Islands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:231
+msgid "Fiji"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:232
+msgid "Finland"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:233
+msgid "France"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:234
+msgid "France, Metropolitan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:235
+msgid "French Guiana"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:236
+msgid "French Polynesia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:237
+msgid "French South Territories"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:238
+msgid "Gabon"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:239
+msgid "Gambia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:240
+msgid "Georgia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:241
+msgid "Germany"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:242
+msgid "Ghana"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:243
+msgid "Gibraltar"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:244
+msgid "Greece"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:245
+msgid "Greenland"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:246
+msgid "Grenada"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:247
+msgid "Guadeloupe"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:248
+msgid "Guam"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:249
+msgid "Guatemala"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:250
+msgid "Guinea"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:251
+msgid "Guinea-Bissau"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:252
+msgid "Guyana"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:253
+msgid "Haiti"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:254
+msgid "Heard Island And Mcdonald Island"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:255
+msgid "Honduras"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:256
+msgid "Hong Kong"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:257
+msgid "Hungary"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:258
+msgid "Iceland"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:259
+msgid "India"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:260
+msgid "Indonesia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:261
+msgid "Iran"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:262
+msgid "Iraq"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:263
+msgid "Ireland"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:264
+msgid "Israel"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:265
+msgid "Italy"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:266
+msgid "Jamaica"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:267
+msgid "Japan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:268
+msgid "Johnston Island"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:269
+msgid "Jordan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:270
+msgid "Kazakhstan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:271
+msgid "Kenya"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:272
+msgid "Kiribati"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:273
+msgid "Korea, Democratic Peoples Republic"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:274
+msgid "Korea, Republic of"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:275
+msgid "Kuwait"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:276
+msgid "Kyrgyzstan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:277
+msgid "Lao People's Democratic Republic"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:278
+msgid "Latvia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:279
+msgid "Lebanon"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:280
+msgid "Lesotho"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:281
+msgid "Liberia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:282
+msgid "Libyan Arab Jamahiriya"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:283
+msgid "Liechtenstein"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:284
+msgid "Lithuania"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:285
+msgid "Luxembourg"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:286
+msgid "Macau"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:287
+msgid "Macedonia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:288
+msgid "Madagascar"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:289
+msgid "Malawi"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:290
+msgid "Malaysia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:291
+msgid "Maldives"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:292
+msgid "Mali"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:293
+msgid "Malta"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:294
+msgid "Marshall Islands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:295
+msgid "Martinique"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:296
+msgid "Mauritania"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:297
+msgid "Mauritius"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:298
+msgid "Mayotte"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:299
+msgid "Mexico"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:300
+msgid "Micronesia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:301
+msgid "Moldavia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:302
+msgid "Monaco"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:303
+msgid "Mongolia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:304
+msgid "Montserrat"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:305
+msgid "Morocco"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:306
+msgid "Mozambique"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:307
+msgid "Union Of Myanmar"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:308
+msgid "Namibia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:309
+msgid "Nauru Island"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:310
+msgid "Nepal"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:311
+msgid "Netherlands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:312
+msgid "Netherlands Antilles"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:313
+msgid "New Caledonia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:314
+msgid "New Zealand"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:315
+msgid "Nicaragua"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:316
+msgid "Niger"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:317
+msgid "Nigeria"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:318
+msgid "Niue"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:319
+msgid "Norfolk Island"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:320
+msgid "Mariana Islands, Northern"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:321
+msgid "Norway"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:322
+msgid "Oman"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:323
+msgid "Pakistan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:324
+msgid "Palau Islands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:325
+msgid "Palestine"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:326
+msgid "Panama"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:327
+msgid "Papua New Guinea"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:328
+msgid "Paraguay"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:329
+msgid "Peru"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:330
+msgid "Philippines"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:331
+msgid "Pitcairn"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:332
+msgid "Poland"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:333
+msgid "Portugal"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:334
+msgid "Puerto Rico"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:335
+msgid "Qatar"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:336
+msgid "Reunion Island"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:337
+msgid "Romania"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:338
+msgid "Russian Federation"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:339
+msgid "Rwanda"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:340
+msgid "Samoa"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:341
+msgid "St Helena"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:342
+msgid "St Kitts & Nevis"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:343
+msgid "St Lucia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:344
+msgid "St Pierre & Miquelon"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:345
+msgid "St Vincent"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:346
+msgid "San Marino"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:347
+msgid "Sao Tome & Principe"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:348
+msgid "Saudi Arabia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:349
+msgid "Senegal"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:350
+msgid "Seychelles"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:351
+msgid "Sierra Leone"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:352
+msgid "Singapore"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:353
+msgid "Slovakia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:354
+msgid "Slovenia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:355
+msgid "Solomon Islands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:356
+msgid "Somalia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:357
+msgid "South Africa"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:358
+msgid "South Georgia and South Sandwich"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:359
+msgid "Spain"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:360
+msgid "Sri Lanka"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:361
+msgid "Stateless Persons"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:362
+msgid "Sudan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:363
+msgid "Suriname"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:364
+msgid "Svalbard and Jan Mayen"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:365
+msgid "Swaziland"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:366
+msgid "Sweden"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:367
+msgid "Switzerland"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:368
+msgid "Syrian Arab Republic"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:369
+msgid "Taiwan, Republic of China"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:370
+msgid "Tajikistan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:371
+msgid "Tanzania"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:372
+msgid "Thailand"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:373
+msgid "Timor Leste"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:374
+msgid "Togo"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:375
+msgid "Tokelau"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:376
+msgid "Tonga"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:377
+msgid "Trinidad & Tobago"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:378
+msgid "Tunisia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:379
+msgid "Turkey"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:380
+msgid "Turkmenistan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:381
+msgid "Turks And Caicos Islands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:382
+msgid "Tuvalu"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:383
+msgid "Uganda"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:384
+msgid "Ukraine"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:385
+msgid "United Arab Emirates"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:386
+msgid "United Kingdom"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:387
+msgid "US Minor Outlying Islands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:388
+msgid "USA"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:389
+msgid "Upper Volta"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:390
+msgid "Uruguay"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:391
+msgid "Uzbekistan"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:392
+msgid "Vanuatu"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:393
+msgid "Vatican City State"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:394
+msgid "Venezuela"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:395
+msgid "Vietnam"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:396
+msgid "Virgin Islands (British)"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:397
+msgid "Virgin Islands (US)"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:398
+msgid "Wallis And Futuna Islands"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:399
+msgid "Western Sahara"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:400
+msgid "Yemen Arab Rep."
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:401
+msgid "Yemen Democratic"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:402
+msgid "Yugoslavia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:403
+msgid "Zaire"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:404
+msgid "Zambia"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/includes/functions.php:405
+msgid "Zimbabwe"
 msgstr ""
 
