@@ -167,13 +167,15 @@ if(!class_exists('popoverpublic')) {
 													}
 													break;
 
-								case 'incountry':	if(!$this->incountry( $popover_incountry )) {
+								case 'incountry':	$incountry = $this->incountry( $popover_incountry );
+													if(!$incountry || $incountry === 'XX') {
 														$show = false;
 													}
 													break;
 
 								case 'notincountry':
-													if($this->incountry( $popover_notincountry )) {
+													$incountry = $this->incountry( $popover_notincountry );
+													if($incountry || $incountry === 'XX') {
 														$show = false;
 													}
 													break;
@@ -471,6 +473,12 @@ if(!class_exists('popoverpublic')) {
 			if(empty($country)) {
 				// No country to get from API
 				$country = $this->get_country_from_api( $ip );
+
+				if($country !== false) {
+					$this->put_country_in_cache( $ip, $country );
+				} else {
+					return 'XX';
+				}
 			}
 
 			if($country == $countrycode) {
@@ -489,8 +497,52 @@ if(!class_exists('popoverpublic')) {
 
 		}
 
+		function put_country_in_cache( $ip, $country ) {
+
+			return $this->insertonduplicate( $this->popover_ip_cache, array( 'IP' => $ip, 'country' => $country, 'cached' => time() ) );
+
+		}
+
 		function get_country_from_api( $ip ) {
 
+			$url = str_replace('%ip%', $ip, PO_REMOTE_IP_URL);
+
+			$response = wp_remote_get( $url );
+
+			if(!is_wp_error($response) && $response['response']['code'] == '200' && $response['body'] != 'XX') {
+				// cache the response for future use
+				$country = trim($response['body']);
+			} else {
+				if(PO_DEFAULT_COUNTRY !== false) {
+					return PO_DEFAULT_COUNTRY;
+				} else {
+					return false;
+				}
+			}
+
+		}
+
+		function insertonduplicate($table, $data) {
+
+			global $wpdb;
+
+			$fields = array_keys($data);
+			$formatted_fields = array();
+			foreach ( $fields as $field ) {
+				$form = '%s';
+				$formatted_fields[] = $form;
+			}
+			$sql = "INSERT INTO `$table` (`" . implode( '`,`', $fields ) . "`) VALUES ('" . implode( "','", $formatted_fields ) . "')";
+			$sql .= " ON DUPLICATE KEY UPDATE ";
+
+			$dup = array();
+			foreach($fields as $field) {
+				$dup[] = "`" . $field . "` = VALUES(`" . $field . "`)";
+			}
+
+			$sql .= implode(',', $dup);
+
+			return $wpdb->query( $wpdb->prepare( $sql, $data) );
 		}
 
 		function clear_forever() {
