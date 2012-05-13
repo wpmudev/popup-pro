@@ -24,7 +24,7 @@ if(!class_exists('popoverpublic')) {
 				$this->$table = popover_db_prefix($this->db, $table);
 			}
 
-			add_action('init', array(&$this, 'selective_message_display'), 1);
+			add_action('init', array(&$this, 'selective_message_display'), 99);
 
 			add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
 
