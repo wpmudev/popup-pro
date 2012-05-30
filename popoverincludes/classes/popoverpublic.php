@@ -131,15 +131,17 @@ if(!class_exists('popoverpublic')) {
 
 					$popover_usejs = $popover->popover_settings['popover_usejs'];
 
-					$popoverstyle = $popover->popover_settings['popover_style'];
+					$popoverstyle = (isset($popover->popover_settings['popover_style'])) ? $popover->popover_settings['popover_style'] : '';
 
-					$popover_delay = $popover->popover_settings['popoverdelay'];
+					$popover_hideforever = (isset($popover->popover_settings['popoverhideforeverlink'])) ? $popover->popover_settings['popoverhideforeverlink'] : '';
 
-					$popover_onurl = $popover->popover_settings['onurl'];
-					$popover_notonurl = $popover->popover_settings['notonurl'];
+					$popover_delay = (isset($popover->popover_settings['popoverdelay'])) ? $popover->popover_settings['popoverdelay'] : '';
 
-					$popover_incountry = $popover->popover_settings['incountry'];
-					$popover_notincountry = $popover->popover_settings['notincountry'];
+					$popover_onurl = (isset($popover->popover_settings['onurl'])) ? $popover->popover_settings['onurl'] : '';
+					$popover_notonurl = (isset($popover->popover_settings['notonurl'])) ? $popover->popover_settings['notonurl'] : '';
+
+					$popover_incountry = (isset($popover->popover_settings['incountry'])) ? $popover->popover_settings['incountry'] : '';
+					$popover_notincountry = (isset($popover->popover_settings['notincountry'])) ? $popover->popover_settings['notincountry'] : '';
 
 					$popover_onurl = $this->sanitise_array($popover_onurl);
 					$popover_notonurl = $this->sanitise_array($popover_notonurl);
@@ -424,7 +426,8 @@ if(!class_exists('popoverpublic')) {
 		}
 
 		function is_fromsearchengine() {
-			$ref = $_SERVER['HTTP_REFERER'];
+
+			$ref = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
 
 			$SE = array('/search?', '.google.', 'web.info.com', 'search.', 'del.icio.us/search', 'soso.com', '/search/', '.yahoo.', '.bing.' );
 
@@ -456,7 +459,9 @@ if(!class_exists('popoverpublic')) {
 
 		function referrer_matches($check) {
 
-			if(preg_match( '/' . $check . '/i', $_SERVER['HTTP_REFERER'] )) {
+			$referer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
+
+			if(preg_match( '/' . $check . '/i', $referer )) {
 				return true;
 			} else {
 				return false;

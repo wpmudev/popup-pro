@@ -246,7 +246,7 @@ if(!class_exists('popoveradmin')) {
 
 			$this->add_admin_header_core();
 
-			if(in_array($_GET['action'], array('edit', 'add'))) {
+			if(isset($_GET['action']) && in_array($_GET['action'], array('edit', 'add'))) {
 				$this->add_admin_header_popover();
 			} else {
 				wp_enqueue_script('popoverdragadminjs', popover_url('popoverincludes/js/jquery.tablednd_0_5.js'), array('jquery'), $this->build);
@@ -456,19 +456,31 @@ if(!class_exists('popoveradmin')) {
 
 			$popover['popover_settings']['popover_style'] = $_POST['popoverstyle'];
 
-			if($_POST['popoverhideforeverlink'] == 'yes') {
+			if(isset($_POST['popoverhideforeverlink']) && $_POST['popoverhideforeverlink'] == 'yes') {
 				$popover['popover_settings']['popoverhideforeverlink'] = 'yes';
 			} else {
 				$popover['popover_settings']['popoverhideforeverlink'] = 'no';
 			}
 
-			$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
+			if(isset($_POST['popoverdelay'])) {
+				$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
+			}
 
-			$popover['popover_settings']['onurl'] = explode("\n", $_POST['popoveronurl']);
-			$popover['popover_settings']['notonurl'] = explode("\n", $_POST['popovernotonurl']);
+			if(isset($_POST['popoveronurl'])) {
+				$popover['popover_settings']['onurl'] = explode("\n", $_POST['popoveronurl']);
+			}
 
-			$popover['popover_settings']['incountry'] = $_POST['popoverincountry'];
-			$popover['popover_settings']['notincountry'] = $_POST['popovernotincountry'];
+			if(isset($_POST['popovernotonurl'])) {
+				$popover['popover_settings']['notonurl'] = explode("\n", $_POST['popovernotonurl']);
+			}
+
+			if(isset($_POST['popoverincountry'])) {
+				$popover['popover_settings']['incountry'] = $_POST['popoverincountry'];
+			}
+
+			if(isset($_POST['popovernotincountry'])) {
+				$popover['popover_settings']['notincountry'] = $_POST['popovernotincountry'];
+			}
 
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
@@ -521,19 +533,31 @@ if(!class_exists('popoveradmin')) {
 
 			$popover['popover_settings']['popover_style'] = $_POST['popoverstyle'];
 
-			if($_POST['popoverhideforeverlink'] == 'yes') {
+			if(isset($_POST['popoverhideforeverlink']) && $_POST['popoverhideforeverlink'] == 'yes') {
 				$popover['popover_settings']['popoverhideforeverlink'] = 'yes';
 			} else {
 				$popover['popover_settings']['popoverhideforeverlink'] = 'no';
 			}
 
-			$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
+			if(isset($_POST['popoverdelay'])) {
+				$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
+			}
 
-			$popover['popover_settings']['onurl'] = explode("\n", $_POST['popoveronurl']);
-			$popover['popover_settings']['notonurl'] = explode("\n", $_POST['popovernotonurl']);
+			if(isset($_POST['popoveronurl'])) {
+				$popover['popover_settings']['onurl'] = explode("\n", $_POST['popoveronurl']);
+			}
 
-			$popover['popover_settings']['incountry'] = $_POST['popoverincountry'];
-			$popover['popover_settings']['notincountry'] = $_POST['popovernotincountry'];
+			if(isset($_POST['popovernotonurl'])) {
+				$popover['popover_settings']['notonurl'] = explode("\n", $_POST['popovernotonurl']);
+			}
+
+			if(isset($_POST['popoverincountry'])) {
+				$popover['popover_settings']['incountry'] = $_POST['popoverincountry'];
+			}
+
+			if(isset($_POST['popovernotincountry'])) {
+				$popover['popover_settings']['notincountry'] = $_POST['popovernotincountry'];
+			}
 
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
@@ -936,17 +960,17 @@ if(!class_exists('popoveradmin')) {
 
 			$popover_usejs = $popover->popover_settings['popover_usejs'];
 
-			$popoverstyle = $popover->popover_settings['popover_style'];
+			$popoverstyle = (isset($popover->popover_settings['popover_style'])) ? $popover->popover_settings['popover_style'] : '';
 
-			$popover_hideforever = $popover->popover_settings['popoverhideforeverlink'];
+			$popover_hideforever = (isset($popover->popover_settings['popoverhideforeverlink'])) ? $popover->popover_settings['popoverhideforeverlink'] : '';
 
-			$popover_delay = $popover->popover_settings['popoverdelay'];
+			$popover_delay = (isset($popover->popover_settings['popoverdelay'])) ? $popover->popover_settings['popoverdelay'] : '';
 
-			$popover_onurl = $popover->popover_settings['onurl'];
-			$popover_notonurl = $popover->popover_settings['notonurl'];
+			$popover_onurl = (isset($popover->popover_settings['onurl'])) ? $popover->popover_settings['onurl'] : '';
+			$popover_notonurl = (isset($popover->popover_settings['notonurl'])) ? $popover->popover_settings['notonurl'] : '';
 
-			$popover_incountry = $popover->popover_settings['incountry'];
-			$popover_notincountry = $popover->popover_settings['notincountry'];
+			$popover_incountry = (isset($popover->popover_settings['incountry'])) ? $popover->popover_settings['incountry'] : '';
+			$popover_notincountry = (isset($popover->popover_settings['notincountry'])) ? $popover->popover_settings['notincountry'] : '';
 
 			$popover_onurl = $this->sanitise_array($popover_onurl);
 			$popover_notonurl = $this->sanitise_array($popover_notonurl);
@@ -996,7 +1020,11 @@ if(!class_exists('popoveradmin')) {
 								<div id='positive-rules-holder'>
 									<?php
 
-										$order = explode(',', $popover_check['order']);
+										if(!empty($popover_check['order'])) {
+											$order = explode(',', $popover_check['order']);
+										} else {
+											$order = array();
+										}
 
 										foreach($order as $key) {
 
