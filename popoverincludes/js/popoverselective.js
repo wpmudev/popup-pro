@@ -42,7 +42,7 @@ function po_get_cookie(name) {
     return null;
 }
 
-function createCookie(name,value,days) {
+function po_createCookie(name,value,days) {
 	if (days) {
 		var date = new Date();
 		date.setTime(date.getTime()+(days*24*60*60*1000));
@@ -52,20 +52,20 @@ function createCookie(name,value,days) {
 	document.cookie = name+"="+value+expires+"; path=/";
 }
 
-function removeMessageBoxForever() {
+function po_removeMessageBoxForever() {
 	jQuery('#darkbackground').remove();
 	jQuery(this).parents(popovername).remove();
-	createCookie('popover_never_view', 'hidealways', 365);
+	po_createCookie('popover_never_view', 'hidealways', 365);
 	return false;
 }
 
-function removeMessageBox() {
+function po_removeMessageBox() {
 	jQuery('#darkbackground').remove();
 	jQuery(this).parents(popovername).remove();
 	return false;
 }
 
-function showMessageBox() {
+function po_showMessageBox() {
 	jQuery(popovername).css('visibility', 'visible');
 	jQuery('#darkbackground').css('visibility', 'visible');
 }
@@ -93,8 +93,10 @@ function po_onsuccess( data ) {
 			jQuery('#' + data['name']).css('left', (jQuery(window).width() / 2) - (jQuery('#message').width() / 2) );
 		}
 
-		jQuery('#clearforever').click(removeMessageBoxForever);
-		jQuery('#closebox').click(removeMessageBox);
+		po_showMessageBox();
+
+		jQuery('#clearforever').click(po_removeMessageBoxForever);
+		jQuery('#closebox').click(po_removeMessageBox);
 
 		jQuery('#message').hover( function() {jQuery('.claimbutton').removeClass('hide');}, function() {jQuery('.claimbutton').addClass('hide');});
 	}
