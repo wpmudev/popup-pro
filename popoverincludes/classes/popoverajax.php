@@ -1,14 +1,20 @@
 <?php
+/*
+* The processing part of the popover plugin
+* - was previously in popoverpublic.php
+*/
+
 if(!class_exists('popoverajax')) {
 
 	class popoverajax {
 
 		var $mylocation = '';
-		var $build = 3;
+		var $build = 5;
 		var $db;
 
-		var $tables = array( 'popover' );
+		var $tables = array( 'popover', 'popover_ip_cache' );
 		var $popover;
+		var $popover_ip_cache;
 
 		var $activepopover = false;
 
@@ -22,21 +28,22 @@ if(!class_exists('popoverajax')) {
 				$this->$table = popover_db_prefix($this->db, $table);
 			}
 
-			//add_action('init', array(&$this, 'selective_message_display'), 1);
+			add_action('init', array(&$this, 'initialise_ajax'), 99);
 
 			add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
 
 			$directories = explode(DIRECTORY_SEPARATOR,dirname(__FILE__));
 			$this->mylocation = $directories[count($directories)-1];
 
-			// Adding in Ajax calls - need to be in the admin area as it uses admin_url :/
-			add_action('wp_ajax_po_popover', array(&$this, 'selective_message_display') );
-			add_action('wp_ajax_nopriv_po_popover', array(&$this, 'selective_message_display') );
-
 		}
 
 		function popoverajax() {
 			$this->__construct();
+		}
+
+		function initialise_ajax() {
+			add_action( 'wp_ajax_popover_selective_ajax', array(&$this,'ajax_selective_message_display') );
+			add_action( 'wp_ajax_nopriv_popover_selective_ajax', array(&$this,'ajax_selective_message_display') );
 		}
 
 		function load_textdomain() {
@@ -55,9 +62,18 @@ if(!class_exists('popoverajax')) {
 			return $this->db->get_results( $sql );
 		}
 
-		function selective_message_display() {
+		function ajax_selective_message_display() {
 
-			die('hello');
+			if(isset($_GET['callback'])) {
+				$data = $this->selective_message_display();
+				echo $_GET['callback'] . "(" . json_encode($data) . ")";
+			}
+
+			exit;
+
+		}
+
+		function selective_message_display() {
 
 			if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
 				$updateoption = 'update_site_option';
@@ -94,12 +110,17 @@ if(!class_exists('popoverajax')) {
 
 					$popover_usejs = $popover->popover_settings['popover_usejs'];
 
-					$popoverstyle = $popover->popover_settings['popover_style'];
+					$popoverstyle = (isset($popover->popover_settings['popover_style'])) ? $popover->popover_settings['popover_style'] : '';
 
-					$popover_delay = $popover->popover_settings['popoverdelay'];
+					$popover_hideforever = (isset($popover->popover_settings['popoverhideforeverlink'])) ? $popover->popover_settings['popoverhideforeverlink'] : '';
 
-					$popover_onurl = $popover->popover_settings['onurl'];
-					$popover_notonurl = $popover->popover_settings['notonurl'];
+					$popover_delay = (isset($popover->popover_settings['popoverdelay'])) ? $popover->popover_settings['popoverdelay'] : '';
+
+					$popover_onurl = (isset($popover->popover_settings['onurl'])) ? $popover->popover_settings['onurl'] : '';
+					$popover_notonurl = (isset($popover->popover_settings['notonurl'])) ? $popover->popover_settings['notonurl'] : '';
+
+					$popover_incountry = (isset($popover->popover_settings['incountry'])) ? $popover->popover_settings['incountry'] : '';
+					$popover_notincountry = (isset($popover->popover_settings['notincountry'])) ? $popover->popover_settings['notincountry'] : '';
 
 					$popover_onurl = $this->sanitise_array($popover_onurl);
 					$popover_notonurl = $this->sanitise_array($popover_notonurl);
@@ -136,19 +157,19 @@ if(!class_exists('popoverajax')) {
 													break;
 
 								case "searchengine":
-													if(!$this->is_fromsearchengine()) {
+													if(!$this->is_fromsearchengine( $_REQUEST['thereferrer'] )) {
 														$show = false;
 													}
 													break;
 
 								case "internal":	$internal = str_replace('http://','',get_option('home'));
-													if($this->referrer_matches(addcslashes($internal,"/"))) {
+													if($this->referrer_matches(addcslashes($internal,"/"), $_REQUEST['thereferrer'] )) {
 														$show = false;
 													}
 													break;
 
 								case "referrer":	$match = $popover_ereg;
-													if(!$this->referrer_matches(addcslashes($match,"/"))) {
+													if(!$this->referrer_matches(addcslashes($match,"/"), $_REQUEST['thereferrer'])) {
 														$show = false;
 													}
 													break;
@@ -158,12 +179,25 @@ if(!class_exists('popoverajax')) {
 													}
 													break;
 
-								case 'onurl':		if(!$this->onurl( $popover_onurl )) {
+								case 'onurl':		if(!$this->onurl( $popover_onurl, $_REQUEST['thefrom'] )) {
 														$show = false;
 													}
 													break;
 
-								case 'notonurl':	if($this->onurl( $popover_notonurl )) {
+								case 'notonurl':	if($this->onurl( $popover_notonurl, $_REQUEST['thefrom'] )) {
+														$show = false;
+													}
+													break;
+
+								case 'incountry':	$incountry = $this->incountry( $popover_incountry );
+													if(!$incountry || $incountry === 'XX') {
+														$show = false;
+													}
+													break;
+
+								case 'notincountry':
+													$incountry = $this->incountry( $popover_notincountry );
+													if($incountry || $incountry === 'XX') {
 														$show = false;
 													}
 													break;
@@ -189,31 +223,79 @@ if(!class_exists('popoverajax')) {
 
 					if($show == true) {
 
-						// Store the active popover so we know what we are using in the footer.
-						$this->activepopover = $popover;
+						// return the popover to the calling function
 
-						wp_enqueue_script('jquery');
+						$popover = array();
 
-						$popover_messagebox = 'a' . md5(date('d')) . '-po';
+						$popover['name'] = 'a' . md5(date('d')) . '-po';
+
 						// Show the advert
-						wp_enqueue_script('popoverjs', popover_url('popoverincludes/js/popover.js'), array('jquery'), $this->build);
 						if(!empty($popover_delay) && $popover_delay != 'immediate') {
 							// Set the delay
-							wp_localize_script('popoverjs', 'popover', array(	'messagebox'		=>	'#' . $popover_messagebox,
-																				'messagedelay'		=>	$popover_delay * 1000
-																				));
+							$popover['delay'] = $popover_delay * 1000;
 						} else {
-							wp_localize_script('popoverjs', 'popover', array(	'messagebox'		=>	'#' . $popover_messagebox,
-																				'messagedelay'		=>	0
-																				));
+							$popover['delay'] = 0;
 						}
 
 						if($popover_usejs == 'yes') {
-							wp_enqueue_script('popoveroverridejs', popover_url('popoverincludes/js/popoversizing.js'), array('jquery'), $this->build);
+							$popover['usejs'] = 'yes';
+						} else {
+							$popover['usejs'] = 'no';
 						}
 
-						add_action('wp_head', array(&$this, 'page_header'));
-						add_action('wp_footer', array(&$this, 'page_footer'));
+						$style = '';
+						$backgroundstyle = '';
+
+						if($popover_usejs == 'yes') {
+							$style = 'z-index:999999;';
+							$box = 'color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
+							$style .= 'left: -1000px; top: =100px;';
+						} else {
+							$style =  'left: ' . $popover_location['left'] . '; top: ' . $popover_location['top'] . ';' . ' z-index:999999;';
+							$style .= 'margin-top: ' . $popover_margin['top'] . '; margin-bottom: ' . $popover_margin['bottom'] . '; margin-right: ' . $popover_margin['right'] . '; margin-left: ' . $popover_margin['left'] . ';';
+
+							$box = 'width: ' . $popover_size['width'] . '; height: ' . $popover_size['height'] . '; color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
+
+						}
+
+						if(!empty($popover_delay) && $popover_delay != 'immediate') {
+							// Hide the popover initially
+							$style .= ' visibility: hidden;';
+							$backgroundstyle .= ' visibility: hidden;';
+						}
+
+						$availablestyles = apply_filters( 'popover_available_styles_directory', array() );
+
+						$popover['html'] = '';
+						if( in_array($popoverstyle, array_keys($availablestyles)) ) {
+							$popover_messagebox = 'a' . md5(date('d')) . '-po';
+
+							if(file_exists(trailingslashit($availablestyles[$popoverstyle]) . 'popover.php')) {
+								ob_start();
+								include_once( trailingslashit($availablestyles[$popoverstyle]) . 'popover.php' );
+								$popover['html'] = ob_get_contents();
+								ob_end_clean();
+							}
+						}
+
+						$availablestylesurl = apply_filters( 'popover_available_styles_url', array() );
+
+						$popover['style'] = '';
+						if( in_array($popoverstyle, array_keys($availablestyles)) ) {
+							// Add the styles
+							if(file_exists(trailingslashit($availablestyles[$popoverstyle]) . 'style.css')) {
+								ob_start();
+								include_once( trailingslashit($availablestyles[$popoverstyle]) . 'style.css' );
+								$content = ob_get_contents();
+								ob_end_clean();
+
+								$popover['style'] = str_replace('#messagebox', '#' . $popover_messagebox, $content);
+								$popover['style'] = str_replace('%styleurl%', trailingslashit($availablestylesurl[$popoverstyle]), $popover['style']);
+
+							}
+
+						}
+
 
 						// Add the cookie
 						if ( isset($_COOKIE['popover_view_'.COOKIEHASH]) ) {
@@ -225,6 +307,9 @@ if(!class_exists('popoverajax')) {
 						}
 						if(!headers_sent()) setcookie('popover_view_'.COOKIEHASH, $count , time() + 30000000, COOKIEPATH, COOKIE_DOMAIN);
 
+
+						return $popover;
+						// Exit from the for - as we have sent a popover
 						break;
 					}
 
@@ -237,7 +322,7 @@ if(!class_exists('popoverajax')) {
 
 		function sanitise_array($arrayin) {
 
-			foreach($arrayin as $key => $value) {
+			foreach( (array) $arrayin as $key => $value) {
 				$arrayin[$key] = htmlentities(stripslashes($value) ,ENT_QUOTES, 'UTF-8');
 			}
 
@@ -334,44 +419,12 @@ if(!class_exists('popoverajax')) {
 
 			$popover_delay = $popover->popover_settings['popoverdelay'];
 
-			$style = '';
-			$backgroundstyle = '';
 
-			if($popover_usejs == 'yes') {
-				$style = 'z-index:999999;';
-				$box = 'color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
-				$style .= 'left: -1000px; top: =100px;';
-			} else {
-				$style =  'left: ' . $popover_location['left'] . '; top: ' . $popover_location['top'] . ';' . ' z-index:999999;';
-				$style .= 'margin-top: ' . $popover_margin['top'] . '; margin-bottom: ' . $popover_margin['bottom'] . '; margin-right: ' . $popover_margin['right'] . '; margin-left: ' . $popover_margin['left'] . ';';
-
-				$box = 'width: ' . $popover_size['width'] . '; height: ' . $popover_size['height'] . '; color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
-
-			}
-
-			if(!empty($popover_delay) && $popover_delay != 'immediate') {
-				// Hide the popover initially
-				$style .= ' visibility: hidden;';
-				$backgroundstyle .= ' visibility: hidden;';
-			}
-
-			$availablestyles = apply_filters( 'popover_available_styles_directory', array() );
-
-			if( in_array($popoverstyle, array_keys($availablestyles)) ) {
-				$popover_messagebox = 'a' . md5(date('d')) . '-po';
-
-				if(file_exists(trailingslashit($availablestyles[$popoverstyle]) . 'popover.php')) {
-					ob_start();
-					include_once( trailingslashit($availablestyles[$popoverstyle]) . 'popover.php' );
-					ob_end_flush();
-				}
-			}
 
 
 		}
 
-		function is_fromsearchengine() {
-			$ref = $_SERVER['HTTP_REFERER'];
+		function is_fromsearchengine( $ref = '') {
 
 			$SE = array('/search?', '.google.', 'web.info.com', 'search.', 'del.icio.us/search', 'soso.com', '/search/', '.yahoo.', '.bing.' );
 
@@ -401,9 +454,9 @@ if(!class_exists('popoverajax')) {
 			}
 		}
 
-		function referrer_matches($check) {
+		function referrer_matches($check, $referer = '') {
 
-			if(preg_match( '/' . $check . '/i', $_SERVER['HTTP_REFERER'] )) {
+			if(preg_match( '/' . $check . '/i', $referer )) {
 				return true;
 			} else {
 				return false;
@@ -436,12 +489,12 @@ if(!class_exists('popoverajax')) {
 		 	return trailingslashit($url);
 		}
 
-		function onurl( $urllist = array() ) {
+		function onurl( $urllist = array(), $url = '' ) {
 
 			$urllist = array_map( 'trim', $urllist );
 
 			if(!empty($urllist)) {
-				if(in_array($this->myURL(), $urllist)) {
+				if(in_array($url, $urllist)) {
 					// we are on the list
 					return true;
 				} else {
@@ -453,6 +506,86 @@ if(!class_exists('popoverajax')) {
 
 		}
 
+		function incountry( $countrycode ) {
+			// Grab the users IP address
+			$ip = $_SERVER["REMOTE_ADDR"];
+
+			$country = $this->get_country_from_cache( $ip );
+			if(empty($country)) {
+				// No country to get from API
+				$country = $this->get_country_from_api( $ip );
+
+				if($country !== false) {
+					$this->put_country_in_cache( $ip, $country );
+				} else {
+					return 'XX';
+				}
+			}
+
+			if($country == $countrycode) {
+				return true;
+			} else {
+				return false;
+			}
+
+		}
+
+		function get_country_from_cache( $ip ) {
+
+			$country = $this->db->get_var( $this->db->prepare( "SELECT country FROM {$this->popover_ip_cache} WHERE IP = %s", $ip ) );
+
+			return $country;
+
+		}
+
+		function put_country_in_cache( $ip, $country ) {
+
+			return $this->insertonduplicate( $this->popover_ip_cache, array( 'IP' => $ip, 'country' => $country, 'cached' => time() ) );
+
+		}
+
+		function get_country_from_api( $ip ) {
+
+			$url = str_replace('%ip%', $ip, PO_REMOTE_IP_URL);
+
+			$response = wp_remote_get( $url );
+
+			if(!is_wp_error($response) && $response['response']['code'] == '200' && $response['body'] != 'XX') {
+				// cache the response for future use
+				$country = trim($response['body']);
+			} else {
+				if(PO_DEFAULT_COUNTRY !== false) {
+					return PO_DEFAULT_COUNTRY;
+				} else {
+					return false;
+				}
+			}
+
+		}
+
+		function insertonduplicate($table, $data) {
+
+			global $wpdb;
+
+			$fields = array_keys($data);
+			$formatted_fields = array();
+			foreach ( $fields as $field ) {
+				$form = '%s';
+				$formatted_fields[] = $form;
+			}
+			$sql = "INSERT INTO `$table` (`" . implode( '`,`', $fields ) . "`) VALUES ('" . implode( "','", $formatted_fields ) . "')";
+			$sql .= " ON DUPLICATE KEY UPDATE ";
+
+			$dup = array();
+			foreach($fields as $field) {
+				$dup[] = "`" . $field . "` = VALUES(`" . $field . "`)";
+			}
+
+			$sql .= implode(',', $dup);
+
+			return $wpdb->query( $wpdb->prepare( $sql, $data) );
+		}
+
 		function clear_forever() {
 			if ( isset($_COOKIE['popover_never_view']) ) {
 				return true;
@@ -462,5 +595,6 @@ if(!class_exists('popoverajax')) {
 		}
 
 	}
+
 }
 ?>
