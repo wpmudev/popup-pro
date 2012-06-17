@@ -42,6 +42,34 @@ function po_get_cookie(name) {
     return null;
 }
 
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function removeMessageBoxForever() {
+	jQuery('#darkbackground').remove();
+	jQuery(this).parents(popovername).remove();
+	createCookie('popover_never_view', 'hidealways', 365);
+	return false;
+}
+
+function removeMessageBox() {
+	jQuery('#darkbackground').remove();
+	jQuery(this).parents(popovername).remove();
+	return false;
+}
+
+function showMessageBox() {
+	jQuery(popovername).css('visibility', 'visible');
+	jQuery('#darkbackground').css('visibility', 'visible');
+}
+
 function po_showMessageBox( data ) {
 
 }
@@ -49,16 +77,26 @@ function po_showMessageBox( data ) {
 function po_onsuccess( data ) {
 
 	//window.setTimeout( "po_showMessageBox( data )", data['delay'] );
-	jQuery( '<style type="text/css">' + data['style'] + '</style>' ).appendTo('head');
-	jQuery( data['html'] ).appendTo('body');
+	if( data['html'] != '' ) {
 
-	if( data['usejs'] == 'yes' ) {
+		popovername = data['name'];
 
-		jQuery('#' + data['name']).width(jQuery('#message').width());
-		jQuery('#' + data['name']).height(jQuery('#message').height());
+		jQuery( '<style type="text/css">' + data['style'] + '</style>' ).appendTo('head');
+		jQuery( data['html'] ).appendTo('body');
 
-		jQuery('#' + data['name']).css('top', (jQuery(window).height() / 2) - (jQuery('#message').height() / 2) );
-		jQuery('#' + data['name']).css('left', (jQuery(window).width() / 2) - (jQuery('#message').width() / 2) );
+		if( data['usejs'] == 'yes' ) {
+
+			jQuery('#' + data['name']).width(jQuery('#message').width());
+			jQuery('#' + data['name']).height(jQuery('#message').height());
+
+			jQuery('#' + data['name']).css('top', (jQuery(window).height() / 2) - (jQuery('#message').height() / 2) );
+			jQuery('#' + data['name']).css('left', (jQuery(window).width() / 2) - (jQuery('#message').width() / 2) );
+		}
+
+		jQuery('#clearforever').click(removeMessageBoxForever);
+		jQuery('#closebox').click(removeMessageBox);
+
+		jQuery('#message').hover( function() {jQuery('.claimbutton').removeClass('hide');}, function() {jQuery('.claimbutton').addClass('hide');});
 	}
 
 }
