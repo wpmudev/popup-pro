@@ -42,10 +42,8 @@ if(is_admin()) {
 	$popoverajax = new popoverajax();
 } else {
 	require_once('popoverincludes/classes/popoverpublic.php');
-	//require_once('popoverincludes/classes/popoverajax.php');
 
 	$popover = new popoverpublic();
-	//$popoverajax = new popoverajax();
 }
 
 load_popover_addons();
