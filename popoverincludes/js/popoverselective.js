@@ -65,21 +65,14 @@ function po_removeMessageBox() {
 	return false;
 }
 
-function po_showMessageBox() {
-	jQuery(popovername).css('visibility', 'visible');
-	jQuery('#darkbackground').css('visibility', 'visible');
-}
+function po_loadMessageBox( ) {
 
-function po_showMessageBox( data ) {
+	// move the data back to the data variable, from mydata so we can use it without changing a chunk of code :)
+	data = mydata;
 
-}
-
-function po_onsuccess( data ) {
-
-	//window.setTimeout( "po_showMessageBox( data )", data['delay'] );
 	if( data['html'] != '' ) {
-
-		popovername = data['name'];
+		// Set the name for other functions to use
+		popovername = '#' + data['name'];
 
 		jQuery( '<style type="text/css">' + data['style'] + '</style>' ).appendTo('head');
 		jQuery( data['html'] ).appendTo('body');
@@ -93,13 +86,22 @@ function po_onsuccess( data ) {
 			jQuery('#' + data['name']).css('left', (jQuery(window).width() / 2) - (jQuery('#message').width() / 2) );
 		}
 
-		po_showMessageBox();
+		jQuery('#' + data['name']).css('visibility', 'visible');
+		jQuery('#darkbackground').css('visibility', 'visible');
 
 		jQuery('#clearforever').click(po_removeMessageBoxForever);
 		jQuery('#closebox').click(po_removeMessageBox);
 
 		jQuery('#message').hover( function() {jQuery('.claimbutton').removeClass('hide');}, function() {jQuery('.claimbutton').addClass('hide');});
 	}
+
+}
+
+function po_onsuccess( data ) {
+	// set the data to be a global variable so we can grab it after the timeout
+	mydata = data;
+
+	window.setTimeout( po_loadMessageBox, data['delay'] );
 
 }
 
