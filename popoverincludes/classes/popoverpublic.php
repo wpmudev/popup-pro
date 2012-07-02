@@ -94,7 +94,7 @@ if(!class_exists('popoverpublic')) {
 			wp_enqueue_script('jquery');
 
 			// Now to register our new js file
-			wp_register_script( 'popoverselective', popover_url('popoverincludes/js/popoverselective.js') );
+			wp_register_script( 'popoverselective', popover_url('popover-load-js.php') );
 			wp_enqueue_script( 'popoverselective' );
 		}
 
