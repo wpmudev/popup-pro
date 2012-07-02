@@ -90,12 +90,17 @@ if(!class_exists('popoverpublic')) {
 		}
 
 		function add_selective_javascript() {
-			// We need javascript so make sure we load it here
-			wp_enqueue_script('jquery');
+			global $pagenow;
 
-			// Now to register our new js file
-			wp_register_script( 'popoverselective', popover_url('popover-load-js.php') );
-			wp_enqueue_script( 'popoverselective' );
+			if(!in_array($pagenow, array('wp-login.php', 'wp-register.php'))) {
+				// We need javascript so make sure we load it here
+				wp_enqueue_script('jquery');
+
+				// Now to register our new js file
+				wp_register_script( 'popoverselective', popover_url('popover-load-js.php') );
+				wp_enqueue_script( 'popoverselective' );
+			}
+
 		}
 
 	}

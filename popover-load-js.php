@@ -25,8 +25,12 @@ if ( $compress && ! ini_get('zlib.output_compression') && 'ob_gzhandler' != ini_
 	}
 }
 
+define( 'POPOVERJSLOCATION', dirname($_SERVER["SCRIPT_FILENAME"]) );
+define( 'ABSPATH', dirname(dirname(dirname(POPOVERJSLOCATION))) . '/' );
+define( 'WPINC', 'wp-includes' );
+
 // Load WordPress so that we can get some bits and pieces.
-include_once('../../../wp-load.php');
+require_once( ABSPATH . 'wp-load.php');
 
 ?>
 //
@@ -38,27 +42,7 @@ include_once('../../../wp-load.php');
 //
 
 // Where the admin-ajax.php file is relative to the domain - have to hardcode for now due to this being a JS file
-var po_adminajax = '/wp-admin/admin-ajax.php';
-
-// Get the source of this file so we know where we are - from http://stackoverflow.com/questions/984510/what-is-my-script-src-url/984656#984656
-var po_scriptSource = (function(scripts) {
-    var scripts = document.getElementsByTagName('script'),
-        script = scripts[scripts.length - 1];
-
-    if (script.getAttribute.length !== undefined) {
-        return script.src
-    }
-
-    return script.getAttribute('src', -1)
-}());
-
-// Gets the domain part of the url
-function po_get_domain( theurl ) {
-
-	pathArray = theurl.split( '/' );
-	return 'http://' + pathArray[2];
-
-}
+var po_adminajax = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 
 // Enable us to get some cookie information - from http://stackoverflow.com/questions/5639346/shortest-function-for-reading-a-cookie-in-javascript
 function po_get_cookie(name) {
@@ -132,14 +116,15 @@ function po_onsuccess( data ) {
 	// set the data to be a global variable so we can grab it after the timeout
 	mydata = data;
 
-	window.setTimeout( po_loadMessageBox, data['delay'] );
+	if(data['name'] != 'nopoover') {
+		window.setTimeout( po_loadMessageBox, data['delay'] );
+	}
 
 }
 
 function po_load_popover() {
 
-	var thedomain = po_get_domain(po_scriptSource);
-	var theajax = thedomain + po_adminajax;
+	var theajax = po_adminajax;
 	var thefrom = window.location;
 	var thereferrer = document.referrer;
 
@@ -165,14 +150,6 @@ function po_load_popover() {
 function po_selectiveLoad() {
 
 	po_load_popover();
-
-
-	//jQuery('#clearforever').click(removeMessageBoxForever);
-	//jQuery('#closebox').click(removeMessageBox);
-
-	//jQuery('#message').hover( function() {jQuery('.claimbutton').removeClass('hide');}, function() {jQuery('.claimbutton').addClass('hide');});
-
-	//window.setTimeout( showMessageBox, popover.messagedelay );
 
 }
 

@@ -312,11 +312,13 @@ if(!class_exists('popoverajax')) {
 						// Exit from the for - as we have sent a popover
 						break;
 					}
-
-
 				}
 
 			}
+
+			// There is no popover to show - so send back a no-popover message
+			return array( 'name' => 'nopopover' );
+
 
 		}
 
