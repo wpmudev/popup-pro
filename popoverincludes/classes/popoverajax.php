@@ -162,7 +162,7 @@ if(!class_exists('popoverajax')) {
 													}
 													break;
 
-								case "internal":	$internal = str_replace('http://','',get_option('home'));
+								case "internal":	$internal = str_replace('^http://','',get_option('home'));
 													if($this->referrer_matches(addcslashes($internal,"/"), $_REQUEST['thereferrer'] )) {
 														$show = false;
 													}
@@ -209,6 +209,15 @@ if(!class_exists('popoverajax')) {
 													}
 													break;
 
+							}
+						}
+
+						// Check for forced popover and if set then output that one instead of any other
+						if(isset($_REQUEST['active_popover']) && (int) $_REQUEST['active_popover'] != 0) {
+							if($popover->id == (int) $_REQUEST['active_popover']) {
+								$show = true;
+							} else {
+								$show = false;
 							}
 						}
 					}

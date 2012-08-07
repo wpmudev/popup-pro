@@ -128,13 +128,19 @@ function po_load_popover() {
 	var thefrom = window.location;
 	var thereferrer = document.referrer;
 
+	// Check if we are forcing a popover - if not then set it to a default value of 0
+	if (typeof force_popover === 'undefined') {
+		force_popover = 0;
+	}
+
 	jQuery.ajax( {
 		url : theajax,
 		dataType : 'jsonp',
 		jsonpCallback : 'po_onsuccess',
 		data : {	action : 'popover_selective_ajax',
 					thefrom : thefrom.toString(),
-					thereferrer : thereferrer.toString()
+					thereferrer : thereferrer.toString(),
+					active_popover : force_popover.toString()
 				},
 		success : function(data) {
 
