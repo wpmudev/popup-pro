@@ -383,7 +383,7 @@ if(!class_exists('popoveradmin')) {
 
 		function get_popovers() {
 
-			$sql = $this->db->prepare( "SELECT * FROM {$this->popover} ORDER BY popover_order ASC" );
+			$sql = "SELECT * FROM {$this->popover} ORDER BY popover_order ASC";
 
 			return $this->db->get_results( $sql );
 

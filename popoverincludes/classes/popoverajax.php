@@ -57,7 +57,7 @@ if(!class_exists('popoverajax')) {
 		}
 
 		function get_active_popovers() {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->popover} WHERE popover_active = 1 ORDER BY popover_order ASC" );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->popover} WHERE popover_active = %d ORDER BY popover_order ASC", 1 );
 
 			return $this->db->get_results( $sql );
 		}
@@ -345,7 +345,37 @@ if(!class_exists('popoverajax')) {
 			$SE = array('/search?', '.google.', 'web.info.com', 'search.', 'del.icio.us/search', 'soso.com', '/search/', '.yahoo.', '.bing.' );
 
 			foreach ($SE as $url) {
-				if (strpos($ref,$url)!==false) return true;
+				if (strpos( $ref, $url) !== false ) {
+					if($url == '.google.') {
+						if( $this->is_googlesearch( $ref) ) {
+							return true;
+						} else {
+							return false;
+						}
+					} else {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		function is_googlesearch( $ref = '' ) {
+			$SE = array('.google.');
+
+			foreach ($SE as $url) {
+				if (strpos($ref,$url) !== false ) {
+					// We've found a google referrer - get the query strings and check its a web source
+					$qs = parse_url( $ref, PHP_URL_QUERY );
+					$qget = array();
+					foreach(explode('&', $qs) as $keyval) {
+					    list( $key, $value ) = explode('=', $keyval);
+					    $qget[ trim($key) ] = trim($value);
+					}
+					if(array_key_exists('source', $qget) && $qget['source'] == 'web') {
+						return true;
+					}
+				}
 			}
 			return false;
 		}
