@@ -399,4 +399,34 @@ function P_CountryList() {
 
 }
 
+function get_popover_option($key, $default = false) {
+
+	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popover/popover.php')) {
+		return get_site_option($key, $default);
+	} else {
+		return get_option($key, $default);
+	}
+
+}
+
+function update_popover_option($key, $value) {
+
+	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popover/popover.php')) {
+		return update_site_option($key, $value);
+	} else {
+		return update_option($key, $value);
+	}
+
+}
+
+function delete_popover_option($key) {
+
+	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popover/popover.php')) {
+		return delete_site_option($key);
+	} else {
+		return delete_option($key);
+	}
+
+}
+
 ?>

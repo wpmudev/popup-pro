@@ -30,6 +30,7 @@ if(!class_exists('popoveradmin')) {
 			// Add header files
 			add_action('load-toplevel_page_popover', array(&$this, 'add_admin_header_popover_menu'));
 			add_action('load-pop-overs_page_popoveraddons', array(&$this, 'add_admin_header_popover_addons'));
+			add_action('load-pop-overs_page_popoversettings', array(&$this, 'add_admin_header_popover_settings'));
 
 			// Ajax calls
 			add_action( 'wp_ajax_popover_update_order', array(&$this, 'ajax_update_popover_order') );
@@ -107,6 +108,8 @@ if(!class_exists('popoveradmin')) {
 
 			$addnew = add_submenu_page('popover', __('Create New Pop Over','popover'), __('Create New','popover'), 'manage_options', "popover&amp;action=add", array(&$this,'handle_addnewpopover_panel'));
 			add_submenu_page('popover', __('Manage Add-ons Plugins','popover'), __('Add-ons','popover'), 'manage_options', "popoveraddons", array(&$this,'handle_addons_panel'));
+
+			add_submenu_page('popover', __('Settings','popover'), __('Settings','popover'), 'manage_options', "popoversettings", array(&$this,'handle_settings_page'));
 
 		}
 
@@ -272,6 +275,16 @@ if(!class_exists('popoveradmin')) {
 
 				$this->update_popover_admin();
 			}
+
+		}
+
+		function add_admin_header_popover_settings() {
+
+			global $action, $page;
+
+			wp_reset_vars( array('action', 'page') );
+
+			$this->update_settings_page();
 
 		}
 
@@ -2013,6 +2026,87 @@ if(!class_exists('popoveradmin')) {
 
 			</div> <!-- wrap -->
 			<?php
+		}
+
+
+		function handle_settings_page() {
+
+			global $action, $page;
+
+			$messages = array();
+			$messages[1] = __('Your settings have been updated.','popover');
+
+			?>
+			<div class='wrap nosubsub'>
+
+				<div class="icon32" id="icon-options-general"><br></div>
+				<h2><?php _e('Pop Over Settings','popover'); ?></h2>
+
+				<?php
+				if ( isset($_GET['msg']) ) {
+					echo '<div id="message" class="updated fade"><p>' . $messages[(int) $_GET['msg']] . '</p></div>';
+					$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
+				}
+				?>
+				<div id="poststuff" class="metabox-holder m-settings">
+				<form action='?page=<?php echo $page; ?>' method='post'>
+
+					<input type='hidden' name='page' value='<?php echo $page; ?>' />
+					<input type='hidden' name='action' value='updatesettings' />
+
+					<?php
+						wp_nonce_field('update-popover-settings');
+					?>
+
+					<div class="postbox">
+						<h3 class="hndle" style='cursor:auto;'><span><?php _e('Pop Over loading method','popover'); ?></span></h3>
+						<div class="inside">
+							<p><?php _e('Select the loading method you want to use for your Pop Overs.','popover'); ?></p>
+							<ul>
+								<li><em><?php _e('- Page Footer : The pop over is included as part of the page html.','popover'); ?></em></li>
+								<li><em><?php _e('- External Load : The pop over is loaded separately from the page, this is the best option if you are running a caching system.','popover'); ?></em></li>
+							</ul>
+
+							<table class="form-table">
+							<tbody>
+								<tr valign="top">
+									<th scope="row"><?php _e('Pop Over loaded using','popover'); ?></th>
+									<td>
+										<?php
+											$settings = get_popover_option('popover-settings', array( 'loadingmethod' => 'external'));
+										?>
+										<select name='loadingmethod' id='loadingmethod'>
+											<option value="footer" <?php if($settings['loadingmethod'] == 'footer') echo "selected='selected'"; ?>><?php _e('Page Footer','popover'); ?></option>
+											<option value="external" <?php if($settings['loadingmethod'] == 'external') echo "selected='selected'"; ?>><?php _e('External Load','popover'); ?></option>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+							</table>
+						</div>
+					</div>
+
+					<p class="submit">
+						<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes', 'popover') ?>" />
+					</p>
+
+				</form>
+				</div>
+			</div> <!-- wrap -->
+			<?php
+		}
+
+		function update_settings_page() {
+
+			if(isset($_POST['action']) && $_POST['action'] == 'updatesettings') {
+
+				check_admin_referer('update-popover-settings');
+
+				update_popover_option( 'popover-settings', $_POST );
+
+				wp_safe_redirect( add_query_arg('msg', 1, wp_get_referer()) );
+			}
+
 		}
 
 	}
