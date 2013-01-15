@@ -25,7 +25,7 @@ if(!class_exists('popoverpublic')) {
 			}
 
 			// Adds the JS to the themes header - this replaces all previous methods of loading
-			add_action( 'init', array( &$this, 'add_selective_javascript') );
+			add_action( 'init', array( &$this, 'initialise_plugin') );
 
 			add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
 
@@ -89,6 +89,21 @@ if(!class_exists('popoverpublic')) {
 
 		}
 
+		function initialise_plugin() {
+
+			$settings = get_popover_option('popover-settings', array( 'loadingmethod' => 'external'));
+
+			switch( $settings['loadingmethod'] ) {
+
+				case 'external':	$this->add_selective_javascript();
+									break;
+
+				case 'footer':		$this->add_footer_files();
+									break;
+			}
+
+		}
+
 		function add_selective_javascript() {
 			global $pagenow;
 
@@ -100,6 +115,14 @@ if(!class_exists('popoverpublic')) {
 				wp_register_script( 'popoverselective', popover_url('popover-load-js.php') );
 				wp_enqueue_script( 'popoverselective' );
 			}
+
+		}
+
+		function add_footer_files() {
+
+		}
+
+		function output_footer_content() {
 
 		}
 
