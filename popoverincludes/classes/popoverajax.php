@@ -440,12 +440,13 @@ if(!class_exists('popoverajax')) {
 			$urllist = array_map( 'trim', $urllist );
 
 			if(!empty($urllist)) {
-				if(in_array($url, $urllist)) {
-					// we are on the list
-					return true;
-				} else {
-					return false;
+				foreach( $urllist as $ul ) {
+					if(preg_match( '#' . $ul . '#i', $url )) {
+						return true;
+					}
 				}
+				// if we are here then there hasn't been a match
+				return false;
 			} else {
 				return true;
 			}
