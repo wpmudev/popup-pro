@@ -152,6 +152,12 @@ if(!class_exists('popoverpublic')) {
 				if( isset($this->thepopover['name']) && $this->thepopover['name'] != 'nopopover' ) {
 					wp_enqueue_script('jquery');
 
+					wp_enqueue_script('popoverlegacyjs', popover_url('popoverincludes/js/popoverlegacy.js'), array('jquery'), $this->build);
+					wp_localize_script('popoverlegacyjs', 'popover', array(	'divname'		=>	$this->thepopover['name'],
+																			'usejs'			=>	$this->thepopover['usejs'],
+																			'delay'			=>	$this->thepopover['delay']
+																		));
+
 					add_action('wp_head', array(&$this, 'output_header_content'));
 					add_action('wp_footer', array(&$this, 'output_footer_content'));
 
@@ -176,8 +182,6 @@ if(!class_exists('popoverpublic')) {
 
 			echo $this->thepopover['html'];
 
-			?>
-			<?php
 		}
 
 	}

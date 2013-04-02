@@ -3,8 +3,6 @@
 //
 // Written by Barry (Incsub)
 //
-//
-//
 
 // Enable us to get some cookie information - from http://stackoverflow.com/questions/5639346/shortest-function-for-reading-a-cookie-in-javascript
 function po_get_cookie(name) {
@@ -31,14 +29,14 @@ function po_createCookie(name,value,days) {
 
 function po_removeMessageBoxForever() {
 	jQuery('#darkbackground').remove();
-	jQuery(this).parents(popovername).remove();
+	jQuery(this).parents( '#' + popover.divname ).remove();
 	po_createCookie('popover_never_view', 'hidealways', 365);
 	return false;
 }
 
 function po_removeMessageBox() {
 	jQuery('#darkbackground').remove();
-	jQuery(this).parents(popovername).remove();
+	jQuery(this).parents( '#' + popover.divname ).remove();
 	return false;
 }
 
