@@ -2065,6 +2065,7 @@ if(!class_exists('popoveradmin')) {
 							<ul>
 								<li><em><?php _e('- Page Footer : The pop over is included as part of the page html.','popover'); ?></em></li>
 								<li><em><?php _e('- External Load : The pop over is loaded separately from the page, this is the best option if you are running a caching system.','popover'); ?></em></li>
+								<li><em><?php _e('- Custom Load : The pop over is loaded separately from the page via a custom front end ajax call, this is currently experimental.','popover'); ?></em></li>
 							</ul>
 
 							<table class="form-table">
