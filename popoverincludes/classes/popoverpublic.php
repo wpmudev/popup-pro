@@ -14,6 +14,8 @@ if(!class_exists('popoverpublic')) {
 
 		var $activepopover = false;
 
+		var $thepopover;
+
 		function __construct() {
 
 			global $wpdb;
@@ -98,7 +100,7 @@ if(!class_exists('popoverpublic')) {
 				case 'external':	$this->add_selective_javascript();
 									break;
 
-				case 'footer':		$this->add_footer_files();
+				case 'footer':		$this->add_popover_files();
 									break;
 			}
 
@@ -118,12 +120,64 @@ if(!class_exists('popoverpublic')) {
 
 		}
 
-		function add_footer_files() {
+		function myURL() {
 
+		 	if ( isset($_SERVER["HTTPS"]) && strtolower($_SERVER["HTTPS"]) == "on") {
+				$url .= "https://";
+			} else {
+				$url = 'http://';
+			}
+
+			if ($_SERVER["SERVER_PORT"] != "80") {
+		  		$url .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+		 	} else {
+		  		$url .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+		 	}
+
+		 	return trailingslashit($url);
+		}
+
+		function add_popover_files() {
+
+			global $popoverajax;
+
+			if( method_exists( $popoverajax, 'selective_message_display') ) {
+
+				// Set up the rquest information from here - this is passed in using the standard JS interface so we need to fake it
+				$_REQUEST['thereferrer'] = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
+				$_REQUEST['thefrom'] = $this->myURL();
+
+				$this->thepopover = $popoverajax->selective_message_display();
+
+				if( isset($this->thepopover['name']) && $this->thepopover['name'] != 'nopopover' ) {
+					wp_enqueue_script('jquery');
+
+					add_action('wp_head', array(&$this, 'output_header_content'));
+					add_action('wp_footer', array(&$this, 'output_footer_content'));
+
+				}
+
+			}
+
+		}
+
+		function output_header_content() {
+			// Output the styles
+			?>
+			<style type="text/css">
+			<?php
+				echo $this->thepopover['style'];
+			?>
+			</style>
+			<?php
 		}
 
 		function output_footer_content() {
 
+			echo $this->thepopover['html'];
+
+			?>
+			<?php
 		}
 
 	}

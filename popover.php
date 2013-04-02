@@ -4,7 +4,7 @@ Plugin Name: Popover plugin
 Plugin URI: http://premium.wpmudev.org
 Description: Allows you to display a fancy popup (powered as a popover!) to visitors sitewide or per blog, a *very* effective way of advertising a mailing list, special offer or running a plain old ad.
 Author: Barry (Incsub)
-Version: 4.4.4 beta
+Version: 4.4.4
 Author URI: http://premium.wpmudev.org
 WDP ID: 123
 
@@ -43,12 +43,14 @@ if(is_admin()) {
 	$popover = new popoveradmin();
 	$popoverajax = new popoverajax();
 } else {
+	// Adding ajax so we don't have to duplicate checking functionality in the public class
+	// NOTE: it's not being used for ajax here
+	require_once('popoverincludes/classes/popoverajax.php');
+
 	require_once('popoverincludes/classes/popoverpublic.php');
 
 	$popover = new popoverpublic();
+	$popoverajax = new popoverajax();
 }
 
 load_popover_addons();
-
-
-?>
