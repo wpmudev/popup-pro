@@ -97,11 +97,14 @@ if(!class_exists('popoverpublic')) {
 
 			switch( $settings['loadingmethod'] ) {
 
-				case 'external':	$this->add_selective_javascript();
-									break;
+				case 'external':		$this->add_selective_javascript();
+										break;
 
-				case 'footer':		$this->add_popover_files();
-									break;
+				case 'footer':			$this->add_popover_files();
+										break;
+
+				case 'frontloading':	$this->add_frontend_selective_javascript();
+										break;
 			}
 
 		}
@@ -115,6 +118,20 @@ if(!class_exists('popoverpublic')) {
 
 				// Now to register our new js file
 				wp_register_script( 'popoverselective', popover_url('popover-load-js.php') );
+				wp_enqueue_script( 'popoverselective' );
+			}
+
+		}
+
+		function add_frontend_selective_javascript() {
+			global $pagenow;
+
+			if(!in_array($pagenow, array('wp-login.php', 'wp-register.php'))) {
+				// We need javascript so make sure we load it here
+				wp_enqueue_script('jquery');
+
+				// Now to register our new js file
+				wp_register_script( 'popoverselective', popover_url('popover-load-custom-js.php') );
 				wp_enqueue_script( 'popoverselective' );
 			}
 

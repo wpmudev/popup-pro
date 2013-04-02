@@ -42,8 +42,21 @@ if(!class_exists('popoverajax')) {
 		}
 
 		function initialise_ajax() {
-			add_action( 'wp_ajax_popover_selective_ajax', array(&$this,'ajax_selective_message_display') );
-			add_action( 'wp_ajax_nopriv_popover_selective_ajax', array(&$this,'ajax_selective_message_display') );
+
+			$settings = get_popover_option('popover-settings', array( 'loadingmethod' => 'external'));
+
+			switch( $settings['loadingmethod'] ) {
+
+				case 'external':		add_action( 'wp_ajax_popover_selective_ajax', array(&$this,'ajax_selective_message_display') );
+										add_action( 'wp_ajax_nopriv_popover_selective_ajax', array(&$this,'ajax_selective_message_display') );
+										break;
+
+				case 'frontloading':	if( isset( $_GET['popoverajaxaction']) && $_GET['popoverajaxaction'] == 'popover_selective_ajax' ) {
+											$this->ajax_selective_message_display();
+										}
+										break;
+			}
+
 		}
 
 		function load_textdomain() {
