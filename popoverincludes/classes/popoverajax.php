@@ -458,6 +458,7 @@ if(!class_exists('popoverajax')) {
 			$ip = $_SERVER["REMOTE_ADDR"];
 
 			$country = $this->get_country_from_cache( $ip );
+
 			if(empty($country)) {
 				// No country to get from API
 				$country = $this->get_country_from_api( $ip );
@@ -465,7 +466,7 @@ if(!class_exists('popoverajax')) {
 				if($country !== false) {
 					$this->put_country_in_cache( $ip, $country );
 				} else {
-					return 'XX';
+					$country = 'XX';
 				}
 			}
 
