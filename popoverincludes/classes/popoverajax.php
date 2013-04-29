@@ -176,13 +176,13 @@ if(!class_exists('popoverajax')) {
 													break;
 
 								case "internal":	$internal = str_replace('^http://','',get_option('home'));
-													if($this->referrer_matches(addcslashes($internal,"/"), $_REQUEST['thereferrer'] )) {
+													if($this->referrer_matches( $internal, $_REQUEST['thereferrer'] )) {
 														$show = false;
 													}
 													break;
 
 								case "referrer":	$match = $popover_ereg;
-													if(!$this->referrer_matches(addcslashes($match,"/"), $_REQUEST['thereferrer'])) {
+													if(!$this->referrer_matches( $match, $_REQUEST['thereferrer'])) {
 														$show = false;
 													}
 													break;
@@ -415,7 +415,7 @@ if(!class_exists('popoverajax')) {
 
 		function referrer_matches($check, $referer = '') {
 
-			if(preg_match( '/' . $check . '/i', $referer )) {
+			if(preg_match( '#' . $check . '#i', $referer )) {
 				return true;
 			} else {
 				return false;
@@ -454,7 +454,7 @@ if(!class_exists('popoverajax')) {
 
 			if(!empty($urllist)) {
 				foreach( $urllist as $ul ) {
-					if(preg_match( '#' . $ul . '#i', $url )) {
+					if(preg_match( '#^' . $ul . '$#i', $url )) {
 						return true;
 					}
 				}
