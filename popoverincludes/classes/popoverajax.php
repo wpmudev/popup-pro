@@ -470,6 +470,11 @@ if(!class_exists('popoverajax')) {
 			// Grab the users IP address
 			$ip = $_SERVER["REMOTE_ADDR"];
 
+			if( has_filter('popover_pre_incountry') ) {
+				// We have an override for the ipcountry in place so ignore the rest
+				return apply_filters('popover_pre_incountry', false, $ip, $countrycode );
+			}
+
 			$country = $this->get_country_from_cache( $ip );
 
 			if(empty($country)) {
