@@ -51,6 +51,16 @@ if(!class_exists('popoveradmin')) {
 
 		function install() {
 
+			$charset_collate = '';
+
+			if ( ! empty($this->db->charset) ) {
+				$charset_collate = "DEFAULT CHARACTER SET " . $this->db->charset;
+			}
+
+			if ( ! empty($this->db->collate) ) {
+				$charset_collate .= " COLLATE " . $this->db->collate;
+			}
+
 			if($this->db->get_var( "SHOW TABLES LIKE '" . $this->popover . "' ") != $this->popover) {
 				 $sql = "CREATE TABLE `" . $this->popover . "` (
 				  	`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -60,7 +70,7 @@ if(!class_exists('popoveradmin')) {
 					  `popover_order` bigint(20) DEFAULT '0',
 					  `popover_active` int(11) DEFAULT '0',
 					  PRIMARY KEY (`id`)
-					)";
+					) $charset_collate;";
 
 				$this->db->query($sql);
 
@@ -74,7 +84,7 @@ if(!class_exists('popoveradmin')) {
 					  `cached` bigint(20) DEFAULT NULL,
 					  PRIMARY KEY (`IP`),
 					  KEY `cached` (`cached`)
-					)";
+					) $charset_collate;";
 
 				$this->db->query($sql);
 
@@ -461,7 +471,7 @@ if(!class_exists('popoveradmin')) {
 				$popover['popover_settings']['popover_count'] = 3;
 			}
 
-			if($_POST['popoverusejs'] == 'yes') {
+			if(isset($_POST['popoverusejs']) && $_POST['popoverusejs'] == 'yes') {
 				$popover['popover_settings']['popover_usejs'] = 'yes';
 			} else {
 				$popover['popover_settings']['popover_usejs'] = 'no';
