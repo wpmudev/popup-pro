@@ -26,28 +26,28 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-require_once('popoverincludes/includes/config.php');
-require_once('popoverincludes/includes/functions.php');
+require_once( dirname(__FILE__) . '/popoverincludes/includes/config.php');
+require_once( dirname(__FILE__) . '/popoverincludes/includes/functions.php');
 // Set up my location
 set_popover_url(__FILE__);
 set_popover_dir(__FILE__);
 
 if(is_admin()) {
-	include_once('popoverincludes/external/wpmudev-dash-notification.php');
+	include_once( dirname(__FILE__) . '/popoverincludes/external/wpmudev-dash-notification.php');
 
-	require_once('popoverincludes/includes/class_wd_help_tooltips.php');
-	require_once('popoverincludes/classes/popover.help.php');
-	require_once('popoverincludes/classes/popoveradmin.php');
-	require_once('popoverincludes/classes/popoverajax.php');
+	require_once( dirname(__FILE__) . '/popoverincludes/includes/class_wd_help_tooltips.php');
+	require_once( dirname(__FILE__) . '/popoverincludes/classes/popover.help.php');
+	require_once( dirname(__FILE__) . '/popoverincludes/classes/popoveradmin.php');
+	require_once( dirname(__FILE__) . '/popoverincludes/classes/popoverajax.php');
 
 	$popover = new popoveradmin();
 	$popoverajax = new popoverajax();
 } else {
 	// Adding ajax so we don't have to duplicate checking functionality in the public class
 	// NOTE: it's not being used for ajax here
-	require_once('popoverincludes/classes/popoverajax.php');
+	require_once( dirname(__FILE__) . '/popoverincludes/classes/popoverajax.php');
 
-	require_once('popoverincludes/classes/popoverpublic.php');
+	require_once( dirname(__FILE__) . '/popoverincludes/classes/popoverpublic.php');
 
 	$popover = new popoverpublic();
 	$popoverajax = new popoverajax();

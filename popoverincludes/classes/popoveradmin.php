@@ -2075,7 +2075,7 @@ if(!class_exists('popoveradmin')) {
 							<ul>
 								<li><em><?php _e('- Page Footer : The pop over is included as part of the page html.','popover'); ?></em></li>
 								<li><em><?php _e('- External Load : The pop over is loaded separately from the page, this is the best option if you are running a caching system.','popover'); ?></em></li>
-								<li><em><?php _e('- Custom Load : The pop over is loaded separately from the page via a custom front end ajax call, this is currently experimental.','popover'); ?></em></li>
+								<li><em><?php _e('- Custom Load : The pop over is loaded separately from the page via a custom front end ajax call.','popover'); ?></em></li>
 							</ul>
 
 							<table class="form-table">
@@ -2084,12 +2084,12 @@ if(!class_exists('popoveradmin')) {
 									<th scope="row"><?php _e('Pop Over loaded using','popover'); ?></th>
 									<td>
 										<?php
-											$settings = get_popover_option('popover-settings', array( 'loadingmethod' => 'external'));
+											$settings = get_popover_option('popover-settings', array( 'loadingmethod' => 'frontloading'));
 										?>
 										<select name='loadingmethod' id='loadingmethod'>
 											<option value="footer" <?php if($settings['loadingmethod'] == 'footer') echo "selected='selected'"; ?>><?php _e('Page Footer','popover'); ?></option>
 											<option value="external" <?php if($settings['loadingmethod'] == 'external') echo "selected='selected'"; ?>><?php _e('External Load','popover'); ?></option>
-											<option value="frontloading" <?php if($settings['loadingmethod'] == 'frontloading') echo "selected='selected'"; ?>><?php _e('Custom Load (experimental)','popover'); ?></option>
+											<option value="frontloading" <?php if($settings['loadingmethod'] == 'frontloading') echo "selected='selected'"; ?>><?php _e('Custom Load','popover'); ?></option>
 										</select>
 									</td>
 								</tr>
