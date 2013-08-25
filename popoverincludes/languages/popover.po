@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PopOver\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-19 14:44+0100\n"
-"PO-Revision-Date: 2013-08-19 14:44+0100\n"
+"POT-Creation-Date: 2013-08-25 11:29+0100\n"
+"PO-Revision-Date: 2013-08-25 11:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: Incsub <barry@incsub.com>\n"
 "MIME-Version: 1.0\n"
@@ -584,6 +584,13 @@ msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/classes/popoveradmin.php:2092
 msgid "Custom Load"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/css/default/popover.php:2
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/css/fixed/popover.php:2
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/css/fullbackground/popover.php:3
+#: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/css/fullbackgroundfixed/popover.php:2
+msgid "Close this box"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/popover/popoverincludes/css/default/popover.php:8
