@@ -76,14 +76,15 @@ if(!class_exists('popoverajax')) {
 		}
 
 		function ajax_selective_message_display() {
-
-			if(isset($_GET['callback'])) {
-				$data = $this->selective_message_display();
-				echo $_GET['callback'] . "(" . json_encode($data) . ")";
-			}
-
+			$callback = !empty($_GET['callback']) && preg_match('/^po_[a-z]+$/i', $_GET['callback'])
+				? $_GET['callback']
+				: false
+			;
+			if (!$callback) return false;
+			
+			$data = json_encode($this->selective_message_display());
+			echo "{$callback}({$data})";
 			exit;
-
 		}
 
 		function selective_message_display() {
@@ -106,6 +107,13 @@ if(!class_exists('popoverajax')) {
 					$popover_title = stripslashes($popover->popover_title);
 					$popover_content = stripslashes($popover->popover_content);
 					$popover->popover_settings = unserialize($popover->popover_settings);
+					
+					if (defined('PO_ALLOW_CONTENT_FILTERING') && PO_ALLOW_CONTENT_FILTERING) {
+						$popover_content = defined('PO_USE_FULL_CONTENT_FILTERING') && PO_USE_FULL_CONTENT_FILTERING
+							? apply_filters('the_content', stripslashes($popover_content))
+							: wptexturize(wpautop($popover_content))
+						;
+					}
 
 					$popover_size = $popover->popover_settings['popover_size'];
 					$popover_location = $popover->popover_settings['popover_location'];

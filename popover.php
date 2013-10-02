@@ -4,7 +4,7 @@ Plugin Name: Popover plugin
 Plugin URI: http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Allows you to display a fancy popup (powered as a popover!) to visitors sitewide or per blog, a *very* effective way of advertising a mailing list, special offer or running a plain old ad.
 Author: Barry (Incsub), Marko Miljus (Incsub)
-Version: 4.4.5.3
+Version: 4.4.5.4
 Author URI: http://premium.wpmudev.org
 WDP ID: 123
 
@@ -24,6 +24,7 @@ Copyright 2007-2013 Incsub (http://incsub.com)
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+define('PO_SELF_DIRNAME', basename(dirname(__FILE__)), true);
 require_once( dirname(__FILE__) . '/popoverincludes/includes/config.php');
 require_once( dirname(__FILE__) . '/popoverincludes/includes/functions.php');
 

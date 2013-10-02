@@ -132,7 +132,7 @@ function P_style_urls( $styles = array() ) {
 }
 add_filter( 'popover_available_styles_url', 'P_style_urls');
 
-function P_style_dirs() {
+function P_style_dirs ($styles=array()) {
 	$styles['Default'] = popover_dir('popoverincludes/css/default');
 	$styles['Default Fixed'] = popover_dir('popoverincludes/css/fixed');
 	$styles['Dark Background Fixed'] = popover_dir('popoverincludes/css/fullbackground');
@@ -399,9 +399,19 @@ function P_CountryList() {
 
 }
 
-function get_popover_option($key, $default = false) {
+function popover_is_on_network () {
+	if (!is_multisite()) return false; // Short on first check
+	if (defined('PO_GLOBAL') && PO_GLOBAL) return true; // Do quick/easy thing first
 
-	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popover/popover.php')) {
+	if (!function_exists('is_plugin_active_for_network')) {
+		require_once(ABSPATH . '/wp-admin/includes/plugin.php');
+	}
+	return is_plugin_active_for_network('popover/popover.php'); // Do this last because it might require loading dependencies
+}
+
+function get_popover_option($key, $default = false) {
+	//if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popover/popover.php')) {
+	if (popover_is_on_network()) {
 		return get_site_option($key, $default);
 	} else {
 		return get_option($key, $default);
@@ -410,8 +420,8 @@ function get_popover_option($key, $default = false) {
 }
 
 function update_popover_option($key, $value) {
-
-	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popover/popover.php')) {
+	//if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popover/popover.php')) {
+	if (popover_is_on_network()) {
 		return update_site_option($key, $value);
 	} else {
 		return update_option($key, $value);
@@ -420,13 +430,11 @@ function update_popover_option($key, $value) {
 }
 
 function delete_popover_option($key) {
-
-	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popover/popover.php')) {
+	//if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('popover/popover.php')) {
+	if (popover_is_on_network()) {
 		return delete_site_option($key);
 	} else {
 		return delete_option($key);
 	}
 
 }
-
-?>
