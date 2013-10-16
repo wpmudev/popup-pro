@@ -357,3 +357,9 @@ div.buttons a.cancellink {
 }
 
 
+.popover-operation fieldset {
+	margin: auto;
+	padding: 1em;
+	border: 1px solid #e6e6e6;
+	margin-bottom: 1em;
+}

@@ -453,8 +453,8 @@ if(!class_exists('popoveradmin')) {
 			}
 
 			$popover['popover_settings'] = array();
-			$popover['popover_settings']['popover_size'] = array( 'width' => $_POST['popoverwidth'], 'height' => $_POST['popoverheight'] );
-			$popover['popover_settings']['popover_location'] = array( 'left' => $_POST['popoverleft'], 'top' => $_POST['popovertop'] );
+			$popover['popover_settings']['popover_size'] = array( 'width' => $_POST['popoverwidth'], 'height' => $_POST['popoverheight'], 'usejs' => $_POST['popover-usejs-size'] );
+			$popover['popover_settings']['popover_location'] = array( 'left' => $_POST['popoverleft'], 'top' => $_POST['popovertop'], 'usejs' => $_POST['popover-usejs-position'] );
 			$popover['popover_settings']['popover_colour'] = array( 'back' => $_POST['popoverbackground'], 'fore' => $_POST['popoverforeground'] );
 			$popover['popover_settings']['popover_margin'] = array( 'left' => $_POST['popovermarginleft'], 'top' => $_POST['popovermargintop'], 'right' => $_POST['popovermarginright'], 'bottom' => $_POST['popovermarginbottom'] );
 			$popover['popover_settings']['popover_check'] = $_POST['popovercheck'];
@@ -484,6 +484,14 @@ if(!class_exists('popoveradmin')) {
 			} else {
 				$popover['popover_settings']['popoverhideforeverlink'] = 'no';
 			}
+			$popover['popover_settings']['popover_close_hideforever'] = isset($_POST['popover_close_hideforever'])
+				? 'yes'
+				: 'no'
+			;
+			$popover['popover_settings']['popover_hideforever_expiry'] = isset($_POST['popover_hideforever_expiry']) && (int)$_POST['popover_hideforever_expiry']
+				? (int)$_POST['popover_hideforever_expiry']
+				: (defined('PO_DEFAULT_EXPIRY') && PO_DEFAULT_EXPIRY ? PO_DEFAULT_EXPIRY : 365)
+			;
 
 			if(isset($_POST['popoverdelay'])) {
 				$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
@@ -505,6 +513,7 @@ if(!class_exists('popoveradmin')) {
 				$popover['popover_settings']['notincountry'] = $_POST['popovernotincountry'];
 			}
 
+			$popover['popover_settings'] = apply_filters('popover-data-save', $popover['popover_settings']);
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
 			if(isset($_POST['addandactivate'])) {
@@ -530,8 +539,8 @@ if(!class_exists('popoveradmin')) {
 			}
 
 			$popover['popover_settings'] = array();
-			$popover['popover_settings']['popover_size'] = array( 'width' => $_POST['popoverwidth'], 'height' => $_POST['popoverheight'] );
-			$popover['popover_settings']['popover_location'] = array( 'left' => $_POST['popoverleft'], 'top' => $_POST['popovertop'] );
+			$popover['popover_settings']['popover_size'] = array( 'width' => $_POST['popoverwidth'], 'height' => $_POST['popoverheight'], 'usejs' => $_POST['popover-usejs-size'] );
+			$popover['popover_settings']['popover_location'] = array( 'left' => $_POST['popoverleft'], 'top' => $_POST['popovertop'], 'usejs' => $_POST['popover-usejs-position'] );
 			$popover['popover_settings']['popover_colour'] = array( 'back' => $_POST['popoverbackground'], 'fore' => $_POST['popoverforeground'] );
 			$popover['popover_settings']['popover_margin'] = array( 'left' => $_POST['popovermarginleft'], 'top' => $_POST['popovermargintop'], 'right' => $_POST['popovermarginright'], 'bottom' => $_POST['popovermarginbottom'] );
 			$popover['popover_settings']['popover_check'] = $_POST['popovercheck'];
@@ -561,6 +570,14 @@ if(!class_exists('popoveradmin')) {
 			} else {
 				$popover['popover_settings']['popoverhideforeverlink'] = 'no';
 			}
+			$popover['popover_settings']['popover_close_hideforever'] = isset($_POST['popover_close_hideforever'])
+				? 'yes'
+				: 'no'
+			;
+			$popover['popover_settings']['popover_hideforever_expiry'] = isset($_POST['popover_hideforever_expiry']) && (int)$_POST['popover_hideforever_expiry']
+				? (int)$_POST['popover_hideforever_expiry']
+				: (defined('PO_DEFAULT_EXPIRY') && PO_DEFAULT_EXPIRY ? PO_DEFAULT_EXPIRY : 365)
+			;
 
 			if(isset($_POST['popoverdelay'])) {
 				$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
@@ -582,6 +599,8 @@ if(!class_exists('popoveradmin')) {
 				$popover['popover_settings']['notincountry'] = $_POST['popovernotincountry'];
 			}
 
+
+			$popover['popover_settings'] = apply_filters('popover-data-save', $popover['popover_settings']);
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
 			return $this->db->update( $this->popover, $popover, array( 'id' => $id ) );
@@ -875,7 +894,7 @@ if(!class_exists('popoveradmin')) {
 													case 'notincountry':	_e('Not in a specific country', 'popover');
 																			break;
 
-													default:				echo apply_filters('popover_nice_rule_name', $key);
+													default:				echo apply_filters('popover_nice_rule_name', '', $key);
 																			break;
 											}
 											echo "<br/>";
@@ -956,8 +975,8 @@ if(!class_exists('popoveradmin')) {
 			$popover_content = stripslashes($popover->popover_content);
 
 			if(empty($popover->popover_settings)) {
-				$popover->popover_settings = array(	'popover_size'		=>	array('width' => '500px', 'height' => '200px'),
-													'popover_location'	=>	array('left' => '100px', 'top' => '100px'),
+				$popover->popover_settings = array(	'popover_size'		=>	array('width' => '500px', 'height' => '200px', 'usejs' => 0),
+													'popover_location'	=>	array('left' => '100px', 'top' => '100px', 'usejs' => 0),
 													'popover_colour'	=>	array('back' => 'FFFFFF', 'fore' => '000000'),
 													'popover_margin'	=>	array('left' => '0px', 'top' => '0px', 'right' => '0px', 'bottom' => '0px'),
 													'popover_check'		=>	array(),
@@ -986,6 +1005,11 @@ if(!class_exists('popoveradmin')) {
 			$popoverstyle = (isset($popover->popover_settings['popover_style'])) ? $popover->popover_settings['popover_style'] : '';
 
 			$popover_hideforever = (isset($popover->popover_settings['popoverhideforeverlink'])) ? $popover->popover_settings['popoverhideforeverlink'] : '';
+			$popover_close_hideforever = (isset($popover->popover_settings['popover_close_hideforever'])) ? $popover->popover_settings['popover_close_hideforever'] : '';
+			$popover_hideforever_expiry = (isset($popover->popover_settings['popover_hideforever_expiry'])) 
+				? (int)$popover->popover_settings['popover_hideforever_expiry'] 
+				: (defined('PO_DEFAULT_EXPIRY') && PO_DEFAULT_EXPIRY ? PO_DEFAULT_EXPIRY : 365)
+			;
 
 			$popover_delay = (isset($popover->popover_settings['popoverdelay'])) ? $popover->popover_settings['popoverdelay'] : '';
 
@@ -1079,14 +1103,13 @@ if(!class_exists('popoveradmin')) {
 												case 'notincountry':	$this->admin_countrylist('notincountry','Not in a specific Country', 'Shows the popover if the user is not in a certain country.', $popover_notincountry);
 																		break;
 
-												default:				do_action('popover_active_rule_' . $key);
-																		do_action('popover_active_rule', $key);
+												default:				if ($key) do_action('popover_active_rule_' . $key, $popover, array($key =>1));
+																		if ($key) do_action('popover_active_rule', $key, $popover, array($key =>1));
 																		break;
 
 											}
 
 										}
-
 
 									?>
 								</div>
@@ -1103,6 +1126,14 @@ if(!class_exists('popoveradmin')) {
 											<input type='text' name='popoverwidth' id='popoverwidth' style='width: 5em;' value='<?php echo $popover_size['width']; ?>' />&nbsp;
 											<?php _e('Height:','popover'); ?>&nbsp;
 											<input type='text' name='popoverheight' id='popoverheight' style='width: 5em;' value='<?php echo $popover_size['height']; ?>' />
+
+											<?php if (!(defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION)) { ?>
+												<label for="popover-usejs-size">
+													<?php _e('... <i>OR</i> use Javascript to set my pop over size', 'popover'); ?>
+													<input type='hidden' name='popover-usejs-size' value='' />
+													<input type='checkbox' name='popover-usejs-size' id='popover-usejs-size' value='1' <?php checked($popover_size['usejs'], 1); ?> />
+												</label>
+											<?php } ?>
 										</td>
 									</tr>
 
@@ -1113,6 +1144,14 @@ if(!class_exists('popoveradmin')) {
 											<input type='text' name='popoverleft' id='popoverleft' style='width: 5em;' value='<?php echo $popover_location['left']; ?>' />&nbsp;
 											<?php _e('Top:','popover'); ?>&nbsp;
 											<input type='text' name='popovertop' id='popovertop' style='width: 5em;' value='<?php echo $popover_location['top']; ?>' />
+											
+											<?php if (!(defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION)) { ?>
+												<label for="popover-usejs-position">
+													<?php _e('... <i>OR</i> use Javascript to position my pop over', 'popover'); ?>
+													<input type='hidden' name='popover-usejs-position' value='' />
+													<input type='checkbox' name='popover-usejs-position' id='popover-usejs-position' value='1' <?php checked($popover_location['usejs'], 1); ?> />
+												</label>
+											<?php } ?>
 										</td>
 									</tr>
 
@@ -1200,6 +1239,19 @@ if(!class_exists('popoveradmin')) {
 										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Remove the "Never see this message again" link','popover'); ?></strong></th>
 										<td valign='top'>
 											<input type='checkbox' name='popoverhideforeverlink' id='popoverhideforeverlink' value='yes' <?php if($popover_hideforever == 'yes') { echo "checked='checked'"; } ?> />
+										</td>
+									</tr>
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Regular close button acts as &quot;Never see this message again&quot; link', 'popover'); ?></strong></th>
+										<td valign='top'>
+											<input type='checkbox' name='popover_close_hideforever' id='popover_close_hideforever' value='yes' <?php if($popover_close_hideforever == 'yes') { echo "checked='checked'"; } ?> />
+										</td>
+									</tr>
+									<tr>
+										<th valign='top' scope='row' style='width: 25%;'><strong><?php _e('Expiry time', 'popover'); ?></strong></th>
+										<td valign='top'>
+											<input type='number' name='popover_hideforever_expiry' id='popover_hideforever_expiry' value='<?php echo (int)$popover_hideforever_expiry; ?>' />
+											<?php _e('days', 'popover'); ?>
 										</td>
 									</tr>
 								</table>
@@ -1294,7 +1346,7 @@ if(!class_exists('popoveradmin')) {
 							$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
 						}
 
-						do_action('popover_additional_rules_main');
+						do_action('popover_additional_rules_main', $popover, $popover_check);
 
 					?>
 					</div> <!-- hidden-actions -->
@@ -1383,7 +1435,7 @@ if(!class_exists('popoveradmin')) {
 										$this->admin_sidebar('notincountry','Not in a specific Country', 'Shows the popover if the user is not in a certain country.', false);
 									}
 
-									do_action('popover_additional_rules_sidebar');
+									do_action('popover_additional_rules_sidebar', $popover_check);
 								?>
 							</ul>
 						</div>
@@ -1532,7 +1584,7 @@ if(!class_exists('popoveradmin')) {
 
 				}
 
-				if(isset($_POST['popoverwidth']) || isset($_POST['popoverheight'])) {
+				if(isset($_POST['popoverwidth']) || isset($_POST['popoverheight']) || isset($_POST['popover-usejs-size'])) {
 
 					$width = $_POST['popoverwidth'];
 					$height = $_POST['popoverheight'];
@@ -1540,10 +1592,12 @@ if(!class_exists('popoveradmin')) {
 					if($width == '') $width = '500px';
 					if($height == '') $height = '200px';
 
-					$updateoption('popover_size', array("width" => $width, "height" => $height));
+					$usejs = !empty($_POST['popover-usejs-size']);
+
+					$updateoption('popover_size', array("width" => $width, "height" => $height, "usejs" => $usejs));
 				}
 
-				if(isset($_POST['popoverleft']) || isset($_POST['popovertop'])) {
+				if(isset($_POST['popoverleft']) || isset($_POST['popovertop']) || isset($_POST['popover-usejs-position'])) {
 
 					$left = $_POST['popoverleft'];
 					$top = $_POST['popovertop'];
@@ -1551,7 +1605,9 @@ if(!class_exists('popoveradmin')) {
 					if($left == '') $left = '100px';
 					if($top == '') $top = '100px';
 
-					$updateoption('popover_location', array("left" => $left, "top" => $top));
+					$usejs = !empty($_POST['popover-usejs-position']);
+
+					$updateoption('popover_location', array("left" => $left, "top" => $top, "usejs" => $usejs));
 				}
 
 				if(isset($_POST['popovermargintop']) || isset($_POST['popovermarginleft']) || isset($_POST['popovermarginright']) || isset($_POST['popovermarginbottom'])) {
@@ -1606,8 +1662,8 @@ if(!class_exists('popoveradmin')) {
 			}
 
 			$popover_content = stripslashes($getoption('popover_content', ''));
-			$popover_size = $getoption('popover_size', array('width' => '500px', 'height' => '200px'));
-			$popover_location = $getoption('popover_location', array('left' => '100px', 'top' => '100px'));
+			$popover_size = $getoption('popover_size', array('width' => '500px', 'height' => '200px', 'usejs' => 0));
+			$popover_location = $getoption('popover_location', array('left' => '100px', 'top' => '100px', 'usejs' => 0));
 			$popover_colour = $getoption('popover_colour', array('back' => 'FFFFFF', 'fore' => '000000'));
 			$popover_margin = $getoption('popover_margin', array('left' => '0px', 'top' => '0px', 'right' => '0px', 'bottom' => '0px'));
 
@@ -2090,6 +2146,7 @@ if(!class_exists('popoveradmin')) {
 											<option value="footer" <?php if($settings['loadingmethod'] == 'footer') echo "selected='selected'"; ?>><?php _e('Page Footer','popover'); ?></option>
 											<option value="external" <?php if($settings['loadingmethod'] == 'external') echo "selected='selected'"; ?>><?php _e('External Load','popover'); ?></option>
 											<option value="frontloading" <?php if($settings['loadingmethod'] == 'frontloading') echo "selected='selected'"; ?>><?php _e('Custom Load','popover'); ?></option>
+											<?php do_action('popover-settings-loading_method', $settings['loadingmethod']); ?>
 										</select>
 									</td>
 								</tr>
@@ -2124,5 +2181,3 @@ if(!class_exists('popoveradmin')) {
 	}
 
 }
-
-?>

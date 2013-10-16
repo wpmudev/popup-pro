@@ -90,3 +90,35 @@ function popoverReady() {
 }
 
 jQuery(document).ready(popoverReady);
+
+(function ($) {
+$(function () {
+	var $size_js = $("#popover-usejs-size"),
+		$pos_js = $("#popover-usejs-position"),
+		$all_js = $("#popoverusejs")
+	;
+	if (!$size_js.length || !$pos_js.length || !$all_js.length) return false;
+	
+	var check_size = function () {
+		var enabled = $size_js.is(":checked");
+		$("#popoverwidth,#popoverheight").attr("disabled", enabled)
+	}
+	$size_js.on("change", check_size);
+	check_size();
+
+	var check_pos = function () {
+		var enabled = $pos_js.is(":checked");
+		$("#popoverleft,#popovertop").attr("disabled", enabled)
+	}
+	$pos_js.on("change", check_pos);
+	check_pos();
+
+	var check_all = function () {
+		var enabled = $all_js.is(":checked");
+		$("#popoverwidth,#popoverheight,#popoverleft,#popovertop").attr("disabled", enabled)
+	}
+	$all_js.on("change", check_all);
+	check_all();
+
+});
+})(jQuery);

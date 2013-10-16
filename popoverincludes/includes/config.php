@@ -12,3 +12,5 @@ if (!defined('PO_PLUGIN_DIR')) define('PO_PLUGIN_DIR', (defined('PO_SELF_DIRNAME
 if (!defined('PO_ALLOW_CONTENT_FILTERING')) define('PO_ALLOW_CONTENT_FILTERING', false, true);
 // Set filtering level for rich content
 if (!defined('PO_USE_FULL_CONTENT_FILTERING')) define('PO_USE_FULL_CONTENT_FILTERING', false, true);
+// Set default cookie expiry length
+if (!defined('PO_DEFAULT_EXPIRY')) define('PO_DEFAULT_EXPIRY', 365, true);

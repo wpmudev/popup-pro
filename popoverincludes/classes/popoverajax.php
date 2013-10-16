@@ -55,6 +55,8 @@ if(!class_exists('popoverajax')) {
 											$this->ajax_selective_message_display();
 										}
 										break;
+				default:
+					do_action('popover-ajax-loading_method', $settings['loadingmethod'], $this);
 			}
 
 		}
@@ -88,7 +90,6 @@ if(!class_exists('popoverajax')) {
 		}
 
 		function selective_message_display() {
-
 			if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
 				$updateoption = 'update_site_option';
 				$getoption = 'get_site_option';
@@ -134,6 +135,11 @@ if(!class_exists('popoverajax')) {
 					$popoverstyle = (isset($popover->popover_settings['popover_style'])) ? $popover->popover_settings['popover_style'] : '';
 
 					$popover_hideforever = (isset($popover->popover_settings['popoverhideforeverlink'])) ? $popover->popover_settings['popoverhideforeverlink'] : '';
+					$popover_close_hideforever = (isset($popover->popover_settings['popover_close_hideforever'])) ? ('yes' == $popover->popover_settings['popover_close_hideforever']) : false;
+					$popover_hideforever_expiry = (isset($popover->popover_settings['popover_hideforever_expiry'])) 
+						? (int)$popover->popover_settings['popover_hideforever_expiry'] 
+						: (defined('PO_DEFAULT_EXPIRY') && PO_DEFAULT_EXPIRY ? PO_DEFAULT_EXPIRY : 365)
+					;
 
 					$popover_delay = (isset($popover->popover_settings['popoverdelay'])) ? $popover->popover_settings['popoverdelay'] : '';
 
@@ -224,7 +230,7 @@ if(!class_exists('popoverajax')) {
 													break;
 
 								default:			if(has_filter('popover_process_rule_' . $key)) {
-														if(!apply_filters( 'popover_process_rule_' . $key, false )) {
+														if(!apply_filters( 'popover_process_rule_' . $key, false, $popover )) {
 															$show = false;
 														}
 													}
@@ -245,7 +251,7 @@ if(!class_exists('popoverajax')) {
 
 					if($show == true) {
 
-						if($this->clear_forever()) {
+						if($this->clear_forever($popover->id)) {
 							$show = false;
 						}
 
@@ -254,8 +260,12 @@ if(!class_exists('popoverajax')) {
 					if($show == true) {
 
 						// return the popover to the calling function
-
-						$popover = array();
+						$_original_popover = $popover;
+						$popover = array(
+							'popover_id' => $_original_popover->id,
+							'close_hide' => $popover_close_hideforever,
+							'expiry' => $popover_hideforever_expiry,
+						);
 
 						$popover['name'] = 'a' . md5(date('d')) . '-po';
 
@@ -273,6 +283,9 @@ if(!class_exists('popoverajax')) {
 							$popover['usejs'] = 'no';
 						}
 
+						$popover['size']['usejs'] = !empty($popover_size['usejs']);
+						$popover['position']['usejs'] = !empty($popover_location['usejs']);
+
 						$style = '';
 						$backgroundstyle = '';
 
@@ -281,10 +294,16 @@ if(!class_exists('popoverajax')) {
 							$box = 'color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
 							$style .= 'left: -1000px; top: =100px;';
 						} else {
-							$style =  'left: ' . $popover_location['left'] . '; top: ' . $popover_location['top'] . ';' . ' z-index:999999;';
+							$style = 'z-index:999999;';
+							if (empty($popover_location['usejs'])) {
+								$style .=  'left: ' . $popover_location['left'] . '; top: ' . $popover_location['top'] . ';';
+							}
 							$style .= 'margin-top: ' . $popover_margin['top'] . '; margin-bottom: ' . $popover_margin['bottom'] . '; margin-right: ' . $popover_margin['right'] . '; margin-left: ' . $popover_margin['left'] . ';';
 
-							$box = 'width: ' . $popover_size['width'] . '; height: ' . $popover_size['height'] . '; color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
+							$box = 'color: #' . $popover_colour['fore'] . '; background: #' . $popover_colour['back'] . ';';
+							if (empty($popover_size['usejs'])) {
+								$box .= 'width: ' . $popover_size['width'] . '; height: ' . $popover_size['height'] . ';';
+							}
 
 						}
 
@@ -338,7 +357,7 @@ if(!class_exists('popoverajax')) {
 						if(!headers_sent()) setcookie('popover_view_'.COOKIEHASH, $count , time() + 30000000, COOKIEPATH, COOKIE_DOMAIN);
 
 
-						return $popover;
+						return apply_filters('popover-output-popover', $popover, $_original_popover);
 						// Exit from the for - as we have sent a popover
 						break;
 					}
@@ -560,8 +579,9 @@ if(!class_exists('popoverajax')) {
 			return $wpdb->query( $wpdb->prepare( $sql, $data) );
 		}
 
-		function clear_forever() {
-			if ( isset($_COOKIE['popover_never_view']) ) {
+		function clear_forever($id=false) {
+			$name = !empty($id) ? "popover_never_view_{$id}" : "popover_never_view";
+			if ( isset($_COOKIE[$name]) ) {
 				return true;
 			} else {
 				return false;

@@ -1,0 +1,18 @@
+Plugin Name: Popover plugin
+Author: Barry (Incsub), Marko Miljus (Incsub)
+
+Change Log:
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+
+v4.5 - 2013-10-16
+----------------------------------------------------------------------
+- Javascript update.
+- Separated size and positioning javascript.
+- Added new expiry options and updated existing ones.
+- Added anonymous loading method add-on.
+- Added advanced URL rules add-on.
+- Added maximum width rule add-on.
+- Added post types rules add-on.
+- Added show on click rule add-on.
+- Added show on exit rule add-on.
