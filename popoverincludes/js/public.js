@@ -61,6 +61,11 @@ var Popup = function (_options) {
         	||
         	(data.size && data.size.usejs)
         ) {
+        	if (!$box.is(":visible")) {
+        		if ((data.usejs && 'yes' === data.usejs) || (data.position && data.position.usejs)) $box.css({top: $win.height()});
+	        	$box.show();
+	        	$msg = $('#message');
+	        }
             $box
             	.width($msg.width())
             	.height($msg.height())
@@ -72,9 +77,14 @@ var Popup = function (_options) {
         	||
         	(data.position && data.position.usejs)
         ) {
+        	if (!$box.is(":visible")) {
+        		$box.css({top: $win.height()});
+	        	$box.show();
+	        	$msg = $('#message');
+	        }
             $box.css({
-            	'top': ($(window).height() / 2) - ($('#message').height() / 2),
-            	'left': ($(window).width() / 2) - ($('#message').width() / 2)
+            	'top': ($(window).height() / 2) - ($msg.height() / 2),
+            	'left': ($(window).width() / 2) - ($msg.width() / 2)
             });
         }
 	};
@@ -83,13 +93,11 @@ var Popup = function (_options) {
 		var data = me.popover_data;
 	    me.popover_name = '#' + data['name'];
 		
-
 		me.set_popup_size(data);
 		$(window).on("resize", function () {
 			me.set_popup_size(data);
 		});
 
-		$(me.popover_name).show();
         $(me.popover_name).css('visibility', 'visible');
         $('#darkbackground').css('visibility', 'visible');
 
