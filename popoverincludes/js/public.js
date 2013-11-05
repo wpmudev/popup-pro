@@ -87,6 +87,7 @@ var Popup = function (_options) {
             	'left': ($(window).width() / 2) - ($msg.width() / 2)
             });
         }
+        if (!$box.is(":visible")) $box.show();
 	};
 
 	this.set_up_message_box = function () {

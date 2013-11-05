@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PopOver\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-16 14:49+0100\n"
-"PO-Revision-Date: 2013-10-16 14:50+0100\n"
+"POT-Creation-Date: 2013-11-05 14:21+0100\n"
+"PO-Revision-Date: 2013-11-05 14:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: Incsub <barry@incsub.com>\n"
 "MIME-Version: 1.0\n"
@@ -44,6 +44,7 @@ msgstr ""
 
 #: popoverincludes/addons/rules-advanced_url.php:81
 #: popoverincludes/addons/rules-post_types.php:102
+#: popoverincludes/addons/rules-xprofile_value.php:121
 msgid "Suppress"
 msgstr ""
 
@@ -60,6 +61,7 @@ msgstr ""
 #: popoverincludes/addons/rules-on_exit.php:30
 #: popoverincludes/addons/rules-onclick.php:30
 #: popoverincludes/addons/rules-post_types.php:126
+#: popoverincludes/addons/rules-xprofile_value.php:145
 msgid "Show"
 msgstr ""
 
@@ -149,6 +151,46 @@ msgstr ""
 
 #: popoverincludes/addons/rules-post_types.php:124
 msgid "Shows the popover on specific post types."
+msgstr ""
+
+#: popoverincludes/addons/rules-xprofile_value.php:47
+msgid "You need BuddyPress XProfile fields component active."
+msgstr ""
+
+#: popoverincludes/addons/rules-xprofile_value.php:74
+msgid "Field:"
+msgstr ""
+
+#: popoverincludes/addons/rules-xprofile_value.php:79
+msgid "equals"
+msgstr ""
+
+#: popoverincludes/addons/rules-xprofile_value.php:80
+msgid "is not"
+msgstr ""
+
+#: popoverincludes/addons/rules-xprofile_value.php:81
+msgid "matches regex"
+msgstr ""
+
+#: popoverincludes/addons/rules-xprofile_value.php:82
+msgid "does not match regex"
+msgstr ""
+
+#: popoverincludes/addons/rules-xprofile_value.php:118
+msgid "Suppress when XProfile field matches condition"
+msgstr ""
+
+#: popoverincludes/addons/rules-xprofile_value.php:119
+msgid "Suppresses the popover when XProfile field matches condition."
+msgstr ""
+
+#: popoverincludes/addons/rules-xprofile_value.php:142
+msgid "Show when XProfile field matches condition"
+msgstr ""
+
+#: popoverincludes/addons/rules-xprofile_value.php:143
+msgid "Shows the popover when XProfile field matches condition."
 msgstr ""
 
 #: popoverincludes/classes/popover.help.php:55
