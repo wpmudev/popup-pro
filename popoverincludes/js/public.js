@@ -122,6 +122,9 @@ var Popup = function (_options) {
 	    
 	    $('<style type="text/css">' + data['style'] + '</style>').appendTo('head');
 	    $(data['html']).appendTo('body');
+	    
+	    $('#' + data['name']).css("visibility", "hidden");
+	    $('#darkbackground').css("visibility", "hidden");
 	};
 
     this.on_success = function (data) {
@@ -170,7 +173,6 @@ var Popup = function (_options) {
 				if ("pending" === me.deferred.state()) me.deferred.resolve();
 			}, 500);
 		});
-
 		if (!_options.popover) {
 			me.async_load_popover().done(function () {
 				def.resolve();

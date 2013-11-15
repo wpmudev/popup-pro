@@ -458,10 +458,12 @@ abstract class Popover_Rules_Rule {
 	}
 
 	protected function _get_field_name () {
-		return esc_attr($this->_id . '[' . join('][', func_get_args()) . ']');
+		$args = func_get_args();
+		return esc_attr($this->_id . '[' . join('][', $args) . ']');
 	}
 	protected function _get_field_id () {
-		return esc_attr($this->_id . join('-', func_get_args()));
+		$args = func_get_args();
+		return esc_attr($this->_id . join('-', $args));
 	}
 
 	protected function _add_hooks () {
