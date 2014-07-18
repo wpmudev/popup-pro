@@ -54,9 +54,9 @@ class Popover_Anonymous_Loading {
 			"message",
 			"clearforever"
 		);
-		$salt = home_url();
-		$pfx = $is_markup ? '' : '#';
-		$opening_delimiter = $is_markup ? '[\'"]' : '#';
+		$salt = home_url('/', 'http');
+		$pfx = $is_markup ? '' : '.';
+		$opening_delimiter = $is_markup ? '[\'"]' : '.';
 		$closing_delimiter = $is_markup ? $opening_delimiter : '\b';
 		foreach ($selectors as $selector) {
 			$hash = md5("{$selector}{$salt}");
@@ -68,7 +68,7 @@ class Popover_Anonymous_Loading {
 			$value = 'p' . $this->_rot($hash, $len);
 			$value = $is_markup
 				? "'{$value}'"
-				: "#{$value}"
+				: ".{$value}"
 			;
 			$html = preg_replace('/' . $opening_delimiter . preg_quote($selector, '/') . $closing_delimiter . '/', $value, $html);
 		}
@@ -122,7 +122,7 @@ class Popover_Anonymous_Loading {
 	}
 
 	private function _generate_slug () {
-		$info = str_split(home_url());
+		$info = str_split(home_url('/', 'http'));
 		$raw = serialize($info);
 		$len = count($info);
 		$len = $len < 5 

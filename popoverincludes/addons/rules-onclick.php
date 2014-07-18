@@ -110,12 +110,10 @@ class Popover_Rules_OnClick {
 $(document).on("popover-init", function (e, popover, data) {
 	var data = data || {};
 	if (!data.wait_for_event || !data.click_selector) return true;
-	
-	//var el = $(data.click_selector);
-	//if (!el.length) return false;
-	//el.one("click", function (e) {
-	
-	$(document).one("click", data.click_selector, function (e) {
+	var el = $(data.click_selector);
+	if (!el.length) return false;
+
+	el.one("click", function (e) {
 		popover.resolve();		
 		return false;
 	});
