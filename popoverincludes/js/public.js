@@ -44,8 +44,9 @@ var Popup = function (_options) {
 	};
 
 	this.remove_message_box = function () {
-	    $('#darkbackground').remove();
-	    $(me.popover_name).remove();
+		var _cbk = me.popover_data.multi_open ? 'hide' : 'remove';
+	    $('#darkbackground')[_cbk]();
+	    $(me.popover_name)[_cbk]();
 	    $(document).trigger('popover-closed');
 	    return false;
 	};
@@ -83,8 +84,8 @@ var Popup = function (_options) {
 	        	$msg = $('#message');
 	        }
             $box.css({
-            	'top': ($(window).height() / 2) - ($msg.height() / 2),
-            	'left': ($(window).width() / 2) - ($msg.width() / 2)
+            	'top': ($(window).height() - $msg.height()) / 2,
+            	'left': ($(window).width() - $msg.width()) / 2
             });
         }
         if (!$box.is(":visible")) $box.show();
@@ -93,18 +94,18 @@ var Popup = function (_options) {
 	this.set_up_message_box = function () {
 		var data = me.popover_data;
 	    me.popover_name = '#' + data['name'];
-		
+
 		me.set_popup_size(data);
-		$(window).on("resize", function () {
+		$(window).off("resize.popover").on("resize.popover", function () {
 			me.set_popup_size(data);
 		});
 
         $(me.popover_name).css('visibility', 'visible');
         $('#darkbackground').css('visibility', 'visible');
 
-        $('#clearforever').click(me.remove_message_box_forever);
-        if (me.popover_data && me.popover_data.close_hide) $('#closebox').click(me.remove_message_box_forever);
-        else $('#closebox').click(me.remove_message_box);
+        $('#clearforever').off("click", me.remove_message_box_forever).on("click", me.remove_message_box_forever);
+        if (me.popover_data && me.popover_data.close_hide) $('#closebox').off("click", me.remove_message_box_forever).on("click", me.remove_message_box_forever);
+        else $('#closebox').off("click", me.remove_message_box).on("click", me.remove_message_box);
 
         $('#message').hover(function() {
             $('.claimbutton').removeClass('hide');
@@ -184,9 +185,23 @@ var Popup = function (_options) {
 		return def;
 	};
 
+	this.reinit = function () {
+		me.deferred = new $.Deferred;
+		me.deferred.done(me.show);
+		$(document).trigger("popover-init", [me.deferred, me.popover_data]);
+		setTimeout(function () {
+			me.popover_name = '#' + me.popover_data.name;
+			$(me.popover_name).hide();
+
+			if (me.popover_data.wait_for_event) return false;
+			if ("pending" === me.deferred.state()) me.deferred.resolve();
+		}, 500);
+	};
+
 	this.show = function () {
 		window.setTimeout(function () {
 			me.set_up_message_box();
+			if (me.popover_data.multi_open) $(document).on('popover-closed', me.reinit);
 		}, me.popover_data.delay);
 	};
 
