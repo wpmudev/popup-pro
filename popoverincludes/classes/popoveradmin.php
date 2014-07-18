@@ -106,20 +106,22 @@ if(!class_exists('popoveradmin')) {
 
 			global $submenu;
 
+			$perms = apply_filters('popover-admin-access_capability', 'manage_options');
+
 			if(is_multisite() && (defined('PO_GLOBAL') && PO_GLOBAL == true)) {
 				if(function_exists('is_network_admin') && is_network_admin()) {
-					add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options',  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
+					add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), $perms,  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
 				}
 			} else {
 				if(!function_exists('is_network_admin') || !is_network_admin()) {
-					add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), 'manage_options',  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
+					add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), $perms,  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
 				}
 			}
 
-			$addnew = add_submenu_page('popover', __('Create New Pop Over','popover'), __('Create New','popover'), 'manage_options', "popover&amp;action=add", array(&$this,'handle_addnewpopover_panel'));
-			add_submenu_page('popover', __('Manage Add-ons Plugins','popover'), __('Add-ons','popover'), 'manage_options', "popoveraddons", array(&$this,'handle_addons_panel'));
+			$addnew = add_submenu_page('popover', __('Create New Pop Over','popover'), __('Create New','popover'), $perms, "popover&amp;action=add", array(&$this,'handle_addnewpopover_panel'));
+			add_submenu_page('popover', __('Manage Add-ons Plugins','popover'), __('Add-ons','popover'), $perms, "popoveraddons", array(&$this,'handle_addons_panel'));
 
-			add_submenu_page('popover', __('Settings','popover'), __('Settings','popover'), 'manage_options', "popoversettings", array(&$this,'handle_settings_page'));
+			add_submenu_page('popover', __('Settings','popover'), __('Settings','popover'), $perms, "popoversettings", array(&$this,'handle_settings_page'));
 
 		}
 
