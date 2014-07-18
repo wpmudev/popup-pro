@@ -14,6 +14,7 @@ class Popover_Rules_Rule_OnClick extends Popover_Rules_Rule {
 
 	protected $_defaults = array(
 		"selector" => 'a',
+		"multi_open" => false,
 	);
 
 	public static function add () {
@@ -41,6 +42,7 @@ class Popover_Rules_Rule_OnClick extends Popover_Rules_Rule {
 		if (empty($settings[$this->_id]) || empty($settings[$this->_id]["selector"])) return $data;
 		$data["click_selector"] = $settings[$this->_id]["selector"];
 		$data["wait_for_event"] = true;
+		$data["multi_open"] = !empty($settings[$this->_id]["multi_open"]);
 		return $data;
 	}
 
@@ -53,6 +55,12 @@ class Popover_Rules_Rule_OnClick extends Popover_Rules_Rule {
 		$markup .= '<label for="' . $this->_get_field_id("selector") . '">' . __('Element selector:', 'popover') . '</label> ';
 		$markup .= '<input type="text" name="' . $this->_get_field_name("selector") . '" id="' . $this->_get_field_id("selector") . '" value="' . esc_attr($data["selector"]) . '" />';
 		$markup .= '<p><em><small>' . __('The popover won\'t be shown until the user clicks on an element matching this selector', 'popover') . '</small></em></p>';
+
+		$markup .= '<label for="' . $this->_get_field_id("multi_open") . '">' . 
+				'<input type="checkbox" name="' . $this->_get_field_name("multi_open") . '" id="' . $this->_get_field_id("multi_open") . '" value="1" ' . checked($data["multi_open"], true, false) . '" />' .
+			__('Allow multiple opening?', 'popover') . 
+		'</label> ';
+		$markup .= '<p><em><small>' . __('If this option is enabled, the message will open every time the selector element is clicked.', 'popover') . '</small></em></p>';
 
 		return $markup;
 	}
@@ -102,10 +110,12 @@ class Popover_Rules_OnClick {
 $(document).on("popover-init", function (e, popover, data) {
 	var data = data || {};
 	if (!data.wait_for_event || !data.click_selector) return true;
-	var el = $(data.click_selector);
-	if (!el.length) return false;
-
-	el.one("click", function (e) {
+	
+	//var el = $(data.click_selector);
+	//if (!el.length) return false;
+	//el.one("click", function (e) {
+	
+	$(document).one("click", data.click_selector, function (e) {
 		popover.resolve();		
 		return false;
 	});
