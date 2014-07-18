@@ -1,4 +1,4 @@
-#darkbackground {
+.darkbackground {
 	position: fixed;
 	background: transparent url(%styleurl%images/opaque80.png) repeat;
 	top: 0;
@@ -9,7 +9,7 @@
 	visibility: visible;
 }
 
-div#messagebox {
+div.messagebox {
 	position: absolute;
 	background: transparent url(%styleurl%images/opaque.png) repeat;
 	z-index: 999;
@@ -17,7 +17,7 @@ div#messagebox {
 	visibility: visible;
 }
 
-div#messagebox div.claimbutton {
+div.messagebox div.claimbutton {
 	position: absolute;
 	bottom: 0;
 	right: 0;
@@ -28,7 +28,7 @@ div#messagebox div.claimbutton {
 	padding-bottom: 5px;
 }
 
-div#messagebox div.claimbutton a:visited, div#messagebox div.claimbutton a {
+div.messagebox div.claimbutton a:visited, div.messagebox div.claimbutton a {
 	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	color: #FFF;
 	text-shadow: #000 1px 1px 0px;
@@ -36,12 +36,12 @@ div#messagebox div.claimbutton a:visited, div#messagebox div.claimbutton a {
 	padding-right: 5px;
 }
 
-#message p {
+.message p {
 	position: relative;
 	clear: both;
 }
 
-#messagebox #closebox {
+.messagebox .closebox {
 	position: absolute;
 	width: 30px;
 	height: 29px;
@@ -51,7 +51,7 @@ div#messagebox div.claimbutton a:visited, div#messagebox div.claimbutton a {
 	z-index: 5;
 }
 
-div#message {
+div.message {
 	position: relative;
 	background: #fff;
 	font: 0.9em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
@@ -59,37 +59,37 @@ div#message {
 	overflow: hidden;
 }
 
-div#message.waiting {
+div.message.waiting {
 	background: #fff url(%styleurl%images/loading.gif) no-repeat center center;
 }
 
-div#message h2 {
+div.message h2 {
 	color: #000;
 	font: bold 1.3em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	margin-top: 0px;
 }
-div#message h2 a {
+div.message h2 a {
 	text-decoration: none;
 	color: #000;
 }
 
-div#message blockquote {
+div.message blockquote {
 	padding: 0px;
 	font-weight: bold;
 	border-left: 5px solid #ccc;
 }
 
-div#message blockquote p{
+div.message blockquote p{
 	padding: 2px 5px;
 }
 
-div#message img {
+div.message img {
 }
 
-div#messagebox.visiblebox {
+div.messagebox.visiblebox {
 	display: block;
 }
-div#messagebox.hiddenbox {
+div.messagebox.hiddenbox {
 	display: none;
 }
 .hide { display: none; }

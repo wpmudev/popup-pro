@@ -82,4 +82,3 @@ if(!class_exists('Popover_Help')) {
 	}
 
 }
-?>
