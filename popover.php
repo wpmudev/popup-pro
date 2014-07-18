@@ -4,7 +4,7 @@ Plugin Name: Popover plugin
 Plugin URI: http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Allows you to display a fancy popup (powered as a popover!) to visitors sitewide or per blog, a *very* effective way of advertising a mailing list, special offer or running a plain old ad.
 Author: WPMU DEV
-Version: 4.5.3
+Version: 4.5.4-BETA-3
 Author URI: http://premium.wpmudev.org
 WDP ID: 123
 

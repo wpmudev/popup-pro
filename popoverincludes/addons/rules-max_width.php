@@ -1,6 +1,6 @@
 <?php
 /*
-Addon Name: Maximum width rule
+Addon Name: Minimum width rule
 Plugin URI: http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Adds screen maximum width rule.
 Author: Ve (Incsub)
