@@ -2,94 +2,22 @@
 if (!class_exists('popoverpublic')) {
 
     class popoverpublic {
-
-        var $mylocation = '';
-        var $build = 5;
-        var $db;
-        var $tables = array('popover', 'popover_ip_cache');
-        var $popover;
-        var $popover_ip_cache;
-        var $activepopover = false;
+        
         var $thepopover;
 
+
+        private $_data;
+
         function __construct() {
-
-            global $wpdb;
-
-            $this->db = & $wpdb;
-
-            foreach ($this->tables as $table) {
-                $this->$table = popover_db_prefix($this->db, $table);
-            }
 
             // Adds the JS to the themes header - this replaces all previous methods of loading
             add_action('init', array(&$this, 'initialise_plugin'));
 
-            add_action('plugins_loaded', array(&$this, 'load_textdomain'));
-
-            $directories = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
-            $this->mylocation = $directories[count($directories) - 1];
-
-            $installed = get_option('popover_installed', false);
-
-            if ($installed === false || $installed != $this->build) {
-                $this->install();
-
-                update_option('popover_installed', $this->build);
-            }
+            $this->_data = Popover_Data::get_instance();
         }
 
         function popoverpublic() {
             $this->__construct();
-        }
-
-        function install() {
-
-            $charset_collate = '';
-
-            if (!empty($this->db->charset)) {
-                $charset_collate = "DEFAULT CHARACTER SET " . $this->db->charset;
-            }
-
-            if (!empty($this->db->collate)) {
-                $charset_collate .= " COLLATE " . $this->db->collate;
-            }
-
-            if ($this->db->get_var("SHOW TABLES LIKE '" . $this->popover . "' ") != $this->popover) {
-                $sql = "CREATE TABLE `" . $this->popover . "` (
-				  	`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-					  `popover_title` varchar(250) DEFAULT NULL,
-					  `popover_content` text,
-					  `popover_settings` text,
-					  `popover_order` bigint(20) DEFAULT '0',
-					  `popover_active` int(11) DEFAULT '0',
-					  PRIMARY KEY (`id`)
-					) $charset_collate;";
-
-                $this->db->query($sql);
-            }
-
-            // Add in IP cache table
-            if ($this->db->get_var("SHOW TABLES LIKE '" . $this->popover_ip_cache . "' ") != $this->popover_ip_cache) {
-                $sql = "CREATE TABLE `" . $this->popover_ip_cache . "` (
-				  	`IP` varchar(12) NOT NULL DEFAULT '',
-					  `country` varchar(2) DEFAULT NULL,
-					  `cached` bigint(20) DEFAULT NULL,
-					  PRIMARY KEY (`IP`),
-					  KEY `cached` (`cached`)
-					) $charset_collate;";
-
-                $this->db->query($sql);
-            }
-        }
-
-        function load_textdomain() {
-
-            $locale = apply_filters('popover_locale', get_locale());
-            $mofile = popover_dir("popoverincludes/languages/popover-$locale.mo");
-
-            if (file_exists($mofile))
-                load_textdomain('popover', $mofile);
         }
 
         function initialise_plugin() {
@@ -165,40 +93,37 @@ if (!class_exists('popoverpublic')) {
 
 
         function add_popover_files() {
+            // Set up the rquest information from here - this is passed in using the standard JS interface so we need to fake it
+            $_REQUEST['thereferrer'] = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
+            $_REQUEST['thefrom'] = $this->myURL();
 
-            global $popoverajax;
+            $this->thepopover = $this->_data->get_applicable_popover_messages();
+            if (
+                (isset($this->thepopover['name']) && $this->thepopover['name'] != 'nopopover')
+                ||
+                count($this->thepopover)
+            ) {
+                if (defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION) {
+                    wp_enqueue_script('jquery');
 
-            if (method_exists($popoverajax, 'selective_message_display')) {
-
-                // Set up the rquest information from here - this is passed in using the standard JS interface so we need to fake it
-                $_REQUEST['thereferrer'] = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
-                $_REQUEST['thefrom'] = $this->myURL();
-
-                $this->thepopover = $popoverajax->selective_message_display();
-
-                if (isset($this->thepopover['name']) && $this->thepopover['name'] != 'nopopover') {
-                    if (defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION) {
-                        wp_enqueue_script('jquery');
-
-                        wp_enqueue_script('popoverlegacyjs', popover_url('popoverincludes/js/popoverlegacy.js'), array('jquery'), $this->build);
-                        wp_localize_script('popoverlegacyjs', 'popover', array('divname' => $this->thepopover['name'],
-                            'usejs' => $this->thepopover['usejs'],
-                            'delay' => $this->thepopover['delay']
-                        ));
-                    } else {
-                        $data = $this->thepopover;
-                        unset($data['style']);
-                        unset($data['html']);
-                        wp_enqueue_script('popover-public', popover_url('popoverincludes/js/public.js'), array('jquery'));
-                        wp_localize_script('popover-public', '_popover_data', array(
-                            'endpoint' => '',
-                            'action' => 'popover_selective_ajax',
-                            'popover' => $data,
-                        ));
-                    }
-                    add_action('wp_head', array(&$this, 'output_header_content'));
-                    add_action('wp_footer', array(&$this, 'output_footer_content'));
+                    wp_enqueue_script('popoverlegacyjs', popover_url('popoverincludes/js/popoverlegacy.js'), array('jquery'), $this->build);
+                    wp_localize_script('popoverlegacyjs', 'popover', array('divname' => $this->thepopover['name'],
+                        'usejs' => $this->thepopover['usejs'],
+                        'delay' => $this->thepopover['delay']
+                    ));
+                } else {
+                    $data = $this->thepopover;
+                    unset($data['style']);
+                    unset($data['html']);
+                    wp_enqueue_script('popover-public', popover_url('popoverincludes/js/public.js'), array('jquery'));
+                    wp_localize_script('popover-public', '_popover_data', array(
+                        'endpoint' => '',
+                        'action' => 'popover_selective_ajax',
+                        'popover' => $data,
+                    ));
                 }
+                add_action('wp_head', array(&$this, 'output_header_content'));
+                add_action('wp_footer', array(&$this, 'output_footer_content'));
             }
         }
 
@@ -221,21 +146,27 @@ if (!class_exists('popoverpublic')) {
 
         function output_header_content() {
             // Output the styles
-            ?>
-            <style type="text/css">
-            <?php
-            echo $this->thepopover['style'];
-            ?>
-            </style>
-            <?php
+            $popovers = !empty($this->thepopover['name'])
+                ? array($this->thepopover)
+                : $this->thepopover
+            ;
+            echo '<style type="text/css">';
+            foreach ($popovers as $pop) {
+                echo $pop['style'];
+            }
+            echo '</style>';
         }
 
         function output_footer_content() {
-
-            echo $this->thepopover['html'];
+            $popovers = !empty($this->thepopover['name'])
+                ? array($this->thepopover)
+                : $this->thepopover
+            ;
+            foreach ($popovers as $pop) {
+                echo $pop['html'];
+            }
         }
 
     }
 
 }
-?>

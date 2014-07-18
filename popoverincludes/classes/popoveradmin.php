@@ -4,102 +4,29 @@ if(!class_exists('popoveradmin')) {
 
 	class popoveradmin {
 
-		var $build = 5;
-
-		var $db;
-
-		var $tables = array( 'popover', 'popover_ip_cache' );
-		var $popover;
-		var $popover_ip_cache;
+		private $_data;
 
 		function __construct() {
-
-			global $wpdb;
-
-			$this->db =& $wpdb;
-
-			foreach($this->tables as $table) {
-				$this->$table = popover_db_prefix($this->db, $table);
-			}
-
-			add_action( 'admin_menu', array(&$this, 'add_menu_pages' ) );
-			add_action( 'network_admin_menu', array(&$this, 'add_menu_pages' ) );
-
-			add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
+			add_action('admin_menu', array($this, 'add_menu_pages'));
+			add_action('network_admin_menu', array($this, 'add_menu_pages'));
 
 			// Add header files
-			add_action('load-toplevel_page_popover', array(&$this, 'add_admin_header_popover_menu'));
-			add_action('load-pop-overs_page_popoveraddons', array(&$this, 'add_admin_header_popover_addons'));
-			add_action('load-pop-overs_page_popoversettings', array(&$this, 'add_admin_header_popover_settings'));
+			add_action('load-toplevel_page_popover', array($this, 'add_admin_header_popover_menu'));
+			add_action('load-pop-overs_page_popoveraddons', array($this, 'add_admin_header_popover_addons'));
+			add_action('load-pop-overs_page_popoversettings', array($this, 'add_admin_header_popover_settings'));
 
 			// Ajax calls
-			add_action( 'wp_ajax_popover_update_order', array(&$this, 'ajax_update_popover_order') );
+			add_action( 'wp_ajax_popover_update_order', array($this, 'ajax_update_popover_order') );
 
-			$installed = get_option('popover_installed', false);
+			// Work with refactored transfer
+			Popover_Updater::serve();
 
-			if($installed === false || $installed != $this->build) {
-				$this->install();
-
-				update_option('popover_installed', $this->build);
-			}
-
+			// Work with the data model
+			$this->_data = Popover_Data::get_instance();
 		}
 
 		function popoveradmin() {
 			$this->__construct();
-		}
-
-		function install() {
-
-			$charset_collate = '';
-
-			if ( ! empty($this->db->charset) ) {
-				$charset_collate = "DEFAULT CHARACTER SET " . $this->db->charset;
-			}
-
-			if ( ! empty($this->db->collate) ) {
-				$charset_collate .= " COLLATE " . $this->db->collate;
-			}
-
-			if($this->db->get_var( "SHOW TABLES LIKE '" . $this->popover . "' ") != $this->popover) {
-				 $sql = "CREATE TABLE `" . $this->popover . "` (
-				  	`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-					  `popover_title` varchar(250) DEFAULT NULL,
-					  `popover_content` text,
-					  `popover_settings` text,
-					  `popover_order` bigint(20) DEFAULT '0',
-					  `popover_active` int(11) DEFAULT '0',
-					  PRIMARY KEY (`id`)
-					) $charset_collate;";
-
-				$this->db->query($sql);
-
-			}
-
-			// Add in IP cache table
-			if($this->db->get_var( "SHOW TABLES LIKE '" . $this->popover_ip_cache . "' ") != $this->popover_ip_cache) {
-				 $sql = "CREATE TABLE `" . $this->popover_ip_cache . "` (
-				  	`IP` varchar(12) NOT NULL DEFAULT '',
-					  `country` varchar(2) DEFAULT NULL,
-					  `cached` bigint(20) DEFAULT NULL,
-					  PRIMARY KEY (`IP`),
-					  KEY `cached` (`cached`)
-					) $charset_collate;";
-
-				$this->db->query($sql);
-
-			}
-
-		}
-
-		function load_textdomain() {
-
-			$locale = apply_filters( 'popover_locale', get_locale() );
-			$mofile = popover_dir( "popoverincludes/languages/popover-$locale.mo" );
-
-			if ( file_exists( $mofile ) )
-				load_textdomain( 'popover', $mofile );
-
 		}
 
 		function add_menu_pages() {
@@ -110,18 +37,18 @@ if(!class_exists('popoveradmin')) {
 
 			if(is_multisite() && (defined('PO_GLOBAL') && PO_GLOBAL == true)) {
 				if(function_exists('is_network_admin') && is_network_admin()) {
-					add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), $perms,  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
+					add_menu_page(__('Pop Overs', 'popover'), __('Pop Overs', 'popover'), $perms,  'popover', array($this, 'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
 				}
 			} else {
 				if(!function_exists('is_network_admin') || !is_network_admin()) {
-					add_menu_page(__('Pop Overs','popover'), __('Pop Overs','popover'), $perms,  'popover', array(&$this,'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
+					add_menu_page(__('Pop Overs', 'popover'), __('Pop Overs', 'popover'), $perms,  'popover', array($this, 'handle_popover_admin'), popover_url('popoverincludes/images/window.png'));
 				}
 			}
 
-			$addnew = add_submenu_page('popover', __('Create New Pop Over','popover'), __('Create New','popover'), $perms, "popover&amp;action=add", array(&$this,'handle_addnewpopover_panel'));
-			add_submenu_page('popover', __('Manage Add-ons Plugins','popover'), __('Add-ons','popover'), $perms, "popoveraddons", array(&$this,'handle_addons_panel'));
+			$addnew = add_submenu_page('popover', __('Create New Pop Over', 'popover'), __('Create New', 'popover'), $perms, "popover&amp;action=add", array($this, 'handle_addnewpopover_panel'));
+			add_submenu_page('popover', __('Manage Add-ons Plugins', 'popover'), __('Add-ons','popover'), $perms, "popoveraddons", array($this, 'handle_addons_panel'));
 
-			add_submenu_page('popover', __('Settings','popover'), __('Settings','popover'), $perms, "popoversettings", array(&$this,'handle_settings_page'));
+			add_submenu_page('popover', __('Settings', 'popover'), __('Settings', 'popover'), $perms, "popoversettings", array($this, 'handle_settings_page'));
 
 		}
 
@@ -151,112 +78,6 @@ if(!class_exists('popoveradmin')) {
 
 		}
 
-		function update_admin_header_popover() {
-
-			global $action, $page, $allowedposttags;
-
-			wp_reset_vars( array('action', 'page') );
-
-			if($action == 'updated') {
-				check_admin_referer('update-popover');
-
-				$usemsg = 1;
-
-				if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
-					$updateoption = 'update_site_option';
-					$getoption = 'get_site_option';
-				} else {
-					$updateoption = 'update_option';
-					$getoption = 'get_option';
-				}
-
-				if(isset($_POST['popovercontent'])) {
-					if ( !current_user_can('unfiltered_html') ) {
-						if(wp_kses($_POST['popovercontent'], $allowedposttags) != $_POST['popovercontent']) {
-							$usemsg = 2;
-						}
-						$updateoption('popover_content', wp_kses($_POST['popovercontent'], $allowedposttags));
-					} else {
-						$updateoption('popover_content', $_POST['popovercontent']);
-					}
-
-				}
-
-				if(isset($_POST['popoverwidth']) || isset($_POST['popoverheight'])) {
-
-					$width = $_POST['popoverwidth'];
-					$height = $_POST['popoverheight'];
-
-					if($width == '') $width = '500px';
-					if($height == '') $height = '200px';
-
-					$updateoption('popover_size', array("width" => $width, "height" => $height));
-				}
-
-				if(isset($_POST['popoverleft']) || isset($_POST['popovertop'])) {
-
-					$left = $_POST['popoverleft'];
-					$top = $_POST['popovertop'];
-
-					if($left == '') $left = '100px';
-					if($top == '') $top = '100px';
-
-					$updateoption('popover_location', array("left" => $left, "top" => $top));
-				}
-
-				if(isset($_POST['popovermargintop']) || isset($_POST['popovermarginleft']) || isset($_POST['popovermarginright']) || isset($_POST['popovermarginbottom'])) {
-
-					$mleft = $_POST['popovermarginleft'];
-					$mtop = $_POST['popovermargintop'];
-					$mright = $_POST['popovermarginright'];
-					$mbottom = $_POST['popovermarginbottom'];
-
-					if($mleft == '') $mleft = '0px';
-					if($mtop == '') $mtop = '0px';
-					if($mright == '') $mright = '0px';
-					if($mbottom == '') $mbottom = '0px';
-
-					$updateoption('popover_margin', array('left' => $mleft, 'top' => $mtop, 'right' => $mright, 'bottom' => $mbottom));
-
-				}
-
-				if(isset($_POST['popoverbackground']) || isset($_POST['popoverforeground'])) {
-
-					$back = $_POST['popoverbackground'];
-					$fore = $_POST['popoverforeground'];
-
-					if($back == '') $back = 'FFFFFF';
-					if($fore == '') $fore = '000000';
-
-					$updateoption('popover_colour', array("back" => $back, "fore" => $fore));
-				}
-
-				if(isset($_POST['popovercheck'])) {
-
-					$updateoption('popover_check', $_POST['popovercheck']);
-
-					if(isset($_POST['popoverereg'])) {
-						$updateoption('popover_ereg', $_POST['popoverereg']);
-					}
-
-					if(isset($_POST['popovercount'])) {
-						$updateoption('popover_count', intval($_POST['popovercount']) );
-					}
-
-				}
-
-				if(isset($_POST['popoverusejs'])) {
-					$updateoption('popover_usejs', 'yes' );
-				} else {
-					$updateoption('popover_usejs', 'no' );
-				}
-
-				wp_safe_redirect( add_query_arg( array('msg' => $usemsg), wp_get_referer() ) );
-
-			}
-
-		}
-
 		function add_admin_header_popover_menu() {
 
 			$this->add_admin_header_core();
@@ -275,16 +96,6 @@ if(!class_exists('popoveradmin')) {
 
 				wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popovermenu.css'), array(), $this->build);
 
-				// Check for transfer
-				if(isset($_GET['transfer'])) {
-					$this->handle_popover_transfer();
-				}
-
-				// Check for existing popovers
-				if($this->has_existing_popover()) {
-					add_action('all_admin_notices', array(&$this, 'show_popover_transfer_offer'));
-				}
-
 				$this->update_popover_admin();
 			}
 
@@ -300,76 +111,6 @@ if(!class_exists('popoveradmin')) {
 
 		}
 
-		function has_existing_popover() {
-
-			if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
-				$getoption = 'get_site_option';
-			} else {
-				$getoption = 'get_option';
-			}
-
-			$popsexist = $this->db->get_var( "SELECT COUNT(*) FROM {$this->popover}");
-
-			if($popsexist == 0 && $getoption('popover_content','no') != 'no' && $getoption('popover_notranfers', 'no') == 'no') {
-				// No pops - and one set in the options
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		function show_popover_transfer_offer() {
-
-			echo '<div class="updated fade below-h2"><p>' . sprintf(__("Welcome to Popover, would you like to transfer your existing Popover to the new format? <a href='%s'>Yes please transfer it</a> / <a href='%s'>No thanks, I'll create a new one myself.</a>", 'popover'), wp_nonce_url('admin.php?page=popover&amp;transfer=yes', 'transferpopover'), wp_nonce_url('admin.php?page=popover&amp;transfer=no','notransferpopover') ) . '</p></div>';
-
-		}
-
-		function handle_popover_transfer() {
-
-			if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
-				$updateoption = 'update_site_option';
-				$getoption = 'get_site_option';
-			} else {
-				$updateoption = 'update_option';
-				$getoption = 'get_option';
-			}
-
-			switch($_GET['transfer']) {
-
-				case 'yes':		check_admin_referer('transferpopover');
-								$popover = array();
-
-								$popover['popover_title'] = __('Transferred Popover', 'popover');
-								$popover['popover_content'] = $getoption('popover_content');
-
-								$popover['popover_settings'] = array();
-								$popover['popover_settings']['popover_size'] = $getoption('popover_size');
-								$popover['popover_settings']['popover_location'] = $getoption('popover_location');;
-								$popover['popover_settings']['popover_colour'] = $getoption('popover_colour');
-								$popover['popover_settings']['popover_margin'] = $getoption('popover_margin');
-								$popover['popover_settings']['popover_check'] = $getoption('popover_check');
-
-								$popover['popover_settings']['popover_count'] = $getoption('popover_count');
-								$popover['popover_settings']['popover_usejs'] = $getoption('popover_usejs');
-
-								$popover['popover_settings']['popover_style'] = 'Default';
-
-								$popover['popover_settings'] = serialize($popover['popover_settings']);
-
-								$popover['popover_active'] = 1;
-
-								$this->db->insert( $this->popover, $popover );
-								wp_safe_redirect( remove_query_arg( 'transfer', remove_query_arg( '_wpnonce' ) ) );
-								break;
-
-				case 'no':		check_admin_referer('notransferpopover');
-								$updateoption('popover_notranfers', 'yes');
-								wp_safe_redirect( remove_query_arg( 'transfer', remove_query_arg( '_wpnonce' ) ) );
-								break;
-			}
-
-		}
-
 		function add_admin_header_core() {
 			// Add in help pages
 			$screen = get_current_screen();
@@ -379,155 +120,36 @@ if(!class_exists('popoveradmin')) {
 		}
 
 		function add_admin_header_popover() {
-
 			global $wp_version;
-
 			wp_enqueue_script('popoveradminjs', popover_url('popoverincludes/js/popoveradmin.js'), array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ), $this->build);
-
 			if(version_compare( preg_replace('/-.*$/', '', $wp_version), "3.3", '<')) {
 				wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popoveradmin.css'), array('widgets'), $this->build);
 			} else {
 				wp_enqueue_style('popoveradmincss', popover_url('popoverincludes/css/popoveradmin.css'), array(), $this->build);
 			}
-
-			$this->update_admin_header_popover();
 		}
 
 		function add_admin_header_popover_addons() {
-
 			$this->add_admin_header_core();
-
 			$this->handle_addons_panel_updates();
 		}
 
-		function reorder_popovers( $popover_id, $order ) {
-
-			$this->db->update( $this->popover, array( 'popover_order' => $order ), array( 'id' => $popover_id) );
-
-		}
-
-		function get_popovers() {
-
-			$sql = "SELECT * FROM {$this->popover} ORDER BY popover_order ASC";
-
-			return $this->db->get_results( $sql );
-
-		}
-
-		function get_popover( $id ) {
-			return $this->db->get_row( $this->db->prepare("SELECT * FROM {$this->popover} WHERE id = %d", $id) );
-		}
-
-		function activate_popover( $id ) {
-			return $this->db->update( $this->popover, array( 'popover_active' => 1 ), array( 'id' => $id) );
-		}
-
-		function deactivate_popover( $id ) {
-			return $this->db->update( $this->popover, array( 'popover_active' => 0 ), array( 'id' => $id) );
-		}
-
-		function toggle_popover( $id ) {
-
-			$sql = $this->db->prepare( "UPDATE {$this->popover} SET popover_active = NOT popover_active WHERE id = %d", $id );
-
-			return $this->db->query( $sql );
-
-		}
-
-		function delete_popover( $id ) {
-
-			return $this->db->query( $this->db->prepare( "DELETE FROM {$this->popover} WHERE id = %d", $id ) );
-
-		}
-
 		function add_popover( $data ) {
-
-			global $action, $page, $allowedposttags;
-
-			$popover = array();
-
-			$popover['popover_title'] = $_POST['popover_title'];
-
-			if ( !current_user_can('unfiltered_html') ) {
-				$popover['popover_content'] = wp_kses($_POST['popover_content'], $allowedposttags);
-			} else {
-				$popover['popover_content'] = $_POST['popover_content'];
-			}
-
-			$popover['popover_settings'] = array();
-			$popover['popover_settings']['popover_size'] = array( 'width' => $_POST['popoverwidth'], 'height' => $_POST['popoverheight'], 'usejs' => $_POST['popover-usejs-size'] );
-			$popover['popover_settings']['popover_location'] = array( 'left' => $_POST['popoverleft'], 'top' => $_POST['popovertop'], 'usejs' => $_POST['popover-usejs-position'] );
-			$popover['popover_settings']['popover_colour'] = array( 'back' => $_POST['popoverbackground'], 'fore' => $_POST['popoverforeground'] );
-			$popover['popover_settings']['popover_margin'] = array( 'left' => $_POST['popovermarginleft'], 'top' => $_POST['popovermargintop'], 'right' => $_POST['popovermarginright'], 'bottom' => $_POST['popovermarginbottom'] );
-			$popover['popover_settings']['popover_check'] = $_POST['popovercheck'];
-
-			if(isset($_POST['popoverereg'])) {
-				$popover['popover_settings']['popover_ereg'] = $_POST['popoverereg'];
-			} else {
-				$popover['popover_settings']['popover_ereg'] = '';
-			}
-
-			if(isset($_POST['popovercount'])) {
-				$popover['popover_settings']['popover_count'] = $_POST['popovercount'];
-			} else {
-				$popover['popover_settings']['popover_count'] = 3;
-			}
-
-			if(isset($_POST['popoverusejs']) && $_POST['popoverusejs'] == 'yes') {
-				$popover['popover_settings']['popover_usejs'] = 'yes';
-			} else {
-				$popover['popover_settings']['popover_usejs'] = 'no';
-			}
-
-			$popover['popover_settings']['popover_style'] = $_POST['popoverstyle'];
-
-			if(isset($_POST['popoverhideforeverlink']) && $_POST['popoverhideforeverlink'] == 'yes') {
-				$popover['popover_settings']['popoverhideforeverlink'] = 'yes';
-			} else {
-				$popover['popover_settings']['popoverhideforeverlink'] = 'no';
-			}
-			$popover['popover_settings']['popover_close_hideforever'] = isset($_POST['popover_close_hideforever'])
-				? 'yes'
-				: 'no'
-			;
-			$popover['popover_settings']['popover_hideforever_expiry'] = isset($_POST['popover_hideforever_expiry']) && (int)$_POST['popover_hideforever_expiry']
-				? (int)$_POST['popover_hideforever_expiry']
-				: (defined('PO_DEFAULT_EXPIRY') && PO_DEFAULT_EXPIRY ? PO_DEFAULT_EXPIRY : 365)
-			;
-
-			if(isset($_POST['popoverdelay'])) {
-				$popover['popover_settings']['popoverdelay'] = $_POST['popoverdelay'];
-			}
-
-			if(isset($_POST['popoveronurl'])) {
-				$popover['popover_settings']['onurl'] = explode("\n", $_POST['popoveronurl']);
-			}
-
-			if(isset($_POST['popovernotonurl'])) {
-				$popover['popover_settings']['notonurl'] = explode("\n", $_POST['popovernotonurl']);
-			}
-
-			if(isset($_POST['popoverincountry'])) {
-				$popover['popover_settings']['incountry'] = $_POST['popoverincountry'];
-			}
-
-			if(isset($_POST['popovernotincountry'])) {
-				$popover['popover_settings']['notincountry'] = $_POST['popovernotincountry'];
-			}
-
-			$popover['popover_settings'] = apply_filters('popover-data-save', $popover['popover_settings']);
-			$popover['popover_settings'] = serialize($popover['popover_settings']);
-
+			$popover = $this->_prepare_popover();
 			if(isset($_POST['addandactivate'])) {
 				$popover['popover_active'] = 1;
 			}
-
-			return $this->db->insert( $this->popover, $popover );
-
+			return $this->_data->save_popover($popover);
 		}
 
 		function update_popover( $id, $data ) {
+			$popover = $this->_prepare_popover();
+			$popover['id'] = $id;
+			return $this->_data->save_popover($popover);
 
+		}
+
+		private function _prepare_popover () {
 			global $action, $page, $allowedposttags;
 
 			$popover = array();
@@ -605,8 +227,7 @@ if(!class_exists('popoveradmin')) {
 			$popover['popover_settings'] = apply_filters('popover-data-save', $popover['popover_settings']);
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
-			return $this->db->update( $this->popover, $popover, array( 'id' => $id ) );
-
+			return $popover;
 		}
 
 		function update_popover_admin() {
@@ -623,28 +244,28 @@ if(!class_exists('popoveradmin')) {
 				switch($_REQUEST['action']) {
 
 
-					case 'activate': 		$id = (int) $_GET['popover'];
-											if(!empty($id)) {
+					case 'activate': 		$id = (int)$_GET['popover'];
+											if (!empty($id)) {
 												check_admin_referer('toggle-popover-' . $id);
 
-												if( $this->activate_popover( $id ) ) {
-													wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
+												if ($this->_data->activate_popover($id)) {
+													wp_safe_redirect(add_query_arg('msg', 3, wp_get_referer()));
 												} else {
-													wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
+													wp_safe_redirect(add_query_arg( 'msg', 4, wp_get_referer()));
 												}
 
 											}
 											break;
 
 
-					case 'deactivate':		$id = (int) $_GET['popover'];
-											if(!empty($id)) {
+					case 'deactivate':		$id = (int)$_GET['popover'];
+											if (!empty($id)) {
 												check_admin_referer('toggle-popover-' . $id);
 
-												if( $this->deactivate_popover( $id ) ) {
-													wp_safe_redirect( add_query_arg( 'msg', 5, wp_get_referer() ) );
+												if ($this->_data->deactivate_popover($id)) {
+													wp_safe_redirect(add_query_arg( 'msg', 5, wp_get_referer()));
 												} else {
-													wp_safe_redirect( add_query_arg( 'msg', 6, wp_get_referer() ) );
+													wp_safe_redirect(add_query_arg( 'msg', 6, wp_get_referer()));
 												}
 
 											}
@@ -652,24 +273,24 @@ if(!class_exists('popoveradmin')) {
 
 					case 'toggle':			$ids = $_REQUEST['popovercheck'];
 
-											if(!empty($ids)) {
+											if (!empty($ids)) {
 												check_admin_referer('bulk-popovers');
-												foreach( (array) $ids as $id ) {
-													$this->toggle_popover( $id );
+												foreach ((array)$ids as $id) {
+													$this->_data->toggle_popover($id);
 												}
-												wp_safe_redirect( add_query_arg( 'msg', 7, wp_get_referer() ) );
+												wp_safe_redirect( add_query_arg('msg', 7, wp_get_referer()));
 											}
 											break;
 
-					case 'delete':			$id = (int) $_GET['popover'];
+					case 'delete':			$id = (int)$_GET['popover'];
 
-											if(!empty($id)) {
+											if (!empty($id)) {
 												check_admin_referer('delete-popover-' . $id);
 
-												if( $this->delete_popover( $id ) ) {
-													wp_safe_redirect( add_query_arg( 'msg', 8, wp_get_referer() ) );
+												if ($this->_data->delete_popover($id)) {
+													wp_safe_redirect(add_query_arg('msg', 8, wp_get_referer()));
 												} else {
-													wp_safe_redirect( add_query_arg( 'msg', 9, wp_get_referer() ) );
+													wp_safe_redirect(add_query_arg('msg', 9, wp_get_referer()));
 												}
 											}
 											break;
@@ -704,7 +325,10 @@ if(!class_exists('popoveradmin')) {
 		}
 
 		function handle_popover_admin() {
-			global $action, $page;
+			//global $action, $page;
+			global $page;
+
+			$action = $_GET['action'];
 
 			if($action == 'edit') {
 				if(isset($_GET['popover'])) {
@@ -781,7 +405,7 @@ if(!class_exists('popoveradmin')) {
 
 					$columns = apply_filters('popover_columns', $columns);
 
-					$popovers = $this->get_popovers();
+					$popovers = $this->_data->get_popovers();
 
 				?>
 
@@ -863,33 +487,6 @@ if(!class_exists('popoveradmin')) {
 													case 'supporter':		_e('Site is not a Pro-site', 'popover');
 																			break;
 
-													case 'isloggedin':		_e('Visitor is logged in', 'popover');
-																			break;
-
-													case 'loggedin':		_e('Visitor is not logged in', 'popover');
-																			break;
-
-													case 'commented':		_e('Visitor has never commented', 'popover');
-																			break;
-
-													case 'searchengine':	_e('Visit via a search engine', 'popover');
-																			break;
-
-													case 'internal':		_e('Visit not via an Internal link', 'popover');
-																			break;
-
-													case 'referrer':		_e('Visit via specific referer', 'popover');
-																			break;
-
-													case 'count':			_e('Popover shown less than x times', 'popover');
-																			break;
-
-													case 'onurl':			_e('On specific URL', 'popover');
-																			break;
-
-													case 'notonurl':		_e('Not on specific URL', 'popover');
-																			break;
-
 													case 'incountry':		_e('In a specific country', 'popover');
 																			break;
 
@@ -951,8 +548,6 @@ if(!class_exists('popoveradmin')) {
 
 		function handle_popover_edit_panel( $id = false ) {
 
-			global $page;
-
 			if(function_exists('get_site_option') && defined('PO_GLOBAL') && PO_GLOBAL == true) {
 				$updateoption = 'update_site_option';
 				$getoption = 'get_site_option';
@@ -963,7 +558,7 @@ if(!class_exists('popoveradmin')) {
 
 
 			if($id !== false) {
-				$popover = $this->get_popover( $id );
+				$popover = $this->_data->get_popover($id);
 
 				$popover->popover_settings = unserialize($popover->popover_settings);
 			} else {
@@ -977,15 +572,16 @@ if(!class_exists('popoveradmin')) {
 			$popover_content = stripslashes($popover->popover_content);
 
 			if(empty($popover->popover_settings)) {
-				$popover->popover_settings = array(	'popover_size'		=>	array('width' => '500px', 'height' => '200px', 'usejs' => 0),
-													'popover_location'	=>	array('left' => '100px', 'top' => '100px', 'usejs' => 0),
-													'popover_colour'	=>	array('back' => 'FFFFFF', 'fore' => '000000'),
-													'popover_margin'	=>	array('left' => '0px', 'top' => '0px', 'right' => '0px', 'bottom' => '0px'),
-													'popover_check'		=>	array(),
-													'popover_ereg'		=>	'',
-													'popover_count'		=>	3,
-													'popover_usejs'		=>	'no'
-													);
+				$popover->popover_settings = array(	
+					'popover_size' => array('width' => '500px', 'height' => '200px', 'usejs' => 0),
+					'popover_location' => array('left' => '100px', 'top' => '100px', 'usejs' => 0),
+					'popover_colour' => array('back' => 'FFFFFF', 'fore' => '000000'),
+					'popover_margin' => array('left' => '0px', 'top' => '0px', 'right' => '0px', 'bottom' => '0px'),
+					'popover_check' => array(),
+					'popover_ereg' => '',
+					'popover_count' => 3,
+					'popover_usejs' => 'no'
+				);
 			}
 
 			$popover_size = $popover->popover_settings['popover_size'];
@@ -1035,7 +631,7 @@ if(!class_exists('popoveradmin')) {
 				<div class='popover-liquid-left'>
 
 					<div id='popover-left'>
-						<form action='?page=<?php echo $page; ?>' name='popoveredit' method='post'>
+						<form action='?page=popover' name='popoveredit' method='post'>
 
 							<input type='hidden' name='id' id='id' value='<?php echo $id; ?>' />
 							<input type='hidden' name='beingdragged' id='beingdragged' value='' />
@@ -1082,24 +678,6 @@ if(!class_exists('popoveradmin')) {
 												case 'supporter':		if( function_exists('is_pro_site') ) $this->admin_main('supporter','Site is not a Pro-site', 'Shows the popover if the site is not a Pro-site.', true);
 																		break;
 
-												case 'isloggedin':		$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
-																		break;
-												case 'loggedin':		$this->admin_main('loggedin','Visitor is not logged in', 'Shows the popover if the user is <strong>not</strong> logged in to your site.', true);
-																		break;
-												case 'commented':		$this->admin_main('commented','Visitor has never commented', 'Shows the popover if the user has never left a comment.', true);
-																		break;
-												case 'searchengine':	$this->admin_main('searchengine','Visit via a search engine', 'Shows the popover if the user arrived via a search engine.', true);
-																		break;
-												case 'internal':		$this->admin_main('internal','Visit not via an Internal link', 'Shows the popover if the user did not arrive on this page via another page on your site.', true);
-																		break;
-												case 'referrer':		$this->admin_referer('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', $popover_ereg);
-																		break;
-												case 'count':			$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
-																		break;
-												case 'onurl':			$this->admin_urllist('onurl','On specific URL', 'Shows the popover if the user is on a certain URL (enter one URL per line)', $popover_onurl);
-																		break;
-												case 'notonurl':		$this->admin_urllist('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL (enter one URL per line)', $popover_notonurl);
-																		break;
 												case 'incountry':		$this->admin_countrylist('incountry','In a specific Country', 'Shows the popover if the user is in a certain country.', $popover_incountry);
 																		break;
 												case 'notincountry':	$this->admin_countrylist('notincountry','Not in a specific Country', 'Shows the popover if the user is not in a certain country.', $popover_notincountry);
@@ -1303,49 +881,12 @@ if(!class_exists('popoveradmin')) {
 							$this->admin_main('supporter','Site is not a Pro-site', 'Shows the popover if the site is not a Pro-site.', true);
 						}
 
-						if(!isset($popover_check['isloggedin'])) {
-							$this->admin_main('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
-						}
-
-						if(!isset($popover_check['loggedin'])) {
-							$this->admin_main('loggedin','Visitor is not logged in', 'Shows the popover if the user is <strong>not</strong> logged in to your site.', true);
-						}
-
-						if(!isset($popover_check['commented'])) {
-							$this->admin_main('commented','Visitor has never commented', 'Shows the popover if the user has never left a comment.', true);
-						}
-
-						if(!isset($popover_check['searchengine'])) {
-							$this->admin_main('searchengine','Visit via a search engine', 'Shows the popover if the user arrived via a search engine.', true);
-						}
-
-						if(!isset($popover_check['internal'])) {
-							$this->admin_main('internal','Visit not via an Internal link', 'Shows the popover if the user did not arrive on this page via another page on your site.', true);
-						}
-
-						if(!isset($popover_check['referrer'])) {
-							$this->admin_referer('referrer','Visit via specific referer', 'Shows the popover if the user arrived via the following referrer:', $popover_ereg);
-						}
-
-						if(!isset($popover_check['onurl'])) {
-							$this->admin_urllist('onurl','On specific URL', 'Shows the popover if the user is on a certain URL (enter one URL per line)', $popover_onurl);
-						}
-
-						if(!isset($popover_check['notonurl'])) {
-							$this->admin_urllist('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL (enter one URL per line)', $popover_notonurl);
-						}
-
 						if(!isset($popover_check['incountry'])) {
 							$this->admin_countrylist('incountry','In a specific Country', 'Shows the popover if the user is in a certain country.', $popover_incountry);
 						}
 
 						if(!isset($popover_check['notincountry'])) {
 							$this->admin_countrylist('notincountry','Not in a specific Country', 'Shows the popover if the user is not in a certain country.', $popover_notincountry);
-						}
-
-						//$popover_count
-						if(!isset($popover_check['count'])) {
-							$this->admin_viewcount('count','Popover shown less than', 'Shows the popover if the user has only seen it less than the following number of times:', $popover_count);
 						}
 
 						do_action('popover_additional_rules_main', $popover, $popover_check);
@@ -1371,59 +912,6 @@ if(!class_exists('popoveradmin')) {
 										$this->admin_sidebar('supporter','Site is not a Pro-site', 'Shows the popover if the site is not a Pro-site.', false);
 									}
 
-									if(isset($popover_check['isloggedin'])) {
-										$this->admin_sidebar('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', true);
-									} else {
-										$this->admin_sidebar('isloggedin','Visitor is logged in', 'Shows the popover if the user is logged in to your site.', false);
-									}
-
-									if(isset($popover_check['loggedin'])) {
-										$this->admin_sidebar('loggedin','Visitor is not logged in', 'Shows the popover if the user is <strong>not</strong> logged in to your site.', true);
-									} else {
-										$this->admin_sidebar('loggedin','Visitor is not logged in', 'Shows the popover if the user is <strong>not</strong> logged in to your site.', false);
-									}
-
-									if(isset($popover_check['commented'])) {
-										$this->admin_sidebar('commented','Visitor has never commented', 'Shows the popover if the user has never left a comment.', true);
-									} else {
-										$this->admin_sidebar('commented','Visitor has never commented', 'Shows the popover if the user has never left a comment.', false);
-									}
-
-									if(isset($popover_check['searchengine'])) {
-										$this->admin_sidebar('searchengine','Visit via a search engine', 'Shows the popover if the user arrived via a search engine.', true);
-									} else {
-										$this->admin_sidebar('searchengine','Visit via a search engine', 'Shows the popover if the user arrived via a search engine.', false);
-									}
-
-									if(isset($popover_check['internal'])) {
-										$this->admin_sidebar('internal','Visit not via an Internal link', 'Shows the popover if the user did not arrive on this page via another page on your site.', true);
-									} else {
-										$this->admin_sidebar('internal','Visit not via an Internal link', 'Shows the popover if the user did not arrive on this page via another page on your site.', false);
-									}
-
-									if(isset($popover_check['referrer'])) {
-										$this->admin_sidebar('referrer','Visit via specific referer', 'Shows the popover if the user arrived via a specific referrer.', true);
-									} else {
-										$this->admin_sidebar('referrer','Visit via specific referer', 'Shows the popover if the user arrived via a specific referrer.', false);
-									}
-
-									if(isset($popover_check['count'])) {
-										$this->admin_sidebar('count','Popover shown less than', 'Shows the popover if the user has only seen it less than a specific number of times.', true);
-									} else {
-										$this->admin_sidebar('count','Popover shown less than', 'Shows the popover if the user has only seen it less than a specific number of times.', false);
-									}
-
-									if(isset($popover_check['onurl'])) {
-										$this->admin_sidebar('onurl','On specific URL', 'Shows the popover if the user is on a certain URL.', true);
-									} else {
-										$this->admin_sidebar('onurl','On specific URL', 'Shows the popover if the user is on a certain URL.', false);
-									}
-
-									if(isset($popover_check['notonurl'])) {
-										$this->admin_sidebar('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL.', true);
-									} else {
-										$this->admin_sidebar('notonurl','Not on specific URL', 'Shows the popover if the user is not on a certain URL.', false);
-									}
 
 									if(isset($popover_check['incountry'])) {
 										$this->admin_sidebar('incountry','In a specific Country', 'Shows the popover if the user is in a certain country.', true);
@@ -1561,299 +1049,6 @@ if(!class_exists('popoveradmin')) {
 			<?php
 		}
 
-		function handle_admin_panelold() {
-
-			global $allowedposttags;
-
-			if(is_multisite() && defined('PO_GLOBAL')) {
-				$updateoption = 'update_site_option';
-				$getoption = 'get_site_option';
-			} else {
-				$updateoption = 'update_option';
-				$getoption = 'get_option';
-			}
-
-			if(isset($_POST['action']) && addslashes($_POST['action']) == 'updatepopover') {
-
-				//print_r($_POST);
-
-				if(isset($_POST['popovercontent'])) {
-					if(defined('PO_USEKSES')) {
-						$updateoption('popover_content', wp_kses($_POST['popovercontent'], $allowedposttags));
-					} else {
-						$updateoption('popover_content', $_POST['popovercontent']);
-					}
-
-				}
-
-				if(isset($_POST['popoverwidth']) || isset($_POST['popoverheight']) || isset($_POST['popover-usejs-size'])) {
-
-					$width = $_POST['popoverwidth'];
-					$height = $_POST['popoverheight'];
-
-					if($width == '') $width = '500px';
-					if($height == '') $height = '200px';
-
-					$usejs = !empty($_POST['popover-usejs-size']);
-
-					$updateoption('popover_size', array("width" => $width, "height" => $height, "usejs" => $usejs));
-				}
-
-				if(isset($_POST['popoverleft']) || isset($_POST['popovertop']) || isset($_POST['popover-usejs-position'])) {
-
-					$left = $_POST['popoverleft'];
-					$top = $_POST['popovertop'];
-
-					if($left == '') $left = '100px';
-					if($top == '') $top = '100px';
-
-					$usejs = !empty($_POST['popover-usejs-position']);
-
-					$updateoption('popover_location', array("left" => $left, "top" => $top, "usejs" => $usejs));
-				}
-
-				if(isset($_POST['popovermargintop']) || isset($_POST['popovermarginleft']) || isset($_POST['popovermarginright']) || isset($_POST['popovermarginbottom'])) {
-
-					$mleft = $_POST['popovermarginleft'];
-					$mtop = $_POST['popovermargintop'];
-					$mright = $_POST['popovermarginright'];
-					$mbottom = $_POST['popovermarginbottom'];
-
-					if($mleft == '') $mleft = '0px';
-					if($mtop == '') $mtop = '0px';
-					if($mright == '') $mright = '0px';
-					if($mbottom == '') $mbottom = '0px';
-
-					$updateoption('popover_margin', array('left' => $mleft, 'top' => $mtop, 'right' => $mright, 'bottom' => $mbottom));
-
-				}
-
-				if(isset($_POST['popoverbackground']) || isset($_POST['popoverforeground'])) {
-
-					$back = $_POST['popoverbackground'];
-					$fore = $_POST['popoverforeground'];
-
-					if($back == '') $back = 'FFFFFF';
-					if($fore == '') $fore = '000000';
-
-					$updateoption('popover_colour', array("back" => $back, "fore" => $fore));
-				}
-
-				if(isset($_POST['popovercheck'])) {
-
-					$updateoption('popover_check', $_POST['popovercheck']);
-
-					if(isset($_POST['popoverereg'])) {
-						$updateoption('popover_ereg', $_POST['popoverereg']);
-					}
-
-					if(isset($_POST['popovercount'])) {
-						$updateoption('popover_count', intval($_POST['popovercount']) );
-					}
-
-				}
-
-				if(isset($_POST['popoverusejs'])) {
-					$updateoption('popover_usejs', 'yes' );
-				} else {
-					$updateoption('popover_usejs', 'no' );
-				}
-
-				echo '<div id="message" class="updated fade"><p>' . __('Your settings have been saved.', 'popover') . '</p></div>';
-
-			}
-
-			$popover_content = stripslashes($getoption('popover_content', ''));
-			$popover_size = $getoption('popover_size', array('width' => '500px', 'height' => '200px', 'usejs' => 0));
-			$popover_location = $getoption('popover_location', array('left' => '100px', 'top' => '100px', 'usejs' => 0));
-			$popover_colour = $getoption('popover_colour', array('back' => 'FFFFFF', 'fore' => '000000'));
-			$popover_margin = $getoption('popover_margin', array('left' => '0px', 'top' => '0px', 'right' => '0px', 'bottom' => '0px'));
-
-			$popover_size = $this->sanitise_array($popover_size);
-			$popover_location = $this->sanitise_array($popover_location);
-			$popover_colour = $this->sanitise_array($popover_colour);
-			$popover_margin = $this->sanitise_array($popover_margin);
-
-			$popover_check = $getoption('popover_check', array());
-			$popover_ereg = $getoption('popover_ereg', '');
-			$popover_count = $getoption('popover_count', '3');
-
-			$popover_usejs = $getoption('popover_usejs', 'no' );
-
-			?>
-
-			<div class='wrap'>
-
-				<form action='' method='post'>
-					<input type='hidden' name='action' value='updatepopover' />
-					<?php wp_nonce_field('updatepopover'); ?>
-
-				<h2><?php _e('Pop Over content settings','popover'); ?></h2>
-				<p><?php _e('Use the settings below to modify the content of your pop over and the rules that will determine when, or if, it will be displayed.','popover'); ?></p>
-
-				<h3><?php _e('Pop Over content','popover'); ?></h3>
-				<p><?php _e('Enter the content for your pop over in the text area below. HTML is allowed.','popover'); ?></p>
-				<textarea name='popovercontent' id='popovercontent' style='width: 90%' rows='10' cols='10'><?php echo stripslashes($popover_content); ?></textarea>
-
-				<p class="submit">
-				<input class="button" type="submit" name="go" value="<?php _e('Update content', 'popover'); ?>" />
-				</p>
-
-				<h3><?php _e('Pop Over display settings','popover'); ?></h3>
-				<p><?php _e('Use the options below to determine the look, and display settings for the Pop Over.','popover'); ?></p>
-
-				<table class='form-table'>
-
-					<tr>
-						<td valign='top' width='49%'>
-							<h3><?php _e('Appearance Settings','popover'); ?></h3>
-
-							<table class='form-table' style='border: 1px solid #ccc; padding-top: 10px; padding-bottom: 10px; margin-bottom: 10px;'>
-								<tr>
-									<th valign='top' scope='row' style='width: 25%;'><?php _e('Pop Over Size','popover'); ?></th>
-									<td valign='top'>
-										<?php _e('Width:','popover'); ?>&nbsp;
-										<input type='text' name='popoverwidth' id='popoverwidth' style='width: 5em;' value='<?php echo $popover_size['width']; ?>' />&nbsp;
-										<?php _e('Height:','popover'); ?>&nbsp;
-										<input type='text' name='popoverheight' id='popoverheight' style='width: 5em;' value='<?php echo $popover_size['height']; ?>' />
-									</td>
-								</tr>
-
-								<tr>
-									<th valign='top' scope='row' style='width: 25%;'><?php _e('Pop Over Position','popover'); ?></th>
-									<td valign='top'>
-										<?php _e('Left:','popover'); ?>&nbsp;
-										<input type='text' name='popoverleft' id='popoverleft' style='width: 5em;' value='<?php echo $popover_location['left']; ?>' />&nbsp;
-										<?php _e('Top:','popover'); ?>&nbsp;
-										<input type='text' name='popovertop' id='popovertop' style='width: 5em;' value='<?php echo $popover_location['top']; ?>' />
-									</td>
-								</tr>
-
-								<tr>
-									<th valign='top' scope='row' style='width: 25%;'><?php _e('Pop Over Margins','popover'); ?></th>
-									<td valign='top'>
-										<?php _e('Left:','popover'); ?>&nbsp;
-										<input type='text' name='popovermarginleft' style='width: 5em;' value='<?php echo $popover_margin['left']; ?>' />&nbsp;
-										<?php _e('Right:','popover'); ?>&nbsp;
-										<input type='text' name='popovermarginright' style='width: 5em;' value='<?php echo $popover_margin['right']; ?>' /><br/>
-										<?php _e('Top:','popover'); ?>&nbsp;
-										<input type='text' name='popovermargintop' style='width: 5em;' value='<?php echo $popover_margin['top']; ?>' />&nbsp;
-										<?php _e('Bottom:','popover'); ?>&nbsp;
-										<input type='text' name='popovermarginbottom' style='width: 5em;' value='<?php echo $popover_margin['bottom']; ?>' />
-									</td>
-								</tr>
-
-								<tr>
-									<th valign='top' scope='row' style='width: 25%;'>&nbsp;</th>
-									<td valign='top'>
-										<?php _e('or just override the above with JS','popover'); ?>&nbsp;<input type='checkbox' name='popoverusejs' id='popoverusejs' value='yes' <?php if($popover_usejs == 'yes') echo "checked='checked'"; ?> />
-									</td>
-								</tr>
-
-								</table>
-								<table class='form-table'>
-
-
-
-								<tr>
-									<th valign='top' scope='row' style='width: 25%;'><?php _e('Background Colour','popover'); ?></th>
-									<td valign='top'>
-										<?php _e('Hex:','popover'); ?>&nbsp;#
-										<input type='text' name='popoverbackground' id='popoverbackground' style='width: 10em;' value='<?php echo $popover_colour['back']; ?>' />
-									</td>
-								</tr>
-
-								<tr>
-									<th valign='top' scope='row' style='width: 25%;'><?php _e('Font Colour','popover'); ?></th>
-									<td valign='top'>
-										<?php _e('Hex:','popover'); ?>&nbsp;#
-										<input type='text' name='popoverforeground' id='popoverforeground' style='width: 10em;' value='<?php echo $popover_colour['fore']; ?>' />
-									</td>
-								</tr>
-
-							</table>
-
-						</td>
-
-						<td valign='top' width='49%'>
-							<h3><?php _e('Display Rules','popover'); ?></h3>
-
-								<p><?php _e('Show the Pop Over if <strong>one</strong> of the following checked rules is true.','popover'); ?></p>
-								<input type='hidden' name='popovercheck[none]' value='none' />
-								<table class='form-table'>
-									<?php
-										if(function_exists('is_supporter')) {
-									?>
-									<tr>
-										<td valign='middle' style='width: 5%;'>
-											<input type='checkbox' name='popovercheck[notsupporter]' <?php if(isset($popover_check['notsupporter'])) echo "checked='checked'"; ?> />
-										</td>
-										<th valign='bottom' scope='row'><?php _e('Visitor is not a supporter.','popover'); ?></th>
-									</tr>
-									<?php
-										}
-									?>
-									<tr>
-										<td valign='middle' style='width: 5%;'>
-											<input type='checkbox' name='popovercheck[isloggedin]' <?php if(isset($popover_check['isloggedin'])) echo "checked='checked'"; ?> />
-										</td>
-										<th valign='bottom' scope='row'><?php _e('Visitor is logged in.','popover'); ?></th>
-									</tr>
-									<tr>
-										<td valign='middle' style='width: 5%;'>
-											<input type='checkbox' name='popovercheck[loggedin]' <?php if(isset($popover_check['loggedin'])) echo "checked='checked'"; ?> />
-										</td>
-										<th valign='bottom' scope='row'><?php _e('Visitor is not logged in.','popover'); ?></th>
-									</tr>
-									<tr>
-										<td valign='middle' style='width: 5%;'>
-											<input type='checkbox' name='popovercheck[commented]' <?php if(isset($popover_check['commented'])) echo "checked='checked'"; ?> />
-										</td>
-										<th valign='bottom' scope='row'><?php _e('Visitor has never commented here before.','popover'); ?></th>
-									</tr>
-									<tr>
-										<td valign='middle' style='width: 5%;'>
-											<input type='checkbox' name='popovercheck[searchengine]' <?php if(isset($popover_check['searchengine'])) echo "checked='checked'"; ?> />
-										</td>
-										<th valign='bottom' scope='row'><?php _e('Visitor came from a search engine.','popover'); ?></th>
-									</tr>
-									<tr>
-										<td valign='middle' style='width: 5%;'>
-											<input type='checkbox' name='popovercheck[internal]' <?php if(isset($popover_check['internal'])) echo "checked='checked'"; ?> />
-										</td>
-										<th valign='bottom' scope='row'><?php _e('Visitor did not come from an internal page.','popover'); ?></th>
-									</tr>
-									<tr>
-										<td valign='middle' style='width: 5%;'>
-											<input type='checkbox' name='popovercheck[referrer]' <?php if(isset($popover_check['referrer'])) echo "checked='checked'"; ?> />
-										</td>
-										<th valign='bottom' scope='row'><?php _e('Visitor referrer matches','popover'); ?>&nbsp;
-										<input type='text' name='popoverereg' id='popoverereg' style='width: 10em;' value='<?php echo htmlentities($popover_ereg,ENT_QUOTES, 'UTF-8'); ?>' />
-										</th>
-									</tr>
-
-									</table>
-
-									<p><?php _e('And the visitor has seen the pop over less than','popover'); ?>&nbsp;
-									<input type='text' name='popovercount' id='popovercount' style='width: 2em;' value='<?php echo htmlentities($popover_count,ENT_QUOTES, 'UTF-8'); ?>' />&nbsp;
-									<?php _e('times','popover'); ?></p>
-
-						</td>
-					</tr>
-
-				</table>
-
-				<p class="submit">
-				<input class="button" type="submit" name="goagain" value="<?php _e('Update settings', 'popover'); ?>" />
-				</p>
-
-				</form>
-
-			</div>
-
-			<?php
-		}
-
 		function handle_addons_panel_updates() {
 			global $action, $page;
 
@@ -1869,48 +1064,50 @@ if(!class_exists('popoveradmin')) {
 
 			switch(addslashes($action)) {
 
-				case 'deactivate':	$key = addslashes($_GET['addon']);
-									if(!empty($key)) {
-										check_admin_referer('toggle-addon-' . $key);
+				case 'deactivate':	
+					$key = addslashes($_GET['addon']);
+					if(!empty($key)) {
+						check_admin_referer('toggle-addon-' . $key);
 
-										$found = array_search($key, $active);
-										if($found !== false) {
-											unset($active[$found]);
-											update_option('popover_activated_addons', array_unique($active));
-											wp_safe_redirect( add_query_arg( 'msg', 5, wp_get_referer() ) );
-										} else {
-											wp_safe_redirect( add_query_arg( 'msg', 6, wp_get_referer() ) );
-										}
-									}
-									break;
+						$found = array_search($key, $active);
+						if($found !== false) {
+							unset($active[$found]);
+							update_option('popover_activated_addons', array_unique($active));
+							wp_safe_redirect( add_query_arg( 'msg', 5, wp_get_referer() ) );
+						} else {
+							wp_safe_redirect( add_query_arg( 'msg', 6, wp_get_referer() ) );
+						}
+					}
+					break;
 
-				case 'activate':	$key = addslashes($_GET['addon']);
-									if(!empty($key)) {
-										check_admin_referer('toggle-addon-' . $key);
+				case 'activate':
+					$key = addslashes($_GET['addon']);
+					if(!empty($key)) {
+						check_admin_referer('toggle-addon-' . $key);
 
-										if(!in_array($key, $active)) {
-											$active[] = $key;
-											update_option('popover_activated_addons', array_unique($active));
-											wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
-										} else {
-											wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
-										}
-									}
-									break;
+						if(!in_array($key, $active)) {
+							$active[] = $key;
+							update_option('popover_activated_addons', array_unique($active));
+							wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
+						} else {
+							wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
+						}
+					}
+					break;
 
 				case 'bulk-toggle':
-									check_admin_referer('bulk-addons');
-									foreach($_GET['addoncheck'] AS $key) {
-										$found = array_search($key, $active);
-										if($found !== false) {
-											unset($active[$found]);
-										} else {
-											$active[] = $key;
-										}
-									}
-									update_option('popover_activated_addons', array_unique($active));
-									wp_safe_redirect( add_query_arg( 'msg', 7, wp_get_referer() ) );
-									break;
+					check_admin_referer('bulk-addons');
+					foreach($_GET['addoncheck'] AS $key) {
+						$found = array_search($key, $active);
+						if($found !== false) {
+							unset($active[$found]);
+						} else {
+							$active[] = $key;
+						}
+					}
+					update_option('popover_activated_addons', array_unique($active));
+					wp_safe_redirect( add_query_arg( 'msg', 7, wp_get_referer() ) );
+					break;
 
 			}
 		}
