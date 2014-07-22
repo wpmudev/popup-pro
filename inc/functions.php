@@ -78,18 +78,18 @@ function load_all_popover_addons() {
 
 function P_style_urls( $styles = array() ) {
 
-	$styles['Default'] = PO_CSS_URL . 'default';
-	$styles['Default Fixed'] = PO_CSS_URL . 'fixed';
-	$styles['Dark Background Fixed'] = PO_CSS_URL . 'fullbackground';
+	$styles['Default'] = PO_TPL_URL . 'default';
+	$styles['Default Fixed'] = PO_TPL_URL . 'fixed';
+	$styles['Dark Background Fixed'] = PO_TPL_URL . 'fullbackground';
 
 	return $styles;
 }
 add_filter( 'popover_available_styles_url', 'P_style_urls');
 
 function P_style_dirs ($styles=array()) {
-	$styles['Default'] = PO_CSS_DIR . 'default';
-	$styles['Default Fixed'] = PO_CSS_DIR . 'fixed';
-	$styles['Dark Background Fixed'] = PO_CSS_DIR . 'fullbackground';
+	$styles['Default'] = PO_TPL_DIR . 'default';
+	$styles['Default Fixed'] = PO_TPL_DIR . 'fixed';
+	$styles['Dark Background Fixed'] = PO_TPL_DIR . 'fullbackground';
 
 	return $styles;
 }

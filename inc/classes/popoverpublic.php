@@ -111,14 +111,14 @@ if (!class_exists('popoverpublic')) {
                     wp_enqueue_script('jquery');
 
                     // Now to register our new js file
-                    wp_register_script('popover_selective_load', PO_JS_URL . 'popover-load.js');
+                    wp_register_script('popover_selective_load', PO_JS_URL . 'popover-load.min.js');
                     wp_enqueue_script('popover_selective_load');
 
                     wp_localize_script('popover_selective_load', 'popover_load_custom', array(
                         'admin_ajax_url' => admin_url( 'admin-ajax.php' ),
                     ));
                 } else {
-                    wp_enqueue_script('popover-public', PO_JS_URL . 'public.js', array('jquery'));
+                    wp_enqueue_script('popover-public', PO_JS_URL . 'public.min.js', array('jquery'));
                     wp_localize_script('popover-public', '_popover_data', array(
                         'endpoint' => admin_url('admin-ajax.php'),
                         'action' => 'popover_selective_ajax',
@@ -136,14 +136,14 @@ if (!class_exists('popoverpublic')) {
                     wp_enqueue_script('jquery');
 
                     // Now to register our new js file
-                    wp_register_script('popover_load_custom', PO_JS_URL . 'popover-load-custom.js');
+                    wp_register_script('popover_load_custom', PO_JS_URL . 'popover-load-custom.min.js');
                     wp_enqueue_script('popover_load_custom');
 
                     wp_localize_script('popover_load_custom', 'popover_selective_custom', array(
                         'admin_ajax_url' => admin_url( 'admin-ajax.php' ),
                     ));
                 } else {
-                    wp_enqueue_script('popover-public', PO_JS_URL . 'public.js', array('jquery'));
+                    wp_enqueue_script('popover-public', PO_JS_URL . 'public.min.js', array('jquery'));
                     wp_localize_script('popover-public', '_popover_data', array(
                         'endpoint' => '',
                         'action' => 'popover_selective_ajax',
@@ -169,7 +169,7 @@ if (!class_exists('popoverpublic')) {
                     if (defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION) {
                         wp_enqueue_script('jquery');
 
-                        wp_enqueue_script('popoverlegacyjs', PO_JS_URL . 'popoverlegacy.js', array('jquery'), $this->build);
+                        wp_enqueue_script('popoverlegacyjs', PO_JS_URL . 'popoverlegacy.min.js', array('jquery'), $this->build);
                         wp_localize_script('popoverlegacyjs', 'popover', array('divname' => $this->thepopover['name'],
                             'usejs' => $this->thepopover['usejs'],
                             'delay' => $this->thepopover['delay']
@@ -178,7 +178,7 @@ if (!class_exists('popoverpublic')) {
                         $data = $this->thepopover;
                         unset($data['style']);
                         unset($data['html']);
-                        wp_enqueue_script('popover-public', PO_JS_URL . 'public.js', array('jquery'));
+                        wp_enqueue_script('popover-public', PO_JS_URL . 'public.min.js', array('jquery'));
                         wp_localize_script('popover-public', '_popover_data', array(
                             'endpoint' => '',
                             'action' => 'popover_selective_ajax',

@@ -252,11 +252,11 @@ if(!class_exists('popoveradmin')) {
 			if(isset($_GET['action']) && in_array($_GET['action'], array('edit', 'add'))) {
 				$this->add_admin_header_popover();
 			} else {
-				wp_enqueue_script('popoverdragadminjs', PO_JS_URL . 'jquery.tablednd_0_5.js', array('jquery'), $this->build);
-				wp_enqueue_script('popoveradminjs', PO_JS_URL . 'popovermenu.js', array('jquery', 'popoverdragadminjs' ), $this->build);
+				wp_enqueue_script('popoverdragadminjs', PO_JS_URL . 'jquery.tablednd_0_5.min.js', array('jquery'), $this->build);
+				wp_enqueue_script('popoveradminjs', PO_JS_URL . 'popovermenu.min.js', array('jquery', 'popoverdragadminjs' ), $this->build);
 
 				wp_localize_script('popoveradminjs', 'popover', array(	'ajaxurl'		=>	admin_url( 'admin-ajax.php' ),
-				 														'ordernonce'	=>	wp_create_nonce('popover_order'),
+																		'ordernonce'	=>	wp_create_nonce('popover_order'),
 																		'dragerror'		=>	__('An error occured updating the Pop Over order.','popover'),
 																		'deletepopover'	=>	__('Are you sure you want to delete this Pop Over?','popover')
 																	));
@@ -370,7 +370,7 @@ if(!class_exists('popoveradmin')) {
 
 			global $wp_version;
 
-			wp_enqueue_script('popoveradminjs', PO_JS_URL . 'popoveradmin.js', array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ), $this->build);
+			wp_enqueue_script('popoveradminjs', PO_JS_URL . 'popoveradmin.min.js', array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ), $this->build);
 
 			if(version_compare( preg_replace('/-.*$/', '', $wp_version), "3.3", '<')) {
 				wp_enqueue_style('popoveradmincss', PO_CSS_URL . 'popoveradmin.css', array('widgets'), $this->build);

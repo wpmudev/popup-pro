@@ -89,8 +89,8 @@ class Popover_Anonymous_Loading {
 
 	public function render_script () {
 		$file = defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION
-			? PO_JS_DIR . 'popover-load.js'
-			: PO_JS_DIR . 'public.js'
+			? PO_JS_DIR . 'popover-load.min.js'
+			: PO_JS_DIR . 'public.min.js'
 		;
 		$data = defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION
 			? sprintf('var popover_load_custom=%s;', json_encode(array(

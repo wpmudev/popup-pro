@@ -1,0 +1,186 @@
+== Testcases
+
+Use script `clean-installation.sh` to create a fresh WordPress installation.
+
+--------------------------------------------------------------------------------
+
+1. Clean installation
+Setup a brand new WordPress installation (single site)
+Keep debugging console open to monitor network infos and JS errors.
+
+1.1 Install and activate the PRO plugin
+  - There should be no warning and no error.
+  - A pointer message must be displayed, pointing at the Appearance menu.
+
+1.2 Open widgets page
+  - Check JS console for errors
+  - All default theme sidebars must have a green marker (= they are replaceable)
+
+1.3 Create new sidebar
+  - Check JS console for errors.
+  - New Sidebar must be displayed immideately.
+  - Sidebar has a toolbar with buttons Location/Edit/Delete.
+  - All three buttons work.
+
+1.4 Create a second sidebar
+  - Second sidebar must be displayed above the first sidebar.
+
+1.5 Edit sidebar
+  Set title to "Sidebar <u>One</u>"
+  Set description to "<script>alert('error')</script>"
+  Enter any text into all 4 wrapper code fields
+  Save
+  - Check JS console, there must be no errors
+  - Title must be exactly "Sidebar <u>One</u>" (not parsed HTML code!)
+  - There should be no javascript alert, but sidebar description is "<script>..."
+  Refresh the page
+  - confirm that above points are still true
+
+1.6 Delete sidebar
+  Click delete and then confirm with "Yes"
+  - Sidebar must be removed instantly
+  - Check JS console for errors
+  Refresh the page
+  - Sidebar must still be gone
+
+1.7 Location popup
+  Open location popup.
+  Check all checkboxes and select 1 value from each multiselect list.
+  Save and open location popup again
+  - All checkboxes are still checked.
+  - Each multiselect list displays the correct value.
+
+1.8 Error handling
+  Try so create a new sidebar with empty name.
+  - User friendly error should be displayed.
+  Try to edit an existing sidebar and set name to empty value.
+  - User friendly error should be displayed.
+  Set sidebar name to super long text
+  - Max 40 characters should be allowed/saved.
+  Set sidebar description to super long text
+  - Max 200 characters should be allowed/saved.
+
+1.9 Theme sidebars
+  - Every Theme sidebar has a toolbar in the bottom
+  - Tools: Replaceable flag / Location popup
+  Click the replacable flag
+  - It will toggle from "Can be replaced" to "static"
+  - Static color is gray / no marker on the left side
+  - Replaceable color is green / with marker-line on left side
+  Change the status of a sidebar and refresh the page
+  - The Replaceable flag must be same (it was saved via ajax)
+
+1.10 Post meta box
+  Open the location popup of any sidebar. Click on the "Post" link.
+  Edit a post.
+  - The sidebars meta box should display all theme sidebars.
+  Select any replacements for all sidebars and save.
+  - The selected values should still be displayed after saving.
+  Go back to widgets section. Make all theme sidebars static.
+  Edit a post again.
+  - The sidebars metabox should display a message, that no sidebar can be replaced.
+  - There should be link inside the text that takes the user to widgets section.
+
+1.11 Pro features
+  - The widgets section has an obvious WPMU Dashboard notification.
+
+  In widget section open the export/import popup
+  Enter some text in the export note and click the Export button.
+  - A file should be downloaded.
+  - The popup should be closed.
+
+  Import the exported file again. Check all checkboxes in the import preview.
+  - Import should be successful
+  - A message with 3 lines should be displayed: Imported sidebars/widgets/settings
+
+  Add a new widget to any sidebar.
+  - There should be 2 buttons next to the save button: "Clone" and "Visibility"
+
+  In the widget click the save button
+  - Loading animation is left of the buttons.
+  - After saving the buttons are still visible.
+
+  Click the Clone button.
+  - Creates a new widget in same sidebar with identical settings as current widget.
+  - The current and new widgets have a new link-icon left of the the title.
+  Change anything in the current widget and save.
+  - The cloned widget should also update and display the same change
+  Click the icon in the title and save.
+  - When clicking the icon the icon will show a broken link.
+  - After saving the icon will disappear from both widgets.
+  - Any changes made to a widget should not change the other widget anymore.
+
+  Click visibility button.
+  - On every click a new section will be displayed/hidden again.
+  Open visibility section and click the plus icon. Choose post-type.
+  - A new section is displayed showing a multi-select list with all post types.
+  Select all post types and save
+  - After saving the visibility section is still displayed
+  - The selected post types are still visible/selected.
+
+
+--------------------------------------------------------------------------------
+
+2. Test FREE version
+Create a new, empty WordPress installation
+
+Tests 1.1 - 1.10 are same as in Pro plugin
+
+1.11 Pro features
+  - The widgets section does _NOT_ contain a WPMU Dashboard notification
+
+  In widget section open the export/import popup
+  - The form should be covered by semi-transparent layer, buttons cannot be clicked.
+  - There should be a note stating that this is a pro feature.
+  - There should a link opening a new tab and displaying this page:
+    http://premium.wpmudev.org/project/custom-sidebars-pro/
+
+  Add a new widget to any sidebar.
+  - There should be 2 semi-transparent buttons "Clone" and "Visibility"
+  - Buttons have same position as in pro plugin
+  - On mouse contact a link should be displayed opening a new tab to this URL:
+    http://premium.wpmudev.org/project/custom-sidebars-pro/
+
+  In the widget click the save button
+  - Loading animation is left of the buttons.
+  - After saving the buttons are still visible.
+
+--------------------------------------------------------------------------------
+
+3. Upgrade from FREE to PRO
+Use the WordPress installation from test 2.
+(make sure there is custom sidebar data from the previous test)
+Then replace the free plugin with the pro plugin.
+
+3.1 Widget section
+  - After update the widgets section shows a WPMU Dashboard notification.
+  - Check the widget section if all your data is still displayed.
+  - Confirm that data is identical to the data you entered with free version.
+
+--------------------------------------------------------------------------------
+
+4. Upgrade from 1.5 to current free plugin
+Create a new, empty WordPress installation
+Install the free plugin version 1.5
+Enter some test data in all sections
+Replace the plugin with the current free plugin version
+
+4.1 Widget section
+  - Check the widget section if all your data is still displayed.
+  - Confirm that data is identical to the data you entered with old version.
+
+--------------------------------------------------------------------------------
+
+5. Installation with demo content
+Create a new, empty WordPress installation
+Import the demo data xml file
+Now repeat test case 1 (install the plugin AFTER the data import!)
+
+--------------------------------------------------------------------------------
+
+6. Multisite installation
+Create a new, empty Mulipsite installation
+Add 2 demo sites
+Run test case 1 on both installations.
+
+--------------------------------------------------------------------------------
