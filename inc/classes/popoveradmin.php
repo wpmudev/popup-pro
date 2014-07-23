@@ -19,7 +19,7 @@ if(!class_exists('popoveradmin')) {
 			$this->db =& $wpdb;
 
 			foreach($this->tables as $table) {
-				$this->$table = popover_db_prefix($this->db, $table);
+				$this->$table = IncPopupDatabase::db_prefix($table);
 			}
 
 			add_action( 'admin_menu', array(&$this, 'add_menu_pages' ) );
@@ -33,59 +33,8 @@ if(!class_exists('popoveradmin')) {
 			// Ajax calls
 			add_action( 'wp_ajax_popover_update_order', array(&$this, 'ajax_update_popover_order') );
 
-			$installed = get_option('popover_installed', false);
-
-			if($installed === false || $installed != $this->build) {
-				$this->install();
-
-				update_option('popover_installed', $this->build);
-			}
-
-		}
-
-		function popoveradmin() {
-			$this->__construct();
-		}
-
-		function install() {
-
-			$charset_collate = '';
-
-			if ( ! empty($this->db->charset) ) {
-				$charset_collate = "DEFAULT CHARACTER SET " . $this->db->charset;
-			}
-
-			if ( ! empty($this->db->collate) ) {
-				$charset_collate .= " COLLATE " . $this->db->collate;
-			}
-
-			if($this->db->get_var( "SHOW TABLES LIKE '" . $this->popover . "' ") != $this->popover) {
-				 $sql = "CREATE TABLE `" . $this->popover . "` (
-				  	`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-					  `popover_title` varchar(250) DEFAULT NULL,
-					  `popover_content` text,
-					  `popover_settings` text,
-					  `popover_order` bigint(20) DEFAULT '0',
-					  `popover_active` int(11) DEFAULT '0',
-					  PRIMARY KEY (`id`)
-					) $charset_collate;";
-
-				$this->db->query($sql);
-
-			}
-
-			// Add in IP cache table
-			if($this->db->get_var( "SHOW TABLES LIKE '" . $this->popover_ip_cache . "' ") != $this->popover_ip_cache) {
-				 $sql = "CREATE TABLE `" . $this->popover_ip_cache . "` (
-				  	`IP` varchar(12) NOT NULL DEFAULT '',
-					  `country` varchar(2) DEFAULT NULL,
-					  `cached` bigint(20) DEFAULT NULL,
-					  PRIMARY KEY (`IP`),
-					  KEY `cached` (`cached`)
-					) $charset_collate;";
-
-				$this->db->query($sql);
-
+			if ( ! IncPopupDatabase::db_is_current() ) {
+				IncPopupDatabase::instance()->db_update();
 			}
 
 		}
@@ -252,8 +201,8 @@ if(!class_exists('popoveradmin')) {
 			if(isset($_GET['action']) && in_array($_GET['action'], array('edit', 'add'))) {
 				$this->add_admin_header_popover();
 			} else {
-				wp_enqueue_script('popoverdragadminjs', PO_JS_URL . 'jquery.tablednd_0_5.min.js', array('jquery'), $this->build);
-				wp_enqueue_script('popoveradminjs', PO_JS_URL . 'popovermenu.min.js', array('jquery', 'popoverdragadminjs' ), $this->build);
+				wp_enqueue_script('popoverdragadminjs', PO_JS_URL . 'jquery.tablednd_0_5.min.js', array('jquery'), PO_BUILD);
+				wp_enqueue_script('popoveradminjs', PO_JS_URL . 'popovermenu.min.js', array('jquery', 'popoverdragadminjs' ), PO_BUILD);
 
 				wp_localize_script('popoveradminjs', 'popover', array(	'ajaxurl'		=>	admin_url( 'admin-ajax.php' ),
 																		'ordernonce'	=>	wp_create_nonce('popover_order'),
@@ -261,7 +210,7 @@ if(!class_exists('popoveradmin')) {
 																		'deletepopover'	=>	__('Are you sure you want to delete this Pop Over?','popover')
 																	));
 
-				wp_enqueue_style('popoveradmincss', PO_CSS_URL . 'popovermenu.css', array(), $this->build);
+				wp_enqueue_style('popoveradmincss', PO_CSS_URL . 'popovermenu.css', array(), PO_BUILD);
 
 				// Check for transfer
 				if(isset($_GET['transfer'])) {
@@ -370,12 +319,12 @@ if(!class_exists('popoveradmin')) {
 
 			global $wp_version;
 
-			wp_enqueue_script('popoveradminjs', PO_JS_URL . 'popoveradmin.min.js', array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ), $this->build);
+			wp_enqueue_script('popoveradminjs', PO_JS_URL . 'popoveradmin.min.js', array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ), PO_BUILD);
 
 			if(version_compare( preg_replace('/-.*$/', '', $wp_version), "3.3", '<')) {
-				wp_enqueue_style('popoveradmincss', PO_CSS_URL . 'popoveradmin.css', array('widgets'), $this->build);
+				wp_enqueue_style('popoveradmincss', PO_CSS_URL . 'popoveradmin.css', array('widgets'), PO_BUILD);
 			} else {
-				wp_enqueue_style('popoveradmincss', PO_CSS_URL . 'popoveradmin.css', array(), $this->build);
+				wp_enqueue_style('popoveradmincss', PO_CSS_URL . 'popoveradmin.css', array(), PO_BUILD);
 			}
 
 			$this->update_admin_header_popover();

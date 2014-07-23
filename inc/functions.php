@@ -1,22 +1,6 @@
 <?php
 
-function popover_helpimage( $image ) {
-	echo "<img src='" . PO_HELP_URL . 'img/' . $image . "' />";
-}
 
-function popover_db_prefix(&$wpdb, $table) {
-
-	if( defined('PO_GLOBAL') && PO_GLOBAL == true ) {
-		if(!empty($wpdb->base_prefix)) {
-			return $wpdb->base_prefix . $table;
-		} else {
-			return $wpdb->prefix . $table;
-		}
-	} else {
-		return $wpdb->prefix . $table;
-	}
-
-}
 
 function get_popover_addons() {
 	if ( is_dir( PO_INC_DIR . 'addons' ) ) {

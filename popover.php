@@ -1,12 +1,12 @@
 <?php
 /*
-Plugin Name: Popover plugin
+Plugin Name: Pop Up!
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Allows you to display a fancy popup (powered as a popover!) to visitors sitewide or per blog, a *very* effective way of advertising a mailing list, special offer or running a plain old ad.
-Version:     4.5.4-BETA-3
+Version:     4.6-BETA
 Author:      WPMU DEV
 Author URI:  http://premium.wpmudev.org
-Textdomain:  inc-popups
+Textdomain:  popover
 WDP ID:      123
 
 Copyright 2007-2013 Incsub (http://incsub.com)
@@ -28,8 +28,12 @@ Contributors - Marko Miljus (Incsub), Ve Bailovity (Incsub)
 
 $something_fishy = false;
 if ( ! defined( 'PO_LANG' ) ) {
-	// used for more readable i18n functions: __( 'text', CSB_LANG );
-	define( 'PO_LANG', 'inc-popups' );
+	// used for more readable i18n functions: __( 'text', PO_LANG );
+	define( 'PO_LANG', 'popover' );
+
+	// The current DB/build version. Not the same as the plugin version!
+	// Increase this when DB structure changes, migration code is required, etc.
+	define( 'PO_BUILD', 6 );
 
 	$plugin_dir = trailingslashit( dirname( __FILE__ ) );
 	$plugin_dir_rel = trailingslashit( dirname( plugin_basename( __FILE__ ) ) );
@@ -49,9 +53,11 @@ if ( ! defined( 'PO_LANG' ) ) {
 	define( 'PO_HELP_URL', $plugin_url . 'help/' );
 
 	require_once( PO_INC_DIR . 'config.php');
-	require_once( PO_INC_DIR . 'functions.php');
 
 	if ( is_admin() ) {
+		// Defines class "IncPopup"
+		require_once( PO_INC_DIR . 'class-popup-admin.php');
+
 		require_once( PO_INC_DIR . 'class_wd_help_tooltips.php');
 		require_once( PO_INC_DIR . 'classes/popover.help.php');
 		require_once( PO_INC_DIR . 'classes/popoveradmin.php');
@@ -60,6 +66,9 @@ if ( ! defined( 'PO_LANG' ) ) {
 		$popover = new popoveradmin();
 		$popoverajax = new popoverajax();
 	} else {
+		// Defines class "IncPopup"
+		require_once( PO_INC_DIR . 'class-popup-public.php');
+
 		// Adding ajax so we don't have to duplicate checking functionality in the public class
 		// NOTE: it's not being used for ajax here
 		require_once( PO_INC_DIR . 'classes/popoverajax.php');
@@ -72,6 +81,9 @@ if ( ! defined( 'PO_LANG' ) ) {
 	TheLib::translate_plugin( PO_LANG, PO_LANG_DIR );
 
 	load_popover_addons();
+
+	// Initialize the plugin as soon as we have identified the current user.
+	add_action( 'set_current_user', array( 'IncPopup', 'instance' ) );
 } else {
 	$something_fishy = true;
 }
@@ -116,4 +128,3 @@ if ( is_admin() ) {
 		require_once PO_INC_DIR . 'external/wpmudev-dashboard/wpmudev-dash-notification.php';
 	}
 }
-

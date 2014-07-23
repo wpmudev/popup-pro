@@ -4,7 +4,6 @@ if (!class_exists('popoverpublic')) {
     class popoverpublic {
 
         var $mylocation = '';
-        var $build = 5;
         var $db;
         var $tables = array('popover', 'popover_ip_cache');
         var $popover;
@@ -19,7 +18,7 @@ if (!class_exists('popoverpublic')) {
             $this->db = & $wpdb;
 
             foreach ($this->tables as $table) {
-                $this->$table = popover_db_prefix($this->db, $table);
+                $this->$table = IncPopupDatabase::db_prefix($table);
             }
 
             // Adds the JS to the themes header - this replaces all previous methods of loading
@@ -28,57 +27,13 @@ if (!class_exists('popoverpublic')) {
             $directories = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
             $this->mylocation = $directories[count($directories) - 1];
 
-            $installed = get_option('popover_installed', false);
-
-            if ($installed === false || $installed != $this->build) {
-                $this->install();
-
-                update_option('popover_installed', $this->build);
+            if ( ! IncPopupDatabase::db_is_current() ) {
+                IncPopupDatabase::instance()->db_update();
             }
         }
 
         function popoverpublic() {
             $this->__construct();
-        }
-
-        function install() {
-
-            $charset_collate = '';
-
-            if (!empty($this->db->charset)) {
-                $charset_collate = "DEFAULT CHARACTER SET " . $this->db->charset;
-            }
-
-            if (!empty($this->db->collate)) {
-                $charset_collate .= " COLLATE " . $this->db->collate;
-            }
-
-            if ($this->db->get_var("SHOW TABLES LIKE '" . $this->popover . "' ") != $this->popover) {
-                $sql = "CREATE TABLE `" . $this->popover . "` (
-				  	`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-					  `popover_title` varchar(250) DEFAULT NULL,
-					  `popover_content` text,
-					  `popover_settings` text,
-					  `popover_order` bigint(20) DEFAULT '0',
-					  `popover_active` int(11) DEFAULT '0',
-					  PRIMARY KEY (`id`)
-					) $charset_collate;";
-
-                $this->db->query($sql);
-            }
-
-            // Add in IP cache table
-            if ($this->db->get_var("SHOW TABLES LIKE '" . $this->popover_ip_cache . "' ") != $this->popover_ip_cache) {
-                $sql = "CREATE TABLE `" . $this->popover_ip_cache . "` (
-				  	`IP` varchar(12) NOT NULL DEFAULT '',
-					  `country` varchar(2) DEFAULT NULL,
-					  `cached` bigint(20) DEFAULT NULL,
-					  PRIMARY KEY (`IP`),
-					  KEY `cached` (`cached`)
-					) $charset_collate;";
-
-                $this->db->query($sql);
-            }
         }
 
         function initialise_plugin() {
@@ -169,7 +124,7 @@ if (!class_exists('popoverpublic')) {
                     if (defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION) {
                         wp_enqueue_script('jquery');
 
-                        wp_enqueue_script('popoverlegacyjs', PO_JS_URL . 'popoverlegacy.min.js', array('jquery'), $this->build);
+                        wp_enqueue_script('popoverlegacyjs', PO_JS_URL . 'popoverlegacy.min.js', array('jquery'), PO_BUILD);
                         wp_localize_script('popoverlegacyjs', 'popover', array('divname' => $this->thepopover['name'],
                             'usejs' => $this->thepopover['usejs'],
                             'delay' => $this->thepopover['delay']

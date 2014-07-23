@@ -25,7 +25,7 @@ if(!class_exists('popoverajax')) {
 			$this->db =& $wpdb;
 
 			foreach($this->tables as $table) {
-				$this->$table = popover_db_prefix($this->db, $table);
+				$this->$table = IncPopupDatabase::db_prefix($table);
 			}
 
 			add_action('init', array(&$this, 'initialise_ajax'), 99);
