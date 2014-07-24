@@ -1,11 +1,12 @@
 <?php
 /*
-Addon Name: XProfile Fields rule
+Addon Name:  XProfile Fields rule
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Adds advanced URL matching with regex support.
-Author: Ve (Incsub)
+Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
-Version: 1.0
+Type:        Rule
+Version:     1.0
 */
 
 abstract class Popover_Rules_Rule_XprofileValue extends Popover_Rules_Rule {
@@ -18,7 +19,7 @@ abstract class Popover_Rules_Rule_XprofileValue extends Popover_Rules_Rule {
 
 	public function apply_rule ($show, $popover) {
 		if (!function_exists('xprofile_get_field_data')) return $show;
-		
+
 		$data = !empty($popover->popover_settings[$this->_id]) ? $popover->popover_settings[$this->_id] : false;
 		if (empty($data)) return $show;
 
@@ -43,7 +44,7 @@ abstract class Popover_Rules_Rule_XprofileValue extends Popover_Rules_Rule {
 
 	public function get_admin_interface ($data) {
 		if (!class_exists('BP_XProfile_Group')) {
-			return '<div class="error below-h2"><p>' . 
+			return '<div class="error below-h2"><p>' .
 				__('You need BuddyPress XProfile fields component active.', 'popover') .
 			'</p></div>';
 		}
@@ -70,9 +71,9 @@ abstract class Popover_Rules_Rule_XprofileValue extends Popover_Rules_Rule {
 			$sel_fld .= '</optgroup>';
 		}
 		$sel_fld .= '</select>';
-		$markup .= '<label for="' . $this->_get_field_id("fields") . '">' . 
+		$markup .= '<label for="' . $this->_get_field_id("fields") . '">' .
 			esc_html(__('Field:', 'popover')) . '&nbsp;' .
-			$sel_fld . 
+			$sel_fld .
 		'</label>';
 
 		$rev_fld = '<select name="' . $this->_get_field_name("correlation") . '">';
@@ -104,7 +105,7 @@ abstract class Popover_Rules_Rule_XprofileValue extends Popover_Rules_Rule {
 }
 
 class Popover_Rules_Rule_NotXprofileValue extends Popover_Rules_Rule_XprofileValue {
-	
+
 	const RULE = 'not-xprofile_value';
 
 	public static function add () {
@@ -128,7 +129,7 @@ class Popover_Rules_Rule_NotXprofileValue extends Popover_Rules_Rule_XprofileVal
 }
 
 class Popover_Rules_Rule_OnXprofileValue extends Popover_Rules_Rule_XprofileValue {
-	
+
 	const RULE = 'xprofile_value';
 
 	public static function add () {

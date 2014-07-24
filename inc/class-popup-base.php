@@ -2,6 +2,8 @@
 // Load dependencies.
 require_once PO_INC_DIR . 'class-popup-item.php';
 require_once PO_INC_DIR . 'class-popup-database.php';
+require_once PO_INC_DIR . 'class-popup-posttype.php';
+
 require_once PO_INC_DIR . 'functions.php';
 
 /**
@@ -20,8 +22,13 @@ abstract class IncPopupBase {
 	 */
 	protected function __construct() {
 		$this->db = IncPopupDatabase::instance();
-	}
 
+		// Register the popup post type.
+		add_action(
+			'init',
+			array( 'IncPopupPosttype', 'instance' )
+		);
+	}
 
 	/**
 	 * Returns an IMG tag that displays the defined image.

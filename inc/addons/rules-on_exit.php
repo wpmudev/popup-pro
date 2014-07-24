@@ -1,11 +1,12 @@
 <?php
 /*
-Addon Name: Show on exit rule
-Plugin URI: http://premium.wpmudev.org/project/the-pop-over-plugin/
+Addon Name:  Show on exit rule
+Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Hides popover until the user is about to leave the page.
-Author: Ve (Incsub)
-Author URI: http://premium.wpmudev.org
-Version: 1.0
+Author:      Ve (Incsub)
+Author URI:  http://premium.wpmudev.org
+Type:        Rule
+Version:     1.0
 */
 
 class Popover_Rules_Rule_OnExit extends Popover_Rules_Rule {
@@ -49,7 +50,7 @@ class Popover_Rules_Rule_OnExit extends Popover_Rules_Rule {
 	public function get_admin_interface ($data) {
 		$data = wp_parse_args($data[$this->_id], $this->_defaults);
 		$markup = '';
-		
+
 		$markup .= '<input type="hidden" name="' . $this->_get_field_name("fire_on_exit") . '" value="' . esc_attr($data["fire_on_exit"]) . '" />';
 		$markup .= '<p><em><small>' . __('The popover won\'t be shown until the user tries to leave the page', 'popover') . '</small></em></p>';
 
@@ -105,7 +106,7 @@ class Popover_Rules_OnExit {
 $(document).on("popover-init", function (e, popover, data) {
 	var data = data || {};
 	if (!data.wait_for_event || !data.fire_on_exit) return true;
-	
+
 	$(document).one("mouseleave", function () {
 		popover.resolve();
 		return false;

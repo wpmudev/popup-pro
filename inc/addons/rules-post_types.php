@@ -1,11 +1,12 @@
 <?php
 /*
-Addon Name: Post Types rules
+Addon Name:  Post Types rules
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Adds post type-related rules.
-Author: Ve (Incsub)
+Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
-Version: 1.0
+Type:        Rule
+Version:     1.0
 */
 
 
@@ -76,7 +77,7 @@ abstract class Popover_Rules_Rule_PostTypes extends Popover_Rules_Rule {
 			$markup .= "<input type='checkbox' id='{$field_id}' name='{$field_name}' {$checked} value='{$url}' />" .
 				'&nbsp;' .
 				"<label for='{$field_id}'>{$label}</label>" .
-			'<br />';	
+			'<br />';
 		}
 		$markup .= '</fieldset>';
 
@@ -85,7 +86,7 @@ abstract class Popover_Rules_Rule_PostTypes extends Popover_Rules_Rule {
 }
 
 class Popover_Rules_Rule_NotPostTypes extends Popover_Rules_Rule_PostTypes {
-	
+
 	const RULE = 'not-post_types';
 
 	public static function add () {
@@ -109,7 +110,7 @@ class Popover_Rules_Rule_NotPostTypes extends Popover_Rules_Rule_PostTypes {
 }
 
 class Popover_Rules_Rule_OnPostTypes extends Popover_Rules_Rule_PostTypes {
-	
+
 	const RULE = 'post_types';
 
 	public static function add () {

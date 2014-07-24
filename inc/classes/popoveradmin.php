@@ -2085,7 +2085,7 @@ if(!class_exists('popoveradmin')) {
 											<option value="footer" <?php if($settings['loadingmethod'] == 'footer') echo "selected='selected'"; ?>><?php _e('Page Footer','popover'); ?></option>
 											<option value="external" <?php if($settings['loadingmethod'] == 'external') echo "selected='selected'"; ?>><?php _e('External Load','popover'); ?></option>
 											<option value="frontloading" <?php if($settings['loadingmethod'] == 'frontloading') echo "selected='selected'"; ?>><?php _e('Custom Load','popover'); ?></option>
-											<?php do_action('popover-settings-loading_method', $settings['loadingmethod']); ?>
+											<?php /*do_action('popover-settings-loading_method', $settings['loadingmethod']);*/ ?>
 										</select>
 									</td>
 								</tr>

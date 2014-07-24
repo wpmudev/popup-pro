@@ -1,11 +1,12 @@
 <?php
 /*
-Addon Name: Advanced URL rules
+Addon Name:  Advanced URL rules
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Adds advanced URL matching with regex support.
-Author: Ve (Incsub)
+Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
-Version: 1.0
+Type:        Rule
+Version:     1.0
 */
 
 abstract class Popover_Rules_Rule_AdvancedUrl extends Popover_Rules_Rule {
@@ -37,7 +38,7 @@ abstract class Popover_Rules_Rule_AdvancedUrl extends Popover_Rules_Rule {
 	public function get_admin_interface ($data) {
 		$data = wp_parse_args($data[$this->_id], $this->_defaults);
 		$markup = '';
-		
+
 		$markup .= '<textarea class="widefat" name="' . $this->_get_field_name("urls") . '">' .
 			esc_textarea(join("\n", $data["urls"])) .
 		'</textarea>';
@@ -64,7 +65,7 @@ abstract class Popover_Rules_Rule_AdvancedUrl extends Popover_Rules_Rule {
 }
 
 class Popover_Rules_Rule_NotAdvancedUrl extends Popover_Rules_Rule_AdvancedUrl {
-	
+
 	const RULE = 'not-advanced_urls';
 
 	public static function add () {
@@ -88,7 +89,7 @@ class Popover_Rules_Rule_NotAdvancedUrl extends Popover_Rules_Rule_AdvancedUrl {
 }
 
 class Popover_Rules_Rule_OnAdvancedUrl extends Popover_Rules_Rule_AdvancedUrl {
-	
+
 	const RULE = 'advanced_urls';
 
 	public static function add () {

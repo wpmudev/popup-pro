@@ -5,6 +5,7 @@ Plugin URI:  http://gist.github.com/378450
 Description: Tests for the existence and functionality of wp_head and wp_footer in the active theme
 Author:      Matt Martz
 Author URI:  http://sivel.net/
+Type:        Misc
 Version:     1.0
 
 	Copyright (c) 2010 Matt Martz (http://sivel.net/)
@@ -70,7 +71,7 @@ function check_head_footer() {
 
 		// If we found errors with the existence of wp_head or wp_footer hook into admin_notices to complain about it
 		if ( ! empty( $head_footer_errors ) )
-			add_action ( 'admin_notices', 'test_head_footer_notices' );
+			add_action( 'admin_notices', 'test_head_footer_notices' );
 	}
 }
 

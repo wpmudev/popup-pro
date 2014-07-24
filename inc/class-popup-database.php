@@ -185,7 +185,7 @@ class IncPopupDatabase {
 		);
 
 		// Save the new DB version to options table.
-		//update_option( 'popover_installed', PO_BUILD );
+		update_option( 'popover_installed', PO_BUILD );
 	}
 
 }

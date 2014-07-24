@@ -1,11 +1,12 @@
 <?php
 /*
-Addon Name: Show on click rule
-Plugin URI: http://premium.wpmudev.org/project/the-pop-over-plugin/
+Addon Name:  Show on click rule
+Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Hides popover initially and shows it on click
-Author: Ve (Incsub)
-Author URI: http://premium.wpmudev.org
-Version: 1.0
+Author:      Ve (Incsub)
+Author URI:  http://premium.wpmudev.org
+Type:        Rule
+Version:     1.0
 */
 
 class Popover_Rules_Rule_OnClick extends Popover_Rules_Rule {
@@ -51,14 +52,14 @@ class Popover_Rules_Rule_OnClick extends Popover_Rules_Rule {
 	public function get_admin_interface ($data) {
 		$data = wp_parse_args($data[$this->_id], $this->_defaults);
 		$markup = '';
-		
+
 		$markup .= '<label for="' . $this->_get_field_id("selector") . '">' . __('Element selector:', 'popover') . '</label> ';
 		$markup .= '<input type="text" name="' . $this->_get_field_name("selector") . '" id="' . $this->_get_field_id("selector") . '" value="' . esc_attr($data["selector"]) . '" />';
 		$markup .= '<p><em><small>' . __('The popover won\'t be shown until the user clicks on an element matching this selector', 'popover') . '</small></em></p>';
 
-		$markup .= '<label for="' . $this->_get_field_id("multi_open") . '">' . 
+		$markup .= '<label for="' . $this->_get_field_id("multi_open") . '">' .
 				'<input type="checkbox" name="' . $this->_get_field_name("multi_open") . '" id="' . $this->_get_field_id("multi_open") . '" value="1" ' . checked($data["multi_open"], true, false) . '" />' .
-			__('Allow multiple opening?', 'popover') . 
+			__('Allow multiple opening?', 'popover') .
 		'</label> ';
 		$markup .= '<p><em><small>' . __('If this option is enabled, the message will open every time the selector element is clicked.', 'popover') . '</small></em></p>';
 
@@ -110,13 +111,13 @@ class Popover_Rules_OnClick {
 $(document).on("popover-init", function (e, popover, data) {
 	var data = data || {};
 	if (!data.wait_for_event || !data.click_selector) return true;
-	
+
 	//var el = $(data.click_selector);
 	//if (!el.length) return false;
 	//el.one("click", function (e) {
-	
+
 	$(document).one("click", data.click_selector, function (e) {
-		popover.resolve();		
+		popover.resolve();
 		return false;
 	});
 });

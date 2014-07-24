@@ -1,11 +1,12 @@
 <?php
 /*
-Addon Name: Anonymous loading method
-Plugin URI: http://premium.wpmudev.org/project/the-pop-over-plugin/
+Addon Name:  Anonymous loading method
+Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Yet another loading method.
-Author: Ve (Incsub)
-Author URI: http://premium.wpmudev.org
-Version: 1.0
+Author:      Ve (Incsub)
+Author URI:  http://premium.wpmudev.org
+Type:        Loading
+Version:     1.0
 */
 
 class Popover_Anonymous_Loading {
@@ -22,7 +23,7 @@ class Popover_Anonymous_Loading {
 	}
 
 	private function _add_hooks () {
-		add_action('popover-settings-loading_method', array($this, 'settings'));
+		add_filter( 'popover-settings-loading_method', array( $this, 'settings' ) );
 		add_action('popover-init-loading_method', array($this, 'init'));
 		add_action('popover-ajax-loading_method', array($this, 'init_ajax'), 10, 2);
 	}
@@ -108,8 +109,13 @@ class Popover_Anonymous_Loading {
 	}
 
 
-	public function settings ($method) {
-		echo '<option value="' . esc_attr(self::METHOD) . '" ' . selected($method, self::METHOD) . '>' . __('Anonymous', 'popover') . '</option>';
+	public function settings ( $loading_methods ) {
+		$loading_methods[] = (object) array(
+			'id'    => self::METHOD,
+			'label' => 'Anonymous',
+			'info'  => '...',
+		);
+		return $loading_methods;
 	}
 
 	public function get_slug () {

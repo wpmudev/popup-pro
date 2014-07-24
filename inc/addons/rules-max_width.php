@@ -1,11 +1,12 @@
 <?php
 /*
-Addon Name: Minimum width rule
-Plugin URI: http://premium.wpmudev.org/project/the-pop-over-plugin/
+Addon Name:  Minimum width rule
+Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Adds screen maximum width rule.
-Author: Ve (Incsub)
-Author URI: http://premium.wpmudev.org
-Version: 1.0
+Author:      Ve (Incsub)
+Author URI:  http://premium.wpmudev.org
+Type:        Rule
+Version:     1.0
 */
 
 class Popover_Rules_Rule_MaxWidth extends Popover_Rules_Rule {
@@ -48,7 +49,7 @@ class Popover_Rules_Rule_MaxWidth extends Popover_Rules_Rule {
 	public function get_admin_interface ($data) {
 		$data = wp_parse_args($data[$this->_id], $this->_defaults);
 		$markup = '';
-		
+
 		$markup .= '<label for="' . $this->_get_field_id("width") . '">' . __('Threshold width:', 'popover') . '</label> ';
 		$markup .= '<input type="text" name="' . $this->_get_field_name("width") . '" id="' . $this->_get_field_id("width") . '" value="' . (int)$data["width"] . '" />px';
 

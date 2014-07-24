@@ -45,6 +45,7 @@ if ( ! defined( 'PO_LANG' ) ) {
 	define( 'PO_HELP_DIR', $plugin_dir . 'help/' );
 	define( 'PO_JS_DIR', $plugin_dir . 'js/' );
 	define( 'PO_CSS_DIR', $plugin_dir . 'css/' );
+	define( 'PO_VIEWS_DIR', $plugin_dir . 'views/' );
 
 	define( 'PO_TPL_URL', $plugin_url . 'css/tpl/' );
 	define( 'PO_JS_URL', $plugin_url . 'js/' );
@@ -53,6 +54,11 @@ if ( ! defined( 'PO_LANG' ) ) {
 	define( 'PO_HELP_URL', $plugin_url . 'help/' );
 
 	require_once( PO_INC_DIR . 'config.php');
+
+	// Include function library
+	if ( file_exists( PO_INC_DIR . 'external/wpmu-lib/core.php' ) ) {
+		require_once PO_INC_DIR . 'external/wpmu-lib/core.php';
+	}
 
 	if ( is_admin() ) {
 		// Defines class "IncPopup"
@@ -86,11 +92,6 @@ if ( ! defined( 'PO_LANG' ) ) {
 	add_action( 'set_current_user', array( 'IncPopup', 'instance' ) );
 } else {
 	$something_fishy = true;
-}
-
-// Include function library
-if ( file_exists( PO_INC_DIR . 'external/wpmu-lib/core.php' ) ) {
-	require_once PO_INC_DIR . 'external/wpmu-lib/core.php';
 }
 
 // Only Pro version: Notify user when a possibly collission is detected.
