@@ -10,7 +10,7 @@ Version:     1.0
 */
 
 
-abstract class Popover_Rules_Rule_Categories extends Popover_Rules_Rule {
+abstract class Popover_Rules_Rule_Categories extends IncPopupRule {
 
 	protected $_defaults = array(
 		"categories" => array(),

@@ -10,7 +10,7 @@ Version:     1.0
 */
 
 
-abstract class Popover_Rules_Rule_PostTypes extends Popover_Rules_Rule {
+abstract class Popover_Rules_Rule_PostTypes extends IncPopupRule {
 
 	protected $_defaults = array(
 		"types" => array(),

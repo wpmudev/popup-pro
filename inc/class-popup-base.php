@@ -3,6 +3,7 @@
 require_once PO_INC_DIR . 'class-popup-item.php';
 require_once PO_INC_DIR . 'class-popup-database.php';
 require_once PO_INC_DIR . 'class-popup-posttype.php';
+require_once PO_INC_DIR . 'class-popup-rule.php';
 
 require_once PO_INC_DIR . 'functions.php';
 

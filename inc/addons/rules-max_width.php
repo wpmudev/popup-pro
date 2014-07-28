@@ -9,7 +9,7 @@ Type:        Rule
 Version:     1.0
 */
 
-class Popover_Rules_Rule_MaxWidth extends Popover_Rules_Rule {
+class Popover_Rules_Rule_MaxWidth extends IncPopupRule {
 
 	const RULE = 'max_width';
 

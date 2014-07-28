@@ -9,7 +9,7 @@ Type:        Rule
 Version:     1.0
 */
 
-class Popover_Rules_Rule_OnClick extends Popover_Rules_Rule {
+class Popover_Rules_Rule_OnClick extends IncPopupRule {
 
 	const RULE = 'on_click';
 

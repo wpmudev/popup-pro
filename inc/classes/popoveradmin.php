@@ -452,7 +452,7 @@ if(!class_exists('popoveradmin')) {
 				$popover['popover_settings']['notincountry'] = $_POST['popovernotincountry'];
 			}
 
-			$popover['popover_settings'] = apply_filters('popover-data-save', $popover['popover_settings']);
+			$popover['popover_settings'] = apply_filters('popup-data-save', $popover['popover_settings']);
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
 			if(isset($_POST['addandactivate'])) {
@@ -539,7 +539,7 @@ if(!class_exists('popoveradmin')) {
 			}
 
 
-			$popover['popover_settings'] = apply_filters('popover-data-save', $popover['popover_settings']);
+			$popover['popover_settings'] = apply_filters('popup-data-save', $popover['popover_settings']);
 			$popover['popover_settings'] = serialize($popover['popover_settings']);
 
 			return $this->db->update( $this->popover, $popover, array( 'id' => $id ) );

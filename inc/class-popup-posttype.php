@@ -71,7 +71,7 @@ class IncPopupPosttype {
 			'label'               => __( 'Pop Up', PO_LANG ),
 			'description'         => __( 'Display Pop Up messages on your website!', PO_LANG ),
 			'labels'              => $labels,
-			'supports'            => array( 'title', 'editor', ),
+			'supports'            => array( '' ),
 			'hierarchical'        => false,
 			'public'              => false,
 			'show_ui'             => true,

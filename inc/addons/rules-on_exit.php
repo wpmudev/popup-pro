@@ -9,7 +9,7 @@ Type:        Rule
 Version:     1.0
 */
 
-class Popover_Rules_Rule_OnExit extends Popover_Rules_Rule {
+class Popover_Rules_Rule_OnExit extends IncPopupRule {
 
 	const RULE = 'on_exit';
 

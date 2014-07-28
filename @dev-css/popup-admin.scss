@@ -1,3 +1,45 @@
+$break_large:     900px;
+$break_small:     600px;
+
+/* ==================  GENERAL STYLES  ================== */
+.post-type-inc_popup {
+	.status-icon {
+		color: #CCC;
+		width: 30px;
+		font-size: 16px;
+		line-height: 20px;
+		height: 20px;
+
+		&:before {
+			content: "\f153";
+		}
+	}
+
+	.status-active .status-icon,
+	.status-publish .status-icon {
+		color: #090;
+		font-size: 30px;
+
+		&:before {
+			content: "\f147";
+		}
+	}
+
+	.status-trash .status-icon {
+		&:before {
+			content: "\f182";
+		}
+	}
+}
+
+select.block,
+textarea.block,
+input.block {
+	margin-left: 0;
+	margin-right: 0;
+	display: block;
+	width: 100%;
+}
 
 /* ==================  ADDON LIST  ================== */
 
@@ -18,6 +60,10 @@
 	tbody th {
 		-webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 		box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+	}
+
+	th.check-column {
+		border-left: 4px solid transparent;
 	}
 
 	.the-name {
@@ -44,6 +90,273 @@
 			font-weight: bold;
 		}
 	}
+}
+
+/* ==================  POPUP LIST  ================== */
+
+.post-type-inc_popup {
+	.view-switch {
+		display: none;
+	}
+
+	.tablenav .alignleft.actions.bulkactions {
+		display: block;
+	}
+
+	.tablenav .alignleft.actions {
+		display: none;
+	}
+
+	.wp-list-table {
+		tbody td,
+		tbody th {
+			-webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+			box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+			padding-top: 15px;
+			padding-bottom: 15px;
+		}
+
+		.column-po_name {
+			width: 300px;
+			@media screen and (max-width: $break_large) {
+				width: 200px;
+			}
+			@media screen and (max-width: $break_small) {
+				width: 40%;
+			}
+
+			.the-title {
+				display: block;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				font-weight: bold;
+			}
+		}
+
+		.column-po_cond {
+			@media screen and (max-width: $break_small) {
+				width: 60%;
+			}
+		}
+
+		.column-po_state {
+			width: 60px;
+			text-align: center;
+		}
+
+		.rule {
+			background: #999;
+			color: #FFF;
+			padding: 1px 6px;
+			border-radius: 3px;
+			margin: 0 4px 1px 0;
+			font-size: 12px;
+			float: left;
+		}
+	}
+}
+
+
+/* ==================  EDITOR  ================== */
+
+
+.sticky-submit {
+	#submitdiv.closed,
+	#submitdiv {
+
+		position: fixed;
+		right: 0;
+		z-index: 10;
+		top: 0;
+		left: 160px;
+		box-shadow: 0 5px 7px -3px rgba(0,0,0,0.2);
+		background: #F5F5F5;
+
+		.inside {
+			display: block;
+		}
+
+		.hndle,
+		.handlediv {
+			display: none;
+		}
+
+		#misc-publishing-actions {
+			display: none;
+		}
+
+		.sticky-actions {
+			padding: 10px;
+		}
+
+		.delete-action {
+			float: left;
+		}
+
+		.save-action,
+		.preview-action,
+		.publishing-action {
+			float: right;
+			margin-right: 10px;
+		}
+	}
+
+	&.folded #submitdiv {
+		left: 36px;
+	}
+
+	#post-body {
+		margin-top: 75px;
+	}
+}
+
+.wp-toolbar .sticky-submit {
+	#submitdiv {
+		top: 32px;
+	}
+
+	#post-body {
+		margin-top: 105px;
+	}
+}
+
+#submitdiv {
+	.preview-action .spinner,
+	.publishing-action .spinner,
+	.save-action .spinner {
+		float: left;
+	}
+
+	.submitdelete.disabled {
+		color: #AAA !important;
+		cursor: default;
+	}
+
+	.delete-action {
+		line-height: 28px;
+		vertical-align: middle;
+		text-align: left;
+		float: left;
+	}
+
+	.publishing-action {
+		text-align: right;
+		float: right;
+		line-height: 23px;
+	}
+}
+
+.post-type-inc_popup #post {
+
+	label {
+		cursor: default;
+	}
+
+	#post-body-content {
+		height: 75px;
+	}
+
+	.columns-2 #postbox-container-1 {
+		padding-top: 75px;
+	}
+
+	#normal-sortables {
+		min-height: 0;
+	}
+
+	#titlediv {
+		label {
+			font-weight: bold;
+			margin: 5px 0;
+			display: block;
+		}
+
+		#popup_name {
+			width: 100%;
+		}
+	}
+
+	.postbox-container {
+		#meta-appearance {
+			display: inline-block;
+			width: 49%;
+		}
+
+		#meta-behavior {
+			float: right;
+			width: 49%;
+		}
+
+		#meta-content,
+		#meta-rules {
+			clear: both;
+		}
+	}
+
+	.content-main {
+		margin-right: 270px;
+	}
+
+	.content-image {
+		position: absolute;
+		width: 250px;
+		top: 0;
+		right: 12px;
+
+		.dropzone {
+			height: 224px;
+			width: 224px;
+			line-height: 224px;
+		}
+	}
+
+	.add_image {
+		padding-left: 5px;
+
+		.add-image-icon:before {
+			color: #888;
+		}
+	}
+
+	h3.main-content {
+		padding-bottom: 10px;
+	}
+
+	.all-rules-box,
+	.active-rules-box {
+		border: 1px solid #E5E5E5;
+		height: 250px;
+		padding: 10px;
+		overflow: scroll;
+		overflow-x: hidden;
+		overflow-y: scroll;
+	}
+
+	.all-rules,
+	.active-rules {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		& > li {
+			padding: 5px;
+			margin: 0 0 10px;
+			line-height: 20px;
+			min-height: 30px;
+			border: 1px solid #E5E5E5;
+
+			&:last-child {
+				margin: 0;
+			}
+		}
+	}
+}
+
+#poststuff .postbox label h3 {
+	border: 0;
+	padding: 0;
+	cursor: default;
 }
 
 /* ==================  IMPORTED  ================== */

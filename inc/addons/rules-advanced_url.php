@@ -9,7 +9,7 @@ Type:        Rule
 Version:     1.0
 */
 
-abstract class Popover_Rules_Rule_AdvancedUrl extends Popover_Rules_Rule {
+abstract class Popover_Rules_Rule_AdvancedUrl extends IncPopupRule {
 
 	protected $_defaults = array(
 		"urls" => array(),

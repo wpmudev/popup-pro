@@ -103,9 +103,10 @@ class IncPopupDatabase {
 				'categories' => 'category', 'not-categories' => 'no_category',
 				'post_types' => 'posttype', 'not-post_types' => 'no_posttype',
 				'xprofile_value' => 'xprofile', 'not-xprofile_value' => 'no_xprofile',
+				'supporter' => 'prosite',
 				'searchengine' => 'searchengine',
-				'commented' => 'commented',
-				'internal' => 'internal',
+				'commented' => 'no_comment',
+				'internal' => 'no_internal',
 				'referrer' => 'referrer',
 				'count' => 'count',
 				'max_width' => 'max_width',
@@ -186,6 +187,24 @@ class IncPopupDatabase {
 
 		// Save the new DB version to options table.
 		update_option( 'popover_installed', PO_BUILD );
+	}
+
+	/**
+	 * Returns a popup object.
+	 *
+	 * @since  4.6
+	 * @param  int $post_id ID of the Pop Up
+	 * @return IncPopupItem
+	 */
+	public function get( $post_id ) {
+		$post_id = absint( $post_id );
+		$popup = wp_cache_get( $post_id, IncPopupItem::POST_TYPE );
+
+		if ( false === $popup ) {
+			$popup = new IncPopupItem( $post_id );
+			wp_cache_set( $post_id, $popup, IncPopupItem::POST_TYPE );
+		}
+		return $popup;
 	}
 
 }
