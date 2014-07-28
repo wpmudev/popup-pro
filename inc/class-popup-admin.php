@@ -65,33 +65,6 @@ class IncPopup extends IncPopupBase {
 			'load-inc_popup_page_addons',
 			array( 'IncPopup', 'handle_addons_update' )
 		);
-
-		// -- POP UP LIST -----------------------
-
-		// Customize the columns in the popup list.
-		add_filter(
-			'manage_' . IncPopupItem::POST_TYPE . '_posts_columns',
-			array( 'IncPopup', 'post_columns' )
-		);
-
-		// Returns the content for the custom columns.
-		add_action(
-			'manage_' . IncPopupItem::POST_TYPE . '_posts_custom_column',
-			array( 'IncPopup', 'post_column_content' ),
-			10, 2
-		);
-
-		// Defines the Quick-Filters above the popup table
-		add_filter(
-			'views_edit-' . IncPopupItem::POST_TYPE,
-			array( 'IncPopup', 'post_views' )
-		);
-
-		// Defines the Bulk-Actions (available in the select box)
-		add_filter(
-			'bulk_actions-edit-' . IncPopupItem::POST_TYPE,
-			array( 'IncPopup', 'post_actions' )
-		);
 	}
 
 	/**
@@ -105,6 +78,47 @@ class IncPopup extends IncPopupBase {
 			TheLib::add_ui( PO_CSS_URL . 'popup-admin.css' );
 			TheLib::add_ui( PO_JS_URL . 'popup-admin.min.js' );
 
+			// -- POP UP LIST -----------------------
+
+			// Customize the columns in the popup list.
+			add_filter(
+				'manage_' . IncPopupItem::POST_TYPE . '_posts_columns',
+				array( 'IncPopup', 'post_columns' )
+			);
+
+			// Returns the content for the custom columns.
+			add_action(
+				'manage_' . IncPopupItem::POST_TYPE . '_posts_custom_column',
+				array( 'IncPopup', 'post_column_content' ),
+				10, 2
+			);
+
+			// Defines the Quick-Filters above the popup table
+			add_filter(
+				'views_edit-' . IncPopupItem::POST_TYPE,
+				array( 'IncPopup', 'post_views' )
+			);
+
+			// Defines the Bulk-Actions (available in the select box)
+			add_filter(
+				'bulk_actions-edit-' . IncPopupItem::POST_TYPE,
+				array( 'IncPopup', 'post_actions' )
+			);
+
+			// Add our own Pop Up update messages.
+			add_filter(
+				'bulk_post_updated_messages',
+				array( 'IncPopup', 'post_update_messages' ),
+				10, 2
+			);
+
+			// Process custom actions in the post-list (e.g. activate/deactivate)
+			add_action(
+				'load-edit.php',
+				array( 'IncPopup', 'post_list_edit' ),
+				1
+			);
+
 			// -- POP UP EDITOR -----------------
 
 			// Display the "Pop Up Title" field in top of the form.
@@ -117,6 +131,13 @@ class IncPopup extends IncPopupBase {
 			add_action(
 				'add_meta_boxes_' . IncPopupItem::POST_TYPE,
 				array( 'IncPopup', 'form_metabox' )
+			);
+
+			// Add custom meta-boxes to the popup-editor
+			add_action(
+				'save_post_' . IncPopupItem::POST_TYPE,
+				array( 'IncPopup', 'form_save' ),
+				10, 3
 			);
 		}
 	}
@@ -342,13 +363,94 @@ class IncPopup extends IncPopupBase {
 
 		switch ( $column ) {
 			case 'po_name':
-				if ( 'trash' == $popup->status ) : ?>
-					<span class="the-title"><?php echo esc_html( $popup->name ); ?></span>
-				<?php else : ?>
+				$can_edit = current_user_can( 'edit_post', $post_id ) && 'trash' !== $popup->status;
+				$post_type_object = get_post_type_object( IncPopupItem::POST_TYPE );
+				$actions = array();
+
+				if ( $can_edit ) {
+					$actions['edit'] = array(
+						'url' => get_edit_post_link( $post_id ),
+						'title' => __( 'Edit this Pop Up', PO_LANG ),
+						'label' => __( 'Edit', PO_LANG )
+					);
+				}
+
+				if ( $can_edit && 'active' === $popup->status ) {
+					$the_url = 'edit.php?post_type=%1$s&post_id=%2$s&action=deactivate';
+					$the_url = admin_url( sprintf( $the_url, IncPopupItem::POST_TYPE, $post_id ) );
+					$the_url = wp_nonce_url( $the_url, 'deactivate-post_' . $post_id );
+					$actions['deactivate'] = array(
+						'url' => $the_url,
+						'title' => __( 'Deactivate this Pop Up', PO_LANG ),
+						'label' => __( 'Deactivate', PO_LANG )
+					);
+				}
+
+				if ( $can_edit && 'inactive' === $popup->status ) {
+					$the_url = 'edit.php?post_type=%1$s&post_id=%2$s&action=activate';
+					$the_url = admin_url( sprintf( $the_url, IncPopupItem::POST_TYPE, $post_id ) );
+					$the_url = wp_nonce_url( $the_url, 'activate-post_' . $post_id );
+					$actions['activate'] = array(
+						'url' => $the_url,
+						'title' => __( 'Activate this Pop Up', PO_LANG ),
+						'label' => __( 'Activate', PO_LANG )
+					);
+				}
+
+				if ( current_user_can( 'delete_post', $post_id ) ) {
+					if ( 'trash' === $popup->status ) {
+						$the_url = $post_type_object->_edit_link . '&amp;action=untrash';
+						$the_url = admin_url( sprintf( $the_url, $post_id ) );
+						$the_url = wp_nonce_url( $the_url, 'untrash-post_' . $post_id );
+						$actions['untrash'] = array(
+							'url' => $the_url,
+							'title' => __( 'Restore this Pop Up from the Trash', PO_LANG ),
+							'label' => __( 'Restore', PO_LANG )
+						);
+					} elseif ( EMPTY_TRASH_DAYS ) {
+						$actions['trash'] = array(
+							'url' => get_delete_post_link( $post_id ),
+							'title' => __( 'Move this Pop Up to the Trash', PO_LANG ),
+							'attr' => 'class="submitdelete"',
+							'label' => __( 'Trash', PO_LANG )
+						);
+					}
+					if ( 'trash' === $popup->status || ! EMPTY_TRASH_DAYS ) {
+						$actions['delete'] = array(
+							'url' => get_delete_post_link( $post_id, '', true ),
+							'title' => __( 'Delete this Pop Up permanently', PO_LANG ),
+							'attr' => 'class="submitdelete"',
+							'label' => __( 'Delete Permanently', PO_LANG )
+						);
+					}
+				}
+
+				if ( $can_edit ) : ?>
 					<a href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>">
 						<span class="the-title"><?php echo esc_html( $popup->name ); ?></span>
 					</a>
-				<?php endif;
+				<?php else : ?>
+					<span class="the-title"><?php echo esc_html( $popup->name ); ?></span>
+				<?php endif; ?>
+				<div class="row-actions">
+				<?php
+				$action_count = count( $actions );
+				$i = 0;
+				foreach ( $actions as $action => $item ) {
+					$i += 1;
+					$sep = ( $i == $action_count ) ? '' : ' | ';
+					?>
+					<span class="<?php echo esc_attr( $action ); ?>">
+					<a href="<?php echo esc_url( @$item['url'] ); ?>"
+						title="<?php echo esc_attr( @$item['title'] ); ?>"
+						<?php echo @$item['attr']; ?>>
+						<?php echo esc_html( @$item['label'] ); ?>
+					</a><?php echo esc_html( $sep ); ?>
+					</span>
+					<?php
+				} ?>
+				</div>
+				<?php
 				break;
 
 			case 'po_cond':
@@ -442,6 +544,60 @@ class IncPopup extends IncPopupBase {
 		return $new_actions;
 	}
 
+	/**
+	 * Define our Pop Up update messages.
+	 *
+	 * @since  4.6
+	 * @see    wp-admin/edit.php
+	 * @param  array $messages Array of messages, by post-type.
+	 * @param  array $counts
+	 * @return array The modified $messages array
+	 */
+	static public function post_update_messages( $messages, $counts ) {
+		$messages[IncPopupItem::POST_TYPE] = array(
+			'updated'   => _n( 'One Pop Up updated.', '%s Pop Ups updated.', $counts['updated'] ),
+			'locked'    => _n( 'One Pop Up not updated, somebody is editing it.', '%s Pop Ups not updated, somebody is editing them.', $counts['locked'] ),
+			'deleted'   => _n( 'One Pop Up permanently deleted.', '%s Pop Ups permanently deleted.', $counts['deleted'] ),
+			'trashed'   => _n( 'One Pop Up moved to the Trash.', '%s Pop Ups moved to the Trash.', $counts['trashed'] ),
+			'untrashed' => _n( 'One Pop Up restored from the Trash.', '%s Pop Ups restored from the Trash.', $counts['untrashed'] ),
+		);
+		return $messages;
+	}
+
+	/**
+	 * Called when the file edit.php is loaded
+	 *
+	 * @since  4.6
+	 */
+	static public function post_list_edit() {
+		$doaction = @$_REQUEST['action'];
+		$post_id = absint( @$_REQUEST['post_id'] );
+		$nonce = @$_REQUEST['_wpnonce'];
+		$popup = IncPopupDatabase::get( $post_id );
+
+		if ( $popup && $doaction ) {
+			if ( ! wp_verify_nonce( $nonce, $doaction . '-post_' . $post_id ) ) {
+				return;
+			}
+
+			switch ( $doaction ) {
+				case 'activate':
+					$popup->status = 'active';
+					$popup->save();
+					break;
+
+				case 'deactivate':
+					$popup->status = 'inactive';
+					$popup->save();
+					break;
+			}
+
+			$back_url = remove_query_arg( array( 'action', 'post_id', '_wpnonce' ) );
+			wp_safe_redirect( $back_url );
+			die();
+		}
+	}
+
 
 	/*===================================*\
 	=======================================
@@ -519,11 +675,13 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function form_title( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
+
+		wp_nonce_field( 'save-popup', 'popup-nonce' );
 		?>
 		<div id="titlediv">
 			<div id="titlewrap">
-				<label for="popup_name"><?php _e( 'Pop Up Name (not displayed on the Pop Up)', PO_LANG ); ?></label>
-				<input type="text" id="popup_name" name="popup_name" required
+				<label for="po_name"><?php _e( 'Pop Up Name (not displayed on the Pop Up)', PO_LANG ); ?></label>
+				<input type="text" id="po_name" name="po_name" required
 					value="<?php echo esc_attr( $popup->name ); ?>"
 					placeholder="<?php _e( 'Name this Pop Up', PO_LANG ); ?>" />
 			</div>
@@ -584,6 +742,107 @@ class IncPopup extends IncPopupBase {
 	static public function meta_submitdiv( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
 		include PO_VIEWS_DIR . 'meta-submitdiv.php';
+	}
+
+	/**
+	 * Save the popup data to database
+	 *
+	 * @since  4.6
+	 * @param  int $post_id Post ID that was saved/created
+	 * @param  WP_Post $post Post object that was saved/created
+	 * @param  bool $update True means the post was updated (not created)
+	 */
+	static public function form_save( $post_id, $post, $update ) {
+		$popup = IncPopupDatabase::get( $post_id );
+
+		// Autosave is not processed.
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		// The nonce is invalid.
+		if ( ! wp_verify_nonce( @$_POST['popup-nonce'], 'save-popup' ) ) {
+			return;
+		}
+
+		// This save event is for a different post type... ??
+		if ( IncPopupItem::POST_TYPE != @$_POST['post_type'] ) {
+			return;
+		}
+
+		// User does not have permissions for this.
+		if ( ! current_user_can( IncPopupPosttype::$perms ) ) {
+			return;
+		}
+
+		$action = @$_POST['po-action'];
+		switch ( $action ) {
+			case 'save':
+				$status = $popup->status;
+				break;
+
+			case 'activate':
+				$status = 'active';
+				break;
+
+			case 'deactivate':
+				$status = 'inactive';
+				break;
+
+			default:
+				// Unknown action.
+				return;
+		}
+
+		$data = array(
+			'id' => $post_id,
+			'name' => @$_POST['po_name'],
+			'status' => $status,
+			'content' => @$_POST['po_content'],
+			'title' => @$_POST['po_heading'],
+			'subtitle' => @$_POST['po_subheading'],
+			'cta_label' => @$_POST['po_cta'],
+			'cta_link' => @$_POST['po_cta_link'],
+		);
+
+		// Save the popup data!
+		$popup->populate( $data );
+
+		// Prevent infinite loop when saving.
+		remove_action(
+			'save_post_' . IncPopupItem::POST_TYPE,
+			array( 'IncPopup', 'form_save' ),
+			10
+		);
+
+		$popup->save();
+
+		add_action(
+			'save_post_' . IncPopupItem::POST_TYPE,
+			array( 'IncPopup', 'form_save' ),
+			10, 3
+		);
+
+		// Removes the 'message' from the redirect URL.
+		add_filter(
+			'redirect_post_location',
+			array( 'IncPopup', 'form_redirect' ),
+			10, 2
+		);
+
+	}
+
+	/**
+	 * Removes the 'message' param from redirect URL.
+	 * This prevents the default WordPress update-notice to be displayed.
+	 *
+	 * @since  4.6
+	 * @param  string $url The redirect URL.
+	 * @param  int $post_id Which post was updated.
+	 * @return string The modified redirect URL.
+	 */
+	static public function form_redirect( $url, $post_id ) {
+		return remove_query_arg( 'message', $url );
 	}
 
 };

@@ -35,10 +35,16 @@ class IncPopupItem {
 	// Status: Active/Inactive/Trash
 	public $status = 'inactive';
 
+	// Original status (used while saving to check if status changed)
+	private $orig_status = 'inactive';
+
 	// -- Content
 
 	// Popup HTML content.
 	public $content = '';
+
+	// Original HTML content (used while saving to check if the content changed)
+	private $orig_content = '';
 
 	// Popup title.
 	public $title = '';
@@ -141,7 +147,9 @@ class IncPopupItem {
 		$this->name = '';
 		$this->order = 0;
 		$this->status = 'inactive';
+		$this->orig_status = 'inactive';
 		$this->content = '';
+		$this->orig_content = '';
 		$this->title = '';
 		$this->subtitle = '';
 		$this->cta_label = '';
@@ -205,14 +213,14 @@ class IncPopupItem {
 		isset( $data['color']['back'] ) && $this->color['back'] = $data['color']['back'];
 		isset( $data['color']['fore'] ) && $this->color['fore'] = $data['color']['fore'];
 
-		in_array( $data['style'], $this->styles ) && $this->style = $data['style'];
+		in_array( @$data['style'], $this->styles ) && $this->style = $data['style'];
 		isset( $data['round_corners'] ) && $this->round_corners = (true == $data['round_corners']);
 		isset( $data['can_hide'] ) && $this->can_hide = (true == $data['can_hide']);
 		isset( $data['close_is_hide'] ) && $this->close_is_hide = (true == $data['close_is_hide']);
 		is_numeric( @$data['hide_expire'] ) && $this->hide_expire = absint( $data['hide_expire'] );
 		isset( $data['overlay_close'] ) && $this->overlay_close = ( true == $data['overlay_close'] );
 
-		in_array( $data['display'], $this->display_opts ) && $this->display = $data['display'];
+		in_array( @$data['display'], $this->display_opts ) && $this->display = $data['display'];
 		is_numeric( @$data['delay'] ) && $this->delay = absint( $data['delay'] );
 		is_numeric( @$data['scroll'] ) && $this->scroll = absint( $data['scroll'] );
 		isset( $data['anchor'] ) && $this->anchor = (true == $data['anchor']);
@@ -248,6 +256,13 @@ class IncPopupItem {
 		$post = get_post( $id );
 
 		$this->reset();
+
+		// Item does not exist.
+		if ( ! $post ) {
+			return;
+		}
+
+		// Item is a different post type.
 		if ( ! self::POST_TYPE == $post->post_type ) {
 			return;
 		}
@@ -262,7 +277,9 @@ class IncPopupItem {
 		$this->id = $post->ID;
 		$this->name = $post->post_title;
 		$this->status = $status;
+		$this->orig_status = $status;
 		$this->content = $post->post_content;
+		$this->orig_content = $post->post_content;
 		$this->order = $post->menu_order;
 
 		// Read metadata of the popup.
@@ -298,8 +315,10 @@ class IncPopupItem {
 	 * @since  4.6
 	 */
 	public function save() {
-		if ( ! did_action( 'wp' ) ) {
-			add_action( 'wp', array( $this, 'save' ) );
+		global $allowedposttags;
+
+		if ( ! did_action( 'wp_loaded' ) ) {
+			add_action( 'wp_loaded', array( $this, 'save' ) );
 			return false;
 		}
 
@@ -308,6 +327,11 @@ class IncPopupItem {
 			case 'inactive': $status = 'draft'; break;
 			case 'trash':    $status = 'trash'; break;
 			default:         $status = 'draft'; break;
+		}
+
+		// When the content changed make sure to only allow valid code!
+		if ( $this->content != $this->orig_content && ! current_user_can( 'unfiltered_html' ) ) {
+			$this->content = wp_kses( $this->content, $allowedposttags );
 		}
 
 		$post = array(
@@ -347,9 +371,30 @@ class IncPopupItem {
 			update_post_meta( $this->id, 'po_checks', $this->checks );
 			update_post_meta( $this->id, 'po_rules', $this->rules );
 
-			TheLib::message( 'Popup saved: ' . $res . ' ' . $this->name );
+			if ( $this->orig_status === $this->status ) {
+				$msg = __( 'Saved Pop Up "<strong>%1$s</strong>"', PO_LANG );
+			} else {
+				switch ( $this->status ) {
+					case 'active':
+						$msg = __( 'Activated Pop Up "<strong>%1$s</strong>".', PO_LANG );
+						break;
+
+					case 'inactive':
+						$msg = __( 'Deactivated Pop Up "<strong>%1$s</strong>".', PO_LANG );
+						break;
+
+					case 'trash':
+						$msg = __( 'Moved Pop Up "<strong>%1$s</strong>" to trash.', PO_LANG );
+						break;
+
+					default:
+						$msg = __( 'Saved Pop Up "<strong>%1$s</strong>".', PO_LANG );
+						break;
+				}
+			}
+			TheLib::message( sprintf( $msg, $this->name ) );
 		} else {
-			TheLib::message( 'Error when saving popup: ' . $this->name );
+			TheLib::message( __( 'Could not save Pop Up.', PO_LANG ), 'err' );
 		}
 		return true;
 	}
