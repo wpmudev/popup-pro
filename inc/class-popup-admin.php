@@ -50,6 +50,12 @@ class IncPopup extends IncPopupBase {
 			array( 'IncPopup', 'setup_module_specific' )
 		);
 
+		// Handles all admin ajax requests.
+		add_action(
+			'wp_ajax_po-ajax',
+			array( 'IncPopup', 'handle_ajax' )
+		);
+
 		// -- SETTINGS --------------------------
 
 		// Save changes from settings page.
@@ -80,65 +86,84 @@ class IncPopup extends IncPopupBase {
 
 			// -- POP UP LIST -----------------------
 
-			// Customize the columns in the popup list.
-			add_filter(
-				'manage_' . IncPopupItem::POST_TYPE . '_posts_columns',
-				array( 'IncPopup', 'post_columns' )
-			);
+			if ( 'edit' === @$hook->base ) {
+				TheLib::add_js( 'jquery-ui-sortable' ); // WordPress core script
 
-			// Returns the content for the custom columns.
-			add_action(
-				'manage_' . IncPopupItem::POST_TYPE . '_posts_custom_column',
-				array( 'IncPopup', 'post_column_content' ),
-				10, 2
-			);
 
-			// Defines the Quick-Filters above the popup table
-			add_filter(
-				'views_edit-' . IncPopupItem::POST_TYPE,
-				array( 'IncPopup', 'post_views' )
-			);
+				// Customize the columns in the popup list.
+				add_filter(
+					'manage_' . IncPopupItem::POST_TYPE . '_posts_columns',
+					array( 'IncPopup', 'post_columns' )
+				);
 
-			// Defines the Bulk-Actions (available in the select box)
-			add_filter(
-				'bulk_actions-edit-' . IncPopupItem::POST_TYPE,
-				array( 'IncPopup', 'post_actions' )
-			);
+				// Returns the content for the custom columns.
+				add_action(
+					'manage_' . IncPopupItem::POST_TYPE . '_posts_custom_column',
+					array( 'IncPopup', 'post_column_content' ),
+					10, 2
+				);
 
-			// Add our own Pop Up update messages.
-			add_filter(
-				'bulk_post_updated_messages',
-				array( 'IncPopup', 'post_update_messages' ),
-				10, 2
-			);
+				// Defines the Quick-Filters above the popup table
+				add_filter(
+					'views_edit-' . IncPopupItem::POST_TYPE,
+					array( 'IncPopup', 'post_views' )
+				);
 
-			// Process custom actions in the post-list (e.g. activate/deactivate)
-			add_action(
-				'load-edit.php',
-				array( 'IncPopup', 'post_list_edit' ),
-				1
-			);
+				// Defines the Bulk-Actions (available in the select box)
+				add_filter(
+					'bulk_actions-edit-' . IncPopupItem::POST_TYPE,
+					array( 'IncPopup', 'post_actions' )
+				);
+
+				// Add our own Pop Up update messages.
+				add_filter(
+					'bulk_post_updated_messages',
+					array( 'IncPopup', 'post_update_messages' ),
+					10, 2
+				);
+
+				// Process custom actions in the post-list (e.g. activate/deactivate)
+				add_action(
+					'load-edit.php',
+					array( 'IncPopup', 'post_list_edit' ),
+					1
+				);
+
+				// Modify the post query to avoid pagination on the popup list.
+				add_action(
+					'pre_get_posts',
+					array( 'IncPopup', 'post_query' )
+				);
+
+				// Remove the posts-per-page filter from screen options.
+				add_action(
+					'admin_head',
+					array( 'IncPopup', 'post_screenoptions' )
+				);
+			}
 
 			// -- POP UP EDITOR -----------------
 
-			// Display the "Pop Up Title" field in top of the form.
-			add_action(
-				'edit_form_after_title',
-				array( 'IncPopup', 'form_title' )
-			);
+			if ( 'post' === @$hook->base ) {
+				// Display the "Pop Up Title" field in top of the form.
+				add_action(
+					'edit_form_after_title',
+					array( 'IncPopup', 'form_title' )
+				);
 
-			// Add custom meta-boxes to the popup-editor
-			add_action(
-				'add_meta_boxes_' . IncPopupItem::POST_TYPE,
-				array( 'IncPopup', 'form_metabox' )
-			);
+				// Add custom meta-boxes to the popup-editor
+				add_action(
+					'add_meta_boxes_' . IncPopupItem::POST_TYPE,
+					array( 'IncPopup', 'form_metabox' )
+				);
 
-			// Add custom meta-boxes to the popup-editor
-			add_action(
-				'save_post_' . IncPopupItem::POST_TYPE,
-				array( 'IncPopup', 'form_save' ),
-				10, 3
-			);
+				// Add custom meta-boxes to the popup-editor
+				add_action(
+					'save_post_' . IncPopupItem::POST_TYPE,
+					array( 'IncPopup', 'form_save' ),
+					10, 3
+				);
+			}
 		}
 	}
 
@@ -175,6 +200,27 @@ class IncPopup extends IncPopupBase {
 			'settings',
 			array( 'IncPopup', 'handle_settings_page' )
 		);
+	}
+
+	/**
+	 * Handles all admin ajax calls.
+	 *
+	 * @since  4.6
+	 */
+	static public function handle_ajax() {
+		$action = @$_POST['do'];
+
+		switch ( $action ) {
+			case 'order':
+				$order = explode( ',', @$_POST['order'] );
+				self::post_order( $order );
+				break;
+
+			default:
+				return;
+		}
+
+		die();
 	}
 
 	/**
@@ -344,6 +390,7 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function post_columns( $post_columns ) {
 		$new_columns = array();
+		$new_columns['po_order'] = '';
 		$new_columns['cb'] = $post_columns['cb'];
 		$new_columns['po_name'] = __( 'Pop Up Name', PO_LANG );
 		$new_columns['po_cond'] = __( 'Conditions', PO_LANG );
@@ -598,6 +645,51 @@ class IncPopup extends IncPopupBase {
 		}
 	}
 
+	/**
+	 * Modify the main WP query to avoid pagination on the popup list.
+	 *
+	 * @since  4.6
+	 */
+	static public function post_query( $query ) {
+		if ( ! $query->is_main_query() ) { return; }
+
+		$query->set( 'posts_per_page', 0 );
+	}
+
+	/**
+	 * Remove the posts-per-page filter from screen options.
+	 *
+	 * @since  4.6
+	 */
+	static public function post_screenoptions() {
+		$screen = get_current_screen();
+		$screen->add_option( 'per_page', false );
+	}
+
+	/**
+	 * Takes an array as input and updates the order of all popups according to
+	 * the definition in the array.
+	 *
+	 * @since  4.6
+	 * @param  array $order List of popup-IDs
+	 */
+	static public function post_order( $order ) {
+		$ids = array();
+
+		foreach ( $order as $item ) {
+			if ( ! is_numeric( $item ) ) {
+				$item = preg_replace( '/[^0-9,.]/', '', $item );
+			}
+			$ids[] = absint( $item );
+		}
+
+		foreach ( $ids as $pos => $id ) {
+			$popup = IncPopupDatabase::get( $id );
+			$popup->order = $pos;
+			$popup->save();
+		}
+	}
+
 
 	/*===================================*\
 	=======================================
@@ -829,7 +921,6 @@ class IncPopup extends IncPopupBase {
 			array( 'IncPopup', 'form_redirect' ),
 			10, 2
 		);
-
 	}
 
 	/**

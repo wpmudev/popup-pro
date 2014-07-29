@@ -116,6 +116,35 @@ input.block {
 			padding-bottom: 15px;
 		}
 
+		.column-po_order {
+			width: 10px;
+
+		}
+
+		tbody tr:hover {
+			.column-po_order {
+				cursor: move;
+				cursor: ns-resize;
+
+				&:before {
+					content: "\f333";
+					width: 20px;
+					height: 20px;
+					font-size: 20px;
+					line-height: 1;
+					font-family: dashicons;
+					text-decoration: inherit;
+					font-weight: normal;
+					font-style: normal;
+					vertical-align: top;
+					text-align: center;
+					transition: color 0.1s ease-in 0ms;
+					-webkit-transition: color 0.1s ease-in 0ms;
+					-webkit-font-smoothing: antialiased;
+				}
+			}
+		}
+
 		.column-po_name {
 			width: 300px;
 			@media screen and (max-width: $break_large) {
@@ -153,6 +182,39 @@ input.block {
 			margin: 0 4px 1px 0;
 			font-size: 12px;
 			float: left;
+		}
+
+		#the-list {
+			tr:nth-child(odd) {
+				background-color: #FFF !important;
+			}
+
+			tr:nth-child(even) {
+				background-color: #F9F9F9 !important;
+			}
+		}
+
+		tr.ui-sortable-helper {
+			box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+		}
+
+		.ui-sortable-placeholder {
+			position: relative;
+
+			.column-po_order:before {
+				content: 'X';
+				display: block;
+				position: absolute;
+				background: red;
+				width: 20px;
+				height: 20px;
+			}
+
+			td {
+				background: #DDD;
+				height: 70px;
+				padding: 0;
+			}
 		}
 	}
 }
