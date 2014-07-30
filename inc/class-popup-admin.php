@@ -83,12 +83,19 @@ class IncPopup extends IncPopupBase {
 			TheLib::add_ui( 'core' );
 			TheLib::add_ui( PO_CSS_URL . 'popup-admin.css' );
 			TheLib::add_ui( PO_JS_URL . 'popup-admin.min.js' );
+			TheLib::add_data(
+				'po_bulk',
+				array(
+					'activate' => __( 'Activate', PO_LANG ),
+					'deactivate' => __( 'Deactivate', PO_LANG ),
+					'toggle' => __( 'Toggle activation', PO_LANG ),
+				)
+			);
 
 			// -- POP UP LIST -----------------------
 
 			if ( 'edit' === @$hook->base ) {
 				TheLib::add_js( 'jquery-ui-sortable' ); // WordPress core script
-
 
 				// Customize the columns in the popup list.
 				add_filter(
@@ -145,6 +152,9 @@ class IncPopup extends IncPopupBase {
 			// -- POP UP EDITOR -----------------
 
 			if ( 'post' === @$hook->base ) {
+				TheLib::add_css( 'wp-color-picker' ); // WordPress core script
+				TheLib::add_js( 'wp-color-picker' ); // WordPress core script
+
 				// Display the "Pop Up Title" field in top of the form.
 				add_action(
 					'edit_form_after_title',
@@ -223,25 +233,6 @@ class IncPopup extends IncPopupBase {
 		die();
 	}
 
-	/**
-	 * Displays a predefined message in the admin screen.
-	 *
-	 * @since  4.6
-	 * @param  int $id Message-ID.
-	 * @param  array $args Placeholders that may be used in the message.
-	 */
-	static protected function show_message( $id, $args ) {
-		$messages = array(
-			1 => 'Your settings have been updated.',
-			2 => '%1$d Add-on(s) activated.',
-			3 => '%1$d Add-on(s) deactivated.',
-			4 => '%1$d Add-on(s) toggled.',
-		);
-		$msg = __( @$messages[$id], PO_LANG );
-		$msg = vsprintf( $msg, $args );
-		TheLib::message( $msg );
-	}
-
 
 	/*==============================*\
 	==================================
@@ -267,14 +258,14 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6
 	 */
 	static public function handle_settings_update() {
-		if ( is_numeric( @$_GET['message'] ) ) {
-			self::show_message( $_GET['message'] );
-		}
-
 		if ( @$_POST['action'] == 'updatesettings' ) {
 			check_admin_referer( 'update-popover-settings' );
 			update_popover_option( 'popover-settings', $_POST );
-			wp_safe_redirect( add_query_arg( 'message', 1, wp_get_referer() ) );
+
+			TheLib::message( __( 'Your settings have been updated.', PO_LANG ) );
+			$redirect_url = remove_query_arg( array( 'message', 'count' ), wp_get_referer() );
+			wp_safe_redirect( $redirect_url );
+			die();
 		}
 	}
 
@@ -303,10 +294,6 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6
 	 */
 	static public function handle_addons_update() {
-		if ( is_numeric( @$_GET['message'] ) ) {
-			self::show_message( $_GET['message'], array( @$_GET['count'] ) );
-		}
-
 		$action = false;
 		if ( isset( $_REQUEST['do_action_1'] ) ) {
 			$action = @$_REQUEST['action_1'];
@@ -325,6 +312,7 @@ class IncPopup extends IncPopupBase {
 		if ( empty( $keys ) ) { return; }
 
 		$active_addons = get_option( 'popover_activated_addons', array() );
+		if ( ! is_array( $active_addons ) ) { $active_addons = array(); }
 		$count = 0;
 
 		foreach ( $keys as $key ) {
@@ -333,7 +321,6 @@ class IncPopup extends IncPopupBase {
 
 			switch ( $action ) {
 				case 'activate':
-					$message = 2;
 					if ( ! $is_active ) {
 						$active_addons[] = $key;
 						$count += 1;
@@ -341,7 +328,6 @@ class IncPopup extends IncPopupBase {
 					break;
 
 				case 'deactivate':
-					$message = 3;
 					if ( $is_active ) {
 						unset( $active_addons[$addon_ind] );
 						$count += 1;
@@ -349,7 +335,6 @@ class IncPopup extends IncPopupBase {
 					break;
 
 				case 'toggle':
-					$message = 4;
 					if ( $is_active ) {
 						unset( $active_addons[$addon_ind] );
 					} else {
@@ -360,14 +345,34 @@ class IncPopup extends IncPopupBase {
 			}
 		}
 
-		if ( $count > 0 ) {
+		$msg = false;
+		switch ( $action ) {
+			case 'activate':
+				1 === $count ?
+				$msg = __( 'One Add-on activated', PO_LANG ) :
+				$msg = __( '%1$s Add-ons activated', PO_LANG );
+				break;
+
+			case 'deactivate':
+				1 === $count ?
+				$msg = __( 'One Add-on deactivated', PO_LANG ) :
+				$msg = __( '%1$s Add-ons deactivated', PO_LANG );
+				break;
+
+			case 'toggle':
+				1 === $count ?
+				$msg = __( 'One Add-on toggled', PO_LANG ) :
+				$msg = __( '%1$s Add-ons toggled', PO_LANG );
+				break;
+		}
+
+		if ( $count > 0 && ! empty ( $msg ) ) {
 			update_option( 'popover_activated_addons', array_unique( $active_addons ) );
 
-			$args = array(
-				'message' => $message,
-				'count' => $count,
-			);
-			wp_safe_redirect( add_query_arg( $args, wp_get_referer() ) );
+			TheLib::message( sprintf( $msg, $count ) );
+			$redirect_url = remove_query_arg( array( 'message', 'count' ), wp_get_referer() );
+			wp_safe_redirect( $redirect_url );
+			die();
 		}
 	}
 
@@ -389,11 +394,18 @@ class IncPopup extends IncPopupBase {
 	 * @return array
 	 */
 	static public function post_columns( $post_columns ) {
+
 		$new_columns = array();
-		$new_columns['po_order'] = '';
+
+		// Only allow re-ordering when ALL popups are visible
+		if ( empty( $_REQUEST['s'] ) ) {
+			$new_columns['po_order'] = '';
+		}
+
 		$new_columns['cb'] = $post_columns['cb'];
 		$new_columns['po_name'] = __( 'Pop Up Name', PO_LANG );
 		$new_columns['po_cond'] = __( 'Conditions', PO_LANG );
+		$new_columns['po_pos'] = __( 'Order', PO_LANG );
 		$new_columns['po_state'] = __( 'Active', PO_LANG );
 		return $new_columns;
 	}
@@ -501,12 +513,20 @@ class IncPopup extends IncPopupBase {
 				break;
 
 			case 'po_cond':
-				foreach ( $popup->checks as $key ) :
-					$label = IncPopupItem::condition_label( $key );
-					?>
+				?>
+				<div class="rules">
+				<?php foreach ( $popup->checks as $key ) : ?>
+					<?php $label = IncPopupItem::condition_label( $key ); ?>
 					<span class="rule"><?php echo esc_html( $label ); ?></span>
-					<?php
-				endforeach;
+				<?php endforeach; ?>
+				</div>
+				<?php
+				break;
+
+			case 'po_pos':
+				?>
+				<span class="the-pos"><?php echo esc_html( $popup->order ); ?></span>
+				<?php
 				break;
 
 			case 'po_state':
@@ -617,36 +637,102 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6
 	 */
 	static public function post_list_edit() {
-		$doaction = @$_REQUEST['action'];
-		$post_id = absint( @$_REQUEST['post_id'] );
-		$nonce = @$_REQUEST['_wpnonce'];
-		$popup = IncPopupDatabase::get( $post_id );
+		$wp_list_table = _get_list_table( 'WP_Posts_List_Table' );
+		$action = $wp_list_table->current_action();
 
-		if ( $popup && $doaction ) {
-			if ( ! wp_verify_nonce( $nonce, $doaction . '-post_' . $post_id ) ) {
-				return;
+		if ( $action ) {
+			if ( 'list' === @$_REQUEST['mode'] ) {
+				// ----- Custom bulk-action.
+				check_admin_referer( 'bulk-posts' );
+				$post_ids = array();
+				if ( isset( $_REQUEST['ids'] ) ) {
+					$post_ids = explode( ',', $_REQUEST['ids'] );
+				} elseif ( ! empty( $_REQUEST['post'] ) ) {
+					$post_ids = array_map( 'intval', $_REQUEST['post'] );
+				}
+
+				$count = 0;
+				foreach ( $post_ids as $post_id ) {
+					$popup = IncPopupDatabase::get( $post_id );
+
+					switch ( $action ) {
+						case 'activate':
+							$popup->status = 'active';
+							break;
+
+						case 'deactivate':
+							$popup->status = 'inactive';
+							break;
+
+						case 'toggle':
+							if ( 'inactive' === $popup->status ) {
+								$popup->status = 'active';
+							} else if ( 'active' === $popup->status ) {
+								$popup->status = 'inactive';
+							} else {
+								$count -= 1;
+							}
+							break;
+					}
+					$popup->save( false );
+					$count += 1;
+				}
+
+				switch ( $action ) {
+					case 'activate':
+						1 === $count ?
+						$msg = __( 'One Pop Up activated', PO_LANG ) :
+						$msg = __( '%1$s Pop Ups activated', PO_LANG );
+						break;
+
+					case 'deactivate':
+						1 === $count ?
+						$msg = __( 'One Pop Up deactivated', PO_LANG ) :
+						$msg = __( '%1$s Pop Ups deactivated', PO_LANG );
+						break;
+
+					case 'toggle':
+						1 === $count ?
+						$msg = __( 'One Pop Up toggled', PO_LANG ) :
+						$msg = __( '%1$s Pop Ups toggled', PO_LANG );
+						break;
+				}
+
+				if ( $count > 0 && ! empty( $msg ) ) {
+					TheLib::message( sprintf( $msg, $count ) );
+				}
 			}
+			else {
+				// ----- Custom row-action.
+				$nonce = @$_REQUEST['_wpnonce'];
+				$post_id = absint( @$_REQUEST['post_id'] );
+				$popup = IncPopupDatabase::get( $post_id );
 
-			switch ( $doaction ) {
-				case 'activate':
-					$popup->status = 'active';
-					$popup->save();
-					break;
+				if ( ! $popup ) { return; }
+				if ( ! wp_verify_nonce( $nonce, $action . '-post_' . $post_id ) ) { return; }
 
-				case 'deactivate':
-					$popup->status = 'inactive';
-					$popup->save();
-					break;
+				switch ( $action ) {
+					case 'activate':
+						$popup->status = 'active';
+						$popup->save();
+						break;
+
+					case 'deactivate':
+						$popup->status = 'inactive';
+						$popup->save();
+						break;
+				}
+
+				$back_url = remove_query_arg( array( 'action', 'post_id', '_wpnonce' ) );
+				wp_safe_redirect( $back_url );
+				die();
 			}
-
-			$back_url = remove_query_arg( array( 'action', 'post_id', '_wpnonce' ) );
-			wp_safe_redirect( $back_url );
-			die();
 		}
 	}
 
 	/**
-	 * Modify the main WP query to avoid pagination on the popup list.
+	 * Modify the main WP query to avoid pagination on the popup list and sort
+	 * the popup list by the popup-order.
 	 *
 	 * @since  4.6
 	 */
@@ -654,6 +740,8 @@ class IncPopup extends IncPopupBase {
 		if ( ! $query->is_main_query() ) { return; }
 
 		$query->set( 'posts_per_page', 0 );
+		$query->set( 'order', 'ASC' );
+		$query->set( 'orderby', 'menu_order' );
 	}
 
 	/**
@@ -675,6 +763,7 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function post_order( $order ) {
 		$ids = array();
+		$new_order = array();
 
 		foreach ( $order as $item ) {
 			if ( ! is_numeric( $item ) ) {
@@ -685,9 +774,13 @@ class IncPopup extends IncPopupBase {
 
 		foreach ( $ids as $pos => $id ) {
 			$popup = IncPopupDatabase::get( $id );
-			$popup->order = $pos;
-			$popup->save();
+			$popup->order = $pos + 1;
+			$popup->save( false );
+
+			$new_order[ $id ] = $popup->order;
 		}
+
+		echo json_encode( $new_order );
 	}
 
 
@@ -888,6 +981,7 @@ class IncPopup extends IncPopupBase {
 
 		$data = array(
 			'id' => $post_id,
+			// Meta: Content
 			'name' => @$_POST['po_name'],
 			'status' => $status,
 			'content' => @$_POST['po_content'],
@@ -895,6 +989,31 @@ class IncPopup extends IncPopupBase {
 			'subtitle' => @$_POST['po_subheading'],
 			'cta_label' => @$_POST['po_cta'],
 			'cta_link' => @$_POST['po_cta_link'],
+
+			// Meta: Appearance
+			'style' => @$_POST['po_style'],
+			'round_corners' => ! isset( $_POST['po_round_corners'] ),
+			'custom_colors' => isset( $_POST['po_custom_colors'] ),
+			'color' => array(
+				'back' => @$_POST['po_color_back'],
+				'fore' => @$_POST['po_color_fore'],
+			),
+			'custom_size' => isset( $_POST['po_custom_size'] ),
+			'size' => array(
+				'width' => @$_POST['po_size_width'],
+				'height' => @$_POST['po_size_height'],
+			),
+
+			// Meta: Behavior
+			'display' => @$_POST['po_display'],
+			'delay' => @$_POST['po_delay'],
+			'delay_type' => @$_POST['po_delay_type'],
+			'scroll' => @$_POST['po_scroll'],
+			'anchor' => @$_POST['po_anchor'],
+			'can_hide' => isset( $_POST['po_can_hide'] ),
+			'close_hides' => isset( $_POST['po_close_hides'] ),
+			'hide_expire' => @$_POST['po_hide_expire'],
+			'overlay_close' => ! isset( $_POST['po_overlay_close'] ),
 		);
 
 		// Save the popup data!

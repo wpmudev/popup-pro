@@ -37,7 +37,7 @@ $form_url = remove_query_arg( array( 'message', 'action', 'addon', '_wpnonce', '
 	<form method="post" id="posts-filter" action="<?php echo esc_url( $form_url ); ?>">
 
 		<div class="tablenav">
-			<div class="alignleft actions">
+			<div class="alignleft actions bulkactions">
 				<select name="action_1">
 					<option value="">
 						<?php _e( 'Bulk Actions', PO_LANG  ); ?>
@@ -93,7 +93,7 @@ $form_url = remove_query_arg( array( 'message', 'action', 'addon', '_wpnonce', '
 					$addon_data = get_file_data(
 						PO_INC_DIR . 'addons/' . $addon,
 						$default_headers,
-						'plugin'
+						'popup-addon'
 					);
 					$is_active = ( in_array( $addon, $active ) );
 

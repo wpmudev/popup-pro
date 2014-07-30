@@ -19,28 +19,16 @@
 	<div class="col-4">
 		<div class="scroller all-rules-box">
 			<ul class="all-rules">
-				<li class="rule">Rule1</li>
-				<li class="rule">Rule2</li>
-				<li class="rule">Rule3</li>
-				<li class="rule">Rule4</li>
-				<li class="rule">Rule5</li>
-				<li class="rule">Rule6</li>
-				<li class="rule">Rule7</li>
-				<li class="rule">Rule8</li>
+				<?php do_action( 'popup-all-rules', $popup ); ?>
 			</ul>
 		</div>
 	</div>
 	<div class="col-8">
 		<div class="scroller active-rules-box">
 			<ul class="active-rules">
-				<li class="rule">Rule1</li>
-				<li class="rule">Rule2</li>
-				<li class="rule">Rule3</li>
-				<li class="rule">Rule4</li>
-				<li class="rule">Rule5</li>
-				<li class="rule">Rule6</li>
-				<li class="rule">Rule7</li>
-				<li class="rule">Rule8</li>
+				<?php foreach ( $popup->checks as $ind => $key ) {
+					do_action( 'popup-active-rule', $popup, $key, $ind );
+				} ?>
 			</ul>
 		</div>
 	</div>

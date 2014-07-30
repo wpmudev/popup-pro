@@ -114,6 +114,13 @@ class IncPopupDatabase {
 				'on_click' => 'on_click',
 			);
 
+			// Translate style to new keys
+			$style_mapping = array(
+				'Default' => 'old-default',
+				'Default Fixed' => 'old-fixed',
+				'Dark Background Fixed' => 'old-fullbackground',
+			);
+
 			// Migrate data from build 5 to build 6!
 			foreach ( $res as $item ) {
 				$raw = unserialize( $item->popover_settings );
@@ -125,6 +132,12 @@ class IncPopupDatabase {
 						$checks[$ind] = isset( $mapping[$key])  ? $mapping[$key] : $key;
 					}
 				}
+				if ( isset( $style_mapping[ @$raw['popover_style'] ] ) ) {
+					$style = $style_mapping[ @$raw['popover_style'] ];
+				} else {
+					$style = @$raw['popover_style'];
+				}
+
 				$data = array(
 					'name'          => $item->popover_title,
 					'content'       => $item->popover_content,
@@ -132,9 +145,9 @@ class IncPopupDatabase {
 					'active'        => $item->popover_active,
 					'size'          => @$raw['popover_size'],
 					'color'         => @$raw['popover_colour'],
-					'style'         => @$raw['popover_style'],
+					'style'         => $style,
 					'can_hide'      => (true != @$raw['popoverhideforeverlink']),
-					'close_is_hide' => @$raw['popover_close_hideforever'],
+					'close_hides'   => @$raw['popover_close_hideforever'],
 					'hide_expire'   => @$raw['popover_hideforever_expiry'],
 					'display'       => 'delay',
 					'delay'         => @$raw['popoverdelay'],

@@ -1,191 +1,200 @@
 <?php
 
 /**
+ * Rule-Collection
+ */
+class IncPopupRules {
+	static public $rules = array();
+
+	static public function register( $classname ) {
+		self::$rules[] = new $classname();
+	}
+}
+
+
+/**
  * Base class for Pop Up conditions
  */
 abstract class IncPopupRule {
 
 	/**
-	 * Rule ID.
-	 * @var string
-	 */
-	protected $_id;
-
-	/**
-	 * Default settings.
+	 * Rule details (ID, Label, Description)
 	 * @var array
 	 */
-	protected $_defaults = array();
+	public $infos = array();
+
+	/*---------------  OVERWRITABLE Functions  ----------------*/
 
 	/**
-	 * Label and description.
-	 * @var array
+	 * Initialize the rule object.
+	 * Overwrite this function
+	 *
+	 * @since  4.6
 	 */
-	protected $_info = array(
-		'title'   => '',
-		'message' => '',
-	);
-
-
-	/*---------------  ABSTRACT Functions  ----------------*/
-
-	abstract public function apply_rule( $show, $popover );
-
-	abstract public static function add();
-
-
-	/*---------------  PUBLIC Functions  ----------------*/
-
-	public function get_admin_interface( $data ) {
-		return '';
+	public function init() {
 	}
 
-	public function save_settings( $settings ) {
-		if ( empty( $_POST[$this->_id] ) ) {
-			return $settings;
-		}
+	/**
+	 * Apply the rule-logic to the specified popup
+	 * Overwrite this function
+	 *
+	 * @since  1.0.0
+	 * @param  bool $show Current decission whether popup should be displayed.
+	 * @param  Object $popup The popup that is evaluated.
+	 * @return bool Updated decission to display popup or not.
+	 */
+	public function apply( $show, $popup ) {
+		return $show;
+	}
 
-		$data = stripslashes_deep( $_POST[$this->_id] );
-		$result = array();
-		$keys = array_keys( $this->_defaults );
-		foreach ( $keys as $key ) {
-			if ( empty( $data[$key] ) ) {
-				continue;
-			}
+	/**
+	 * Output the Admin-Form for the active rule.
+	 * Overwrite this function
+	 *
+	 * @since  1.0.0
+	 * @param  Object $popup The popup that is edited.
+	 * @param  string $key Rule-ID.
+	 */
+	public function form( $popup, $key ) {
+		echo '';
+	}
 
-			$result[$key] = array_filter( array_map( 'wp_strip_all_tags', $data[$key] ) );
-		}
-		$settings[$this->_id] = $result;
+	/**
+	 * Update and return the $settings array to save the form values.
+	 * Overwrite this function
+	 *
+	 * @since  1.0.0
+	 * @param  array $settings Collection of rule-settings.
+	 * @param  string $key Rule-ID.
+	 * @return array The updated rule-settings collection.
+	 */
+	public function save( $settings, $key ) {
 		return $settings;
 	}
 
-	public function rule_name( $rule, $key ) {
-		if ( $key != $this->_id ) {
-			return $rule;
-		}
+	/*---------------  PUBLIC Functions  ----------------*/
 
-		return $this->_info['message'];
+	/**
+	 * Create the rule object.
+	 * This is _only_ done by IncPopupRules::register() above!
+	 *
+	 * @since 1.0.0
+	 */
+	public function __construct() {
+		$this->init();
+		$this->add_hooks();
 	}
 
-	public function add_main_active_rule( $popover, $check ) {
-		$in_use = ! empty( $check[$this->_id] ) ? $check[$this->_id] : false;
-		if ( ! $in_use ) {
-			return false;
+	/**
+	 * Filter that returns the rule name if $key is the current rule-ID.
+	 * Handles filter `popup-rule-label`
+	 *
+	 * @since  1.0.0
+	 */
+	public function label( $rule, $key ) {
+		if ( isset( $this->infos[ $key ] ) ) {
+			return $this->infos[ $key ]->label;
 		}
-		$this->add_active_rule( $popover, $check );
+		return $rule;
 	}
 
-	public function add_active_rule( $popover, $check ) {
-		$data = ! empty( $popover->popover_settings ) ? $popover->popover_settings : false;
-		?>
-		<div class="popover-operation" id="main-<?php echo esc_attr( $this->_id ); ?>">
-			<h2 class="sidebar-name">
-				<?php echo esc_html( $this->_info['title'] ); ?>
-				<span>
-					<a href="#remove"
-						class="removelink"
-						id="remove-<?php echo esc_attr( $this->_id ); ?>"
-						title="<?php printf(
-							__( 'Remove %s tag from this rules area.', PO_LANG ),
-							esc_html( $this->_info['title'] )
-						); ?>">
-						<?php _e( 'Remove', PO_LANG ); ?>
-					</a>
-				</span>
-			</h2>
-			<div class="inner-operation">
-				<p><?php echo esc_html( $this->_info['message'] ); ?></p>
-				<?php echo $this->get_admin_interface( $data ); ?>
-				<input type="hidden" name="popovercheck[<?php echo esc_attr( $this->_id ); ?>]" value="yes" />
-			</div>
-		</div>
-		<?php
+	/**
+	 * Display the rule form inside the "active rules" list
+	 *
+	 * @since  1.0.0
+	 */
+	public function admin_active_rule( $popup, $key, $index ) {
+		foreach ( $this->infos as $key => $data ) {
+			if ( $popup->uses_rule( $key ) ) {
+				?>
+				<li id="po-rule-<?php echo esc_attr( $index ); ?>" class="rule">
+					<div>
+						<strong><?php echo esc_html( $data->label ); ?></strong>
+					</div>
+					<div>
+						<?php $this->form( $popup, $key ); ?>
+					</div>
+				</li>
+				<?php
+			}
+		}
 	}
 
-	public function add_draggable_rule( $check ) {
-		if ( isset( $check[$this->_id] ) ) {
-			return false;
-		}
-
-		?>
-		<li class="popover-draggable" id="<?php echo esc_attr( $this->_id ); ?>">
-			<div class="action action-draggable">
-				<div class="action-top closed">
-					<a href="#available-actions" class="action-button hide-if-no-js"></a>
-					<?php echo esc_html( $this->_info['title'] ); ?>
+	/**
+	 * Display the rule-switch in the "all rules" list (no options, only a
+	 * function to activate/deactivate the rule)
+	 *
+	 * @since  1.0.0
+	 */
+	public function admin_rule_list( $popup ) {
+		foreach ( $this->infos as $key => $data ) {
+			$active = $popup->uses_rule( $key );
+			$class = $active ? 'on' : 'off';
+			?>
+			<li class="rule <?php echo esc_attr( $class ); ?>">
+				<div class="wpmui-toggle">
+					<input type="checkbox" name="po_check[]" class="wpmui-toggle-checkbox" id="rule-<?php echo esc_attr( $key ); ?>" checked>
+					<label class="wpmui-toggle-label" for="rule-<?php echo esc_attr( $key ); ?>">
+						<span class="wpmui-toggle-inner"></span>
+						<span class="wpmui-toggle-switch"></span>
+					</label>
 				</div>
-				<div class="action-body closed">
-					<?php if ( ! empty( $this->_info['message'] ) ) : ?>
-						<p>
-							<?php echo esc_html( $this->_info['message'] ); ?>
-						</p>
-					<?php endif; ?>
-					<p>
-						<a href="#addtopopover"
-							class="action-to-popover"
-							title="<?php _e( 'Add this rule to the popover.', PO_LANG ); ?>">
-							<?php _e( 'Add this rule to the popover.', PO_LANG ); ?>
-						</a>
-					</p>
-				</div>
-			</div>
-		</li>
-		<?php
+				<?php echo esc_html( $data->label ); ?>
+			</li>
+			<?php
+		}
 	}
-
 
 	/*---------------  PROTECTED Functions  ----------------*/
 
-	protected function __construct() {
-		$this->_add_hooks();
+	/**
+	 * Adds rule-details to the objects infos-collection
+	 *
+	 * @since 4.6
+	 * @param string $id
+	 * @param string $label
+	 * @param string $description
+	 */
+	protected function add_info( $id, $label, $description ) {
+		$this->infos[ $id ] = (object) array(
+			'label' => $label,
+			'description' => $description,
+		);
 	}
 
-	protected function _get_field_name() {
-		$args = func_get_args();
-		return esc_attr( $this->_id . '[' . join( '][', $args ) . ']' );
-	}
-
-	protected function _get_field_id() {
-		$args = func_get_args();
-		return esc_attr( $this->_id . join( '-', $args ) );
-	}
-
-	protected function _add_hooks() {
-		if ( ! $this->_id ) {
-			return false;
-		}
-
+	/**
+	 * Register hooks.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function add_hooks() {
 		add_filter(
 			'popup-rule-label',
-			array( $this, 'rule_name' ),
+			array( $this, 'label' ),
 			10, 2
 		);
 
 		add_action(
-			'popover_active_rule_' . $this->_id,
-			array( $this, 'add_main_active_rule' ),
-			10, 2
-		); // Shown
+			'popup-active-rule',
+			array( $this, 'admin_active_rule' ),
+			10, 3
+		);
 
 		add_action(
-			'popover_additional_rules_main',
-			array( $this, 'add_active_rule' ),
-			10, 2
-		); // Hidden
-
-		add_action(
-			'popover_additional_rules_sidebar',
-			array( $this, 'add_draggable_rule' )
+			'popup-all-rules',
+			array( $this, 'admin_rule_list' ),
+			10, 1
 		);
 
 		add_filter(
 			'popup-data-save',
-			array( $this, 'save_settings' )
+			array( $this, 'save' ),
+			10, 2
 		);
 
 		add_filter(
-			'popover_process_rule_' . $this->_id,
-			array( $this, 'apply_rule' ),
+			'popup-apply-rules',
+			array( $this, 'apply' ),
 			10, 2
 		);
 	}

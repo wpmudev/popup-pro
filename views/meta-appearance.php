@@ -6,43 +6,79 @@
  * Available variables: $popup
  */
 
+$styles = apply_filters( 'popover-styles', array() );
+
 ?>
 <div class="wpmui-grid-12">
 	<div class="col-12">
-		<label><strong><?php _e( 'Select which style you want to use:', PO_LANG ); ?></strong></label>
+		<label for="po-style">
+			<strong>
+				<?php _e( 'Select which style you want to use:', PO_LANG ); ?>
+			</strong>
+		</label>
 	</div>
 </div>
 <div class="wpmui-grid-12">
 	<div class="col-7">
-		<select class="block">
-			<option>Cabriolet</option>
+		<input type="hidden"
+			class="po-orig-style"
+			name="po_orig_style"
+			value="<?php echo esc_attr( $popup->style ); ?>" />
+		<input type="hidden"
+			class="po-orig-style-old"
+			name="po_orig_style_old"
+			value="<?php echo esc_attr( $popup->deprecated_style ); ?>" />
+		<select class="block" id="po-style" name="po_style">
+			<?php foreach ( $styles as $key => $data ) : ?>
+				<?php if ( $data->deprecated && $popup->style != $key ) {
+					continue;
+				} ?>
+				<option value="<?php echo esc_attr( $key ); ?>"
+					data-old="<?php echo esc_attr( $data->deprecated ); ?>"
+					<?php selected( $key, $popup->style ); ?>>
+					<?php echo esc_attr( $data->name ); ?>
+					<?php if ( $data->deprecated ) : ?>*<?php endif; ?>
+				</option>
+			<?php endforeach; ?>
 		</select>
 	</div>
 	<div class="col-5">
 		<label>
-			<input type="checkbox" />
+			<input type="checkbox"
+				name="po_round_corners"
+				<?php checked( ! $popup->round_corners ); ?> />
 			<?php _e( 'No rounded corners', PO_LANG ); ?>
 		</label>
 	</div>
 </div>
 
 <div class="wpmui-grid-12">
-	<div class="col-12">
+	<div class="col-12 inp-row">
 		<label>
-			<input type="checkbox" />
+			<input type="checkbox"
+				name="po_custom_colors"
+				id="po-custom-colors"
+				data-toggle=".chk-custom-colors"
+				<?php checked( $popup->custom_colors ); ?> />
 			<?php _e( 'Use custom colors', PO_LANG ); ?>
 		</label>
 	</div>
 </div>
-<div class="wpmui-grid-12">
-	<div class="col-5">
-		<input>
+<div class="wpmui-grid-12 chk-custom-colors">
+	<div class="col-5 inp-row">
+		<input type="text"
+			class="colorpicker inp-small"
+			name="po_color_back"
+			value="<?php echo esc_attr( $popup->color['back'] ); ?>" />
 	</div>
-	<div class="col-5">
-		<input>
+	<div class="col-5 inp-row">
+		<input type="text"
+			class="colorpicker inp-small"
+			name="po_color_fore"
+			value="<?php echo esc_attr( $popup->color['fore'] ); ?>" />
 	</div>
 </div>
-<div class="wpmui-grid-12">
+<div class="wpmui-grid-12 chk-custom-colors">
 	<div class="col-5">
 		<?php _e( 'Links, button background, heading and subheading', PO_LANG ); ?>
 	</div>
@@ -52,21 +88,34 @@
 </div>
 
 <div class="wpmui-grid-12">
-	<div class="col-12">
+	<div class="col-12 inp-row">
 		<label>
-			<input type="checkbox" />
+			<input type="checkbox"
+				name="po_custom_size"
+				id="po-custom-size"
+				data-toggle=".chk-custom-size"
+				<?php checked( $popup->custom_size ); ?> />
 			<?php _e( 'Use custom size (if selected the Pop Up won\'t be responsive)', PO_LANG ); ?>
 		</label>
 	</div>
-
 </div>
-<div class="wpmui-grid-12">
-	<div class="col-5">
-		<label><?php _e( 'Width:', PO_LANG ); ?></label>
-		<input placeholder="600px" />
+<div class="wpmui-grid-12 chk-custom-size">
+	<div class="col-5 inp-row">
+		<label for="po-size-width"><?php _e( 'Width:', PO_LANG ); ?></label>
+		<input type="text"
+			id="po-size-width"
+			name="po_size_width"
+			class="inp-small"
+			value="<?php echo esc_attr( $popup->size['width'] ); ?>"
+			placeholder="600px" />
 	</div>
-	<div class="col-5">
-		<label><?php _e( 'Height:', PO_LANG ); ?></label>
-		<input placeholder="300px" />
+	<div class="col-5 inp-row">
+		<label for="po-size-height"><?php _e( 'Height:', PO_LANG ); ?></label>
+		<input type="text"
+			id="po-size-height"
+			name="po_size_height"
+			class="inp-small"
+			value="<?php echo esc_attr( $popup->size['height'] ); ?>"
+			placeholder="300px" />
 	</div>
 </div>

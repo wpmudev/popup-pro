@@ -1,6 +1,90 @@
 $break_large:     900px;
 $break_small:     600px;
 
+/**
+ * ON OFF SWITCH (move to wpmu-lib)
+ */
+
+.wpmui-toggle {
+    position: relative;
+    width: 26px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select: none;
+}
+.wpmui-toggle-checkbox {
+    display: none !important;
+}
+.wpmui-toggle-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid #CCC;
+    border-radius: 50px;
+}
+.wpmui-toggle-inner {
+    display: block;
+    width: 200%;
+    margin-left: -100%;
+    -moz-transition: margin 0.3s ease-in 0s;
+    -webkit-transition: margin 0.3s ease-in 0s;
+    -o-transition: margin 0.3s ease-in 0s;
+    transition: margin 0.3s ease-in 0s;
+}
+.wpmui-toggle-inner:before,
+.wpmui-toggle-inner:after {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 5px;
+    padding: 0;
+    line-height: 5px;
+    font-size: 10px;
+    color: white;
+    font-family: Trebuchet, Arial, sans-serif;
+    font-weight: bold;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2) inset;
+}
+.wpmui-toggle-inner:before {
+    content: "";
+    padding-left: 5px;
+    background-color: #0074A2;
+}
+.wpmui-toggle-inner:after {
+    content: "";
+    padding-right: 5px;
+    background-color: #EEEEEE;
+    text-align: right;
+}
+.wpmui-toggle-switch {
+    display: block;
+    width: 14px;
+    margin: -3.5px;
+    background: #F8F8F8;
+    border: 1px solid #CCC;
+    border-radius: 15px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 20px;
+    -moz-transition: all 0.3s ease-in 0s;
+    -webkit-transition: all 0.3s ease-in 0s;
+    -o-transition: all 0.3s ease-in 0s;
+    transition: all 0.3s ease-in 0s;
+
+    box-shadow: -1px 1px 2px rgba(0,0,0,0.1);
+
+}
+.wpmui-toggle-checkbox:checked + .wpmui-toggle-label .wpmui-toggle-inner {
+    margin-left: 0;
+}
+.wpmui-toggle-checkbox:checked + .wpmui-toggle-label .wpmui-toggle-switch {
+    right: 0px;
+}
+
 /* ==================  GENERAL STYLES  ================== */
 .post-type-inc_popup {
 	.status-icon {
@@ -39,6 +123,38 @@ input.block {
 	margin-right: 0;
 	display: block;
 	width: 100%;
+}
+
+.wp-admin select {
+	vertical-align: bottom;
+	margin-top: 0;
+}
+
+.inp-small {
+	width: 75px;
+}
+
+.inp-row {
+	min-height: 32px;
+}
+
+.inactive {
+	opacity: .35;
+	position: relative;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 10000;
+	}
+}
+
+.inactive-anim {
+	transition: opacity .3s;
 }
 
 /* ==================  ADDON LIST  ================== */
@@ -107,6 +223,10 @@ input.block {
 		display: none;
 	}
 
+	[for="po_name-hide"] {
+		display: none;
+	}
+
 	.wp-list-table {
 		tbody td,
 		tbody th {
@@ -146,14 +266,6 @@ input.block {
 		}
 
 		.column-po_name {
-			width: 300px;
-			@media screen and (max-width: $break_large) {
-				width: 200px;
-			}
-			@media screen and (max-width: $break_small) {
-				width: 40%;
-			}
-
 			.the-title {
 				display: block;
 				white-space: nowrap;
@@ -164,9 +276,17 @@ input.block {
 		}
 
 		.column-po_cond {
+			width: 55%;
+
 			@media screen and (max-width: $break_small) {
-				width: 60%;
+				width: 40%;
 			}
+		}
+
+		.column-po_pos {
+			width: 30px;
+			text-align: center;
+			white-space: nowrap;
 		}
 
 		.column-po_state {
@@ -413,6 +533,32 @@ input.block {
 				margin: 0;
 			}
 		}
+	}
+
+	.wp-picker-container {
+		* {
+			box-sizing: content-box;
+		}
+
+		.wp-picker-holder {
+			position: absolute;
+			z-index: 10;
+		}
+
+		.iris-picker {
+			box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+		}
+	}
+
+	hr {
+		margin: 16px -12px 6px;
+		border-top: 0;
+		border-bottom: 1px solid #EEE;
+	}
+
+	.wpmui-toggle {
+		float: right;
+		margin: 6px;
 	}
 }
 

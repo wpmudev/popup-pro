@@ -10,11 +10,7 @@ class IncPopupItem {
 	const POST_TYPE = 'inc_popup';
 
 	// The styles available for this popup.
-	public $styles = array(
-		'default',
-		'simple',
-		'cabriolet',
-	);
+	public $styles = null;
 
 	// The available options for the display setting.
 	public $display_opts = array(
@@ -66,11 +62,17 @@ class IncPopupItem {
 	// CSS style of the popup.
 	public $style = 'default';
 
+	// Info if the used popup-style is old (4.5 or earlier)
+	public $deprecated_style = false;
+
 	// Checkbox: Use custom size.
 	public $custom_size = false;
 
 	// Popup size (width, height of the box).
 	public $size = array();
+
+	// Checkbox: Use custom colors.
+	public $custom_colors = false;
 
 	// Colors (background, font).
 	public $color = array();
@@ -99,6 +101,9 @@ class IncPopupItem {
 
 	// Appear after <delay> seconds.
 	public $delay = 0;
+
+	// s (seconds) or m (minutes).
+	public $delay_type = 's';
 
 	// Appear after scrolling <scroll> % of the page.
 	public $scroll = 0;
@@ -160,11 +165,13 @@ class IncPopupItem {
 			'width' => null,
 			'height' => null,
 		);
+		$this->custom_colors = false;
 		$this->color = array(
 			'back' => null,
 			'fore' => null,
 		);
 		$this->style = 'default';
+		$this->deprecated_style = false;
 		$this->round_corners = true;
 		$this->can_hide = false;
 		$this->close_hides = false;
@@ -172,6 +179,7 @@ class IncPopupItem {
 		$this->overlay_close = true;
 		$this->display = 'delay';
 		$this->delay = 0;
+		$this->delay_type = 's';
 		$this->scroll = 0;
 		$this->anchor = '';
 		$this->checks = array();
@@ -193,6 +201,9 @@ class IncPopupItem {
 		}
 		$this->reset();
 
+		$styles = apply_filters( 'popover-styles', array() );
+		$style_keys = array_keys( $styles );
+
 		isset( $data['id'] ) && $this->id = $data['id'];
 		isset( $data['name'] ) && $this->name = $data['name'];
 		isset( $data['order'] ) && $this->order = $data['order'];
@@ -207,23 +218,34 @@ class IncPopupItem {
 		isset( $data['cta_link'] ) && $this->cta_link = $data['cta_link'];
 		isset( $data['custom_size'] ) && $this->custom_size = $data['custom_size'];
 
-		is_numeric( @$data['size']['width'] ) && $this->size['width'] = absint( $data['size']['width'] );
-		is_numeric( @$data['size']['height'] ) && $this->size['height'] = absint( $data['size']['height'] );
+		isset( $data['size']['width'] ) && $this->size['width'] = $data['size']['width'];
+		isset( $data['size']['height'] ) && $this->size['height'] = $data['size']['height'];
+		is_numeric( $this->size['width'] ) && $this->size['width'] .= 'px';
+		is_numeric( $this->size['height'] ) && $this->size['height'] .= 'px';
 
 		isset( $data['color']['back'] ) && $this->color['back'] = $data['color']['back'];
 		isset( $data['color']['fore'] ) && $this->color['fore'] = $data['color']['fore'];
+		if ( isset( $data['custom_colors'] ) ) {
+			$this->custom_colors = (true == $data['custom_colors']);
+		} else {
+			$this->custom_colors = ( ! empty( $this->color['back'] ) && ! empty( $this->color['fore'] ) );
+		}
 
-		in_array( @$data['style'], $this->styles ) && $this->style = $data['style'];
+		in_array( @$data['style'], $style_keys ) && $this->style = $data['style'];
+		if ( ! isset( $styles[ $this->style ] ) ) { $this->style = 'simple'; } // default style.
+		$this->deprecated_style = $styles[ $this->style ]->deprecated;
+
 		isset( $data['round_corners'] ) && $this->round_corners = (true == $data['round_corners']);
 		isset( $data['can_hide'] ) && $this->can_hide = (true == $data['can_hide']);
-		isset( $data['close_is_hide'] ) && $this->close_is_hide = (true == $data['close_is_hide']);
+		isset( $data['close_hides'] ) && $this->close_hides = (true == $data['close_hides']);
 		is_numeric( @$data['hide_expire'] ) && $this->hide_expire = absint( $data['hide_expire'] );
 		isset( $data['overlay_close'] ) && $this->overlay_close = ( true == $data['overlay_close'] );
 
 		in_array( @$data['display'], $this->display_opts ) && $this->display = $data['display'];
 		is_numeric( @$data['delay'] ) && $this->delay = absint( $data['delay'] );
+		isset( $data['delay_type'] ) && $this->delay_type = $data['delay_type'];
 		is_numeric( @$data['scroll'] ) && $this->scroll = absint( $data['scroll'] );
-		isset( $data['anchor'] ) && $this->anchor = (true == $data['anchor']);
+		isset( $data['anchor'] ) && $this->anchor = $data['anchor'];
 
 		is_array( @$data['checks'] ) && $this->checks = $data['checks'];
 		is_array( @$data['rules'] ) && $this->rules = $data['rules'];
@@ -274,6 +296,8 @@ class IncPopupItem {
 			default:         $status = 'inactive'; break;
 		}
 
+		$styles = apply_filters( 'popover-styles', array() );
+
 		$this->id = $post->ID;
 		$this->name = $post->post_title;
 		$this->status = $status;
@@ -291,6 +315,7 @@ class IncPopupItem {
 		$this->custom_size = get_post_meta( $this->id, 'po_custom_size', true );
 		$this->size = get_post_meta( $this->id, 'po_size', true );
 		$this->color = get_post_meta( $this->id, 'po_color', true );
+		$this->custom_colors = get_post_meta( $this->id, 'po_custom_colors', true );
 		$this->style = get_post_meta( $this->id, 'po_style', true );
 		$this->round_corners = get_post_meta( $this->id, 'po_round_corners', true );
 		$this->can_hide = get_post_meta( $this->id, 'po_can_hide', true );
@@ -299,10 +324,14 @@ class IncPopupItem {
 		$this->overlay_close = get_post_meta( $this->id, 'po_overlay_close', true );
 		$this->display = get_post_meta( $this->id, 'po_display', true );
 		$this->delay = get_post_meta( $this->id, 'po_delay', true );
+		$this->delay_type = get_post_meta( $this->id, 'po_delay_type', true );
 		$this->scroll = get_post_meta( $this->id, 'po_scroll', true );
 		$this->anchor = get_post_meta( $this->id, 'po_anchor', true );
 		$this->checks = get_post_meta( $this->id, 'po_checks', true );
 		$this->rules = get_post_meta( $this->id, 'po_rules', true );
+
+		if ( ! isset( $styles[ $this->style ] ) ) { $this->style = 'simple'; } // default style.
+		$this->deprecated_style = $styles[ $this->style ]->deprecated;
 
 		if ( empty( $this->name ) ) {
 			$this->name = __( 'Unnamed Pop Up', PO_LANG );
@@ -313,8 +342,10 @@ class IncPopupItem {
 	 * Save the current popup to the database.
 	 *
 	 * @since  4.6
+	 * @param  bool $show_message If true then a success message will be
+	 *                displayed. Set to false when saving via ajax.
 	 */
-	public function save() {
+	public function save( $show_message = true ) {
 		global $allowedposttags;
 
 		if ( ! did_action( 'wp_loaded' ) ) {
@@ -358,6 +389,7 @@ class IncPopupItem {
 			update_post_meta( $this->id, 'po_custom_size', $this->custom_size );
 			update_post_meta( $this->id, 'po_size', $this->size );
 			update_post_meta( $this->id, 'po_color', $this->color );
+			update_post_meta( $this->id, 'po_custom_colors', $this->custom_colors );
 			update_post_meta( $this->id, 'po_style', $this->style );
 			update_post_meta( $this->id, 'po_round_corners', $this->round_corners );
 			update_post_meta( $this->id, 'po_can_hide', $this->can_hide );
@@ -366,38 +398,74 @@ class IncPopupItem {
 			update_post_meta( $this->id, 'po_overlay_close', $this->overlay_close );
 			update_post_meta( $this->id, 'po_display', $this->display );
 			update_post_meta( $this->id, 'po_delay', $this->delay );
+			update_post_meta( $this->id, 'po_delay_type', $this->delay_type );
 			update_post_meta( $this->id, 'po_scroll', $this->scroll );
 			update_post_meta( $this->id, 'po_anchor', $this->anchor );
 			update_post_meta( $this->id, 'po_checks', $this->checks );
 			update_post_meta( $this->id, 'po_rules', $this->rules );
-
-			if ( $this->orig_status === $this->status ) {
-				$msg = __( 'Saved Pop Up "<strong>%1$s</strong>"', PO_LANG );
-			} else {
-				switch ( $this->status ) {
-					case 'active':
-						$msg = __( 'Activated Pop Up "<strong>%1$s</strong>".', PO_LANG );
-						break;
-
-					case 'inactive':
-						$msg = __( 'Deactivated Pop Up "<strong>%1$s</strong>".', PO_LANG );
-						break;
-
-					case 'trash':
-						$msg = __( 'Moved Pop Up "<strong>%1$s</strong>" to trash.', PO_LANG );
-						break;
-
-					default:
-						$msg = __( 'Saved Pop Up "<strong>%1$s</strong>".', PO_LANG );
-						break;
-				}
-			}
-			TheLib::message( sprintf( $msg, $this->name ) );
-		} else {
-			TheLib::message( __( 'Could not save Pop Up.', PO_LANG ), 'err' );
 		}
+
+		if ( $show_message ) {
+			if ( ! empty( $res ) ) {
+				if ( $this->orig_status === $this->status ) {
+					$msg = __( 'Saved Pop Up "<strong>%1$s</strong>"', PO_LANG );
+				} else {
+					switch ( $status ) {
+						case 'publish':
+							$msg = __( 'Activated Pop Up "<strong>%1$s</strong>".', PO_LANG );
+							break;
+
+						case 'draft':
+							$msg = __( 'Deactivated Pop Up "<strong>%1$s</strong>".', PO_LANG );
+							break;
+
+						case 'trash':
+							$msg = __( 'Moved Pop Up "<strong>%1$s</strong>" to trash.', PO_LANG );
+							break;
+
+						default:
+							$msg = __( 'Saved Pop Up "<strong>%1$s</strong>".', PO_LANG );
+							break;
+					}
+				}
+				TheLib::message( sprintf( $msg, $this->name ) );
+			} else {
+				TheLib::message( __( 'Could not save Pop Up.', PO_LANG ), 'err' );
+			}
+		}
+
 		return true;
 	}
+
+	/**
+	 * Checks whether the current popup uses the specified rule or not.
+	 *
+	 * @since  4.6
+	 * @param  string $key Rule-ID.
+	 * @return bool
+	 */
+	public function uses_rule( $key ) {
+		$active = false;
+
+		foreach ( $this->checks as $ind => $check_key ) {
+			if ( $key == $check_key ) {
+				$active = true;
+				break;
+			}
+		}
+
+		return $active;
+	}
+
+
+	/*======================================*\
+	==========================================
+	==                                      ==
+	==           STATIC Functions           ==
+	==                                      ==
+	==========================================
+	\*======================================*/
+
 
 	/**
 	 * Returns an string with the translated condition label.
@@ -439,4 +507,6 @@ class IncPopupItem {
 			default:          return $key;
 		}
 	}
+
+
 }

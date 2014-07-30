@@ -19,6 +19,7 @@
 	<div class="wpmui-grid-12">
 		<div class="col-6">
 			<input class="block"
+				type="text"
 				id="po-heading"
 				name="po_heading"
 				placeholder="<?php _e( 'Enter your heading here...', PO_LANG ); ?>"
@@ -26,6 +27,7 @@
 		</div>
 		<div class="col-6">
 			<input class="block"
+				type="text"
 				id="po-subheading"
 				name="po_subheading"
 				placeholder="<?php _e( 'Enter your subheading here...', PO_LANG ); ?>"
@@ -56,6 +58,7 @@
 	<div class="wpmui-grid-12">
 		<div class="col-4">
 			<input class="block"
+				type="text"
 				id="po-cta"
 				name="po_cta"
 				placeholder="<?php _e( 'Button Label', PO_LANG ); ?>"
@@ -63,6 +66,7 @@
 		</div>
 		<div class="col-4">
 			<input class="block"
+				type="text"
 				id="po-cta-link"
 				name="po_cta_link"
 				placeholder="<?php _e( 'Button Link (http://www.example.com)', PO_LANG ); ?>"
