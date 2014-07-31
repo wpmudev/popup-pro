@@ -42,7 +42,6 @@ if ( ! defined( 'PO_LANG' ) ) {
 	define( 'PO_LANG_DIR', $plugin_dir_rel . 'lang/' );
 	define( 'PO_TPL_DIR', $plugin_dir . 'css/tpl/' );
 	define( 'PO_INC_DIR', $plugin_dir . 'inc/' );
-	define( 'PO_HELP_DIR', $plugin_dir . 'help/' );
 	define( 'PO_JS_DIR', $plugin_dir . 'js/' );
 	define( 'PO_CSS_DIR', $plugin_dir . 'css/' );
 	define( 'PO_VIEWS_DIR', $plugin_dir . 'views/' );
@@ -51,7 +50,6 @@ if ( ! defined( 'PO_LANG' ) ) {
 	define( 'PO_JS_URL', $plugin_url . 'js/' );
 	define( 'PO_CSS_URL', $plugin_url . 'css/' );
 	define( 'PO_IMG_URL', $plugin_url . 'img/' );
-	define( 'PO_HELP_URL', $plugin_url . 'help/' );
 
 	require_once( PO_INC_DIR . 'config-defaults.php');
 

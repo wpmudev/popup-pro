@@ -97,17 +97,6 @@ abstract class IncPopupBase {
 	}
 
 	/**
-	 * Returns an IMG tag that displays the defined image.
-	 *
-	 * @since  4.6
-	 * @param  string $image The image file name.
-	 * @return string HTML code
-	 */
-	static public function help_img( $image ) {
-		return '<img src="' . esc_attr( PO_HELP_URL . 'img/' . $image ) . '" />';
-	}
-
-	/**
 	 * Returns an array with all core popup styles.
 	 *
 	 * @since  4.6
