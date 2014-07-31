@@ -24,17 +24,18 @@ if ( ! defined( 'PO_DEFAULT_COUNTRY' ) ) {
 	define( 'PO_DEFAULT_COUNTRY', 'US', true );
 }
 
-// Set default cookie expiry length.
+// Set default cookie expiry time (in days).
 if ( ! defined( 'PO_DEFAULT_EXPIRY' ) ) {
 	define( 'PO_DEFAULT_EXPIRY', 365, true );
 }
 
-// ?? Allow rich (html) content
+// Should Pop Up content be parsed before displaying the popup (... -> &helip; etc.)?
 if ( ! defined( 'PO_ALLOW_CONTENT_FILTERING' ) ) {
 	define( 'PO_ALLOW_CONTENT_FILTERING', false, true );
 }
 
-// ?? Set filtering level for rich content
+// Should Pop Up content be filtered via the_content (allows shortcodes, etc.)?
+// For this to work, the flag PO_ALLOW_CONTENT_FILTERING has to be TRUE!
 if ( ! defined( 'PO_USE_FULL_CONTENT_FILTERING' ) ) {
 	define( 'PO_USE_FULL_CONTENT_FILTERING', false, true );
 }

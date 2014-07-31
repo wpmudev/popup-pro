@@ -53,26 +53,22 @@ if ( ! defined( 'PO_LANG' ) ) {
 	define( 'PO_IMG_URL', $plugin_url . 'img/' );
 	define( 'PO_HELP_URL', $plugin_url . 'help/' );
 
-	require_once( PO_INC_DIR . 'config.php');
+	require_once( PO_INC_DIR . 'config-defaults.php');
 
-	// Include function library
+	// Include function library.
 	if ( file_exists( PO_INC_DIR . 'external/wpmu-lib/core.php' ) ) {
 		require_once PO_INC_DIR . 'external/wpmu-lib/core.php';
 	}
 
 	if ( is_admin() ) {
-		// Defines class "IncPopup"
+		// Defines class 'IncPopup'.
 		require_once( PO_INC_DIR . 'class-popup-admin.php');
 
-		require_once( PO_INC_DIR . 'class_wd_help_tooltips.php');
-		require_once( PO_INC_DIR . 'classes/popover.help.php');
-		require_once( PO_INC_DIR . 'classes/popoveradmin.php');
 		require_once( PO_INC_DIR . 'classes/popoverajax.php');
 
-		$popover = new popoveradmin();
 		$popoverajax = new popoverajax();
 	} else {
-		// Defines class "IncPopup"
+		// Defines class 'IncPopup'.
 		require_once( PO_INC_DIR . 'class-popup-public.php');
 
 		// Adding ajax so we don't have to duplicate checking functionality in the public class

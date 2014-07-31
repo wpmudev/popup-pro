@@ -114,10 +114,10 @@ class IncPopupItem {
 	// -- Conditions
 
 	// Conditions that need to be true in order to use the popup.
-	public $checks = array();
+	public $rule = array();
 
-	// Extra arguments for the conditions (e.g. "check[0] = count" and "rules[count] = 3")
-	public $rules = array();
+	// Extra arguments for the conditions (e.g. "rule[0] = count" and "rule_data[count] = 3")
+	public $rule_data = array();
 
 	// -------------------------------------------------------------------------
 
@@ -162,13 +162,13 @@ class IncPopupItem {
 		$this->image = '';
 		$this->custom_size = false;
 		$this->size = array(
-			'width' => null,
-			'height' => null,
+			'width' => '',
+			'height' => '',
 		);
 		$this->custom_colors = false;
 		$this->color = array(
-			'back' => null,
-			'fore' => null,
+			'back' => '',
+			'fore' => '',
 		);
 		$this->style = 'default';
 		$this->deprecated_style = false;
@@ -182,8 +182,8 @@ class IncPopupItem {
 		$this->delay_type = 's';
 		$this->scroll = 0;
 		$this->anchor = '';
-		$this->checks = array();
-		$this->rules = array();
+		$this->rule = array();
+		$this->rule_data = array();
 	}
 
 	/**
@@ -232,9 +232,6 @@ class IncPopupItem {
 		}
 
 		in_array( @$data['style'], $style_keys ) && $this->style = $data['style'];
-		if ( ! isset( $styles[ $this->style ] ) ) { $this->style = 'simple'; } // default style.
-		$this->deprecated_style = $styles[ $this->style ]->deprecated;
-
 		isset( $data['round_corners'] ) && $this->round_corners = (true == $data['round_corners']);
 		isset( $data['can_hide'] ) && $this->can_hide = (true == $data['can_hide']);
 		isset( $data['close_hides'] ) && $this->close_hides = (true == $data['close_hides']);
@@ -247,19 +244,75 @@ class IncPopupItem {
 		is_numeric( @$data['scroll'] ) && $this->scroll = absint( $data['scroll'] );
 		isset( $data['anchor'] ) && $this->anchor = $data['anchor'];
 
-		is_array( @$data['checks'] ) && $this->checks = $data['checks'];
-		is_array( @$data['rules'] ) && $this->rules = $data['rules'];
+		is_array( @$data['rule'] ) && $this->rule = $data['rule'];
+		is_array( @$data['rule_data'] ) && $this->rule_data = $data['rule_data'];
 
-		// Remove empty/invalid conditions.
-		foreach ( $this->checks as $ind => $key ) {
-			if ( empty( $key ) ) {
-				unset( $this->checks[$ind] );
-			}
+		$this->validate_data();
+	}
+
+	/**
+	 * Validates and sanitizes the current popup details.
+	 *
+	 * @since  4.6
+	 */
+	protected function validate_data() {
+		$styles = apply_filters( 'popover-styles', array() );
+
+		// Name.
+		if ( empty( $this->name ) ) {
+			$this->name = __( 'New Pop Up', PO_LANG );
 		}
-		foreach ( $this->rules as $ind => $key ) {
-			if ( empty( $key ) ) {
-				unset( $this->rules[$ind] );
-			}
+
+		// Order.
+		if ( empty( $this->id ) || empty( $this->order ) ) {
+			$this->order = IncPopupDatabase::next_order();
+		}
+
+		// Color.
+		if ( ! is_array( $this->color ) ) { $this->color = array(); }
+		if ( ! isset( $this->color['back'] ) ) { $this->color['back'] = ''; }
+		if ( ! isset( $this->color['fore'] ) ) { $this->color['fore'] = ''; }
+		if ( ! empty( $this->color['back'] ) && $this->color['back'][0] !== '#' ) {
+			$this->color['back'] = '#' . $this->color['back'];
+		}
+		if ( ! empty( $this->color['fore'] ) && $this->color['fore'][0] !== '#' ) {
+			$this->color['fore'] = '#' . $this->color['fore'];
+		}
+
+		// Size.
+		if ( ! is_array( $this->size ) ) { $this->size = array(); }
+		if ( ! isset( $this->size['width'] ) ) { $this->size['width'] = ''; }
+		if ( ! isset( $this->size['height'] ) ) { $this->size['height'] = ''; }
+
+		// Style.
+		if ( ! isset( $styles[ $this->style ] ) ) { $this->style = 'simple'; } // default style.
+		$this->deprecated_style = $styles[ $this->style ]->deprecated;
+
+		// Boolean types.
+		$this->custom_size = (true == @$this->custom_size);
+		$this->custom_colors = (true == @$this->custom_colors);
+		$this->deprecated_style = (true == @$this->deprecated_style);
+		$this->round_corners = (true == @$this->round_corners);
+		$this->can_hide = (true == @$this->can_hide);
+		$this->close_hides = (true == @$this->close_hides);
+		$this->overlay_close = (true == @$this->overlay_close);
+
+		// Numeric types.
+		$this->hide_expire = absint( $this->hide_expire );
+		$this->delay = absint( $this->delay );
+		$this->scroll = absint( $this->scroll );
+
+		// Display behavior.
+		if ( ! in_array( $this->display, $this->display_opts ) ) { $this->display = 'delay'; }
+
+		// Rules.
+		if ( ! is_array( $this->rule ) ) { $this->rule = array(); }
+		foreach ( $this->rule as $ind => $key ) {
+			if ( empty( $key ) ) { unset( $this->rule[$ind] ); }
+		}
+		if ( ! is_array( $this->rule_data ) ) { $this->rule_data = array(); }
+		foreach ( $this->rule_data as $ind => $key ) {
+			if ( empty( $key ) ) { unset( $this->rule_data[$ind] ); }
 		}
 
 		// Check if the "id" is valid!
@@ -327,15 +380,10 @@ class IncPopupItem {
 		$this->delay_type = get_post_meta( $this->id, 'po_delay_type', true );
 		$this->scroll = get_post_meta( $this->id, 'po_scroll', true );
 		$this->anchor = get_post_meta( $this->id, 'po_anchor', true );
-		$this->checks = get_post_meta( $this->id, 'po_checks', true );
-		$this->rules = get_post_meta( $this->id, 'po_rules', true );
+		$this->rule = get_post_meta( $this->id, 'po_rule', true );
+		$this->rule_data = get_post_meta( $this->id, 'po_rule_data', true );
 
-		if ( ! isset( $styles[ $this->style ] ) ) { $this->style = 'simple'; } // default style.
-		$this->deprecated_style = $styles[ $this->style ]->deprecated;
-
-		if ( empty( $this->name ) ) {
-			$this->name = __( 'Unnamed Pop Up', PO_LANG );
-		}
+		$this->validate_data();
 	}
 
 	/**
@@ -347,6 +395,8 @@ class IncPopupItem {
 	 */
 	public function save( $show_message = true ) {
 		global $allowedposttags;
+
+		$this->validate_data();
 
 		if ( ! did_action( 'wp_loaded' ) ) {
 			add_action( 'wp_loaded', array( $this, 'save' ) );
@@ -401,8 +451,8 @@ class IncPopupItem {
 			update_post_meta( $this->id, 'po_delay_type', $this->delay_type );
 			update_post_meta( $this->id, 'po_scroll', $this->scroll );
 			update_post_meta( $this->id, 'po_anchor', $this->anchor );
-			update_post_meta( $this->id, 'po_checks', $this->checks );
-			update_post_meta( $this->id, 'po_rules', $this->rules );
+			update_post_meta( $this->id, 'po_rule', $this->rule );
+			update_post_meta( $this->id, 'po_rule_data', $this->rule_data );
 		}
 
 		if ( $show_message ) {
@@ -447,8 +497,8 @@ class IncPopupItem {
 	public function uses_rule( $key ) {
 		$active = false;
 
-		foreach ( $this->checks as $ind => $check_key ) {
-			if ( $key == $check_key ) {
+		foreach ( $this->rule as $ind => $rule_key ) {
+			if ( $key == $rule_key ) {
 				$active = true;
 				break;
 			}

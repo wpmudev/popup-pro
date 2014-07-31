@@ -21,58 +21,107 @@ abstract class IncPopupRule {
 	 * Rule details (ID, Label, Description)
 	 * @var array
 	 */
-	public $infos = array();
+	protected $infos = array();
 
-	/*---------------  OVERWRITABLE Functions  ----------------*/
+	/*---------------  OVERWRITABLE functions  ----------------*/
 
 	/**
 	 * Initialize the rule object.
-	 * Overwrite this function
+	 * Overwrite this function!
 	 *
 	 * @since  4.6
 	 */
-	public function init() {
+	protected function init() {
+		/*
+		// Register new rule
+		$this->add_rule( 'id', 'label', 'description' );
+
+		// Add custom hooks for the rule
+		add_action( 'wp_footer', array( $this, 'footer_code' ) );
+		*/
 	}
 
 	/**
-	 * Apply the rule-logic to the specified popup
-	 * Overwrite this function
+	 * Apply the rule-logic to the specified popup:
+	 * Create a function with name "apply_" + rule-ID
 	 *
-	 * @since  1.0.0
-	 * @param  bool $show Current decission whether popup should be displayed.
-	 * @param  Object $popup The popup that is evaluated.
-	 * @return bool Updated decission to display popup or not.
+	 * Example:
+	 * protected function apply_url( $data ) {
+	 *   return true; // Condition for rule "url"
+	 * }
+	 *
+	 * @since  4.6
+	 * @param  mixed $data Rule-data which was saved via the save_() handler.
+	 * @return bool Decission to display popup or not.
 	 */
-	public function apply( $show, $popup ) {
-		return $show;
+	protected function apply_( $data ) {
+		return true;
 	}
 
 	/**
-	 * Output the Admin-Form for the active rule.
-	 * Overwrite this function
+	 * Output the Admin-Form for a single rule:
+	 * Create a function with name "form_" + rule-ID
 	 *
-	 * @since  1.0.0
-	 * @param  Object $popup The popup that is edited.
-	 * @param  string $key Rule-ID.
+	 * Example:
+	 * protected function form_url( $data ) {
+	 *   echo 'Form for rule "url"...';
+	 * }
+	 *
+	 * @since  4.6
+	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 */
-	public function form( $popup, $key ) {
+	protected function form_( $data ) {
 		echo '';
 	}
 
 	/**
-	 * Update and return the $settings array to save the form values.
-	 * Overwrite this function
+	 * Update and return rule-config which should be saved in DB.
+	 * Create a function with name "save_" + rule-ID
 	 *
-	 * @since  1.0.0
-	 * @param  array $settings Collection of rule-settings.
-	 * @param  string $key Rule-ID.
-	 * @return array The updated rule-settings collection.
+	 * Example:
+	 * protected function save_url() {
+	 *   return array();
+	 * }
+	 *
+	 * @since  4.6
+	 * @return mixed Data collection of this rule.
 	 */
-	public function save( $settings, $key ) {
-		return $settings;
+	protected function save_() {
+		return false;
 	}
 
-	/*---------------  PUBLIC Functions  ----------------*/
+	/*---------------  PUBLIC functions  ----------------*/
+
+	/**
+	 * Checks if this object defines a rule with the specified ID.
+	 *
+	 * @since  4.6
+	 * @param  string $key Rule-ID
+	 * @return bool
+	 */
+	public function has_rule( $key ) {
+		return isset( $this->infos[ $key ] );
+	}
+
+	/**
+	 * Adds rule-details to the objects infos-collection
+	 *
+	 * @since 4.6
+	 * @param string $id
+	 * @param string $label
+	 * @param string $description
+	 * @param string $exclude Optional. Rule-ID that is excluded when this
+	 *                rule is activated.
+	 */
+	protected function add_info( $id, $label, $description, $exclude = '' ) {
+		$this->infos[ $id ] = (object) array(
+			'label' => $label,
+			'description' => $description,
+			'exclude' => $exclude,
+		);
+	}
+
+	/*---------------  INTERNAL functions  ----------------*/
 
 	/**
 	 * Create the rule object.
@@ -82,7 +131,7 @@ abstract class IncPopupRule {
 	 */
 	public function __construct() {
 		$this->init();
-		$this->add_hooks();
+		$this->_add_hooks();
 	}
 
 	/**
@@ -91,7 +140,7 @@ abstract class IncPopupRule {
 	 *
 	 * @since  1.0.0
 	 */
-	public function label( $rule, $key ) {
+	public function _label( $rule, $key ) {
 		if ( isset( $this->infos[ $key ] ) ) {
 			return $this->infos[ $key ]->label;
 		}
@@ -99,24 +148,98 @@ abstract class IncPopupRule {
 	}
 
 	/**
+	 * Apply the rule-logic to the specified popup
+	 *
+	 * @since  1.0.0
+	 * @param  bool $show Current decission whether popup should be displayed.
+	 * @param  Object $popup The popup that is evaluated.
+	 * @return bool Updated decission to display popup or not.
+	 */
+	public function _apply( $show, $popup ) {
+		if ( ! $show ) { return $show; }
+
+		foreach ( $this->infos as $key => $rule ) {
+			$method = 'apply_' . $key;
+			if ( method_exists( $this, $method ) ) {
+				if ( ! $this->$method( @$popup->rule_data[$key] ) ) {
+					$show = false;
+					break;
+				}
+			}
+		}
+
+		return $show;
+	}
+
+	/**
+	 * Output the Admin-Form for the active rule.
+	 *
+	 * @since  1.0.0
+	 * @param  Object $popup The popup that is edited.
+	 * @param  string $key Rule-ID.
+	 */
+	public function _form( $popup, $key ) {
+		$method = 'form_' . $key;
+		if ( method_exists( $this, $method ) ) {
+			echo '<div class="rule-form">';
+			$this->$method( @$popup->rule_data[$key] );
+			echo '</div>';
+		}
+	}
+
+	/**
+	 * Update and return the $settings array to save the form values.
+	 *
+	 * @since  1.0.0
+	 * @param  array $data Collection of rule-settings.
+	 * @return array The updated rule-settings collection.
+	 */
+	public function _save( $data ) {
+		foreach ( $this->infos as $key => $rule ) {
+			$method = 'save_' . $key;
+			if ( method_exists( $this, $method ) ) {
+				$data[$key] = $this->$method();
+			}
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Display the rule form inside the "active rules" list
 	 *
 	 * @since  1.0.0
+	 * @param  InPopupItem $popup
+	 * @param  string|false $show_key If false: Render the inactive forms
+	 *                If string: Render the form for this rule-ID.
 	 */
-	public function admin_active_rule( $popup, $key, $index ) {
+	public function _admin_active_rule( $popup, $show_key ) {
+		if ( ! empty( $show_key ) && ! $this->has_rule( $show_key ) ) { return; }
+
 		foreach ( $this->infos as $key => $data ) {
-			if ( $popup->uses_rule( $key ) ) {
-				?>
-				<li id="po-rule-<?php echo esc_attr( $index ); ?>" class="rule">
-					<div>
-						<strong><?php echo esc_html( $data->label ); ?></strong>
+			$active = $popup->uses_rule( $key );
+			$class = $active ? 'on' : 'off';
+
+			if ( $active && empty( $show_key ) ) { continue; }
+			if ( ! $active && ! empty( $show_key ) ) { continue; }
+			if ( $active && $show_key !== $key ) { continue; }
+
+			?>
+			<li id="po-rule-<?php echo esc_attr( $key ); ?>"
+				class="rule <?php echo esc_attr( $class )?>"
+				data-key="<?php echo esc_attr( $key ); ?>">
+				<div class="rule-title">
+					<?php echo esc_html( $data->label ); ?>
+				</div>
+				<span class="rule-toggle dashicons"></span>
+				<div class="rule-inner">
+					<div class="rule-description">
+						<em><?php echo esc_html( $data->description ); ?></em>
 					</div>
-					<div>
-						<?php $this->form( $popup, $key ); ?>
-					</div>
-				</li>
-				<?php
-			}
+					<?php $this->_form( $popup, $key ); ?>
+				</div>
+			</li>
+			<?php
 		}
 	}
 
@@ -126,14 +249,19 @@ abstract class IncPopupRule {
 	 *
 	 * @since  1.0.0
 	 */
-	public function admin_rule_list( $popup ) {
+	public function _admin_rule_list( $popup ) {
 		foreach ( $this->infos as $key => $data ) {
 			$active = $popup->uses_rule( $key );
 			$class = $active ? 'on' : 'off';
 			?>
-			<li class="rule <?php echo esc_attr( $class ); ?>">
+			<li class="rule rule-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $class ); ?>">
 				<div class="wpmui-toggle">
-					<input type="checkbox" name="po_check[]" class="wpmui-toggle-checkbox" id="rule-<?php echo esc_attr( $key ); ?>" checked>
+					<input type="checkbox"
+						class="wpmui-toggle-checkbox"
+						id="rule-<?php echo esc_attr( $key ); ?>"
+						data-form="#po-rule-<?php echo esc_attr( $key ); ?>"
+						data-exclude="<?php echo esc_attr( @$data->exclude ); ?>"
+						<?php checked( $active ); ?> />
 					<label class="wpmui-toggle-label" for="rule-<?php echo esc_attr( $key ); ?>">
 						<span class="wpmui-toggle-inner"></span>
 						<span class="wpmui-toggle-switch"></span>
@@ -145,56 +273,39 @@ abstract class IncPopupRule {
 		}
 	}
 
-	/*---------------  PROTECTED Functions  ----------------*/
-
-	/**
-	 * Adds rule-details to the objects infos-collection
-	 *
-	 * @since 4.6
-	 * @param string $id
-	 * @param string $label
-	 * @param string $description
-	 */
-	protected function add_info( $id, $label, $description ) {
-		$this->infos[ $id ] = (object) array(
-			'label' => $label,
-			'description' => $description,
-		);
-	}
-
 	/**
 	 * Register hooks.
 	 *
 	 * @since 1.0.0
 	 */
-	protected function add_hooks() {
+	protected function _add_hooks() {
 		add_filter(
 			'popup-rule-label',
-			array( $this, 'label' ),
+			array( $this, '_label' ),
 			10, 2
 		);
 
 		add_action(
-			'popup-active-rule',
-			array( $this, 'admin_active_rule' ),
-			10, 3
+			'popup-rule-forms',
+			array( $this, '_admin_active_rule' ),
+			10, 2
 		);
 
 		add_action(
 			'popup-all-rules',
-			array( $this, 'admin_rule_list' ),
+			array( $this, '_admin_rule_list' ),
 			10, 1
 		);
 
 		add_filter(
-			'popup-data-save',
-			array( $this, 'save' ),
-			10, 2
+			'popup-save-rules',
+			array( $this, '_save' ),
+			10, 1
 		);
 
 		add_filter(
 			'popup-apply-rules',
-			array( $this, 'apply' ),
+			array( $this, '_apply' ),
 			10, 2
 		);
 	}

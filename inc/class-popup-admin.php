@@ -3,6 +3,15 @@
 require_once PO_INC_DIR . 'class-popup-base.php';
 
 /**
+		Code snippet from old plugin:
+
+		// Add in help pages
+		$screen = get_current_screen();
+		$help = new Popover_Help( $screen );
+		$help->attach();
+ */
+
+/**
  * Defines the popup class for admin pages.
  *
  * @since  4.6
@@ -56,6 +65,13 @@ class IncPopup extends IncPopupBase {
 			array( 'IncPopup', 'handle_ajax' )
 		);
 
+		// Every time a popup is changed we validate "order" value of all popups.
+		add_action(
+			'save_post_' . IncPopupItem::POST_TYPE,
+			array( 'IncPopup', 'post_check_order' ),
+			99, 3
+		);
+
 		// -- SETTINGS --------------------------
 
 		// Save changes from settings page.
@@ -81,6 +97,7 @@ class IncPopup extends IncPopupBase {
 	static public function setup_module_specific( $hook ) {
 		if ( IncPopupItem::POST_TYPE === @$hook->post_type ) {
 			TheLib::add_ui( 'core' );
+			TheLib::add_ui( 'select' );
 			TheLib::add_ui( PO_CSS_URL . 'popup-admin.css' );
 			TheLib::add_ui( PO_JS_URL . 'popup-admin.min.js' );
 			TheLib::add_data(
@@ -260,7 +277,7 @@ class IncPopup extends IncPopupBase {
 	static public function handle_settings_update() {
 		if ( @$_POST['action'] == 'updatesettings' ) {
 			check_admin_referer( 'update-popover-settings' );
-			update_popover_option( 'popover-settings', $_POST );
+			IncPopupDatabase::set_option( 'popover-settings', $_POST );
 
 			TheLib::message( __( 'Your settings have been updated.', PO_LANG ) );
 			$redirect_url = remove_query_arg( array( 'message', 'count' ), wp_get_referer() );
@@ -376,6 +393,36 @@ class IncPopup extends IncPopupBase {
 		}
 	}
 
+	/**
+	 * Returns a list with all available add-on files.
+	 *
+	 * @since  4.6
+	 * @return array List of add-on files.
+	 */
+	public function get_addons() {
+		$List = null;
+
+		if ( null === $List ) {
+			$List = array();
+			$base_len = strlen( PO_INC_DIR . 'addons/' );
+			foreach ( glob( PO_INC_DIR . 'addons/*.php' ) as $path ) {
+				$List[] = substr( $path, $base_len );
+			}
+
+			/**
+			 * Filter the add-on list to add or remove items.
+			 */
+			$List = apply_filters( 'popover-available-addons', $List );
+
+			// Legacy filter (with underscore)
+			$List = apply_filters( 'popover_available_addons', $List );
+
+			sort( $List );
+		}
+
+		return $List;
+	}
+
 
 	/*=================================*\
 	=====================================
@@ -398,15 +445,19 @@ class IncPopup extends IncPopupBase {
 		$new_columns = array();
 
 		// Only allow re-ordering when ALL popups are visible
-		if ( empty( $_REQUEST['s'] ) ) {
+		if ( empty( $_REQUEST['s'] ) && empty( $_REQUEST['post_status'] ) ) {
 			$new_columns['po_order'] = '';
 		}
 
 		$new_columns['cb'] = $post_columns['cb'];
 		$new_columns['po_name'] = __( 'Pop Up Name', PO_LANG );
 		$new_columns['po_cond'] = __( 'Conditions', PO_LANG );
-		$new_columns['po_pos'] = __( 'Order', PO_LANG );
-		$new_columns['po_state'] = __( 'Active', PO_LANG );
+
+		if ( 'trash' != @$_REQUEST['post_status'] ) {
+			$new_columns['po_pos'] = __( 'Order', PO_LANG );
+			$new_columns['po_state'] = __( 'Active', PO_LANG );
+		}
+
 		return $new_columns;
 	}
 
@@ -515,18 +566,26 @@ class IncPopup extends IncPopupBase {
 			case 'po_cond':
 				?>
 				<div class="rules">
-				<?php foreach ( $popup->checks as $key ) : ?>
-					<?php $label = IncPopupItem::condition_label( $key ); ?>
-					<span class="rule"><?php echo esc_html( $label ); ?></span>
-				<?php endforeach; ?>
+				<?php if ( empty( $popup->rule ) ) : ?>
+					<span class="rule"><?php _e( 'Always', PO_LANG ); ?></span>
+				<?php else : ?>
+					<?php foreach ( $popup->rule as $key ) : ?>
+						<?php $label = IncPopupItem::condition_label( $key ); ?>
+						<span class="rule"><?php echo esc_html( $label ); ?></span>
+					<?php endforeach; ?>
+				<?php endif; ?>
 				</div>
 				<?php
 				break;
 
 			case 'po_pos':
-				?>
-				<span class="the-pos"><?php echo esc_html( $popup->order ); ?></span>
-				<?php
+				if ( 'trash' === $popup->status ) {
+					echo '-';
+				} else {
+					?>
+					<span class="the-pos"><?php echo esc_html( $popup->order ); ?></span>
+					<?php
+				}
 				break;
 
 			case 'po_state':
@@ -783,6 +842,29 @@ class IncPopup extends IncPopupBase {
 		echo json_encode( $new_order );
 	}
 
+	/**
+	 * Save the popup data to database
+	 *
+	 * @since  4.6
+	 * @param  int $post_id Post ID that was saved/created
+	 * @param  WP_Post $post Post object that was saved/created
+	 * @param  bool $update True means the post was updated (not created)
+	 */
+	static public function post_check_order( $post_id, $post, $update ) {
+		$popup = IncPopupDatabase::get( $post_id );
+
+		// Autosave is not processed.
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) { return; }
+
+		// This save event is for a different post type... ??
+		if ( $popup->id != $post_id ) { return; }
+
+		// User does not have permissions for this.
+		if ( ! current_user_can( IncPopupPosttype::$perms ) ) { return; }
+
+		IncPopupDatabase::refresh_order();
+	}
+
 
 	/*===================================*\
 	=======================================
@@ -941,24 +1023,16 @@ class IncPopup extends IncPopupBase {
 		$popup = IncPopupDatabase::get( $post_id );
 
 		// Autosave is not processed.
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return;
-		}
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) { return; }
 
 		// The nonce is invalid.
-		if ( ! wp_verify_nonce( @$_POST['popup-nonce'], 'save-popup' ) ) {
-			return;
-		}
+		if ( ! wp_verify_nonce( @$_POST['popup-nonce'], 'save-popup' ) ) { return; }
 
 		// This save event is for a different post type... ??
-		if ( IncPopupItem::POST_TYPE != @$_POST['post_type'] ) {
-			return;
-		}
+		if ( IncPopupItem::POST_TYPE != @$_POST['post_type'] ) { return; }
 
 		// User does not have permissions for this.
-		if ( ! current_user_can( IncPopupPosttype::$perms ) ) {
-			return;
-		}
+		if ( ! current_user_can( IncPopupPosttype::$perms ) ) { return; }
 
 		$action = @$_POST['po-action'];
 		switch ( $action ) {
@@ -981,6 +1055,7 @@ class IncPopup extends IncPopupBase {
 
 		$data = array(
 			'id' => $post_id,
+
 			// Meta: Content
 			'name' => @$_POST['po_name'],
 			'status' => $status,
@@ -1014,6 +1089,10 @@ class IncPopup extends IncPopupBase {
 			'close_hides' => isset( $_POST['po_close_hides'] ),
 			'hide_expire' => @$_POST['po_hide_expire'],
 			'overlay_close' => ! isset( $_POST['po_overlay_close'] ),
+
+			// Meta: Rules:
+			'rule' => explode( ',', @$_POST['po_rule_order'] ),
+			'rule_data' => apply_filters( 'popup-save-rules', array() ),
 		);
 
 		// Save the popup data!

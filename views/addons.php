@@ -21,7 +21,7 @@ $default_headers = array(
 );
 
 // List of all Addons.
-$addons = get_popover_addons();
+$addons = IncPopup::get_addons();
 
 // List of active Addons.
 $active = get_option( 'popover_activated_addons', array() );

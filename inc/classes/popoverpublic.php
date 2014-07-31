@@ -38,7 +38,7 @@ if (!class_exists('popoverpublic')) {
 
         function initialise_plugin() {
 
-            $settings = get_popover_option('popover-settings', array('loadingmethod' => 'frontloading'));
+            $settings = IncPopupDatabase::get_option('popover-settings', array('loadingmethod' => 'frontloading'));
 
             switch ($settings['loadingmethod']) {
 

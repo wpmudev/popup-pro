@@ -4,8 +4,13 @@ require_once PO_INC_DIR . 'class-popup-item.php';
 require_once PO_INC_DIR . 'class-popup-database.php';
 require_once PO_INC_DIR . 'class-popup-posttype.php';
 require_once PO_INC_DIR . 'class-popup-rule.php';
+
 // Load core rules.
 require_once PO_INC_DIR . 'class-popup-rule-url.php';
+require_once PO_INC_DIR . 'class-popup-rule-geo.php';
+require_once PO_INC_DIR . 'class-popup-rule-popup.php';
+require_once PO_INC_DIR . 'class-popup-rule-referer.php';
+require_once PO_INC_DIR . 'class-popup-rule-user.php';
 
 require_once PO_INC_DIR . 'functions.php';
 
@@ -60,13 +65,45 @@ abstract class IncPopupBase {
 	}
 
 	/**
+	 * If the plugin operates on global multisite level.
+	 *
+	 * @since  4.6
+	 * @return bool
+	 */
+	static public function use_global() {
+		$State = null;
+
+		if ( null === $State ) {
+			$State = is_multisite() && PO_GLOBAL;
+		}
+
+		return $State;
+	}
+
+	/**
+	 * If the the user currently is on correct level (global vs blog)
+	 *
+	 * @since  4.6
+	 * @return bool
+	 */
+	static public function correct_level() {
+		$State = null;
+
+		if ( null === $State ) {
+			$State = self::use_global() === is_network_admin();
+		}
+
+		return $State;
+	}
+
+	/**
 	 * Returns an IMG tag that displays the defined image.
 	 *
 	 * @since  4.6
 	 * @param  string $image The image file name.
 	 * @return string HTML code
 	 */
-	static function help_img( $image ) {
+	static public function help_img( $image ) {
 		return '<img src="' . esc_attr( PO_HELP_URL . 'img/' . $image ) . '" />';
 	}
 

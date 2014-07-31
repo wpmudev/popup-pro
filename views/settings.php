@@ -30,7 +30,7 @@ $loading_methods = array(
  */
 $loading_methods = apply_filters( 'popover-settings-loading_method', $loading_methods );
 
-$settings = get_popover_option( 'popover-settings', array( 'loadingmethod' => 'frontloading' ) );
+$settings = IncPopupDatabase::get_option( 'popover-settings', array( 'loadingmethod' => 'frontloading' ) );
 $cur_method = $settings['loadingmethod'];
 
 $form_url = remove_query_arg( array( 'message', 'action', '_wpnonce' ) );

@@ -37,7 +37,10 @@ class IncPopupPosttype {
 		 *
 		 * @var string
 		 */
-		self::$perms = apply_filters( 'popover-admin-access_capability', 'manage_options' );
+		self::$perms = apply_filters( 'popover-admin-access-capability', 'manage_options' );
+
+		// Legacy filter (with underscore)
+		self::$perms = apply_filters( 'popover-admin-access_capability', self::$perms );
 
 		// Register the posttype
 		self::setup_posttype();

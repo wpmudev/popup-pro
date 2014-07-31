@@ -103,7 +103,7 @@ class IncPopupDatabase {
 				'categories' => 'category', 'not-categories' => 'no_category',
 				'post_types' => 'posttype', 'not-post_types' => 'no_posttype',
 				'xprofile_value' => 'xprofile', 'not-xprofile_value' => 'no_xprofile',
-				'supporter' => 'prosite',
+				'supporter' => 'no_prosite',
 				'searchengine' => 'searchengine',
 				'commented' => 'no_comment',
 				'internal' => 'no_internal',
@@ -151,8 +151,8 @@ class IncPopupDatabase {
 					'hide_expire'   => @$raw['popover_hideforever_expiry'],
 					'display'       => 'delay',
 					'delay'         => @$raw['popoverdelay'],
-					'checks'        => $checks,
-					'rules' => array(
+					'rules'         => $checks,
+					'rule_data' => array(
 						'count'          => @$raw['popover_count'],
 						'ereg'           => @$raw['popover_ereg'],
 						'min_width'      => @$raw['max_width'],
@@ -218,6 +218,123 @@ class IncPopupDatabase {
 			wp_cache_set( $post_id, $popup, IncPopupItem::POST_TYPE );
 		}
 		return $popup;
+	}
+
+	/**
+	 * Returns the next available value for the popup position (order)
+	 *
+	 * @since  4.6
+	 * @return int Next free order position; bottom of the list.
+	 */
+	public function next_order() {
+		global $wpdb;
+
+		$sql = "
+			SELECT menu_order
+			FROM {$wpdb->posts}
+			WHERE post_type=%s
+			ORDER BY menu_order DESC
+			LIMIT 1
+		";
+		$sql = $wpdb->prepare(
+			$sql,
+			IncPopupItem::POST_TYPE
+		);
+		//wp_die( $sql );
+		$pos = $wpdb->get_var( $sql );
+
+		return absint( $pos ) + 1;
+	}
+
+	/**
+	 * Updates the order of all popups that are not in trash.
+	 *
+	 * @since  4.6
+	 */
+	public function refresh_order() {
+		global $wpdb;
+
+		// 1. Set all trashed popups to order=999999.
+		$sql_fix = "
+			UPDATE {$wpdb->posts}
+			SET menu_order=999999
+			WHERE post_type=%s AND post_status=%s
+		";
+		$sql = $wpdb->prepare(
+			$sql_fix,
+			IncPopupItem::POST_TYPE,
+			'trash'
+		);
+		$wpdb->query( $sql );
+
+		// 2. Get all active/inactive popups in correct order.
+		$sql_get = "
+			SELECT ID, menu_order
+			FROM {$wpdb->posts}
+			WHERE post_type=%s
+				AND post_status IN (%s, %s)
+			ORDER BY menu_order
+		";
+		$sql = $wpdb->prepare(
+			$sql_get,
+			IncPopupItem::POST_TYPE,
+			'publish',
+			'draft'
+		);
+		$list = $wpdb->get_results( $sql );
+
+		// 3. Update the menu order of all active/inactive popups.
+		$sql_fix = "
+			UPDATE {$wpdb->posts}
+			SET menu_order=%d
+			WHERE post_type=%s AND ID=%d
+		";
+		foreach ( $list as $ind => $data ) {
+			$sql = $wpdb->prepare(
+				$sql_fix,
+				($ind + 1),
+				IncPopupItem::POST_TYPE,
+				$data->ID
+			);
+			$wpdb->query( $sql );
+		}
+	}
+
+	/**
+	 * Returns an option value - these are defined in the settings screen.
+	 *
+	 * @since  4.6
+	 * @param  string $key Option name.
+	 * @param  mixed $default The default value (option does not exist).
+	 * @return mixed The option value.
+	 */
+	public function get_option( $key, $default = false ) {
+		$value = false;
+
+		if ( IncPopup::use_global() ) {
+			$value = get_site_option( $key, $default );
+		} else {
+			$value = get_option( $key, $default );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Saves an option to the database.
+	 *
+	 * @since  4.6
+	 * @param  string $key Option name.
+	 * @param  mixed $value The value to save.
+	 */
+	public function set_option( $key, $default = false ) {
+		$value = false;
+
+		if ( IncPopup::use_global() ) {
+			update_site_option( $key, $value );
+		} else {
+			update_option( $key, $value );
+		}
 	}
 
 }

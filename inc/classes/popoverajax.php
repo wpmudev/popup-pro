@@ -41,7 +41,7 @@ if(!class_exists('popoverajax')) {
 
 		function initialise_ajax() {
 
-			$settings = get_popover_option('popover-settings', array( 'loadingmethod' => 'external'));
+			$settings = IncPopupDatabase::get_option('popover-settings', array( 'loadingmethod' => 'external'));
 
 			switch( $settings['loadingmethod'] ) {
 
