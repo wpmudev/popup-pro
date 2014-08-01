@@ -244,12 +244,12 @@ textarea.block {
 		display: none;
 	}
 
-	.tablenav .alignleft.actions.bulkactions {
-		display: block;
-	}
-
+	/* Hide the date-filter which is always included by WordPress */
 	.tablenav .alignleft.actions {
-		display: none;
+		#post-query-submit,
+		select[name="m"] {
+			display: none;
+		}
 	}
 
 	[for="po_name-hide"] {

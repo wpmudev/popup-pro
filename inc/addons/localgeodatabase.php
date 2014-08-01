@@ -20,7 +20,10 @@ class popover_local_geo {
 		$this->db =& $wpdb;
 
 		if( $this->check_tables_exist() ) {
-			add_filter('popover_pre_incountry', array( &$this, 'incountry' ), 10, 3);
+			// TODO: This should return the country code, and not the boolean value!
+			add_filter('popover-get-country', array( &$this, 'incountry' ), 10, 2);
+
+			//add_filter('popover_pre_incountry', array( &$this, 'incountry' ), 10, 3);
 		}
 
 	}

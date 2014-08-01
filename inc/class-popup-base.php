@@ -12,8 +12,6 @@ require_once PO_INC_DIR . 'class-popup-rule-popup.php';
 require_once PO_INC_DIR . 'class-popup-rule-referer.php';
 require_once PO_INC_DIR . 'class-popup-rule-user.php';
 
-require_once PO_INC_DIR . 'functions.php';
-
 /**
  * Defines common functions that are used in admin and frontpage.
  */
@@ -30,6 +28,13 @@ abstract class IncPopupBase {
 	 */
 	protected function __construct() {
 		$this->db = IncPopupDatabase::instance();
+
+		TheLib::translate_plugin( PO_LANG, PO_LANG_DIR );
+
+		// Update the DB if required.
+		if ( ! IncPopupDatabase::db_is_current() ) {
+			IncPopupDatabase::db_update();
+		}
 
 		// Register the popup post type.
 		add_action(
@@ -165,7 +170,7 @@ abstract class IncPopupBase {
 
 	/**
 	 * Returns a list of all style infos (id, url, path, deprecated)
-	 * Handles filter `popover-tyles`
+	 * Handles filter `popover-styles`
 	 *
 	 * @since  4.6
 	 * @param  array $list
@@ -181,8 +186,8 @@ abstract class IncPopupBase {
 		// Add core styles to the response.
 		foreach ( $core_styles as $key => $data ) {
 			$list[ $key ] = (object) array(
-				'url' => PO_TPL_URL . $key,
-				'dir' => PO_TPL_DIR . $key,
+				'url' => trailingslashit( PO_TPL_URL . $key ),
+				'dir' => trailingslashit( PO_TPL_DIR . $key ),
 				'name' => $data->name,
 				'deprecated' => (true == @$data->deprecated),
 			);
@@ -201,6 +206,36 @@ abstract class IncPopupBase {
 		}
 
 		return $list;
+	}
+
+	/**
+	 * Returns a list with all available add-on files.
+	 *
+	 * @since  4.6
+	 * @return array List of add-on files.
+	 */
+	public function get_addons() {
+		$List = null;
+
+		if ( null === $List ) {
+			$List = array();
+			$base_len = strlen( PO_INC_DIR . 'addons/' );
+			foreach ( glob( PO_INC_DIR . 'addons/*.php' ) as $path ) {
+				$List[] = substr( $path, $base_len );
+			}
+
+			/**
+			 * Filter the add-on list to add or remove items.
+			 */
+			$List = apply_filters( 'popover-available-addons', $List );
+
+			// Legacy filter (with underscore)
+			$List = apply_filters( 'popover_available_addons', $List );
+
+			sort( $List );
+		}
+
+		return $List;
 	}
 
 };

@@ -6,8 +6,34 @@
 class IncPopupRules {
 	static public $rules = array();
 
+	/**
+	 * Register a new rule class.
+	 *
+	 * @since  4.6
+	 * @param  string $classname Class-name (not object!)
+	 */
 	static public function register( $classname ) {
 		self::$rules[] = new $classname();
+	}
+
+	/**
+	 * Checks which php file defines the specified rule-ID
+	 *
+	 * @since  4.6
+	 * @param  string $key Rule-ID.
+	 * @return string filename of the rule-file.
+	 */
+	static public function file_for_rule( $key ) {
+		$file = '';
+
+		foreach ( self::$rules as $obj ) {
+			if ( $obj->has_rule( $key ) ) {
+				$file = $obj->filename;
+				break;
+			}
+		}
+
+		return $file;
 	}
 }
 
@@ -22,6 +48,12 @@ abstract class IncPopupRule {
 	 * @var array
 	 */
 	protected $infos = array();
+
+	/**
+	 * Name of the file (set by the child class)
+	 * @var string
+	 */
+	public $filename = '';
 
 	/*---------------  OVERWRITABLE functions  ----------------*/
 
@@ -159,6 +191,9 @@ abstract class IncPopupRule {
 		if ( ! $show ) { return $show; }
 
 		foreach ( $this->infos as $key => $rule ) {
+			// Skip the rule if the popup does not use it.
+			if ( ! in_array( $key, $popup->rule ) ) { continue; }
+
 			$method = 'apply_' . $key;
 			if ( method_exists( $this, $method ) ) {
 				if ( ! $this->$method( @$popup->rule_data[$key] ) ) {

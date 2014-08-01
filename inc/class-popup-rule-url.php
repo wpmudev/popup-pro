@@ -2,6 +2,10 @@
 /**
  * Core rule: On Url / Not On Url
  *
+ * NOTE: DON'T RENAME THIS FILE!!
+ * This filename is saved as metadata with each popup that uses these rules.
+ * Renaming the file will DISABLE the rules, which is very bad!
+ *
  * @since  4.6
  */
 class IncPopupRule_Url extends IncPopupRule {
@@ -12,6 +16,8 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @since  4.6
 	 */
 	protected function init() {
+		$this->filename = basename( __FILE__ );
+
 		// 'url' rule.
 		$this->add_info(
 			'url',
@@ -47,7 +53,10 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_url( $data ) {
-		return true;
+		if ( is_string( $data ) ) { $data = array( $data ); }
+		if ( ! is_array( $data ) ) { return true; }
+
+		return $this->check_url( @$_REQUEST['thefrom'], $data );
 	}
 
 	/**
@@ -98,7 +107,10 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_no_url( $data ) {
-		return true;
+		if ( is_string( $data ) ) { $data = array( $data ); }
+		if ( ! is_array( $data ) ) { return true; }
+
+		return ! $this->check_url( @$_REQUEST['thefrom'], $data );
 	}
 
 	/**
@@ -129,6 +141,42 @@ class IncPopupRule_Url extends IncPopupRule {
 	 */
 	protected function save_no_url() {
 		return explode( "\n", @$_POST['po_rule_data']['no_url'] );
+	}
+
+
+	/*======================================*\
+	==========================================
+	==                                      ==
+	==           HELPER FUNCTIONS           ==
+	==                                      ==
+	==========================================
+	\*======================================*/
+
+
+	/**
+	 * Tests if the $test_url matches any pattern defined in the $list.
+	 *
+	 * @since  4.6
+	 * @param  string $test_url The URL to test.
+	 * @param  array $list List of URL-patterns to test against.
+	 * @return bool
+	 */
+	protected function check_url( $test_url, $list ) {
+		$response = false;
+		$list = array_map( 'trim', $list );
+
+		if ( empty( $list ) ) {
+			$response = true;
+		} else {
+			foreach ( $list as $match ) {
+				if ( preg_match( '#^' . $match . '$#i', $test_url ) ) {
+					$response = true;
+					break;
+				}
+			}
+		}
+
+		return $response;
 	}
 
 };

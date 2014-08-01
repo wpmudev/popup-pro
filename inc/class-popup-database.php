@@ -5,6 +5,9 @@
  */
 class IncPopupDatabase {
 
+	// Use `self::db_prefix( IP_TABLE );` to get the full table name.
+	const IP_TABLE = 'popover_ip_cache';
+
 	/**
 	 * Returns the singleton instance of the popup database class.
 	 *
@@ -44,16 +47,23 @@ class IncPopupDatabase {
 	 */
 	static public function db_prefix( $table ) {
 		global $wpdb;
+		static $Prefixed = array();
 
-		if ( defined( 'PO_GLOBAL' ) && true == PO_GLOBAL ) {
-			if ( ! empty( $wpdb->base_prefix ) ) {
-				return $wpdb->base_prefix . $table;
+		if ( ! isset( $Prefixed[$table] ) ) {
+			$Prefixed[$table] = $table;
+
+			if ( defined( 'PO_GLOBAL' ) && true == PO_GLOBAL ) {
+				if ( ! empty( $wpdb->base_prefix ) ) {
+					$Prefixed[$table] = $wpdb->base_prefix . $table;
+				} else {
+					$Prefixed[$table] = $wpdb->prefix . $table;
+				}
 			} else {
-				return $wpdb->prefix . $table;
+				$Prefixed[$table] = $wpdb->prefix . $table;
 			}
-		} else {
-			return $wpdb->prefix . $table;
 		}
+
+		return $Prefixed[$table];
 	}
 
 	/**
@@ -81,7 +91,7 @@ class IncPopupDatabase {
 		$tbl_ip_cache = self::db_prefix( 'popover_ip_cache' );
 
 		if ( $wpdb->get_var( 'SHOW TABLES LIKE "' . $tbl_popover . '" ' ) == $tbl_popover ) {
-			// Migrate to custom post type
+			// Migrate to custom post type.
 			$sql = "
 			SELECT
 				id,
@@ -198,6 +208,20 @@ class IncPopupDatabase {
 			)
 		);
 
+		// Migrate the Plugin Settings.
+		$settings = IncPopupDatabase::get_option(
+			'popover-settings',
+			array( 'loadingmethod' => 'ajax' )
+		);
+		$cur_method = @$settings['loadingmethod'];
+		switch ( $cur_method ) {
+			case '':
+			case 'external':     $cur_method = 'ajax'; break;
+			case 'frontloading': $cur_method = 'front'; break;
+		}
+		$settings['loadingmethod'] = $cur_method;
+		self::set_option( $settings );
+
 		// Save the new DB version to options table.
 		update_option( 'popover_installed', PO_BUILD );
 	}
@@ -218,6 +242,36 @@ class IncPopupDatabase {
 			wp_cache_set( $post_id, $popup, IncPopupItem::POST_TYPE );
 		}
 		return $popup;
+	}
+
+	/**
+	 * Returns an array with all IDs of the active popups.
+	 * The IDs are in the correct order (as defined in the admin list)
+	 *
+	 * @since  4.6
+	 * @return array List of active popups.
+	 */
+	public function get_active_ids() {
+		global $wpdb;
+		static $List = null;
+
+		if ( null === $List ) {
+			$sql_get = "
+				SELECT ID
+				FROM {$wpdb->posts}
+				WHERE post_type=%s
+					AND post_status=%s
+				ORDER BY menu_order
+			";
+			$sql = $wpdb->prepare(
+				$sql_get,
+				IncPopupItem::POST_TYPE,
+				'publish'
+			);
+			$List = $wpdb->get_col( $sql );
+		}
+
+		return $List;
 	}
 
 	/**
@@ -335,6 +389,73 @@ class IncPopupDatabase {
 		} else {
 			update_option( $key, $value );
 		}
+	}
+
+
+	/*==============================*\
+	==================================
+	==                              ==
+	==           IP CACHE           ==
+	==                              ==
+	==================================
+	\*==============================*/
+
+
+	/**
+	 * Returns the country code that is associated with the IP Address from the
+	 * local cache table.
+	 *
+	 * @since  4.6
+	 * @param  string $ip The IP Address.
+	 * @return string Associated country code (or empty string).
+	 */
+	static public function get_country( $ip ) {
+		global $wpdb;
+		$Country = array();
+
+		if ( ! isset( $Country[$ip] ) ) {
+			$ip_table = self::db_prefix( IP_TABLE );
+			$sql = "
+				SELECT country
+				FROM {$ip_table}
+				WHERE IP = %s
+			";
+			$sql = $this->db->prepare( $sql, $ip );
+			$Country[$ip] = $wpdb->get_var( $sql );
+
+			if ( null === $Country[$ip] ) { $Country[$ip] = ''; }
+		}
+
+		return $country;
+	}
+
+	/**
+	 * Adds information to the IP-Cache table.
+	 *
+	 * @since 4.6
+	 * @param string $ip The IP Address.
+	 * @param string $country Country code.
+	 */
+	static public function add_ip( $ip, $country ) {
+		global $wpdb;
+
+		$ip_table = self::db_prefix( IP_TABLE );
+
+		// Delete the cached data, if it already exists.
+		$sql = "
+			DELETE FROM $ip_table
+			WHERE IP = %s
+		";
+		$sql = $wpdb->prepare( $sql, $ip );
+		$wpdb->query( $sql );
+
+		// Insert the new dataset.
+		$sql = "
+			INSERT INTO $ip_table (IP, country, cached)
+			VALUES (%s, %s, %s)
+		";
+		$sql = $wpdb->prepare( $sql, $ip, $country, time() );
+		$wpdb->query( $sql );
 	}
 
 }

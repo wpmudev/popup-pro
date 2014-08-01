@@ -116,8 +116,14 @@ class IncPopupItem {
 	// Conditions that need to be true in order to use the popup.
 	public $rule = array();
 
+	// Specifies which rule-files are needed to handle all popup conditions.
+	public $rule_files = array();
+
 	// Extra arguments for the conditions (e.g. "rule[0] = count" and "rule_data[count] = 3")
 	public $rule_data = array();
+
+	// This is used to store dynamic properties used by templates, such as the div-ID string.
+	public $code = null;
 
 	// -------------------------------------------------------------------------
 
@@ -183,7 +189,14 @@ class IncPopupItem {
 		$this->scroll = 0;
 		$this->anchor = '';
 		$this->rule = array();
+		$this->rule_files = array();
 		$this->rule_data = array();
+
+		$this->code = (object) array(
+			'id'     => 'a' . md5( date( 'd' ) ) . '-po',
+			'colors' => 'color: ' . $this->color['fore'] . '; background: ' . $this->color['back'] . ';',
+		);
+
 	}
 
 	/**
@@ -258,16 +271,6 @@ class IncPopupItem {
 	protected function validate_data() {
 		$styles = apply_filters( 'popover-styles', array() );
 
-		// Name.
-		if ( empty( $this->name ) ) {
-			$this->name = __( 'New Pop Up', PO_LANG );
-		}
-
-		// Order.
-		if ( empty( $this->id ) || empty( $this->order ) ) {
-			$this->order = IncPopupDatabase::next_order();
-		}
-
 		// Color.
 		if ( ! is_array( $this->color ) ) { $this->color = array(); }
 		if ( ! isset( $this->color['back'] ) ) { $this->color['back'] = ''; }
@@ -307,17 +310,46 @@ class IncPopupItem {
 
 		// Rules.
 		if ( ! is_array( $this->rule ) ) { $this->rule = array(); }
+		$this->rule_files = array();
 		foreach ( $this->rule as $ind => $key ) {
 			if ( empty( $key ) ) { unset( $this->rule[$ind] ); }
+
+			// Set rule-files.
+			$file = IncPopupRules::file_for_rule( $key );
+			if ( $file && ! in_array( $file, $this->rule_files ) ) {
+				$this->rule_files[] = $file;
+			}
 		}
 		if ( ! is_array( $this->rule_data ) ) { $this->rule_data = array(); }
 		foreach ( $this->rule_data as $ind => $key ) {
 			if ( empty( $key ) ) { unset( $this->rule_data[$ind] ); }
 		}
 
-		// Check if the "id" is valid!
-		if ( $this->id > 0 && self::POST_TYPE !== get_post_type( $this->id ) ) {
-			$this->id = 0;
+		// Validation only done when editing popups.
+		if ( is_admin() ) {
+			// Name.
+			if ( empty( $this->name ) ) {
+				$this->name = __( 'New Pop Up', PO_LANG );
+			}
+
+			// Order.
+			if ( empty( $this->id ) || empty( $this->order ) ) {
+				$this->order = IncPopupDatabase::next_order();
+			}
+
+			// Rule-files.
+			$this->rule_files = array();
+			foreach ( $this->rule as $ind => $key ) {
+				$file = IncPopupRules::file_for_rule( $key );
+				if ( $file && ! in_array( $file, $this->rule_files ) ) {
+					$this->rule_files[] = $file;
+				}
+			}
+
+			// Check if the "id" is valid!
+			if ( $this->id > 0 && self::POST_TYPE !== get_post_type( $this->id ) ) {
+				$this->id = 0;
+			}
 		}
 	}
 
@@ -381,6 +413,7 @@ class IncPopupItem {
 		$this->scroll = get_post_meta( $this->id, 'po_scroll', true );
 		$this->anchor = get_post_meta( $this->id, 'po_anchor', true );
 		$this->rule = get_post_meta( $this->id, 'po_rule', true );
+		$this->rule_files = get_post_meta( $this->id, 'po_rule_files', true );
 		$this->rule_data = get_post_meta( $this->id, 'po_rule_data', true );
 
 		$this->validate_data();
@@ -452,6 +485,7 @@ class IncPopupItem {
 			update_post_meta( $this->id, 'po_scroll', $this->scroll );
 			update_post_meta( $this->id, 'po_anchor', $this->anchor );
 			update_post_meta( $this->id, 'po_rule', $this->rule );
+			update_post_meta( $this->id, 'po_rule_files', $this->rule_files );
 			update_post_meta( $this->id, 'po_rule_data', $this->rule_data );
 		}
 
@@ -505,6 +539,53 @@ class IncPopupItem {
 		}
 
 		return $active;
+	}
+
+	/**
+	 * Load the Pop Up HTML code from the popup.php template.
+	 *
+	 * @since  4.6
+	 * @return string HTML code.
+	 */
+	public function load_html() {
+		$styles = apply_filters( 'popover-styles', array() );
+		$details = $styles[$this->style];
+
+		$html = '';
+		$tpl_file = $details->dir . 'popover.php';
+
+		if ( file_exists( $tpl_file ) ) {
+			ob_start();
+			include_once( $tpl_file );
+			$html = ob_get_contents();
+			ob_end_clean();
+		}
+		return $html;
+	}
+
+	/**
+	 * Load the Pop Up CSS styles from the style.css template.
+	 *
+	 * @since  4.6
+	 * @return string CSS code.
+	 */
+	public function load_styles() {
+		$styles = apply_filters( 'popover-styles', array() );
+		$details = $styles[$this->style];
+
+		$style = '';
+		$tpl_file = $details->dir . 'style.css';
+
+		if ( file_exists( $tpl_file ) ) {
+			ob_start();
+			include_once( $tpl_file );
+			$style = ob_get_contents();
+			ob_end_clean();
+
+			$style = str_replace( '#messagebox', '#' . $this->code->id, $style );
+			$style = str_replace( '%styleurl%', $details->url, $style );
+		}
+		return $style;
 	}
 
 

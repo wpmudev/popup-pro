@@ -2,6 +2,10 @@
 /**
  * Core rule: Referer / Internal / Search Engine
  *
+ * NOTE: DON'T RENAME THIS FILE!!
+ * This filename is saved as metadata with each popup that uses these rules.
+ * Renaming the file will DISABLE the rules, which is very bad!
+ *
  * @since  4.6
  */
 class IncPopupRule_Referer extends IncPopupRule {
@@ -12,6 +16,8 @@ class IncPopupRule_Referer extends IncPopupRule {
 	 * @since  4.6
 	 */
 	protected function init() {
+		$this->filename = basename( __FILE__ );
+
 		// 'referer' rule.
 		$this->add_info(
 			'referer',
@@ -52,7 +58,7 @@ class IncPopupRule_Referer extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_referer( $data ) {
-		return true;
+		return $this->test_referer( $data );
 	}
 
 	/**
@@ -62,12 +68,15 @@ class IncPopupRule_Referer extends IncPopupRule {
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 */
 	protected function form_referer( $data ) {
+		if ( is_string( $data ) ) { $referer = $data; }
+		else if ( is_array( $data ) ) { $referer = implode( "\n", $data ); }
+		else { $referer = ''; }
 		?>
 		<label for="po-rule-data-referer">
 			<?php _e( 'Referers (one per line):', PO_LANG ); ?>
 		</label>
 		<textarea name="po_rule_data[referer]" id="po-rule-data-referer" class="block"><?php
-			echo esc_attr( $data );
+			echo esc_attr( $referer );
 		?></textarea>
 		<?php
 	}
@@ -79,7 +88,7 @@ class IncPopupRule_Referer extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_referer() {
-		return @$_POST['po_rule_data']['referer'];
+		return explode( "\n", @$_POST['po_rule_data']['referer'] );
 	}
 
 
@@ -100,7 +109,9 @@ class IncPopupRule_Referer extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_internal( $data ) {
-		return true;
+		$internal = preg_replace( '#^https?://#', '', get_option( 'home' ) );
+
+		return $this->test_referer( $internal );
 	}
 
 
@@ -121,8 +132,110 @@ class IncPopupRule_Referer extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_searchengine( $data ) {
-		return true;
+		return $this->test_searchengine();
 	}
+
+
+	/*======================================*\
+	==========================================
+	==                                      ==
+	==           HELPER FUNCTIONS           ==
+	==                                      ==
+	==========================================
+	\*======================================*/
+
+
+	/**
+	 * Tests if the current referer is one of the referers of the list.
+	 * Current referer has to be specified in the URL param "thereferer".
+	 *
+	 * @since  4.6
+	 * @param  array $list List of referers to check.
+	 * @return bool
+	 */
+	protected function test_referer( $list ) {
+		$response = false;
+		if ( is_string( $list ) ) { $list = array( $list ); }
+		if ( ! is_array( $list ) ) { return true; }
+
+		$referer = @$_REQUEST['thereferrer'];
+
+		if ( empty( $referer ) ) {
+			$response = true;
+		} else {
+			foreach ( $list as $item ) {
+				if ( preg_match( '#' . $item . '#i', $referer ) ) {
+					$response = true;
+					break;
+				}
+			}
+		}
+		return $response;
+	}
+
+	/**
+	 * Tests if the current referer is a search engine.
+	 * Current referer has to be specified in the URL param "thereferer".
+	 *
+	 * @since  4.6
+	 * @return bool
+	 */
+	protected function test_searchengine() {
+		$response = false;
+		$referer = @$_REQUEST['thereferrer'];
+
+		$patterns = array(
+			'/search?',
+			'.google.',
+			'web.info.com',
+			'search.',
+			'del.icio.us/search',
+			'soso.com',
+			'/search/',
+			'.yahoo.',
+			'.bing.',
+		);
+
+		foreach ( $patterns as $url ) {
+			if ( strpos( $referer, $url ) !== false ) {
+				if ( $url == '.google.' ) {
+					if ( $this->is_googlesearch( $referer ) ) {
+						$response = true;
+					} else {
+						$response = false;
+					}
+				} else {
+					$response = true;
+				}
+				break;
+			}
+		}
+		return $response;
+	}
+
+	/**
+	 * Checks if the referer is a google web-source.
+	 *
+	 * @since  4.6
+	 * @param  string $referer
+	 * @return bool
+	 */
+	protected function is_googlesearch( $referer = '' ) {
+		$response = false;
+
+		// Get the query strings and check its a web source.
+		$qs = parse_url( $referer, PHP_URL_QUERY );
+		$qget = array();
+
+		foreach ( explode( '&', $qs ) as $keyval ) {
+			list( $key, $value ) = explode( '=', $keyval );
+			$qget[ trim( $key ) ] = trim( $value );
+		}
+		$response = @$qget['source'] == 'web';
+
+		return $response;
+	}
+
 
 };
 

@@ -7,7 +7,7 @@ Version:     4.6-BETA
 Author:      WPMU DEV
 Author URI:  http://premium.wpmudev.org
 Textdomain:  popover
-WDP ID:      123
+WDP ID:      123            : TODO THIS NEEDS TO BE UPDATED
 
 Copyright 2007-2013 Incsub (http://incsub.com)
 Author - Barry (Incsub)
@@ -28,11 +28,14 @@ Contributors - Marko Miljus (Incsub), Ve Bailovity (Incsub)
 
 $something_fishy = false;
 if ( ! defined( 'PO_LANG' ) ) {
-	// used for more readable i18n functions: __( 'text', PO_LANG );
+	// Used for more readable i18n functions: __( 'text', PO_LANG );
 	define( 'PO_LANG', 'popover' );
 
-	// The current DB/build version. Not the same as the plugin version!
-	// Increase this when DB structure changes, migration code is required, etc.
+	/**
+	 * The current DB/build version. NOT THE SAME AS THE PLUGIN VERSION!
+	 * Increase this when DB structure changes, migration code is required, etc.
+	 * See IncPopupDatabase: db_is_current() and db_update()
+	 */
 	define( 'PO_BUILD', 6 );
 
 	$plugin_dir = trailingslashit( dirname( __FILE__ ) );
@@ -51,36 +54,19 @@ if ( ! defined( 'PO_LANG' ) ) {
 	define( 'PO_CSS_URL', $plugin_url . 'css/' );
 	define( 'PO_IMG_URL', $plugin_url . 'img/' );
 
-	require_once( PO_INC_DIR . 'config-defaults.php');
-
 	// Include function library.
 	if ( file_exists( PO_INC_DIR . 'external/wpmu-lib/core.php' ) ) {
 		require_once PO_INC_DIR . 'external/wpmu-lib/core.php';
 	}
 
+	require_once( PO_INC_DIR . 'config-defaults.php');
 	if ( is_admin() ) {
 		// Defines class 'IncPopup'.
 		require_once( PO_INC_DIR . 'class-popup-admin.php');
-
-		require_once( PO_INC_DIR . 'classes/popoverajax.php');
-
-		$popoverajax = new popoverajax();
 	} else {
 		// Defines class 'IncPopup'.
 		require_once( PO_INC_DIR . 'class-popup-public.php');
-
-		// Adding ajax so we don't have to duplicate checking functionality in the public class
-		// NOTE: it's not being used for ajax here
-		require_once( PO_INC_DIR . 'classes/popoverajax.php');
-		require_once( PO_INC_DIR . 'classes/popoverpublic.php');
-
-		$popover = new popoverpublic();
-		$popoverajax = new popoverajax();
 	}
-
-	TheLib::translate_plugin( PO_LANG, PO_LANG_DIR );
-
-	load_popover_addons();
 
 	// Initialize the plugin as soon as we have identified the current user.
 	add_action( 'set_current_user', array( 'IncPopup', 'instance' ) );
@@ -117,6 +103,7 @@ if ( is_admin() ) {
 			'id' => 123,
 			'name' => 'Pop Up!',
 			'screens' => array(
+				// TODO: THIS NEEDS TO BE UPDATED!!!
 				'popover',
 			),
 		);

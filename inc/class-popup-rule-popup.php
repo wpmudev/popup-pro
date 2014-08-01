@@ -2,6 +2,10 @@
 /**
  * Core rule: Count
  *
+ * NOTE: DON'T RENAME THIS FILE!!
+ * This filename is saved as metadata with each popup that uses these rules.
+ * Renaming the file will DISABLE the rules, which is very bad!
+ *
  * @since  4.6
  */
 class IncPopupRule_Count extends IncPopupRule {
@@ -12,6 +16,8 @@ class IncPopupRule_Count extends IncPopupRule {
 	 * @since  4.6
 	 */
 	protected function init() {
+		$this->filename = basename( __FILE__ );
+
 		// 'count' rule.
 		$this->add_info(
 			'count',
@@ -38,7 +44,9 @@ class IncPopupRule_Count extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_count( $data ) {
-		return true;
+		$max_count = absint( $data );
+		$count = absint( @$_COOKIE['popover_view_' . COOKIEHASH] );
+		return $count < $max_count;
 	}
 
 	/**

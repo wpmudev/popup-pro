@@ -2,6 +2,10 @@
 /**
  * Core rule: In Country / Not In Country
  *
+ * NOTE: DON'T RENAME THIS FILE!!
+ * This filename is saved as metadata with each popup that uses these rules.
+ * Renaming the file will DISABLE the rules, which is very bad!
+ *
  * @since  4.6
  */
 class IncPopupRule_Country extends IncPopupRule {
@@ -12,6 +16,8 @@ class IncPopupRule_Country extends IncPopupRule {
 	 * @since  4.6
 	 */
 	protected function init() {
+		$this->filename = basename( __FILE__ );
+
 		// 'country' rule.
 		$this->add_info(
 			'country',
@@ -47,7 +53,10 @@ class IncPopupRule_Country extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_country( $data ) {
-		return true;
+		if ( is_string( $data ) ) { $data = array( $data ); }
+		if ( ! is_array( $data ) ) { return true; }
+
+		return $this->test_country( $data );
 	}
 
 	/**
@@ -108,7 +117,10 @@ class IncPopupRule_Country extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_no_country( $data ) {
-		return true;
+		if ( is_string( $data ) ) { $data = array( $data ); }
+		if ( ! is_array( $data ) ) { return true; }
+
+		return $this->test_country( $data );
 	}
 
 	/**
@@ -150,6 +162,87 @@ class IncPopupRule_Country extends IncPopupRule {
 	protected function save_no_country() {
 		return @$_POST['po_rule_data']['no_country'];
 	}
+
+
+	/*======================================*\
+	==========================================
+	==                                      ==
+	==           HELPER FUNCTIONS           ==
+	==                                      ==
+	==========================================
+	\*======================================*/
+
+
+	protected function get_user_country() {
+		// Grab the users IP address
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$country = false;
+
+		// See if an add-on provides the country for us.
+		$country = apply_filters( 'popover-get-country', false, $ip );
+		if ( ! empty( $country ) ) {
+			return $country;
+		}
+
+		// Next check the local caching-table.
+		$country = IncPopupDatabase::get_country( $ip );
+		if ( ! empty( $country ) ) {
+			return $country;
+		}
+
+		// Finally use the external API to find the country.
+		$country = $this->country_from_api( $ip );
+
+		if ( ! empty( $country ) ) {
+			IncPopupDatabase::add_ip( $ip, $country );
+		} else {
+			$country = 'XX';
+		}
+		return $country;
+	}
+
+	/**
+	 * Queries an external geo-API to find the country of the specified IP.
+	 *
+	 * @since  4.6
+	 * @param  string $ip The IP Address.
+	 * @return string The country code.
+	 */
+	static protected function country_from_api( $ip ) {
+		$url = str_replace( '%ip%', $ip, PO_REMOTE_IP_URL );
+		$response = wp_remote_get( $url );
+
+		if ( ! is_wp_error( $response ) && $response['response']['code'] == '200' && $response['body'] != 'XX' ) {
+			// cache the response for future use
+			$country = trim( $response['body'] );
+		} else {
+			if ( PO_DEFAULT_COUNTRY !== false ) {
+				return PO_DEFAULT_COUNTRY;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * Checks if the current user IP belongs to one of the countries defined in
+	 * country_codes list.
+	 *
+	 * @since  1.0.0
+	 * @param  array $country_codes List of country codes.
+	 * @return bool
+	 */
+	protected function test_country( $country_codes ) {
+		$response = true;
+		$country = $this->get_user_country();
+
+		if ( $country == 'XX' ) {
+			return $response;
+		}
+
+		return in_array( $country, $country_codes );
+	}
+
 
 
 	/*-----  Country list  ------*/

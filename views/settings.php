@@ -7,19 +7,20 @@ $loading_methods = array(
 	(object) array(
 		'id'    => 'footer',
 		'label' => 'Page Footer',
-		'info'  => 'The Pop Up is included as part of the page html',
+		'info'  => 'The Pop Up is included as part of the page html.',
 	),
 	(object) array(
-		'id'    => 'external',
+		'id'    => 'ajax',
 		'label' => 'External Load',
-		'info'  => 'The Pop Up is loaded separately from the page, ' .
-			'this is the best option if you are running a caching system',
+		'info'  => 'The Pop Up is loaded separately from the page ' .
+			'(via a normal WordPress Ajax call). ' .
+			'This is the best option if you are running a caching system',
 	),
 	(object) array(
-		'id'    => 'frontloading',
+		'id'    => 'front',
 		'label' => 'Custom Load',
-		'info'  => 'The Pop Up is loaded separately from the page via '.
-			'a custom front end ajax call',
+		'info'  => 'The Pop Up is loaded separately from the page '.
+			'(via custom front end Ajax call)',
 	),
 );
 
@@ -28,10 +29,17 @@ $loading_methods = array(
  *
  * @var array
  */
+$loading_methods = apply_filters( 'popover-settings-loading-method', $loading_methods );
+
+// Legacy filter
 $loading_methods = apply_filters( 'popover-settings-loading_method', $loading_methods );
 
-$settings = IncPopupDatabase::get_option( 'popover-settings', array( 'loadingmethod' => 'frontloading' ) );
-$cur_method = $settings['loadingmethod'];
+
+$settings = IncPopupDatabase::get_option(
+	'popover-settings',
+	array( 'loadingmethod' => 'ajax' )
+);
+$cur_method = @$settings['loadingmethod'];
 
 $form_url = remove_query_arg( array( 'message', 'action', '_wpnonce' ) );
 
@@ -91,7 +99,9 @@ $form_url = remove_query_arg( array( 'message', 'action', '_wpnonce' ) );
 		</div>
 
 		<p class="submit">
-			<button class="button-primary"><?php _e( 'Save Changes', PO_LANG ) ?></button>
+			<button class="button-primary">
+				<?php _e( 'Save Changes', PO_LANG ) ?>
+			</button>
 		</p>
 
 	</form>

@@ -2,6 +2,10 @@
 /**
  * Core rule: Login / No Login / No Comment / No ProSite
  *
+ * NOTE: DON'T RENAME THIS FILE!!
+ * This filename is saved as metadata with each popup that uses these rules.
+ * Renaming the file will DISABLE the rules, which is very bad!
+ *
  * @since  4.6
  */
 class IncPopupRule_User extends IncPopupRule {
@@ -12,6 +16,8 @@ class IncPopupRule_User extends IncPopupRule {
 	 * @since  4.6
 	 */
 	protected function init() {
+		$this->filename = basename( __FILE__ );
+
 		// 'login' rule.
 		$this->add_info(
 			'login',
@@ -61,7 +67,7 @@ class IncPopupRule_User extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_login( $data ) {
-		return true;
+		return is_user_logged_in();
 	}
 
 
@@ -82,7 +88,7 @@ class IncPopupRule_User extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_no_login( $data ) {
-		return true;
+		return ! is_user_logged_in();
 	}
 
 
@@ -103,7 +109,7 @@ class IncPopupRule_User extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_no_comment( $data ) {
-		return true;
+		return ! isset( $_COOKIE['comment_author_' . COOKIEHASH] );
 	}
 
 
@@ -124,7 +130,8 @@ class IncPopupRule_User extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_no_prosite( $data ) {
-		return true;
+		$prosite = function_exists( 'is_pro_site' ) && is_pro_site();
+		return ! $prosite;
 	}
 
 };

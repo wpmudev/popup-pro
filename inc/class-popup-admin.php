@@ -3,15 +3,6 @@
 require_once PO_INC_DIR . 'class-popup-base.php';
 
 /**
-		Code snippet from old plugin:
-
-		// Add in help pages
-		$screen = get_current_screen();
-		$help = new Popover_Help( $screen );
-		$help->attach();
- */
-
-/**
  * Defines the popup class for admin pages.
  *
  * @since  4.6
@@ -391,36 +382,6 @@ class IncPopup extends IncPopupBase {
 			wp_safe_redirect( $redirect_url );
 			die();
 		}
-	}
-
-	/**
-	 * Returns a list with all available add-on files.
-	 *
-	 * @since  4.6
-	 * @return array List of add-on files.
-	 */
-	public function get_addons() {
-		$List = null;
-
-		if ( null === $List ) {
-			$List = array();
-			$base_len = strlen( PO_INC_DIR . 'addons/' );
-			foreach ( glob( PO_INC_DIR . 'addons/*.php' ) as $path ) {
-				$List[] = substr( $path, $base_len );
-			}
-
-			/**
-			 * Filter the add-on list to add or remove items.
-			 */
-			$List = apply_filters( 'popover-available-addons', $List );
-
-			// Legacy filter (with underscore)
-			$List = apply_filters( 'popover_available_addons', $List );
-
-			sort( $List );
-		}
-
-		return $List;
 	}
 
 
