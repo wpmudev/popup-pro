@@ -32,7 +32,7 @@ class IncPopupDatabase {
 	 */
 	static public function db_is_current() {
 		// This value is only changed by function db_update() below.
-		$cur_version = get_option( 'popover_installed', 0 );
+		$cur_version = self::_get_option( 'popover_installed', 0 );
 
 		return $cur_version == PO_BUILD;
 	}
@@ -209,10 +209,7 @@ class IncPopupDatabase {
 		);
 
 		// Migrate the Plugin Settings.
-		$settings = IncPopupDatabase::get_option(
-			'popover-settings',
-			array( 'loadingmethod' => 'ajax' )
-		);
+		$settings = IncPopupDatabase::get_settings();
 		$cur_method = @$settings['loadingmethod'];
 		switch ( $cur_method ) {
 			case '':
@@ -220,10 +217,10 @@ class IncPopupDatabase {
 			case 'frontloading': $cur_method = 'front'; break;
 		}
 		$settings['loadingmethod'] = $cur_method;
-		self::set_option( $settings );
+		self::set_settings( $settings );
 
 		// Save the new DB version to options table.
-		update_option( 'popover_installed', PO_BUILD );
+		self::_set_option( 'popover_installed', PO_BUILD );
 	}
 
 	/**
@@ -355,35 +352,72 @@ class IncPopupDatabase {
 	}
 
 	/**
-	 * Returns an option value - these are defined in the settings screen.
+	 * Returns the plugin settings.
 	 *
 	 * @since  4.6
-	 * @param  string $key Option name.
-	 * @param  mixed $default The default value (option does not exist).
-	 * @return mixed The option value.
+	 * @return array.
 	 */
-	public function get_option( $key, $default = false ) {
+	public function get_settings() {
 		$value = false;
 
-		if ( IncPopup::use_global() ) {
-			$value = get_site_option( $key, $default );
-		} else {
-			$value = get_option( $key, $default );
-		}
+		$default = array( 'loadingmethod' => 'ajax' );
+		return self::_get_option( 'popover-settings', $default );
+	}
 
-		return $value;
+	/**
+	 * Saves the plugin settings.
+	 *
+	 * @since  4.6
+	 * @param  array $value The value to save.
+	 */
+	public function set_settings( $value ) {
+		self::_set_option( 'popover-settings', $value );
+	}
+
+	/**
+	 * Returns all active add-ons.
+	 *
+	 * @since  4.6
+	 * @return array.
+	 */
+	public function get_active_addons() {
+		$value = false;
+
+		$default = array();
+		return self::_get_option( 'popover_activated_addons', $default );
 	}
 
 	/**
 	 * Saves an option to the database.
 	 *
 	 * @since  4.6
-	 * @param  string $key Option name.
-	 * @param  mixed $value The value to save.
+	 * @param  array $value The value to save.
 	 */
-	public function set_option( $key, $default = false ) {
-		$value = false;
+	public function set_active_addons( $value ) {
+		self::_set_option( 'popover_activated_addons', $value );
+	}
 
+	/**
+	 * Internal function to get a option value from correct options table.
+	 *
+	 * @since  4.6
+	 */
+	static protected function _get_option( $key, $default ) {
+		$value = $default;
+		if ( IncPopup::use_global() ) {
+			$value = get_site_option( $key, $default );
+		} else {
+			$value = get_option( $key, $default );
+		}
+		return $value;
+	}
+
+	/**
+	 * Internal function to save a value to the correct options table.
+	 *
+	 * @since 4.6
+	 */
+	static protected function _set_option( $key, $value ) {
 		if ( IncPopup::use_global() ) {
 			update_site_option( $key, $value );
 		} else {

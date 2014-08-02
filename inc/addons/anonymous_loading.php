@@ -97,7 +97,7 @@ class Popover_Anonymous_Loading {
 			? sprintf('var popover_load_custom=%s;', json_encode(array(
 				'admin_ajax_url' => admin_url('admin-ajax.php')
 			)))
-			: sprintf('var _popover_data=%s', json_encode(array(
+			: sprintf('var _popup_data=%s', json_encode(array(
 				'endpoint' => admin_url('admin-ajax.php'),
 				'action' => 'popover_selective_ajax',
 			)))

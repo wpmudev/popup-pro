@@ -119,11 +119,17 @@ class IncPopupItem {
 	// Specifies which rule-files are needed to handle all popup conditions.
 	public $rule_files = array();
 
-	// Extra arguments for the conditions (e.g. "rule[0] = count" and "rule_data[count] = 3")
+	// Extra arguments for the conditions
+	// (e.g. "rule[0] = count" and "rule_data[count] = 3")
 	public $rule_data = array();
 
-	// This is used to store dynamic properties used by templates, such as the div-ID string.
+	// This is used to store dynamic properties used by templates, such as the
+	// div-ID string or custom css styles.
 	public $code = null;
+
+	// Public collection of details that are passed to frontend javascript to
+	// render the popup.
+	public $script_data = array();
 
 	// -------------------------------------------------------------------------
 
@@ -192,11 +198,9 @@ class IncPopupItem {
 		$this->rule_files = array();
 		$this->rule_data = array();
 
-		$this->code = (object) array(
-			'id'     => 'a' . md5( date( 'd' ) ) . '-po',
-			'colors' => 'color: ' . $this->color['fore'] . '; background: ' . $this->color['back'] . ';',
-		);
-
+		$this->code = (object) array();
+		$this->code->id     = 'a' . md5( date( 'd' ) ) . '-po';
+		$this->code->colors = '';
 	}
 
 	/**
@@ -324,6 +328,29 @@ class IncPopupItem {
 		foreach ( $this->rule_data as $ind => $key ) {
 			if ( empty( $key ) ) { unset( $this->rule_data[$ind] ); }
 		}
+
+		// Display data.
+		if ( $this->custom_colors ) {
+			$this->code->colors = 'color:' . $this->color['fore'] . ';background:' . $this->color['back'] . ';';
+		} else {
+			$this->code->colors = '';
+		}
+
+		$this->script_data['html_id'] = $this->code->id;
+		$this->script_data['popup_id'] = $this->id;
+		$this->script_data['close_hide'] = $this->close_hides;
+		$this->script_data['expiry'] = $this->hide_expire;
+		$this->script_data['custom_size'] = $this->custom_size;
+		$this->script_data['width'] = $this->size['width'];
+		$this->script_data['height'] = $this->size['height'];
+
+		switch ( $this->delay_type ) {
+			case 'm': $this->script_data['delay'] = $this->delay * 60000;
+			case 's':
+			default:  $this->script_data['delay'] = $this->delay * 1000;
+		}
+
+		$this->script_data = apply_filters( 'popover-output-popover', $this->script_data, $this );
 
 		// Validation only done when editing popups.
 		if ( is_admin() ) {
@@ -586,6 +613,18 @@ class IncPopupItem {
 			$style = str_replace( '%styleurl%', $details->url, $style );
 		}
 		return $style;
+	}
+
+	/**
+	 * Change some script_data properties for displaying a popup-preview.
+	 *
+	 * @since  4.6
+	 */
+	public function preview_mode() {
+		$this->script_data['popup_id'] = 'preview-' . $this->id;
+		$this->script_data['delay'] = 0;
+		$this->script_data['close_hide'] = false;
+		$this->script_data['preview'] = true;
 	}
 
 

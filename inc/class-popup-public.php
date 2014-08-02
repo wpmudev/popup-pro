@@ -11,7 +11,6 @@ class IncPopup extends IncPopupBase {
 
 	/**
 	 * Defines the current popup that is displayed.
-	 * Used by load_method_footer
 	 * @var IncPopupItem
 	 */
 	protected $popup = null;
@@ -50,18 +49,6 @@ class IncPopup extends IncPopupBase {
 			'init',
 			array( $this, 'init_public' )
 		);
-
-		// Ajax handlers to load Pop Up data (for logged in users).
-		add_action(
-			'wp_ajax_inc_popup',
-			array( 'IncPopup', 'ajax_load_popup' )
-		);
-
-		// Ajax handlers to load Pop Up data (for guests).
-		add_action(
-			'wp_ajax_nopriv_inc_popup',
-			array( 'IncPopup', 'ajax_load_popup' )
-		);
 	}
 
 	/**
@@ -70,7 +57,7 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6
 	 */
 	protected function load_addons() {
-		$active = get_option( 'popover_activated_addons', array() );
+		$active = IncPopupDatabase::get_active_addons();
 		$active = (array) $active;
 
 		if ( empty( $active ) ) { return; }
@@ -107,10 +94,7 @@ class IncPopup extends IncPopupBase {
 		$this->load_addons();
 
 		// Load plugin settings.
-		$settings = IncPopupDatabase::get_option(
-			'popover-settings',
-			array( 'loadingmethod' => 'ajax' )
-		);
+		$settings = IncPopupDatabase::get_settings();
 
 		// Initialize javascript-data.
 		$this->script_data['ajaxurl'] = '';
@@ -163,7 +147,7 @@ class IncPopup extends IncPopupBase {
 	 */
 	protected function load_scripts() {
 		wp_register_script(
-			'popover-public',
+			'popup-public',
 			PO_JS_URL . 'public.min.js',
 			array( 'jquery' ),
 			false,
@@ -171,12 +155,12 @@ class IncPopup extends IncPopupBase {
 		);
 
 		wp_localize_script(
-			'popover-public',
-			'_popover_data',
+			'popup-public',
+			'_popup_data',
 			$this->script_data
 		);
 
-		wp_enqueue_script( 'popover-public' );
+		wp_enqueue_script( 'popup-public' );
 	}
 
 	/**
@@ -230,35 +214,32 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6
 	 */
 	protected function load_method_footer() {
-		global $popoverajax;
-
-		// Set up the rquest information from here.
-		// This is passed in using the standard JS interface so we need to fake it.
+		/**
+		 * Set up the rquest information from here.
+		 * These values are used by some rules and need to be set manually here
+		 * In an ajax request they would already be defined by the ajax url.
+		 */
 		$_REQUEST['thereferrer'] = @$_SERVER['HTTP_REFERER'];
 		$_REQUEST['thefrom'] = TheLib::current_url();
 
-		$this->popup = $popoverajax->get_popup_data();
+		// Populates $this->popup
+		$this->select_popup();
 
-		if ( isset( $this->popup['name'] ) && $this->popup['name'] != 'nopopover' ) {
-			$data = $this->popup;
+		if ( empty( $this->popup ) ) { return; }
 
-			// These two are included via wp_head and wp_foot below.
-			unset( $data['style'] );
-			unset( $data['html'] );
+		$data = $this->popup->script_data;
+		$this->script_data['popup'] = $data;
+		$this->load_scripts();
 
-			$this->script_data['popup'] = $data;
-			$this->load_scripts();
+		add_action(
+			'wp_head',
+			array( $this, 'show_header')
+		);
 
-			add_action(
-				'wp_head',
-				array( 'IncPopup', 'show_header')
-			);
-
-			add_action(
-				'wp_footer',
-				array( 'IncPopup', 'show_footer')
-			);
-		}
+		add_action(
+			'wp_footer',
+			array( $this, 'show_footer')
+		);
 	}
 
 	/**
@@ -266,10 +247,11 @@ class IncPopup extends IncPopupBase {
 	 *
 	 * @since  4.6
 	 */
-	static public function show_header() {
-		?>
-		<style type="text/css"><?php echo @$this->popup['style']; ?></style>
-		<?php
+	public function show_header() {
+		if ( empty( $this->popup ) ) { return; }
+
+		$styles = $this->popup->load_styles();
+		echo '<style type="text/css">' . $styles . '</style>';
 	}
 
 	/**
@@ -277,135 +259,11 @@ class IncPopup extends IncPopupBase {
 	 *
 	 * @since  4.6
 	 */
-	static public function show_footer() {
-		echo @$this->popup['html'];
-	}
+	public function show_footer() {
+		if ( empty( $this->popup ) ) { return; }
 
-	/**
-	 * Returns the popup content as JSON object and then ends the request.
-	 *
-	 * @since  4.6
-	 */
-	static public function ajax_load_popup() {
-		$action = @$_REQUEST['do'];
-
-		switch ( $action ) {
-			case 'get-data':
-				$data = $this->get_popup_data();
-				echo 'po_data(' . json_encode( $data ) . ')';
-				die();
-		}
-	}
-
-
-	/*==================================*\
-	======================================
-	==                                  ==
-	==           SELECT POPUP           ==
-	==                                  ==
-	======================================
-	\*==================================*/
-
-
-	protected function get_popup_data() {
-		$items = $this->find_popups();
-
-		if ( empty( $items ) ) {
-			return array( 'name' => 'nopopover' );
-		}
-
-		$popup = reset( $items );
-
-		// return the popover to the calling function
-		$data = array(
-			'popover_id' => $popup->id,
-			'close_hide' => $popup->close_hides,
-			'expiry' => $popup->hide_expire,
-		);
-
-		$data['name'] = 'a' . md5( date( 'd' ) ) . '-po';
-
-		switch ( $popup->delay_type ) {
-			case 'm': $data['delay'] = $popup->delay * 60000;
-			case 's':
-			default:  $data['delay'] = $popup->delay * 1000;
-		}
-
-		$data['html'] = $popup->load_html();
-		$data['html'] = $popup->load_styles();
-
-		// Increase the popup counter.
-		$count = absint( @$_COOKIE['popover_view_' . COOKIEHASH] );
-		$count += 1;
-		if ( ! headers_sent() ) {
-			setcookie(
-				'popover_view_' . COOKIEHASH,
-				$count ,
-				time() + 30000000,
-				COOKIEPATH,
-				COOKIE_DOMAIN
-			);
-		}
-
-		// Filter and return the popup details
-		return apply_filters( 'popover-output-popover', $data, $popup );
-	}
-
-	/**
-	 * Returns an array of Pop Up objects that should be displayed for the
-	 * current page/user. The Pop Ups are in the order in which they are defined
-	 * in the admin list.
-	 *
-	 * @since  4.6
-	 * @return array List of all popups that fit the current page.
-	 */
-	protected function find_popups() {
-		$popup_id = false;
-		$popups = array();
-
-		if ( isset( $_REQUEST['po_id'] ) ) {
-			// Check for forced popup.
-			$popup_id = absint( $_REQUEST['po_id'] );
-			$active_ids = array( $popup_id );
-		} else {
-			$active_ids = IncPopupDatabase::get_active_ids();
-		}
-
-		foreach ( $active_ids as $id ) {
-			$popup = IncPopupDatabase::get( $id );
-
-			if ( $popup_id ) {
-				// Forced popup ignores all conditions.
-				$show = true;
-			} else {
-				// Apply the conditions to decide if the popup should be displayed.
-				$show = apply_filters( 'popup-apply-rules', true, $popup );
-			}
-
-			// Stop here if the popup failed in some conditions.
-			if ( ! $show ) { continue; }
-
-			// Stop here if the user did choose to hide the popup.
-			if ( $this->is_hidden( $id ) ) { continue; }
-
-			$popups[] = $popup;
-		}
-
-		return $popups;
-	}
-
-
-	/**
-	 * Tests if a popup is marked as hidden ("never see this message again").
-	 * This flag is stored as a cookie on the users computer.
-	 *
-	 * @since  4.6
-	 * @param  int $id Pop Up ID
-	 * @return bool
-	 */
-	protected function is_hidden( $id ) {
-		$name = 'popover_never_view_' . $id;
-		return isset( $_COOKIE[$name] );
+		$html = $this->popup->load_html();
+		echo '' . $html;
 	}
 
 };

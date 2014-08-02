@@ -35,10 +35,7 @@ $loading_methods = apply_filters( 'popover-settings-loading-method', $loading_me
 $loading_methods = apply_filters( 'popover-settings-loading_method', $loading_methods );
 
 
-$settings = IncPopupDatabase::get_option(
-	'popover-settings',
-	array( 'loadingmethod' => 'ajax' )
-);
+$settings = IncPopupDatabase::get_settings();
 $cur_method = @$settings['loadingmethod'];
 
 $form_url = remove_query_arg( array( 'message', 'action', '_wpnonce' ) );

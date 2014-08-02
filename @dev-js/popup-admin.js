@@ -349,6 +349,46 @@ jQuery(function init_admin() {
 		tbody.disableSelection();
 	}
 
+	// Shows a preview of the current Pop Up.
+	function init_preview() {
+		var doc = jQuery( document );
+			body = jQuery( '#wpcontent' );
+
+		var handle_list_click = function handle_list_click( ev ) {
+			var me = jQuery( this ),
+				po_id = me.data( 'id' );
+
+			ev.preventDefault();
+			if ( undefined === window.inc_popup ) { return false; }
+
+			body.addClass( 'wpmui-loading' );
+			inc_popup.load( po_id );
+			return false;
+		};
+
+		var handle_editor_click = function handle_editor_click( ev ) {
+			var me = jQuery( this ),
+				form = jQuery( '#post' ),
+				ajax = wpmUi.ajax();
+
+			ev.preventDefault();
+			if ( undefined === window.inc_popup ) { return false; }
+
+			data = ajax.extract_data( form );
+			body.addClass( 'wpmui-loading' );
+			inc_popup.load( 0, data );
+			return false;
+		};
+
+		var remove_animation = function remove_animation() {
+			body.removeClass( 'wpmui-loading' );
+		};
+
+		doc.on( 'click', '.posts .po-preview', handle_list_click );
+		doc.on( 'click', '#post .preview', handle_editor_click );
+		doc.on( 'popup-load-done', remove_animation );
+	};
+
 	if ( ! jQuery( 'body.post-type-inc_popup' ).length ) {
 		return;
 	}
@@ -360,6 +400,7 @@ jQuery(function init_admin() {
 		init_colorpicker();
 		init_edit_controls();
 		init_rules();
+		init_preview();
 
 		wpmUi.upgrade_multiselect();
 	}
@@ -368,6 +409,7 @@ jQuery(function init_admin() {
 	else if ( jQuery( 'body.edit-php' ).length ) {
 		sortable_list();
 		bulk_actions();
+		init_preview();
 	}
 
 });

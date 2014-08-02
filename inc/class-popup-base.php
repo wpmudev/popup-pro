@@ -67,6 +67,18 @@ abstract class IncPopupBase {
 			'popover-styles',
 			array( 'IncPopupBase', 'style_infos' )
 		);
+
+		// Ajax handlers to load Pop Up data (for logged in users).
+		add_action(
+			'wp_ajax_inc_popup',
+			array( $this, 'ajax_load_popup' )
+		);
+
+		// Ajax handlers to load Pop Up data (for guests).
+		add_action(
+			'wp_ajax_nopriv_inc_popup',
+			array( $this, 'ajax_load_popup' )
+		);
 	}
 
 	/**
@@ -236,6 +248,128 @@ abstract class IncPopupBase {
 		}
 
 		return $List;
+	}
+
+	/**
+	 * Returns the popup content as JSON object and then ends the request.
+	 *
+	 * @since  4.6
+	 */
+	public function ajax_load_popup() {
+		$action = @$_REQUEST['do'];
+
+		switch ( $action ) {
+			case 'get-data':
+				$this->select_popup();
+				if ( ! empty( $this->popup ) ) {
+					$data = $this->popup->script_data;
+					$data['html'] = $this->popup->load_html();
+					$data['styles'] = $this->popup->load_styles();
+					echo 'po_data(' . json_encode( $data ) . ')';
+				}
+				die();
+		}
+	}
+
+
+	/*==================================*\
+	======================================
+	==                                  ==
+	==           SELECT POPUP           ==
+	==                                  ==
+	======================================
+	\*==================================*/
+
+
+	/**
+	 * Returns an array with popup details.
+	 *
+	 * @since  4.6
+	 * @return array
+	 */
+	protected function select_popup() {
+		$data = array();
+		$items = $this->find_popups();
+		$this->popup = null;
+
+		if ( empty( $items ) ) {
+			return $data;
+		}
+
+		// Use the first popup item from the list.
+		$this->popup = reset( $items );
+
+		// Increase the popup counter.
+		$count = absint( @$_COOKIE['po_c-' . $this->popup->id] );
+		$count += 1;
+		if ( ! headers_sent() ) {
+			setcookie(
+				'po_c-' . $this->popup->id,
+				$count ,
+				time() + 500000000,
+				COOKIEPATH,
+				COOKIE_DOMAIN
+			);
+		}
+	}
+
+	/**
+	 * Returns an array of Pop Up objects that should be displayed for the
+	 * current page/user. The Pop Ups are in the order in which they are defined
+	 * in the admin list.
+	 *
+	 * @since  4.6
+	 * @return array List of all popups that fit the current page.
+	 */
+	protected function find_popups() {
+		$popup_id = false;
+		$popups = array();
+
+		if ( isset( $_REQUEST['po_id'] ) ) {
+			// Check for forced popup.
+			$popup_id = absint( $_REQUEST['po_id'] );
+			$active_ids = array( $popup_id );
+		} else {
+			$active_ids = IncPopupDatabase::get_active_ids();
+		}
+
+		foreach ( $active_ids as $id ) {
+			$popup = IncPopupDatabase::get( $id );
+
+			if ( $popup_id ) {
+				// Forced popup ignores all conditions.
+				$show = true;
+			} else {
+				// Apply the conditions to decide if the popup should be displayed.
+				$show = apply_filters( 'popup-apply-rules', true, $popup );
+			}
+
+			// Stop here if the popup failed in some conditions.
+			if ( ! $show ) { continue; }
+
+			// Stop here if the user did choose to hide the popup.
+			if ( ! @$_REQUEST['preview'] && $this->is_hidden( $id ) ) { continue; }
+
+			$popups[] = $popup;
+		}
+
+		return $popups;
+	}
+
+
+	/**
+	 * Tests if a popup is marked as hidden ("never see this message again").
+	 * This flag is stored as a cookie on the users computer.
+	 *
+	 * @since  4.6
+	 * @param  int $id Pop Up ID
+	 * @return bool
+	 */
+	protected function is_hidden( $id ) {
+		$name = 'po_h-' . $id;
+		$name_old = 'popover_never_view_' . $id;
+
+		return isset( $_COOKIE[$name] ) || isset( $_COOKIE[$name_old] );
 	}
 
 };

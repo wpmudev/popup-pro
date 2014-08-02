@@ -196,7 +196,7 @@ abstract class IncPopupRule {
 
 			$method = 'apply_' . $key;
 			if ( method_exists( $this, $method ) ) {
-				if ( ! $this->$method( @$popup->rule_data[$key] ) ) {
+				if ( ! $this->$method( @$popup->rule_data[$key], $popup ) ) {
 					$show = false;
 					break;
 				}

@@ -91,6 +91,7 @@ class IncPopup extends IncPopupBase {
 			TheLib::add_ui( 'select' );
 			TheLib::add_ui( PO_CSS_URL . 'popup-admin.css' );
 			TheLib::add_ui( PO_JS_URL . 'popup-admin.min.js' );
+			TheLib::add_ui( PO_JS_URL . 'public.min.js' ); // For Preview.
 			TheLib::add_data(
 				'po_bulk',
 				array(
@@ -99,6 +100,18 @@ class IncPopup extends IncPopupBase {
 					'toggle' => __( 'Toggle activation', PO_LANG ),
 				)
 			);
+			// For Preview
+			TheLib::add_data(
+				'_popup_data',
+				array(
+					'ajaxurl' => admin_url( 'admin-ajax.php' ),
+					'do'      => 'get-data',
+					'popup'   => '',
+					'noinit'  => true,
+					'preview' => true,
+				)
+			);
+
 
 			// -- POP UP LIST -----------------------
 
@@ -241,6 +254,35 @@ class IncPopup extends IncPopupBase {
 		die();
 	}
 
+	/**
+	 * Returns the popup content as JSON object and then ends the request.
+	 *
+	 * @since  4.6
+	 */
+	public function ajax_load_popup() {
+		$action = @$_REQUEST['do'];
+
+		switch ( $action ) {
+			case 'get-data':
+				if ( IncPopupItem::POST_TYPE == @$_REQUEST['data']['post_type'] ) {
+					$this->popup = new IncPopupItem();
+					$data = self::prepare_formdata( $_REQUEST['data'] );
+					$this->popup->populate( $data );
+				} else {
+					$this->select_popup();
+				}
+
+				if ( ! empty( $this->popup ) ) {
+					$this->popup->preview_mode();
+					$data = $this->popup->script_data;
+					$data['html'] = $this->popup->load_html();
+					$data['styles'] = $this->popup->load_styles();
+					echo 'po_data(' . json_encode( $data ) . ')';
+				}
+				die();
+		}
+	}
+
 
 	/*==============================*\
 	==================================
@@ -268,7 +310,12 @@ class IncPopup extends IncPopupBase {
 	static public function handle_settings_update() {
 		if ( @$_POST['action'] == 'updatesettings' ) {
 			check_admin_referer( 'update-popover-settings' );
-			IncPopupDatabase::set_option( 'popover-settings', $_POST );
+
+			$settings = array(
+				'loadingmethod' => @$_POST['loadingmethod'],
+			);
+
+			IncPopupDatabase::set_settings( $settings );
 
 			TheLib::message( __( 'Your settings have been updated.', PO_LANG ) );
 			$redirect_url = remove_query_arg( array( 'message', 'count' ), wp_get_referer() );
@@ -319,7 +366,7 @@ class IncPopup extends IncPopupBase {
 		check_admin_referer( 'popup-addon' );
 		if ( empty( $keys ) ) { return; }
 
-		$active_addons = get_option( 'popover_activated_addons', array() );
+		$active_addons = IncPopupDatabase::get_active_addons();
 		if ( ! is_array( $active_addons ) ) { $active_addons = array(); }
 		$count = 0;
 
@@ -375,7 +422,7 @@ class IncPopup extends IncPopupBase {
 		}
 
 		if ( $count > 0 && ! empty ( $msg ) ) {
-			update_option( 'popover_activated_addons', array_unique( $active_addons ) );
+			IncPopupDatabase::set_active_addons( array_unique( $active_addons ) );
 
 			TheLib::message( sprintf( $msg, $count ) );
 			$redirect_url = remove_query_arg( array( 'message', 'count' ), wp_get_referer() );
@@ -468,6 +515,13 @@ class IncPopup extends IncPopupBase {
 					);
 				}
 
+				$actions['popup_preview'] = array(
+					'url' => '#',
+					'title' => __( 'Preview this Pop Up', PO_LANG ),
+					'attr' => 'class="po-preview" data-id="' . $post_id . '"',
+					'label' => __( 'Preview', PO_LANG )
+				);
+
 				if ( current_user_can( 'delete_post', $post_id ) ) {
 					if ( 'trash' === $popup->status ) {
 						$the_url = $post_type_object->_edit_link . '&amp;action=untrash';
@@ -514,7 +568,7 @@ class IncPopup extends IncPopupBase {
 					<span class="<?php echo esc_attr( $action ); ?>">
 					<a href="<?php echo esc_url( @$item['url'] ); ?>"
 						title="<?php echo esc_attr( @$item['title'] ); ?>"
-						<?php echo @$item['attr']; ?>>
+						<?php echo '' . @$item['attr']; ?>>
 						<?php echo esc_html( @$item['label'] ); ?>
 					</a><?php echo esc_html( $sep ); ?>
 					</span>
@@ -973,6 +1027,58 @@ class IncPopup extends IncPopupBase {
 	}
 
 	/**
+	 * Returns an array with all relevant popup fields extracted from the
+	 * submitted form data.
+	 *
+	 * @since  4.6
+	 * @param  array $form Raw form array, submitted from WP admin.
+	 * @return array Data extracted from the $form array.
+	 */
+	static protected function prepare_formdata( $form ) {
+		$data = array(
+			// Meta: Content
+			'name' => @$form['po_name'],
+			'content' => stripslashes( @$form['po_content'] ),
+			'title' => @$form['po_heading'],
+			'subtitle' => @$form['po_subheading'],
+			'cta_label' => @$form['po_cta'],
+			'cta_link' => @$form['po_cta_link'],
+
+			// Meta: Appearance
+			'style' => @$form['po_style'],
+			'round_corners' => ! isset( $form['po_round_corners'] ),
+			'custom_colors' => isset( $form['po_custom_colors'] ),
+			'color' => array(
+				'back' => @$form['po_color_back'],
+				'fore' => @$form['po_color_fore'],
+			),
+			'custom_size' => isset( $form['po_custom_size'] ),
+			'size' => array(
+				'width' => @$form['po_size_width'],
+				'height' => @$form['po_size_height'],
+			),
+
+			// Meta: Behavior
+			'display' => @$form['po_display'],
+			'delay' => @$form['po_delay'],
+			'delay_type' => @$form['po_delay_type'],
+			'scroll' => @$form['po_scroll'],
+			'anchor' => @$form['po_anchor'],
+			'can_hide' => isset( $form['po_can_hide'] ),
+			'close_hides' => isset( $form['po_close_hides'] ),
+			'hide_expire' => @$form['po_hide_expire'],
+			'overlay_close' => ! isset( $form['po_overlay_close'] ),
+
+			// Meta: Rules:
+			'rule' => explode( ',', @$form['po_rule_order'] ),
+			'rule_data' => apply_filters( 'popup-save-rules', array() ),
+		);
+
+		return $data;
+	}
+
+
+	/**
 	 * Save the popup data to database
 	 *
 	 * @since  4.6
@@ -1014,49 +1120,11 @@ class IncPopup extends IncPopupBase {
 				return;
 		}
 
-		$data = array(
-			'id' => $post_id,
-
-			// Meta: Content
-			'name' => @$_POST['po_name'],
-			'status' => $status,
-			'content' => @$_POST['po_content'],
-			'title' => @$_POST['po_heading'],
-			'subtitle' => @$_POST['po_subheading'],
-			'cta_label' => @$_POST['po_cta'],
-			'cta_link' => @$_POST['po_cta_link'],
-
-			// Meta: Appearance
-			'style' => @$_POST['po_style'],
-			'round_corners' => ! isset( $_POST['po_round_corners'] ),
-			'custom_colors' => isset( $_POST['po_custom_colors'] ),
-			'color' => array(
-				'back' => @$_POST['po_color_back'],
-				'fore' => @$_POST['po_color_fore'],
-			),
-			'custom_size' => isset( $_POST['po_custom_size'] ),
-			'size' => array(
-				'width' => @$_POST['po_size_width'],
-				'height' => @$_POST['po_size_height'],
-			),
-
-			// Meta: Behavior
-			'display' => @$_POST['po_display'],
-			'delay' => @$_POST['po_delay'],
-			'delay_type' => @$_POST['po_delay_type'],
-			'scroll' => @$_POST['po_scroll'],
-			'anchor' => @$_POST['po_anchor'],
-			'can_hide' => isset( $_POST['po_can_hide'] ),
-			'close_hides' => isset( $_POST['po_close_hides'] ),
-			'hide_expire' => @$_POST['po_hide_expire'],
-			'overlay_close' => ! isset( $_POST['po_overlay_close'] ),
-
-			// Meta: Rules:
-			'rule' => explode( ',', @$_POST['po_rule_order'] ),
-			'rule_data' => apply_filters( 'popup-save-rules', array() ),
-		);
-
-		// Save the popup data!
+		// Populate the popup.
+		$data = self::prepare_formdata( $_POST );
+		$data['id'] = $post_id;
+		$data['order'] = $popup->order;
+		$data['status'] = $status;
 		$popup->populate( $data );
 
 		// Prevent infinite loop when saving.

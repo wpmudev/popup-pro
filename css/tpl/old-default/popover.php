@@ -9,7 +9,7 @@
 	class="visiblebox"
 	style="z-index: 999999; left: -1000px; top: 100px; display: none;">
 
-	<a href="#" id="closebox" title="<?php _e( 'Close this box', PO_LANG ); ?>" />
+	<a href="#" id="closebox" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
 	<div id="message" style="<?php echo esc_attr( $this->code->colors ); ?>">
 
 		<?php echo apply_filters( 'the_content', $this->content ); ?>

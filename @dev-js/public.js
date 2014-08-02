@@ -1,221 +1,317 @@
 ;(function () {
+	var Popup = function( _options ) {
 
-var Popup = function (_options) {
-
-	var me = this,
-		popover_data = {}
-		;
-
-	this.deferred = new jQuery.Deferred,
-
-	this.get_cookie = function (name) {
-		var nameEQ = name + "=";
-		var ca = document.cookie.split(';');
-		for (var i = 0; i < ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) === ' ')
-				c = c.substring(1, c.length);
-			if (c.indexOf(nameEQ) === 0)
-				return c.substring(nameEQ.length, c.length);
-		}
-		return null;
-	};
-
-	this.create_cookie = function (name, value, days) {
-		if (days) {
-			var date = new Date();
-			date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-			var expires = "; expires=" + date.toGMTString();
-		}
-		else
-			var expires = "";
-
-		var cookie_name = me.popover_data && me.popover_data.popover_id
-			? name + '_' + me.popover_data.popover_id
-			: name
-		;
-		document.cookie = cookie_name + "=" + value + expires + "; path=/";
-	};
-
-	this.remove_message_box_forever = function () {
-		var expiry = me.popover_data.expiry || 365;
-		me.remove_message_box();
-		me.create_cookie('popover_never_view', 'hidealways', expiry);
-		return false;
-	};
-
-	this.remove_message_box = function () {
-		var _cbk = me.popover_data.multi_open ? 'hide' : 'remove';
-		jQuery('#darkbackground')[_cbk]();
-		jQuery(me.popover_name)[_cbk]();
-		jQuery(document).trigger('popover-closed');
-		return false;
-	};
-
-	this.set_popup_size = function () {
-		var data = me.popover_data;
-		var $msg = jQuery('#message'),
-			$win = jQuery(window),
-			$box = jQuery(me.popover_name)
-		;
-		if (
-			(data.usejs && 'yes' === data.usejs)
-			||
-			(data.size && data.size.usejs)
-		) {
-			if (!$box.is(":visible")) {
-				if ((data.usejs && 'yes' === data.usejs) || (data.position && data.position.usejs)) $box.css({top: $win.height()});
-				$box.show();
-				$msg = jQuery('#message');
-			}
-			$box
-				.width($msg.width())
-				.height($msg.height())
+		var me = this,
+			$doc = jQuery( document ),
+			$win = jQuery( window ),
+			$po_bg = jQuery( '#darkbackground' ),
+			$po_div = null,
+			$po_msg = null,
+			$po_close = null,
+			$po_hide = null
 			;
-		}
 
-		if (
-			(data.usejs && 'yes' === data.usejs)
-			||
-			(data.position && data.position.usejs)
-		) {
-			if (!$box.is(":visible")) {
-				$box.css({top: $win.height()});
-				$box.show();
-				$msg = jQuery('#message');
+		this.data = {};
+
+		/**
+		 * Close Pop Up and set the "never see again" flag.
+		 */
+		this.close_forever = function close_forever() {
+			var expiry = me.data.expiry || 365;
+
+			me.close_popup();
+			if ( _options['preview'] ) { return false; }
+
+			me.set_cookie( 'po_h-', 1, expiry );
+			return false;
+		};
+
+		/**
+		 * Close Pop Up.
+		 * Depending on the "multi_open" flag it can be opened again.
+		 */
+		this.close_popup = function close_popup() {
+			if ( me.data.multi_open ) {
+				$po_bg.hide();
+				$po_div.hide();
+			} else {
+				$po_bg.remove();
+				$po_div.remove();
 			}
-			$box.css({
-				'top': (jQuery(window).height() - $msg.height()) / 2,
-				'left': (jQuery(window).width() - $msg.width()) / 2
-			});
-		}
-		if (!$box.is(":visible")) $box.show();
-	};
 
-	this.set_up_message_box = function () {
-		var data = me.popover_data;
-		me.popover_name = '#' + data['name'];
+			$doc.trigger( 'popup-closed' );
+			// Legacy trigger.
+			$doc.trigger( 'popover-closed' );
+			return false;
+		};
 
-		me.set_popup_size(data);
-		jQuery(window).off("resize.popover").on("resize.popover", function () {
-			me.set_popup_size(data);
-		});
-
-		jQuery(me.popover_name).css('visibility', 'visible');
-		jQuery('#darkbackground').css('visibility', 'visible');
-
-		jQuery('#clearforever').off("click", me.remove_message_box_forever).on("click", me.remove_message_box_forever);
-		if (me.popover_data && me.popover_data.close_hide) jQuery('#closebox').off("click", me.remove_message_box_forever).on("click", me.remove_message_box_forever);
-		else jQuery('#closebox').off("click", me.remove_message_box).on("click", me.remove_message_box);
-
-		jQuery('#message').hover(function() {
-			jQuery('.claimbutton').removeClass('hide');
-		}, function() {
-			jQuery('.claimbutton').addClass('hide');
-		});
-
-		jQuery(document).trigger('popover-displayed', [me.popover_data, me]);
-	};
-
-	this.load_message_box = function () {
-		var data = me.popover_data;
-
-		if (data['html'] === '') return false;
-
-		jQuery('<style type="text/css">' + data['style'] + '</style>').appendTo('head');
-		jQuery(data['html']).appendTo('body');
-
-		jQuery('#' + data['name']).css("visibility", "hidden");
-		jQuery('#darkbackground').css("visibility", "hidden");
-	};
-
-	this.on_success = function (data) {
-		me.popover_data = data;
-		if (data['name'] !== 'nopoover') me.load_message_box();
-	};
-
-	this.async_load_popover = function () {
-
-		var thefrom = window.location;
-		var thereferrer = document.referrer;
-		// Check if we are forcing a popover - if not then set it to a default value of 0
-		if (typeof force_popover === 'undefined') {
-			force_popover = 0;
-		}
-
-		return jQuery.ajax({
-			url: _options.ajaxurl,
-			dataType: 'jsonp',
-			jsonpCallback: 'po_data',
-			data: {
-				'action': 'inc_popup',
-				'do': _options['do'],
-				thefrom: thefrom.toString(),
-				thereferrer: thereferrer.toString(),
-				po_id: force_popover.toString()
-			},
-			success: function(data) {
-				me.on_success(data);
+		this.move_popup = function move_popup() {
+			if ( me.data.custom_size ) {
+				$po_div.width(me.data.width)
+					.height(me.data.height);
 			}
-		});
-		return false;
-	};
 
-	this.init = function () {
-		var def = new jQuery.Deferred;
-		me.deferred.done(me.show);
+			if ( ! $po_div.is( ":visible" ) ) {
+				$po_div.css({
+					'top': $win.height()
+				});
+				$po_div.show();
+			}
 
-		def.done(function () {
-			jQuery(document).trigger("popover-init", [me.deferred, me.popover_data]);
+			// Short delay before positioning the popup to give the browser time
+			// to show/resize the popup (20ms ~ 1 screen refresh)
+			window.setTimeout(function() {
+				$po_div.css({
+					'top':  ($win.height() - $po_msg.height()) / 2,
+					'left': ($win.width()  - $po_msg.width()) / 2
+				});
+			}, 20);
+		};
+
+
+		/**
+		 * Check if the Pop Up is ready to be displayed.
+		 * If it is ready then it is displayed.
+		 */
+		this.maybe_show_popup = function maybe_show_popup() {
+			console.log ('Maybe show...', me.data);
+			me.fetch_dom();
+
+			$doc.trigger( 'popup-init', [undefined, me.data] );
+			// Legacy trigger.
+			$doc.trigger( 'popover-init', [undefined, me.data] );
+
 			setTimeout(function () {
-				me.popover_name = '#' + me.popover_data.name;
-				jQuery(me.popover_name).hide();
+				$po_div.hide();
 
-				if (me.popover_data.wait_for_event) return false;
-				if ("pending" === me.deferred.state()) me.deferred.resolve();
+				// We're waiting for some javascript event before showing the popup.
+				if ( me.data.wait_for_event ) { return false; }
+
+				window.setTimeout(function() {
+					me.show();
+					if ( me.data.multi_open ) {
+						$doc.on('popover-closed', me.reinit);
+					}
+				}, me.data.delay);
 			}, 500);
-		});
-		if (!_options.popover) {
-			me.async_load_popover().done(function () {
-				def.resolve();
-			});
-		} else {
-			me.popover_data = _options.popover;
-			def.resolve();
 		}
-		return def;
+
+		/**
+		 * Display the popup!
+		 */
+		this.show = function show() {
+			console.log ('Show popup!', $po_div, me.data);
+			me.move_popup(me.data);
+
+			$win.off("resize.popover").on("resize.popover", function () {
+				me.move_popup(me.data);
+			});
+
+			$po_div.show();
+			$po_bg.show();
+
+			$po_hide.off( "click", me.close_forever )
+				.on( "click", me.close_forever );
+
+			if ( me.data && me.data.close_hide ) {
+				$po_close.off( "click", me.close_forever )
+					.on( "click", me.close_forever );
+			} else {
+				$po_close.off( "click", me.close_popup )
+					.on( "click", me.close_popup );
+			}
+
+			$po_msg.hover(function() {
+				jQuery( '.claimbutton' ).removeClass( 'hide' );
+			}, function() {
+				jQuery( '.claimbutton' ).addClass( 'hide' );
+			});
+
+			$doc.trigger( 'popup-displayed', [me.data, me] );
+			// Legacy trigger.
+			$doc.trigger( 'popover-displayed', [me.data, me] );
+		};
+
+
+		/*-----  Dynamically load Pop Ups  ------*/
+
+
+		/**
+		 * Finds the Pop Up DOM elements and stores them in protected member
+		 * variables for easy access.
+		 */
+		this.fetch_dom = function fetch_dom() {
+			console.log ('fetch DOM', me.data)
+			$po_div = jQuery( '#' + me.data['html_id'] );
+			$po_msg = $po_div.find( '#message' );
+			$po_close = $po_div.find( '#closebox' );
+			$po_hide = $po_div.find( '#clearforever' );
+		};
+
+		/**
+		 * Insert the Pop Up CSS and HTML as hidden elements into the DOM.
+		 */
+		this.prepare_dom = function prepare_dom() {
+			console.log ('prepare Popup')
+			if ( me.data['html'] === '' ) { return false; }
+
+			jQuery( '<style type="text/css">' + me.data['styles'] + '</style>' )
+				.appendTo('head');
+
+			jQuery( me.data['html'] )
+				.appendTo('body');
+
+			me.fetch_dom();
+
+			$po_div.hide();
+			$po_bg.hide();
+
+			me.maybe_show_popup();
+		};
+
+		/**
+		 * Load popup data via ajax.
+		 */
+		this.load_popup = function load_popup( id, data ) {
+			console.log ('load popup')
+			var po_id = 0,
+				thefrom = window.location,
+				thereferrer = document.referrer;
+
+			var handle_done = function handle_done( data ) {
+				console.log ('load popup DONE', data);
+				me.data = data;
+
+				if ( data ) {
+					me.prepare_dom();
+				}
+			};
+
+			// fore_popup = load a popup_id by ID.
+			if ( typeof force_popover != 'undefined' ) {
+				po_id = force_popover.toString();
+			}
+			if ( typeof id != 'undefined' ) {
+				po_id = id.toString();
+			}
+
+			return jQuery.ajax({
+				url:           _options['ajaxurl'],
+				dataType:      'jsonp',
+				jsonpCallback: 'po_data',
+				data: {
+					'action':    'inc_popup',
+					'do':        _options['do'],
+					thefrom:     thefrom.toString(),
+					thereferrer: thereferrer.toString(),
+					po_id:       po_id,
+					data:        data || {}
+				},
+				success: function( data ) {
+					handle_done( data );
+				},
+				complete: function() {
+					$doc.trigger( 'popup-load-done', [me.data, me] );
+				}
+			});
+			return false;
+		};
+
+
+		/*-----  Init  ------*/
+
+
+		this.init = function init() {
+			console.log ('Init!')
+			if ( ! _options['popup'] ) {
+				me.load_popup();
+			} else {
+				me.data = _options['popup'];
+				me.maybe_show_popup();
+			}
+		};
+
+		/**
+		 * Used for certain rules (e.g. on-click rule) to show the Pop Up
+		 * again when the rule validates a second time
+		 */
+		this.reinit = function reinit() {
+			me.maybe_show_popup();
+		};
+
+
+		/*======================================*\
+		==========================================
+		==                                      ==
+		==           HELPER FUNCTIONS           ==
+		==                                      ==
+		==========================================
+		\*======================================*/
+
+
+		// Get a cookie value.
+		this.get_cookie = function get_cookie( name ) {
+			var i, c, cookie_name, value,
+				ca = document.cookie.split( ';' );
+
+			if ( me.data && me.data.popup_id ) {
+				cookie_name = name + '-' + me.data.popup_id + "=";
+			} else {
+				cookie_name = name + "=";
+			}
+
+			for ( i = 0; i < ca.length; i += 1 ) {
+				c = ca[i];
+				while ( c.charAt(0) === ' ' ) {
+					c = c.substring( 1, c.length );
+				}
+				if (c.indexOf( cookie_name ) === 0 ) {
+					return c.substring( cookie_name.length, c.length );
+				}
+			}
+			return null;
+		};
+
+		// Saves the value into a cookie.
+		this.set_cookie = function set_cookie( name, value, days ) {
+			var date, expires, cookie_name;
+
+			if ( _options['preview'] ) { return; }
+
+			if ( ! isNaN( days ) ) {
+				date = new Date();
+				date.setTime( date.getTime() + ( days * 24 * 60 * 60 * 1000 ) );
+				expires = "; expires=" + date.toGMTString();
+			} else {
+				expires = "";
+			}
+
+			if ( me.data && me.data.popup_id ) {
+				cookie_name = name + '-' + me.data.popup_id;
+			} else {
+				cookie_name = name;
+			}
+
+			document.cookie = cookie_name + "=" + value + expires + "; path=/";
+		};
+
+
+		/*-----  Finished  ------*/
+
+
+		// Only expose the "init" and "load" functions of the Pop Up.
+		return {
+			init: this.init,
+			load: this.load_popup
+		};
 	};
 
-	this.reinit = function () {
-		me.deferred = new jQuery.Deferred;
-		me.deferred.done(me.show);
-		jQuery(document).trigger("popover-init", [me.deferred, me.popover_data]);
-		setTimeout(function () {
-			me.popover_name = '#' + me.popover_data.name;
-			jQuery(me.popover_name).hide();
 
-			if (me.popover_data.wait_for_event) return false;
-			if ("pending" === me.deferred.state()) me.deferred.resolve();
-		}, 500);
-	};
-
-	this.show = function () {
-		window.setTimeout(function () {
-			me.set_up_message_box();
-			if (me.popover_data.multi_open) jQuery(document).on('popover-closed', me.reinit);
-		}, me.popover_data.delay);
-	};
-
-	return {
-		init: this.init
-	};
-};
-
-
-// Let's initialize
-jQuery(function () {
-	var pop = new Popup(_popover_data);
-	pop.init();
-});
+	// Initialize the Pop Up one the page is loaded.
+	jQuery(function() {
+		window.inc_popup = new Popup( _popup_data );
+		if ( _popup_data['noinit'] || _popup_data['preview'] ) { return; }
+		inc_popup.init();
+	});
 
 })();

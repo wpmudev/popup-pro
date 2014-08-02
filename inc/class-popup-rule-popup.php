@@ -41,11 +41,12 @@ class IncPopupRule_Count extends IncPopupRule {
 	 *
 	 * @since  4.6
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
+	 * @param  IncPopupItem $popup The Pop Up that is displayed.
 	 * @return bool Decission to display popup or not.
 	 */
-	protected function apply_count( $data ) {
+	protected function apply_count( $data, $popup ) {
 		$max_count = absint( $data );
-		$count = absint( @$_COOKIE['popover_view_' . COOKIEHASH] );
+		$count = absint( @$_COOKIE['po_c-' . $popup->id] );
 		return $count < $max_count;
 	}
 

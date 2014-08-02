@@ -24,7 +24,7 @@ $default_headers = array(
 $addons = IncPopup::get_addons();
 
 // List of active Addons.
-$active = get_option( 'popover_activated_addons', array() );
+$active = IncPopupDatabase::get_active_addons();
 
 $has_addons = false;
 $columncount = count( $columns ) + 1;
