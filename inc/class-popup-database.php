@@ -119,7 +119,7 @@ class IncPopupDatabase {
 				'internal' => 'no_internal',
 				'referrer' => 'referrer',
 				'count' => 'count',
-				'max_width' => 'max_width',
+				'max_width' => 'min_width',
 				'on_exit' => 'on_exit',
 				'on_click' => 'on_click',
 			);

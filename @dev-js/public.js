@@ -74,7 +74,6 @@
 		 * If it is ready then it is displayed.
 		 */
 		this.maybe_show_popup = function maybe_show_popup() {
-			console.log ('Maybe show...', me.data);
 			me.fetch_dom();
 
 			$doc.trigger( 'popup-init', [undefined, me.data] );
@@ -90,7 +89,7 @@
 				window.setTimeout(function() {
 					me.show();
 					if ( me.data.multi_open ) {
-						$doc.on('popover-closed', me.reinit);
+						$doc.on('popup-closed', me.reinit);
 					}
 				}, me.data.delay);
 			}, 500);
@@ -100,10 +99,9 @@
 		 * Display the popup!
 		 */
 		this.show = function show() {
-			console.log ('Show popup!', $po_div, me.data);
 			me.move_popup(me.data);
 
-			$win.off("resize.popover").on("resize.popover", function () {
+			$win.off("resize.popup").on("resize.popup", function () {
 				me.move_popup(me.data);
 			});
 
@@ -141,7 +139,6 @@
 		 * variables for easy access.
 		 */
 		this.fetch_dom = function fetch_dom() {
-			console.log ('fetch DOM', me.data)
 			$po_div = jQuery( '#' + me.data['html_id'] );
 			$po_msg = $po_div.find( '#message' );
 			$po_close = $po_div.find( '#closebox' );
@@ -152,7 +149,6 @@
 		 * Insert the Pop Up CSS and HTML as hidden elements into the DOM.
 		 */
 		this.prepare_dom = function prepare_dom() {
-			console.log ('prepare Popup')
 			if ( me.data['html'] === '' ) { return false; }
 
 			jQuery( '<style type="text/css">' + me.data['styles'] + '</style>' )
@@ -173,13 +169,11 @@
 		 * Load popup data via ajax.
 		 */
 		this.load_popup = function load_popup( id, data ) {
-			console.log ('load popup')
 			var po_id = 0,
 				thefrom = window.location,
 				thereferrer = document.referrer;
 
 			var handle_done = function handle_done( data ) {
-				console.log ('load popup DONE', data);
 				me.data = data;
 
 				if ( data ) {
@@ -187,10 +181,12 @@
 				}
 			};
 
-			// fore_popup = load a popup_id by ID.
+			// Legacy: force_popover = load a popup_id by ID.
 			if ( typeof force_popover != 'undefined' ) {
 				po_id = force_popover.toString();
 			}
+
+			// New way of specifying popup ID is via param: load(id)
 			if ( typeof id != 'undefined' ) {
 				po_id = id.toString();
 			}
@@ -222,7 +218,6 @@
 
 
 		this.init = function init() {
-			console.log ('Init!')
 			if ( ! _options['popup'] ) {
 				me.load_popup();
 			} else {

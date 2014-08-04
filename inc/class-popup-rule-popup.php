@@ -19,10 +19,12 @@ class IncPopupRule_Count extends IncPopupRule {
 		$this->filename = basename( __FILE__ );
 
 		// 'count' rule.
-		$this->add_info(
+		$this->add_rule(
 			'count',
 			__( 'Pop Up shown less than', PO_LANG ),
-			__( 'Shows the Pop Up if the user has only seen it less than a specific number of times.', PO_LANG )
+			__( 'Shows the Pop Up if the user has only seen it less than a specific number of times.', PO_LANG ),
+			'',
+			5
 		);
 	}
 

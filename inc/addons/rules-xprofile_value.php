@@ -9,7 +9,7 @@ Type:        Rule
 Version:     1.0
 */
 
-abstract class Popover_Rules_Rule_XprofileValue extends IncPopupRule {
+abstract class IncPopup_Rules_Rule_XprofileValue extends IncPopupRule {
 
 	protected $_defaults = array(
 		"field" => false,
@@ -104,7 +104,7 @@ abstract class Popover_Rules_Rule_XprofileValue extends IncPopupRule {
 	}
 }
 
-class Popover_Rules_Rule_NotXprofileValue extends Popover_Rules_Rule_XprofileValue {
+class IncPopup_Rules_Rule_NotXprofileValue extends IncPopup_Rules_Rule_XprofileValue {
 
 	const RULE = 'not-xprofile_value';
 
@@ -128,7 +128,7 @@ class Popover_Rules_Rule_NotXprofileValue extends Popover_Rules_Rule_XprofileVal
 	}
 }
 
-class Popover_Rules_Rule_OnXprofileValue extends Popover_Rules_Rule_XprofileValue {
+class IncPopup_Rules_Rule_OnXprofileValue extends IncPopup_Rules_Rule_XprofileValue {
 
 	const RULE = 'xprofile_value';
 
@@ -153,15 +153,15 @@ class Popover_Rules_Rule_OnXprofileValue extends Popover_Rules_Rule_XprofileValu
 }
 
 
-class Popover_Rules_XprofileValue {
+class IncPopup_Rules_XprofileValue {
 
 	private function __construct () {
-		Popover_Rules_Rule_OnXprofileValue::add();
-		Popover_Rules_Rule_NotXprofileValue::add();
+		IncPopup_Rules_Rule_OnXprofileValue::add();
+		IncPopup_Rules_Rule_NotXprofileValue::add();
 	}
 
 	public static function serve () {
 		$me = new self;
 	}
 }
-Popover_Rules_XprofileValue::serve();
+IncPopup_Rules_XprofileValue::serve();

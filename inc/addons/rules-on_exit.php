@@ -2,14 +2,14 @@
 /*
 Addon Name:  Show on exit rule
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Hides popover until the user is about to leave the page.
+Description: Hides Pop Up until the user is about to leave the page.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
 Version:     1.0
 */
 
-class Popover_Rules_Rule_OnExit extends IncPopupRule {
+class IncPopup_Rules_Rule_OnExit extends IncPopupRule {
 
 	const RULE = 'on_exit';
 
@@ -34,7 +34,7 @@ class Popover_Rules_Rule_OnExit extends IncPopupRule {
 
 	protected function _add_hooks () {
 		parent::_add_hooks();
-		add_filter('popover-output-popover', array($this, 'append_data'), 10, 2);
+		add_filter('popup-output-data', array($this, 'append_data'), 10, 2);
 	}
 
 	public function append_data ($data, $popover) {
@@ -76,14 +76,10 @@ class Popover_Rules_Rule_OnExit extends IncPopupRule {
 
 }
 
-class Popover_Rules_OnExit {
+class IncPopup_Rules_OnExit {
 
 	private function __construct () {
-		if (!(defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION)) {
-			Popover_Rules_Rule_OnExit::add();
-		} else {
-			add_action('admin_notices', array($this, 'legacy_js_notice'));
-		}
+		IncPopup_Rules_Rule_OnExit::add();
 	}
 
 	public static function serve () {
@@ -96,7 +92,7 @@ class Popover_Rules_OnExit {
 	}
 
 	private function _add_hooks () {
-		if (!(defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION)) add_action('wp_footer', array($this, 'inject_script'));
+		add_action('wp_footer', array($this, 'inject_script'));
 	}
 
 	public function inject_script () {
@@ -117,4 +113,4 @@ $(document).on("popover-init", function (e, popover, data) {
 EOJS;
 	}
 }
-Popover_Rules_OnExit::serve();
+IncPopup_Rules_OnExit::serve();

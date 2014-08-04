@@ -4,6 +4,10 @@
  * Rule-Collection
  */
 class IncPopupRules {
+	// List of classes.
+	static public $classes = array();
+
+	// List of all rules.
 	static public $rules = array();
 
 	/**
@@ -13,8 +17,9 @@ class IncPopupRules {
 	 * @param  string $classname Class-name (not object!)
 	 */
 	static public function register( $classname ) {
-		self::$rules[] = new $classname();
+		self::$classes[] = new $classname();
 	}
+
 
 	/**
 	 * Checks which php file defines the specified rule-ID
@@ -26,28 +31,179 @@ class IncPopupRules {
 	static public function file_for_rule( $key ) {
 		$file = '';
 
-		foreach ( self::$rules as $obj ) {
-			if ( $obj->has_rule( $key ) ) {
-				$file = $obj->filename;
+		foreach ( self::$rules as $prio => $list ) {
+			if ( isset( $list[ $key ] ) ) {
+				$file = $list[ $key ]->filename;
 				break;
 			}
 		}
 
 		return $file;
 	}
+
+	/**
+	 * Registers a rule.
+	 *
+	 * @since 4.6
+	 * @param IncPopupRule $obj
+	 * @param string $filename
+	 * @param string $id
+	 * @param string $label
+	 * @param string $description
+	 * @param string $exclude Optional. Rule-ID that is excluded when this
+	 *                rule is activated.
+	 * @param  int $priority Defines if the rule is displayed in the top of
+	 *                the list (0) or the bottom (100)
+	 */
+	static public function add_rule( $obj, $filename, $id, $label, $description, $exclude = '', $priority = 10 ) {
+		if ( ! isset( self::$rules[ $priority ] ) ) {
+			self::$rules[ $priority ] = array();
+		}
+
+		self::$rules[$priority][$id] = (object) array(
+			'obj' => $obj,
+			'filename' => $filename,
+			'label' => $label,
+			'description' => $description,
+			'exclude' => $exclude,
+		);
+
+		ksort( self::$rules, SORT_NUMERIC );
+	}
+
+	/**
+	 * Register hooks.
+	 *
+	 * @since 1.0.0
+	 */
+	public function init() {
+		add_filter(
+			'popup-rule-label',
+			array( __CLASS__, '_label' ),
+			10, 2
+		);
+
+		add_action(
+			'popup-rule-forms',
+			array( __CLASS__, '_admin_rule_form' ),
+			10, 1
+		);
+
+		add_action(
+			'popup-rule-switch',
+			array( __CLASS__, '_admin_rule_list' ),
+			10, 1
+		);
+
+		add_filter(
+			'popup-save-rules',
+			array( __CLASS__, '_save' ),
+			10, 1
+		);
+
+		add_filter(
+			'popup-apply-rules',
+			array( __CLASS__, '_apply' ),
+			10, 2
+		);
+	}
+
+
+	/*-----  INTERNAL FUNCTIONS (handlers)  ------*/
+
+
+	/**
+	 * Filter that returns the rule name if $key is the current rule-ID.
+	 * Handles filter `popup-rule-label`
+	 *
+	 * @since  1.0.0
+	 */
+	static public function _label( $rule, $key ) {
+		foreach ( self::$rules as $prio => $list ) {
+			if ( isset( $list[ $key ] ) ) {
+				return $list[ $key ]->label;
+			}
+		}
+		return $rule;
+	}
+
+	/**
+	 * Apply the rule-logic to the specified popup
+	 *
+	 * @since  1.0.0
+	 * @param  bool $show Current decission whether popup should be displayed.
+	 * @param  Object $popup The popup that is evaluated.
+	 * @return bool Updated decission to display popup or not.
+	 */
+	static public function _apply( $show, $popup ) {
+		foreach ( self::$rules as $prio => $list ) {
+			foreach ( $list as $key => $rule ) {
+				$rule->obj->_apply( $key, $show, $popup );
+			}
+		}
+	}
+
+	/**
+	 * Update and return the $settings array to save the form values.
+	 *
+	 * @since  1.0.0
+	 * @param  array $data Collection of rule-settings.
+	 * @return array The updated rule-settings collection.
+	 */
+	static public function _save( $data ) {
+		foreach ( self::$rules as $prio => $list ) {
+			foreach ( $list as $key => $rule ) {
+				$data = $rule->obj->_save( $key, $data );
+			}
+		}
+		return $data;
+	}
+
+	/**
+	 * Display the rule form inside the "active rules" list
+	 *
+	 * @since  1.0.0
+	 * @param  InPopupItem $popup
+	 */
+	static public function _admin_rule_form( $popup ) {
+		foreach ( self::$rules as $prio => $list ) {
+			foreach ( $list as $key => $rule ) {
+				$rule->obj->_admin_rule_form( $key, $rule, $popup );
+			}
+		}
+	}
+
+	/**
+	 * Display the rule-switch in the "all rules" list (no options, only a
+	 * function to activate/deactivate the rule)
+	 *
+	 * @since  1.0.0
+	 */
+	static public function _admin_rule_list( $popup ) {
+		foreach ( self::$rules as $prio => $list ) {
+			foreach ( $list as $key => $rule ) {
+				$rule->obj->_admin_rule_list( $key, $rule, $popup );
+			}
+		}
+	}
 }
+
+IncPopupRules::init();
+
+
+/*===============================*\
+===================================
+==                               ==
+==           RULE BASE           ==
+==                               ==
+===================================
+\*===============================*/
 
 
 /**
  * Base class for Pop Up conditions
  */
 abstract class IncPopupRule {
-
-	/**
-	 * Rule details (ID, Label, Description)
-	 * @var array
-	 */
-	protected $infos = array();
 
 	/**
 	 * Name of the file (set by the child class)
@@ -125,31 +281,20 @@ abstract class IncPopupRule {
 	/*---------------  PUBLIC functions  ----------------*/
 
 	/**
-	 * Checks if this object defines a rule with the specified ID.
-	 *
-	 * @since  4.6
-	 * @param  string $key Rule-ID
-	 * @return bool
-	 */
-	public function has_rule( $key ) {
-		return isset( $this->infos[ $key ] );
-	}
-
-	/**
-	 * Adds rule-details to the objects infos-collection
+	 * Registers a rule.
 	 *
 	 * @since 4.6
 	 * @param string $id
 	 * @param string $label
 	 * @param string $description
-	 * @param string $exclude Optional. Rule-ID that is excluded when this
-	 *                rule is activated.
+	 * @param string $exclude
+	 * @param int $priority
 	 */
-	protected function add_info( $id, $label, $description, $exclude = '' ) {
-		$this->infos[ $id ] = (object) array(
-			'label' => $label,
-			'description' => $description,
-			'exclude' => $exclude,
+	protected function add_rule( $id, $label, $description, $exclude = '', $priority = 10 ) {
+		IncPopupRules::add_rule(
+			$this,
+			$this->filename,
+			$id, $label, $description, $exclude, $priority
 		);
 	}
 
@@ -163,20 +308,6 @@ abstract class IncPopupRule {
 	 */
 	public function __construct() {
 		$this->init();
-		$this->_add_hooks();
-	}
-
-	/**
-	 * Filter that returns the rule name if $key is the current rule-ID.
-	 * Handles filter `popup-rule-label`
-	 *
-	 * @since  1.0.0
-	 */
-	public function _label( $rule, $key ) {
-		if ( isset( $this->infos[ $key ] ) ) {
-			return $this->infos[ $key ]->label;
-		}
-		return $rule;
 	}
 
 	/**
@@ -187,19 +318,17 @@ abstract class IncPopupRule {
 	 * @param  Object $popup The popup that is evaluated.
 	 * @return bool Updated decission to display popup or not.
 	 */
-	public function _apply( $show, $popup ) {
+	public function _apply( $key, $show, $popup ) {
 		if ( ! $show ) { return $show; }
 
-		foreach ( $this->infos as $key => $rule ) {
-			// Skip the rule if the popup does not use it.
-			if ( ! in_array( $key, $popup->rule ) ) { continue; }
+		// Skip the rule if the popup does not use it.
+		if ( ! in_array( $key, $popup->rule ) ) { continue; }
 
-			$method = 'apply_' . $key;
-			if ( method_exists( $this, $method ) ) {
-				if ( ! $this->$method( @$popup->rule_data[$key], $popup ) ) {
-					$show = false;
-					break;
-				}
+		$method = 'apply_' . $key;
+		if ( method_exists( $this, $method ) ) {
+			if ( ! $this->$method( @$popup->rule_data[$key], $popup ) ) {
+				$show = false;
+				break;
 			}
 		}
 
@@ -229,12 +358,10 @@ abstract class IncPopupRule {
 	 * @param  array $data Collection of rule-settings.
 	 * @return array The updated rule-settings collection.
 	 */
-	public function _save( $data ) {
-		foreach ( $this->infos as $key => $rule ) {
-			$method = 'save_' . $key;
-			if ( method_exists( $this, $method ) ) {
-				$data[$key] = $this->$method();
-			}
+	public function _save( $key, $data ) {
+		$method = 'save_' . $key;
+		if ( method_exists( $this, $method ) ) {
+			$data[$key] = $this->$method();
 		}
 
 		return $data;
@@ -245,37 +372,26 @@ abstract class IncPopupRule {
 	 *
 	 * @since  1.0.0
 	 * @param  InPopupItem $popup
-	 * @param  string|false $show_key If false: Render the inactive forms
-	 *                If string: Render the form for this rule-ID.
 	 */
-	public function _admin_active_rule( $popup, $show_key ) {
-		if ( ! empty( $show_key ) && ! $this->has_rule( $show_key ) ) { return; }
-
-		foreach ( $this->infos as $key => $data ) {
-			$active = $popup->uses_rule( $key );
-			$class = $active ? 'on' : 'off';
-
-			if ( $active && empty( $show_key ) ) { continue; }
-			if ( ! $active && ! empty( $show_key ) ) { continue; }
-			if ( $active && $show_key !== $key ) { continue; }
-
-			?>
-			<li id="po-rule-<?php echo esc_attr( $key ); ?>"
-				class="rule <?php echo esc_attr( $class )?>"
-				data-key="<?php echo esc_attr( $key ); ?>">
-				<div class="rule-title">
-					<?php echo esc_html( $data->label ); ?>
+	public function _admin_rule_form( $key, $data, $popup ) {
+		$active = $popup->uses_rule( $key );
+		$class = $active ? 'on' : 'off';
+		?>
+		<li id="po-rule-<?php echo esc_attr( $key ); ?>"
+			class="rule <?php echo esc_attr( $class )?>"
+			data-key="<?php echo esc_attr( $key ); ?>">
+			<div class="rule-title">
+				<?php echo esc_html( $data->label ); ?>
+			</div>
+			<span class="rule-toggle dashicons"></span>
+			<div class="rule-inner">
+				<div class="rule-description">
+					<em><?php echo esc_html( $data->description ); ?></em>
 				</div>
-				<span class="rule-toggle dashicons"></span>
-				<div class="rule-inner">
-					<div class="rule-description">
-						<em><?php echo esc_html( $data->description ); ?></em>
-					</div>
-					<?php $this->_form( $popup, $key ); ?>
-				</div>
-			</li>
-			<?php
-		}
+				<?php $this->_form( $popup, $key ); ?>
+			</div>
+		</li>
+		<?php
 	}
 
 	/**
@@ -284,65 +400,28 @@ abstract class IncPopupRule {
 	 *
 	 * @since  1.0.0
 	 */
-	public function _admin_rule_list( $popup ) {
-		foreach ( $this->infos as $key => $data ) {
-			$active = $popup->uses_rule( $key );
-			$class = $active ? 'on' : 'off';
-			?>
-			<li class="rule rule-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $class ); ?>">
-				<div class="wpmui-toggle">
-					<input type="checkbox"
-						class="wpmui-toggle-checkbox"
-						id="rule-<?php echo esc_attr( $key ); ?>"
-						data-form="#po-rule-<?php echo esc_attr( $key ); ?>"
-						data-exclude="<?php echo esc_attr( @$data->exclude ); ?>"
-						<?php checked( $active ); ?> />
-					<label class="wpmui-toggle-label" for="rule-<?php echo esc_attr( $key ); ?>">
-						<span class="wpmui-toggle-inner"></span>
-						<span class="wpmui-toggle-switch"></span>
-					</label>
-				</div>
-				<?php echo esc_html( $data->label ); ?>
-			</li>
-			<?php
-		}
-	}
-
-	/**
-	 * Register hooks.
-	 *
-	 * @since 1.0.0
-	 */
-	protected function _add_hooks() {
-		add_filter(
-			'popup-rule-label',
-			array( $this, '_label' ),
-			10, 2
-		);
-
-		add_action(
-			'popup-rule-forms',
-			array( $this, '_admin_active_rule' ),
-			10, 2
-		);
-
-		add_action(
-			'popup-all-rules',
-			array( $this, '_admin_rule_list' ),
-			10, 1
-		);
-
-		add_filter(
-			'popup-save-rules',
-			array( $this, '_save' ),
-			10, 1
-		);
-
-		add_filter(
-			'popup-apply-rules',
-			array( $this, '_apply' ),
-			10, 2
-		);
+	public function _admin_rule_list( $key, $data, $popup ) {
+		$active = $popup->uses_rule( $key );
+		$class = $active ? 'on' : 'off';
+		?>
+		<li class="rule rule-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $class ); ?>">
+			<div class="wpmui-toggle">
+				<input type="checkbox"
+					class="wpmui-toggle-checkbox"
+					id="rule-<?php echo esc_attr( $key ); ?>"
+					data-form="#po-rule-<?php echo esc_attr( $key ); ?>"
+					data-exclude="<?php echo esc_attr( @$data->exclude ); ?>"
+					name="po_rule[]"
+					value="<?php echo esc_attr( $key ); ?>"
+					<?php checked( $active ); ?> />
+				<label class="wpmui-toggle-label" for="rule-<?php echo esc_attr( $key ); ?>">
+					<span class="wpmui-toggle-inner"></span>
+					<span class="wpmui-toggle-switch"></span>
+				</label>
+			</div>
+			<?php echo esc_html( $data->label ); ?>
+		</li>
+		<?php
 	}
 
 };

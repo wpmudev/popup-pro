@@ -9,7 +9,7 @@ Type:        Setting
 Version:     1.0
 */
 
-class Popover_Anonymous_Loading {
+class IncPopup_Anonymous_Loading {
 
 	const METHOD = 'anonymous';
 
@@ -23,9 +23,9 @@ class Popover_Anonymous_Loading {
 	}
 
 	private function _add_hooks () {
-		add_filter( 'popover-settings-loading_method', array( $this, 'settings' ) );
-		add_action('popover-init-loading_method', array($this, 'init'));
-		add_action('popover-ajax-loading_method', array($this, 'init_ajax'), 10, 2);
+		add_filter( 'popup-settings-loading-method', array( $this, 'settings' ) );
+		add_action( 'popup-init-loading-method', array($this, 'init') );
+		add_action( 'popup-ajax-loading-method', array($this, 'init_ajax'), 10, 2 );
 	}
 
 	public function init ($method) {
@@ -38,7 +38,7 @@ class Popover_Anonymous_Loading {
 		if ($method != self::METHOD) return false;
 		add_action('wp_ajax_popover_selective_ajax', array($ajax, 'ajax_selective_message_display'));
 		add_action('wp_ajax_nopriv_popover_selective_ajax', array($ajax, 'ajax_selective_message_display'));
-		add_action('popover-output-popover', array($this, 'filter_popover'));
+		add_action('popup-output-data', array($this, 'filter_popover'));
 	}
 
 	public function filter_popover ($pop) {
@@ -89,19 +89,13 @@ class Popover_Anonymous_Loading {
 	}
 
 	public function render_script () {
-		$file = defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION
-			? PO_JS_DIR . 'popover-load.min.js'
-			: PO_JS_DIR . 'public.min.js'
-		;
-		$data = defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION
-			? sprintf('var popover_load_custom=%s;', json_encode(array(
-				'admin_ajax_url' => admin_url('admin-ajax.php')
-			)))
-			: sprintf('var _popup_data=%s', json_encode(array(
+		$file = PO_JS_DIR . 'public.min.js';
+
+		$data = sprintf('var _popup_data=%s', json_encode(array(
 				'endpoint' => admin_url('admin-ajax.php'),
 				'action' => 'popover_selective_ajax',
-			)))
-		;
+			)));
+
 		if (!file_exists($file) && !is_readable($file)) return false;
 		header("Content-type: text/javascript");
 		echo "{$data}\n";
@@ -144,4 +138,4 @@ class Popover_Anonymous_Loading {
 		return strtr($str, $letters, substr($letters, $len) . substr($letters, 0, $len));
 	}
 }
-Popover_Anonymous_Loading::serve();
+IncPopup_Anonymous_Loading::serve();

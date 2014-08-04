@@ -9,7 +9,7 @@ Type:        Caching
 Version:     1.0
 */
 
-class popover_local_geo {
+class IncPopup_Local_Geo {
 
 	var $db;
 
@@ -26,10 +26,6 @@ class popover_local_geo {
 			//add_filter('popover_pre_incountry', array( &$this, 'incountry' ), 10, 3);
 		}
 
-	}
-
-	function popover_local_geo() {
-		$this->__construct();
 	}
 
 	function check_tables_exist() {
@@ -78,4 +74,4 @@ class popover_local_geo {
 
 }
 
-$popover_local_geo = new popover_local_geo();
+$popover_local_geo = new IncPopup_Local_Geo();

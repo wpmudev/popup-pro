@@ -19,33 +19,39 @@ class IncPopupRule_User extends IncPopupRule {
 		$this->filename = basename( __FILE__ );
 
 		// 'login' rule.
-		$this->add_info(
+		$this->add_rule(
 			'login',
 			__( 'Visitor is logged in', PO_LANG ),
 			__( 'Shows the Pop Up if the user is logged in to your site.', PO_LANG ),
-			'no_login'
+			'no_login',
+			1
 		);
 
 		// 'no_login' rule.
-		$this->add_info(
+		$this->add_rule(
 			'no_login',
 			__( 'Visitor is not logged in', PO_LANG ),
 			__( 'Shows the Pop Up if the user is not logged in to your site.', PO_LANG ),
-			'login'
+			'login',
+			1
 		);
 
 		// 'no_comment' rule.
-		$this->add_info(
+		$this->add_rule(
 			'no_comment',
 			__( 'Visitor has never commented', PO_LANG ),
-			__( 'Shows the Pop Up if the user has never left a comment.', PO_LANG )
+			__( 'Shows the Pop Up if the user has never left a comment.', PO_LANG ),
+			'',
+			1
 		);
 
 		// 'no_prosite' rule.
-		$this->add_info(
+		$this->add_rule(
 			'no_prosite',
 			__( 'Site is not a Pro-Site', PO_LANG ),
-			__( 'Shows the Pop Up if the site is not a Pro-Site.', PO_LANG )
+			__( 'Shows the Pop Up if the site is not a Pro-Site.', PO_LANG ),
+			'',
+			20
 		);
 	}
 

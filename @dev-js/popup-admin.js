@@ -187,21 +187,9 @@ jQuery(function init_admin() {
 	// Toggle rules on/off
 	function init_rules() {
 		var all_rules = jQuery( '#meta-rules .all-rules' ),
-			active_rules = jQuery( '#meta-rules .active-rules' ),
-			inp_order = jQuery( '#po-rule-order' );
+			active_rules = jQuery( '#meta-rules .active-rules' );
 
 		if ( ! all_rules.length ) { return; }
-
-		var update_order = function update_order() {
-			var active = active_rules.find( '.rule.on' ),
-				list = [];
-
-			for ( var i = 0; i < active.length; i += 1 ) {
-				list.push( jQuery( active[i] ).data( 'key' ) );
-			}
-
-			inp_order.val( list.toString() );
-		};
 
 		var toggle_checkbox = function toggle_checkbox( ev ) {
 			var me = jQuery( ev.target ),
@@ -222,17 +210,12 @@ jQuery(function init_admin() {
 			if ( active ) {
 				rule.removeClass( 'off' ).addClass( 'on' );
 				form.removeClass( 'off' ).addClass( 'on open' );
-
-				// Move form to the bottom of the list.
-				form.appendTo( active_rules );
 			} else {
 				rule.removeClass( 'on' ).addClass( 'off' );
 				form.removeClass( 'on' ).addClass( 'off' );
 			}
 
 			exclude_rules( me, active );
-
-			update_order();
 		};
 
 		var exclude_rules = function exclude_rules( checkbox, active ) {
@@ -261,15 +244,6 @@ jQuery(function init_admin() {
 
 			form.toggleClass( 'open' );
 		};
-
-		active_rules.sortable({
-			axis: 'y',
-			handle: '.rule-title',
-			helper: 'clone',
-			opacity: .75,
-			update: update_order
-		});
-		active_rules.disableSelection();
 
 		all_rules.find( 'input.wpmui-toggle-checkbox' ).click( toggle_rule );
 		all_rules.find( '.rule' ).click( toggle_checkbox );

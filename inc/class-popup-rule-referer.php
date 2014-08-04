@@ -19,24 +19,30 @@ class IncPopupRule_Referer extends IncPopupRule {
 		$this->filename = basename( __FILE__ );
 
 		// 'referer' rule.
-		$this->add_info(
+		$this->add_rule(
 			'referer',
 			__( 'Visit via specific referer', PO_LANG ),
-			__( 'Shows the Pop Up if the user arrived via a specific referrer.', PO_LANG )
+			__( 'Shows the Pop Up if the user arrived via a specific referrer.', PO_LANG ),
+			'',
+			15
 		);
 
 		// 'internal' rule.
-		$this->add_info(
+		$this->add_rule(
 			'internal',
 			__( 'Visit not via an Internal link', PO_LANG ),
-			__( 'Shows the Pop Up if the user did not arrive on this page via another page on your site.', PO_LANG )
+			__( 'Shows the Pop Up if the user did not arrive on this page via another page on your site.', PO_LANG ),
+			'',
+			15
 		);
 
 		// 'searchengine' rule.
-		$this->add_info(
+		$this->add_rule(
 			'searchengine',
 			__( 'Visit via a search engine', PO_LANG ),
-			__( 'Shows the Pop Up if the user arrived via a search engine.', PO_LANG )
+			__( 'Shows the Pop Up if the user arrived via a search engine.', PO_LANG ),
+			'',
+			15
 		);
 	}
 

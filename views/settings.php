@@ -12,14 +12,16 @@ $loading_methods = array(
 	(object) array(
 		'id'    => 'ajax',
 		'label' => 'External Load',
-		'info'  => 'The Pop Up is loaded separately from the page ' .
+		'info'  =>
+			'The Pop Up is loaded separately from the page ' .
 			'(via a normal WordPress Ajax call). ' .
 			'This is the best option if you are running a caching system',
 	),
 	(object) array(
 		'id'    => 'front',
 		'label' => 'Custom Load',
-		'info'  => 'The Pop Up is loaded separately from the page '.
+		'info'  =>
+			'The Pop Up is loaded separately from the page '. // ,
 			'(via custom front end Ajax call)',
 	),
 );
@@ -29,11 +31,7 @@ $loading_methods = array(
  *
  * @var array
  */
-$loading_methods = apply_filters( 'popover-settings-loading-method', $loading_methods );
-
-// Legacy filter
-$loading_methods = apply_filters( 'popover-settings-loading_method', $loading_methods );
-
+$loading_methods = apply_filters( 'popup-settings-loading-method', $loading_methods );
 
 $settings = IncPopupDatabase::get_settings();
 $cur_method = @$settings['loadingmethod'];
@@ -50,7 +48,7 @@ $form_url = remove_query_arg( array( 'message', 'action', '_wpnonce' ) );
 
 		<input type="hidden" name="action" value="updatesettings" />
 
-		<?php wp_nonce_field( 'update-popover-settings' ); ?>
+		<?php wp_nonce_field( 'update-popup-settings' ); ?>
 
 		<div class="postbox">
 			<h3 class="hndle" style="cursor:auto;">

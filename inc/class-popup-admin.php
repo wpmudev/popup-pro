@@ -309,7 +309,7 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function handle_settings_update() {
 		if ( @$_POST['action'] == 'updatesettings' ) {
-			check_admin_referer( 'update-popover-settings' );
+			check_admin_referer( 'update-popup-settings' );
 
 			$settings = array(
 				'loadingmethod' => @$_POST['loadingmethod'],
@@ -1070,7 +1070,7 @@ class IncPopup extends IncPopupBase {
 			'overlay_close' => ! isset( $form['po_overlay_close'] ),
 
 			// Meta: Rules:
-			'rule' => explode( ',', @$form['po_rule_order'] ),
+			'rule' => @$form['po_rule'],
 			'rule_data' => apply_filters( 'popup-save-rules', array() ),
 		);
 

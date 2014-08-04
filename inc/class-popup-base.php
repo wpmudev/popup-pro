@@ -42,29 +42,35 @@ abstract class IncPopupBase {
 			array( 'IncPopupPosttype', 'instance' )
 		);
 
+		// Load active add-ons.
+		add_action(
+			'init',
+			array( 'IncPopup', 'load_addons' )
+		);
+
 		// Return a list of all popup style URLs.
 		add_filter(
-			'popover_available_styles_url',
+			'popup-available-styles-url',
 			array( 'IncPopupBase', 'style_urls' )
 		);
 		add_filter(
-			'popover-available-styles-url',
+			'popover_available_styles_url',
 			array( 'IncPopupBase', 'style_urls' )
 		);
 
 		// Return a list of all popup style paths (absolute directory).
 		add_filter(
-			'popover_available_styles_directory',
+			'popup-available-styles-directory',
 			array( 'IncPopupBase', 'style_paths' )
 		);
 		add_filter(
-			'popover-available-styles-directory',
+			'popover_available_styles_directory',
 			array( 'IncPopupBase', 'style_paths' )
 		);
 
 		// Returns a list of all style infos (id, url, path, deprecated)
 		add_filter(
-			'popover-styles',
+			'popup-styles',
 			array( 'IncPopupBase', 'style_infos' )
 		);
 
@@ -144,7 +150,7 @@ abstract class IncPopupBase {
 
 	/**
 	 * Returns a list of all core popup styles (URL to each style dir)
-	 * Handles filter `popover_available_styles_url`
+	 * Handles filter `popup-available-styles-url`
 	 *
 	 * @since  4.6
 	 * @param  array $list
@@ -163,7 +169,7 @@ abstract class IncPopupBase {
 
 	/**
 	 * Returns a list of all core popup styles (absolute path to each style dir)
-	 * Handles filter `popover_available_styles_directory`
+	 * Handles filter `popup-available-styles-directory`
 	 *
 	 * @since  4.6
 	 * @param  array $list
@@ -182,7 +188,7 @@ abstract class IncPopupBase {
 
 	/**
 	 * Returns a list of all style infos (id, url, path, deprecated)
-	 * Handles filter `popover-styles`
+	 * Handles filter `popup-styles`
 	 *
 	 * @since  4.6
 	 * @param  array $list
@@ -190,8 +196,8 @@ abstract class IncPopupBase {
 	 */
 	static public function style_infos( $list = array() ) {
 		$core_styles = self::_get_styles();
-		$urls = apply_filters( 'popover-available-styles-url', array() );
-		$paths = apply_filters( 'popover-available-styles-directory', array() );
+		$urls = apply_filters( 'popup-available-styles-url', array() );
+		$paths = apply_filters( 'popup-available-styles-directory', array() );
 
 		if ( ! is_array( $list ) ) { $list = array(); }
 
@@ -239,7 +245,7 @@ abstract class IncPopupBase {
 			/**
 			 * Filter the add-on list to add or remove items.
 			 */
-			$List = apply_filters( 'popover-available-addons', $List );
+			$List = apply_filters( 'popup-available-addons', $List );
 
 			// Legacy filter (with underscore)
 			$List = apply_filters( 'popover_available_addons', $List );
@@ -248,6 +254,28 @@ abstract class IncPopupBase {
 		}
 
 		return $List;
+	}
+
+	/**
+	 * Loads the active Add-On files.
+	 *
+	 * @since  4.6
+	 */
+	public function load_addons() {
+		$active = IncPopupDatabase::get_active_addons();
+		$active = (array) $active;
+
+		if ( empty( $active ) ) { return; }
+
+		// $available uses apply_filter to customize the results:
+		$available = self::get_addons();
+
+		foreach ( $available as $addon ) {
+			$path = PO_INC_DIR . 'addons/'. $addon;
+			if ( in_array( $addon, $active ) && file_exists( $path ) ) {
+				include_once $path;
+			}
+		}
 	}
 
 	/**

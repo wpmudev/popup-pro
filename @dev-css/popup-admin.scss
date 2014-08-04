@@ -1,90 +1,6 @@
 $break_large:     900px;
 $break_small:     600px;
 
-/**
- * ON OFF SWITCH (move to wpmu-lib)
- */
-
-.wpmui-toggle {
-    position: relative;
-    width: 26px;
-    -webkit-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select: none;
-}
-.wpmui-toggle-checkbox {
-    display: none !important;
-}
-.wpmui-toggle-label {
-    display: block;
-    overflow: hidden;
-    cursor: pointer;
-    border: 1px solid #CCC;
-    border-radius: 50px;
-}
-.wpmui-toggle-inner {
-    display: block;
-    width: 200%;
-    margin-left: -100%;
-    -moz-transition: margin 0.3s ease-in 0s;
-    -webkit-transition: margin 0.3s ease-in 0s;
-    -o-transition: margin 0.3s ease-in 0s;
-    transition: margin 0.3s ease-in 0s;
-}
-.wpmui-toggle-inner:before,
-.wpmui-toggle-inner:after {
-    display: block;
-    float: left;
-    width: 50%;
-    height: 5px;
-    padding: 0;
-    line-height: 5px;
-    font-size: 10px;
-    color: white;
-    font-family: Trebuchet, Arial, sans-serif;
-    font-weight: bold;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.2) inset;
-}
-.wpmui-toggle-inner:before {
-    content: "";
-    padding-left: 5px;
-    background-color: #0074A2;
-}
-.wpmui-toggle-inner:after {
-    content: "";
-    padding-right: 5px;
-    background-color: #EEEEEE;
-    text-align: right;
-}
-.wpmui-toggle-switch {
-    display: block;
-    width: 14px;
-    margin: -3.5px;
-    background: #F8F8F8;
-    border: 1px solid #CCC;
-    border-radius: 15px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 20px;
-    -moz-transition: all 0.3s ease-in 0s;
-    -webkit-transition: all 0.3s ease-in 0s;
-    -o-transition: all 0.3s ease-in 0s;
-    transition: all 0.3s ease-in 0s;
-
-    box-shadow: -1px 1px 2px rgba(0,0,0,0.1);
-
-}
-.wpmui-toggle-checkbox:checked + .wpmui-toggle-label .wpmui-toggle-inner {
-    margin-left: 0;
-}
-.wpmui-toggle-checkbox:checked + .wpmui-toggle-label .wpmui-toggle-switch {
-    right: 0px;
-}
-
 
 /*====================================*\
 ========================================
@@ -168,6 +84,16 @@ textarea.block {
 
 .inactive-anim {
 	transition: opacity .3s;
+}
+
+fieldset {
+	border: 1px solid #DDD;
+	padding: 8px;
+	margin: 0 0 10px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
 }
 
 
@@ -603,7 +529,7 @@ textarea.block {
 			background: #E5E5E5;
 			padding: 5px;
 			margin: -5px;
-			cursor: ns-resize;
+			cursor: pointer;
 		}
 
 		.rule-toggle {

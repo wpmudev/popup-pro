@@ -2,14 +2,14 @@
 /*
 Addon Name:  Show on click rule
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Hides popover initially and shows it on click
+Description: Hides Pop Up initially and shows it on click
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
 Version:     1.0
 */
 
-class Popover_Rules_Rule_OnClick extends IncPopupRule {
+class IncPopup_Rules_Rule_OnClick extends IncPopupRule {
 
 	const RULE = 'on_click';
 
@@ -35,7 +35,7 @@ class Popover_Rules_Rule_OnClick extends IncPopupRule {
 
 	protected function _add_hooks () {
 		parent::_add_hooks();
-		add_filter('popover-output-popover', array($this, 'append_data'), 10, 2);
+		add_filter('popup-output-data', array($this, 'append_data'), 10, 2);
 	}
 
 	public function append_data ($data, $popover) {
@@ -81,14 +81,10 @@ class Popover_Rules_Rule_OnClick extends IncPopupRule {
 	}
 }
 
-class Popover_Rules_OnClick {
+class IncPopup_Rules_OnClick {
 
 	private function __construct () {
-		if (!(defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION)) {
-			Popover_Rules_Rule_OnClick::add();
-		} else {
-			add_action('admin_notices', array($this, 'legacy_js_notice'));
-		}
+		IncPopup_Rules_Rule_OnClick::add();
 	}
 
 	public static function serve () {
@@ -101,7 +97,7 @@ class Popover_Rules_OnClick {
 	}
 
 	private function _add_hooks () {
-		if (!(defined('POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION') && POPOVER_LEGACY_JAVASCRIPT_DIFFERENTIATION)) add_action('wp_footer', array($this, 'inject_script'));
+		add_action('wp_footer', array($this, 'inject_script'));
 	}
 
 	public function inject_script () {
@@ -126,4 +122,4 @@ $(document).on("popover-init", function (e, popover, data) {
 EOJS;
 	}
 }
-Popover_Rules_OnClick::serve();
+IncPopup_Rules_OnClick::serve();

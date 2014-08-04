@@ -51,28 +51,6 @@ class IncPopup extends IncPopupBase {
 		);
 	}
 
-	/**
-	 * Loads the active Add-On files.
-	 *
-	 * @since  4.6
-	 */
-	protected function load_addons() {
-		$active = IncPopupDatabase::get_active_addons();
-		$active = (array) $active;
-
-		if ( empty( $active ) ) { return; }
-
-		// $available uses apply_filter to customize the results:
-		$available = $this->get_addons();
-
-		foreach ( $available as $addon ) {
-			$path = PO_INC_DIR . 'addons/'. $addon;
-			if ( in_array( $addon, $active ) && file_exists( $path ) ) {
-				include_once $path;
-			}
-		}
-	}
-
 
 	/*==================================*\
 	======================================
@@ -130,12 +108,8 @@ class IncPopup extends IncPopupBase {
 				/**
 				 * Custom loading handler can be processed by an add-on.
 				 */
-				do_action( 'popover-init-loading-method', $cur_method );
-				do_action( 'popover-ajax-loading-method', $cur_method, $this );
-
-				// Legacy action handler.
-				do_action( 'popover-init-loading_method', $cur_method );
-				do_action( 'popover-ajax-loading_method', $cur_method, $this );
+				do_action( 'popup-init-loading-method', $cur_method );
+				do_action( 'popup-ajax-loading-method', $cur_method, $this );
 				break;
 		}
 	}

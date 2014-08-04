@@ -10,7 +10,7 @@ Version:     1.0
 */
 
 
-abstract class Popover_Rules_Rule_PostTypes extends IncPopupRule {
+abstract class IncPopup_Rules_Rule_PostTypes extends IncPopupRule {
 
 	protected $_defaults = array(
 		"types" => array(),
@@ -85,7 +85,7 @@ abstract class Popover_Rules_Rule_PostTypes extends IncPopupRule {
 	}
 }
 
-class Popover_Rules_Rule_NotPostTypes extends Popover_Rules_Rule_PostTypes {
+class IncPopup_Rules_Rule_NotPostTypes extends IncPopup_Rules_Rule_PostTypes {
 
 	const RULE = 'not-post_types';
 
@@ -109,7 +109,7 @@ class Popover_Rules_Rule_NotPostTypes extends Popover_Rules_Rule_PostTypes {
 	}
 }
 
-class Popover_Rules_Rule_OnPostTypes extends Popover_Rules_Rule_PostTypes {
+class IncPopup_Rules_Rule_OnPostTypes extends IncPopup_Rules_Rule_PostTypes {
 
 	const RULE = 'post_types';
 
@@ -134,11 +134,11 @@ class Popover_Rules_Rule_OnPostTypes extends Popover_Rules_Rule_PostTypes {
 }
 
 
-class Popover_Rules_PostTypes {
+class IncPopup_Rules_PostTypes {
 
 	private function __construct () {
-		Popover_Rules_Rule_OnPostTypes::add();
-		Popover_Rules_Rule_NotPostTypes::add();
+		IncPopup_Rules_Rule_OnPostTypes::add();
+		IncPopup_Rules_Rule_NotPostTypes::add();
 	}
 
 	public static function serve () {
@@ -162,4 +162,4 @@ jQuery(document).ajaxSend(function(e, xhr, opts) {
 EOJS;
 	}
 }
-Popover_Rules_PostTypes::serve();
+IncPopup_Rules_PostTypes::serve();

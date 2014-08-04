@@ -9,7 +9,6 @@ $columns = array(
 	'type'   => __( 'Type', PO_LANG ),
 	'desc'   => __( 'Description', PO_LANG ),
 );
-$columns = apply_filters( 'popover_addoncolumns', $columns );
 
 // Fields extracted from each Addon.
 $default_headers = array(

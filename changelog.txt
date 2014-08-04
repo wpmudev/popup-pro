@@ -1,4 +1,4 @@
-Plugin Name: Popover plugin
+Plugin Name: Pop Up!
 Author: Barry (Incsub), Marko Miljus (Incsub)
 
 Change Log:

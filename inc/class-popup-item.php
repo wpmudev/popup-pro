@@ -218,7 +218,7 @@ class IncPopupItem {
 		}
 		$this->reset();
 
-		$styles = apply_filters( 'popover-styles', array() );
+		$styles = apply_filters( 'popup-styles', array() );
 		$style_keys = array_keys( $styles );
 
 		isset( $data['id'] ) && $this->id = $data['id'];
@@ -273,7 +273,7 @@ class IncPopupItem {
 	 * @since  4.6
 	 */
 	protected function validate_data() {
-		$styles = apply_filters( 'popover-styles', array() );
+		$styles = apply_filters( 'popup-styles', array() );
 
 		// Color.
 		if ( ! is_array( $this->color ) ) { $this->color = array(); }
@@ -293,7 +293,7 @@ class IncPopupItem {
 
 		// Style.
 		if ( ! isset( $styles[ $this->style ] ) ) { $this->style = 'simple'; } // default style.
-		$this->deprecated_style = $styles[ $this->style ]->deprecated;
+		$this->deprecated_style = @$styles[ $this->style ]->deprecated;
 
 		// Boolean types.
 		$this->custom_size = (true == @$this->custom_size);
@@ -350,7 +350,7 @@ class IncPopupItem {
 			default:  $this->script_data['delay'] = $this->delay * 1000;
 		}
 
-		$this->script_data = apply_filters( 'popover-output-popover', $this->script_data, $this );
+		$this->script_data = apply_filters( 'popup-output-data', $this->script_data, $this );
 
 		// Validation only done when editing popups.
 		if ( is_admin() ) {
@@ -408,7 +408,7 @@ class IncPopupItem {
 			default:         $status = 'inactive'; break;
 		}
 
-		$styles = apply_filters( 'popover-styles', array() );
+		$styles = apply_filters( 'popup-styles', array() );
 
 		$this->id = $post->ID;
 		$this->name = $post->post_title;
@@ -575,7 +575,7 @@ class IncPopupItem {
 	 * @return string HTML code.
 	 */
 	public function load_html() {
-		$styles = apply_filters( 'popover-styles', array() );
+		$styles = apply_filters( 'popup-styles', array() );
 		$details = $styles[$this->style];
 
 		$html = '';
@@ -597,7 +597,7 @@ class IncPopupItem {
 	 * @return string CSS code.
 	 */
 	public function load_styles() {
-		$styles = apply_filters( 'popover-styles', array() );
+		$styles = apply_filters( 'popup-styles', array() );
 		$details = $styles[$this->style];
 
 		$style = '';
