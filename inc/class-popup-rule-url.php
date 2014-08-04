@@ -55,8 +55,7 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_url( $data ) {
-		if ( is_string( $data ) ) { $data = array( $data ); }
-		if ( ! is_array( $data ) ) { return true; }
+		$data = $this->sanitize_values( $data );
 		$url = $this->current_url();
 
 		return $this->check_url( $url, $data );
@@ -69,9 +68,8 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 */
 	protected function form_url( $data ) {
-		if ( is_string( $data ) ) { $urls = $data; }
-		else if ( is_array( $data ) ) { $urls = implode( "\n", $data ); }
-		else { $urls = ''; }
+		$data = $this->sanitize_values( $data );
+		$urls = implode( "\n", $data );
 		?>
 		<label for="po-rule-data-url">
 			<?php _e( 'URLs (one per line):', PO_LANG ); ?>
@@ -89,7 +87,7 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_url() {
-		return explode( "\n", @$_POST['po_rule_data']['url'] );
+		return $this->sanitize_values( @$_POST['po_rule_data']['url'] );
 	}
 
 
@@ -110,8 +108,7 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_no_url( $data ) {
-		if ( is_string( $data ) ) { $data = array( $data ); }
-		if ( ! is_array( $data ) ) { return true; }
+		$data = $this->sanitize_values( $data );
 		$url = $this->current_url();
 
 		return ! $this->check_url( $url, $data );
@@ -124,9 +121,8 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 */
 	protected function form_no_url( $data ) {
-		if ( is_string( $data ) ) { $urls = $data; }
-		else if ( is_array( $data ) ) { $urls = implode( "\n", $data ); }
-		else { $urls = ''; }
+		$data = $this->sanitize_values( $data );
+		$urls = implode( "\n", $data );
 		?>
 		<label for="po-rule-data-no-url">
 			<?php _e( 'URLs (one per line):', PO_LANG ); ?>
@@ -144,7 +140,7 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_url() {
-		return explode( "\n", @$_POST['po_rule_data']['no_url'] );
+		return $this->sanitize_values( @$_POST['po_rule_data']['no_url'] );
 	}
 
 
@@ -156,6 +152,23 @@ class IncPopupRule_Url extends IncPopupRule {
 	==========================================
 	\*======================================*/
 
+
+	/**
+	 * Sanitizes the data parameter so it can be savely used by other functions.
+	 *
+	 * @since  4.6
+	 * @param  mixed $data
+	 * @return array
+	 */
+	protected function sanitize_values( $data ) {
+		if ( is_string( $data ) ) {
+			$data = explode( "\n", $data );
+		} else if ( ! is_array( $data ) ) {
+			$data = array();
+		}
+
+		return $data;
+	}
 
 	/**
 	 * Returns the URL which can be defined by REQUEST[theform] or wp->request.

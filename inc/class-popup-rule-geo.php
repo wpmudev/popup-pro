@@ -200,6 +200,7 @@ class IncPopupRule_Country extends IncPopupRule {
 		} else {
 			$country = 'XX';
 		}
+
 		return $country;
 	}
 
@@ -213,17 +214,16 @@ class IncPopupRule_Country extends IncPopupRule {
 	static protected function country_from_api( $ip ) {
 		$url = str_replace( '%ip%', $ip, PO_REMOTE_IP_URL );
 		$response = wp_remote_get( $url );
+		$country = false;
 
 		if ( ! is_wp_error( $response ) && $response['response']['code'] == '200' && $response['body'] != 'XX' ) {
 			// cache the response for future use
 			$country = trim( $response['body'] );
 		} else {
-			if ( PO_DEFAULT_COUNTRY !== false ) {
-				return PO_DEFAULT_COUNTRY;
-			} else {
-				return false;
-			}
+			$country = PO_DEFAULT_COUNTRY;
 		}
+
+		return $country;
 	}
 
 	/**

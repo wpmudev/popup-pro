@@ -51,11 +51,6 @@ class IncPopupRule_Category extends IncPopupRule {
 			'singular' => __( 'Singular', PO_LANG ),
 			'plural'   => __( 'Archive', PO_LANG ),
 		);
-
-		add_action(
-			'wp_footer',
-			array( $this, 'inject_script_category' )
-		);
 	}
 
 	/**
@@ -77,6 +72,25 @@ class IncPopupRule_Category extends IncPopupRule {
 			});
 		</script>
 		<?php
+	}
+
+	/**
+	 * Append data to the popup javascript-variable.
+	 *
+	 * @since  4.6
+	 * @param  array $data Data collection that is printed to javascript.
+	 * @param  IncPopupItem $popup The original popup object.
+	 * @return array Modified data collection.
+	 */
+	public function append_data( $script_data, $popup ) {
+		if ( $popup->uses_rule( 'category' ) || $popup->uses_rule( 'no_category' ) ) {
+			add_action(
+				'wp_footer',
+				array( $this, 'inject_script_category' )
+			);
+		}
+
+		return $script_data;
 	}
 
 
@@ -203,9 +217,9 @@ class IncPopupRule_Category extends IncPopupRule {
 		<fieldset>
 			<legend><?php echo esc_html( $label_category ) ?></legend>
 			<select name="po_rule_data[<?php echo esc_attr( $name ); ?>][categories][]" multiple="multiple">
-			<?php foreach ( $this->categories as $key => $term ) : ?>
-			<option value="<?php echo esc_attr( $key ); ?>"
-				<?php selected( in_array( $key, $data['categories'] ) ); ?>>
+			<?php foreach ( $this->categories as $term ) : ?>
+			<option value="<?php echo esc_attr( $term->term_id ); ?>"
+				<?php selected( in_array( $term->term_id, $data['categories'] ) ); ?>>
 				<?php echo esc_html( $term->name ); ?>
 			</option>
 			<?php endforeach; ?>
@@ -236,17 +250,19 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * @return bool
 	 */
 	protected function check_category( $categories, $url_types ) {
+		global $post;
 		$response = false;
 		if ( ! is_array( $categories ) ) { $categories = array(); }
 		if ( ! is_array( $url_types ) ) { $url_types = array(); }
 
-		if ( ! empty( $_REQUEST['categories'] ) ) {
+
+		if ( isset( $_REQUEST['categories'] ) ) {
 			// Via URL/AJAX
 			$cur_cats = json_decode( $_REQUEST['categories'] );
 			$cur_single = ( 0 != absint( @$_REQUEST['is_single'] ) );
 		} else {
 			// Via wp_footer
-			$cur_cats = wp_list_pluck( get_the_category(), 'term_id' );
+			$cur_cats = wp_list_pluck( get_the_category( $post->ID ), 'term_id' );
 			$cur_single = is_singular();
 		}
 

@@ -21,7 +21,7 @@ class IncPopupRule_Referer extends IncPopupRule {
 		// 'referer' rule.
 		$this->add_rule(
 			'referer',
-			__( 'Visit via specific referer', PO_LANG ),
+			__( 'From a specific referer', PO_LANG ),
 			__( 'Shows the Pop Up if the user arrived via a specific referrer.', PO_LANG ),
 			'',
 			15
@@ -30,7 +30,7 @@ class IncPopupRule_Referer extends IncPopupRule {
 		// 'internal' rule.
 		$this->add_rule(
 			'internal',
-			__( 'Visit not via an Internal link', PO_LANG ),
+			__( 'Not from an internal link', PO_LANG ),
 			__( 'Shows the Pop Up if the user did not arrive on this page via another page on your site.', PO_LANG ),
 			'',
 			15
@@ -39,7 +39,7 @@ class IncPopupRule_Referer extends IncPopupRule {
 		// 'searchengine' rule.
 		$this->add_rule(
 			'searchengine',
-			__( 'Visit via a search engine', PO_LANG ),
+			__( 'From a search engine', PO_LANG ),
 			__( 'Shows the Pop Up if the user arrived via a search engine.', PO_LANG ),
 			'',
 			15
@@ -117,7 +117,7 @@ class IncPopupRule_Referer extends IncPopupRule {
 	protected function apply_internal( $data ) {
 		$internal = preg_replace( '#^https?://#', '', get_option( 'home' ) );
 
-		return $this->test_referer( $internal );
+		return ! $this->test_referer( $internal );
 	}
 
 
@@ -164,7 +164,7 @@ class IncPopupRule_Referer extends IncPopupRule {
 		if ( is_string( $list ) ) { $list = array( $list ); }
 		if ( ! is_array( $list ) ) { return true; }
 
-		$referer = @$_REQUEST['thereferrer'];
+		$referer = $this->get_referer();
 
 		if ( empty( $referer ) ) {
 			$response = true;
@@ -188,7 +188,7 @@ class IncPopupRule_Referer extends IncPopupRule {
 	 */
 	protected function test_searchengine() {
 		$response = false;
-		$referer = @$_REQUEST['thereferrer'];
+		$referer = $this->get_referer();
 
 		$patterns = array(
 			'/search?',
@@ -227,19 +227,41 @@ class IncPopupRule_Referer extends IncPopupRule {
 	 * @return bool
 	 */
 	protected function is_googlesearch( $referer = '' ) {
-		$response = false;
+		$response = true;
 
 		// Get the query strings and check its a web source.
 		$qs = parse_url( $referer, PHP_URL_QUERY );
 		$qget = array();
 
 		foreach ( explode( '&', $qs ) as $keyval ) {
-			list( $key, $value ) = explode( '=', $keyval );
-			$qget[ trim( $key ) ] = trim( $value );
+			$kv = explode( '=', $keyval );
+			if ( count( $kv ) == 2 ) {
+				$qget[ trim( $kv[0] ) ] = trim( $kv[1] );
+			}
 		}
-		$response = @$qget['source'] == 'web';
+
+		if ( isset( $qget['source'] ) ) {
+			$response = $qget['source'] == 'web';
+		}
 
 		return $response;
+	}
+
+	/**
+	 * Returns the referer.
+	 *
+	 * @since  4.6
+	 * @return string
+	 */
+	protected function get_referer() {
+		$referer = '';
+		if ( isset( $_REQUEST['thereferrer'] ) ) {
+			$referer = $_REQUEST['thereferrer'];
+		} else if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
+			$referer = $_SERVER['HTTP_REFERER'];
+		}
+
+		return $referer;
 	}
 
 

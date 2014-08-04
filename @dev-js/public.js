@@ -12,6 +12,7 @@
 			;
 
 		this.data = {};
+		this.have_popup = false;
 
 		/**
 		 * Close Pop Up and set the "never see again" flag.
@@ -37,11 +38,17 @@
 			} else {
 				$po_bg.remove();
 				$po_div.remove();
+
+				me.have_popup = false;
 			}
 
 			$doc.trigger( 'popup-closed' );
 			// Legacy trigger.
 			$doc.trigger( 'popover-closed' );
+
+			if ( ! me.have_popup ) {
+				me.next_popup();
+			}
 			return false;
 		};
 
@@ -68,6 +75,13 @@
 			}, 20);
 		};
 
+		/**
+		 * Reject the current Pop Up: Do not display it.
+		 */
+		this.reject = function reject() {
+			me.have_popup = false;
+			me.data = {};
+		};
 
 		/**
 		 * Check if the Pop Up is ready to be displayed.
@@ -76,23 +90,28 @@
 		this.maybe_show_popup = function maybe_show_popup() {
 			me.fetch_dom();
 
-			$doc.trigger( 'popup-init', [undefined, me.data] );
+			$doc.trigger( 'popup-init', [me, me.data] );
 			// Legacy trigger.
-			$doc.trigger( 'popover-init', [undefined, me.data] );
+			$doc.trigger( 'popover-init', [me, me.data] );
 
-			setTimeout(function () {
-				$po_div.hide();
+			if ( ! me.have_popup ) {
+				// Pop Up was rejected during popup-init event. Do not display.
+				me.next_popup();
+			} else {
+				setTimeout(function () {
+					$po_div.hide();
 
-				// We're waiting for some javascript event before showing the popup.
-				if ( me.data.wait_for_event ) { return false; }
+					// We're waiting for some javascript event before showing the popup.
+					if ( me.data.wait_for_event ) { return false; }
 
-				window.setTimeout(function() {
-					me.show();
-					if ( me.data.multi_open ) {
-						$doc.on('popup-closed', me.reinit);
-					}
-				}, me.data.delay);
-			}, 500);
+					window.setTimeout(function() {
+						me.show();
+						if ( me.data.multi_open ) {
+							$doc.on('popup-closed', me.reinit);
+						}
+					}, me.data.delay);
+				}, 500);
+			}
 		}
 
 		/**
@@ -173,10 +192,13 @@
 				thefrom = window.location,
 				thereferrer = document.referrer;
 
+			me.have_popup = false;
+
 			var handle_done = function handle_done( data ) {
 				me.data = data;
 
 				if ( data ) {
+					me.have_popup = true;
 					me.prepare_dom();
 				}
 			};
@@ -213,14 +235,23 @@
 			return false;
 		};
 
+		/**
+		 * Try to load the next Pop Up from the server.
+		 */
+		this.next_popup = function next_popup() {
+			console.log ('try to fetch next popup...');
+		};
+
 
 		/*-----  Init  ------*/
 
 
 		this.init = function init() {
 			if ( ! _options['popup'] ) {
+				me.have_popup = false;
 				me.load_popup();
 			} else {
+				me.have_popup = true;
 				me.data = _options['popup'];
 				me.maybe_show_popup();
 			}

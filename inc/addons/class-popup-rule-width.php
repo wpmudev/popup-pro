@@ -57,14 +57,13 @@ class IncPopupRule_Width extends IncPopupRule {
 					var reject = false, width = jQuery(window).width();
 					data = data || {};
 					if ( ! isNaN(data.width_min) && data.width_min > 0 ) {
-						if ( width < data.width_min ) { reject = true; console.log ('rej 1xx') }
+						if ( width < data.width_min ) { reject = true; }
 					}
 					if ( ! isNaN(data.width_max) && data.width_max > 0 ) {
-						if ( width > data.width_max ) { reject = true; console.log ('rej 2') }
+						if ( width > data.width_max ) { reject = true; }
 					}
 
 					if ( reject ) {
-						console.log ('reject popup!');
 						popup.reject();
 					}
 				};
@@ -179,6 +178,16 @@ class IncPopupRule_Width extends IncPopupRule {
 	protected function save_width() {
 		return $this->sanitize_values( @$_POST['po_rule_data']['width'] );
 	}
+
+
+	/*======================================*\
+	==========================================
+	==                                      ==
+	==           HELPER FUNCTIONS           ==
+	==                                      ==
+	==========================================
+	\*======================================*/
+
 
 	/**
 	 * Sanitizes the data parameter so it can be savely used by other functions.

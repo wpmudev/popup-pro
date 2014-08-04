@@ -448,19 +448,19 @@ class IncPopupDatabase {
 		$Country = array();
 
 		if ( ! isset( $Country[$ip] ) ) {
-			$ip_table = self::db_prefix( IP_TABLE );
+			$ip_table = self::db_prefix( self::IP_TABLE );
 			$sql = "
 				SELECT country
 				FROM {$ip_table}
 				WHERE IP = %s
 			";
-			$sql = $this->db->prepare( $sql, $ip );
+			$sql = $wpdb->prepare( $sql, $ip );
 			$Country[$ip] = $wpdb->get_var( $sql );
 
 			if ( null === $Country[$ip] ) { $Country[$ip] = ''; }
 		}
 
-		return $country;
+		return $Country[$ip];
 	}
 
 	/**
@@ -473,7 +473,7 @@ class IncPopupDatabase {
 	static public function add_ip( $ip, $country ) {
 		global $wpdb;
 
-		$ip_table = self::db_prefix( IP_TABLE );
+		$ip_table = self::db_prefix( self::IP_TABLE );
 
 		// Delete the cached data, if it already exists.
 		$sql = "

@@ -46,7 +46,7 @@ class IncPopup extends IncPopupBase {
 
 		// Init loading-process of the pop up.
 		add_action(
-			'init',
+			'wp',   // "wp", not "init"!
 			array( $this, 'init_public' )
 		);
 	}
