@@ -1,15 +1,15 @@
 <?php
 /*
-Addon Name:  Post Categories rules
+Addon Name:  Post Types rules
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Adds post category related rules.
+Description: Adds post type-related rules.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
 Version:     1.0
 */
 
-class IncPopupRule_Category extends IncPopupRule {
+class IncPopupRule_Posttype extends IncPopupRule {
 
 	/**
 	 * Initialize the rule object.
@@ -19,21 +19,21 @@ class IncPopupRule_Category extends IncPopupRule {
 	protected function init() {
 		$this->filename = basename( __FILE__ );
 
-		// 'category' rule.
+		// 'posttype' rule.
 		$this->add_rule(
-			'category',
-			__( 'On post category', PO_LANG ),
-			__( 'Shows the Pop Up on pages that match any of the specified categories.', PO_LANG ),
-			'no_category',
+			'posttype',
+			__( 'For specific Post Types', PO_LANG ),
+			__( 'Shows the Pop Up on pages that match any of the specified Post Types.', PO_LANG ),
+			'no_posttype',
 			30
 		);
 
-		// 'no_category' rule.
+		// 'no_posttype' rule.
 		$this->add_rule(
-			'no_category',
-			__( 'Not on post category', PO_LANG ),
-			__( 'Shows the Pop Up on pages that do not match any of the specified categories.', PO_LANG ),
-			'category',
+			'no_posttype',
+			__( 'Not for specific Post Types', PO_LANG ),
+			__( 'Shows the Pop Up on pages that do not match any of the specified Post Type.', PO_LANG ),
+			'posttype',
 			30
 		);
 
@@ -45,10 +45,9 @@ class IncPopupRule_Category extends IncPopupRule {
 			10, 2
 		);
 
-		$this->categories = get_terms(
-			'category',
+		$this->posttypes = get_post_types(
 			array(
-				'hide_empty' => false,
+				'public' => true,
 			),
 			'objects'
 		);
@@ -60,22 +59,24 @@ class IncPopupRule_Category extends IncPopupRule {
 	}
 
 	/**
-	 * Injects some javascript for buddypress pages to the page footer.
+	 * Injects some javascript for the rule into the page footer.
 	 *
 	 * @since  4.6
 	 */
-	public function inject_script_category() {
-		$categories = json_encode( wp_list_pluck( get_the_category(), 'term_id' ) );
+	public function inject_script_posttype() {
+		$post_type = esc_js( get_post_type() );
 		$is_singular = is_singular() ? 1 : 0;
 		?>
 		<script>
-			jQuery(document).ajaxSend(function(e, xhr, opts) {
-				var cats = JSON.stringify(<?php echo esc_js( $categories ); ?>);
+		jQuery(document).ajaxSend(function(e, xhr, opts) {
+			if ( opts.url.match(/po_onsuccess/) ) {
+				var posttype = <?php echo esc_js( $post_type ); ?>;
 				var single = <?php echo esc_js( $is_singular ); ?>;
 				if ( opts.url.match( /\bpo_[a-z]/ ) ) {
-					opts.url += '&categories=' + cats + '&is_single=' + single;
+					opts.url += '&post_type=' + posttype + '&is_single=' + single;
 				}
-			});
+			}
+		});
 		</script>
 		<?php
 	}
@@ -89,10 +90,10 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * @return array Modified data collection.
 	 */
 	public function append_data( $script_data, $popup ) {
-		if ( $popup->uses_rule( 'category' ) || $popup->uses_rule( 'no_category' ) ) {
+		if ( $popup->uses_rule( 'posttype' ) || $popup->uses_rule( 'no_posttype' ) ) {
 			add_action(
 				'wp_footer',
-				array( $this, 'inject_script_category' )
+				array( $this, 'inject_script_posttype' )
 			);
 		}
 
@@ -103,7 +104,7 @@ class IncPopupRule_Category extends IncPopupRule {
 	/*==============================*\
 	==================================
 	==                              ==
-	==           CATEGORY           ==
+	==           POSTTYPE           ==
 	==                              ==
 	==================================
 	\*==============================*/
@@ -116,10 +117,10 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 * @return bool Decission to display popup or not.
 	 */
-	protected function apply_category( $data ) {
+	protected function apply_posttype( $data ) {
 		if ( ! is_array( $data ) ) { $data = array(); }
 
-		return $this->check_category( @$data['categories'], @$data['urls'] );
+		return $this->check_posttype( @$data['posttypes'], @$data['urls'] );
 	}
 
 	/**
@@ -128,11 +129,11 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * @since  4.6
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 */
-	protected function form_category( $data ) {
+	protected function form_posttype( $data ) {
 		$this->render_form(
-			'category',
-			__( 'Show on these post categories:', PO_LANG ),
-			__( 'Show on these category type URLs:', PO_LANG ),
+			'posttype',
+			__( 'Show for these Post Types:', PO_LANG ),
+			__( 'Show on these Post Type URLs:', PO_LANG ),
 			$data
 		);
 	}
@@ -143,15 +144,15 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * @since  4.6
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_category() {
-		return @$_POST['po_rule_data']['category'];
+	protected function save_posttype() {
+		return @$_POST['po_rule_data']['posttype'];
 	}
 
 
 	/*=================================*\
 	=====================================
 	==                                 ==
-	==           NO_CATEGORY           ==
+	==           NO_POSTTYPE           ==
 	==                                 ==
 	=====================================
 	\*=================================*/
@@ -164,10 +165,10 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 * @return bool Decission to display popup or not.
 	 */
-	protected function apply_no_category( $data ) {
+	protected function apply_no_posttype( $data ) {
 		if ( ! is_array( $data ) ) { $data = array(); }
 
-		return ! $this->check_category( @$data['categories'], @$data['urls'] );
+		return ! $this->check_posttype( @$data['posttypes'], @$data['urls'] );
 	}
 
 	/**
@@ -176,11 +177,11 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * @since  4.6
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 */
-	protected function form_no_category( $data ) {
+	protected function form_no_posttype( $data ) {
 		$this->render_form(
-			'no_category',
-			__( 'Hide on these post categories:', PO_LANG ),
-			__( 'Hide on these category type URLs:', PO_LANG ),
+			'no_posttype',
+			__( 'Hide for these Post Types:', PO_LANG ),
+			__( 'Hide on these Post Type URLs:', PO_LANG ),
 			$data
 		);
 	}
@@ -191,8 +192,8 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * @since  4.6
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_no_category() {
-		return @$_POST['po_rule_data']['no_category'];
+	protected function save_no_posttype() {
+		return @$_POST['po_rule_data']['no_posttype'];
 	}
 
 
@@ -210,23 +211,23 @@ class IncPopupRule_Category extends IncPopupRule {
 	 *
 	 * @since  1.0.0
 	 * @param  string $name
-	 * @param  string $label_category
+	 * @param  string $label_posttype
 	 * @param  string $label_urls
 	 * @param  array $data
 	 */
-	protected function render_form( $name, $label_category, $label_urls, $data ) {
+	protected function render_form( $name, $label_posttype, $label_urls, $data ) {
 		if ( ! is_array( $data ) ) { $data = array(); }
-		if ( ! is_array( @$data['categories'] ) ) { $data['categories'] = array(); }
+		if ( ! is_array( @$data['posttypes'] ) ) { $data['posttypes'] = array(); }
 		if ( ! is_array( @$data['urls'] ) ) { $data['urls'] = array(); }
 
 		?>
 		<fieldset>
-			<legend><?php echo esc_html( $label_category ) ?></legend>
-			<select name="po_rule_data[<?php echo esc_attr( $name ); ?>][categories][]" multiple="multiple">
-			<?php foreach ( $this->categories as $term ) : ?>
-			<option value="<?php echo esc_attr( $term->term_id ); ?>"
-				<?php selected( in_array( $term->term_id, $data['categories'] ) ); ?>>
-				<?php echo esc_html( $term->name ); ?>
+			<legend><?php echo esc_html( $label_posttype ) ?></legend>
+			<select name="po_rule_data[<?php echo esc_attr( $name ); ?>][posttypes][]" multiple="multiple">
+			<?php foreach ( $this->posttypes as $key => $type ) : ?>
+			<option value="<?php echo esc_attr( $key ); ?>"
+				<?php selected( in_array( $key, $data['posttypes'] ) ); ?>>
+				<?php echo esc_html( $type->labels->name ); ?>
 			</option>
 			<?php endforeach; ?>
 			</select>
@@ -255,45 +256,34 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * @param  array $url_types
 	 * @return bool
 	 */
-	protected function check_category( $categories, $url_types ) {
+	protected function check_posttype( $posttype, $url_types ) {
 		global $post;
 		$response = false;
-		if ( ! is_array( $categories ) ) { $categories = array(); }
+		if ( ! is_array( $posttype ) ) { $posttype = array(); }
 		if ( ! is_array( $url_types ) ) { $url_types = array(); }
 
-
-		if ( isset( $_REQUEST['categories'] ) ) {
+		if ( isset( $_REQUEST['posttype'] ) ) {
 			// Via URL/AJAX
-			$cur_cats = json_decode( $_REQUEST['categories'] );
+			$cur_type = $_REQUEST['post_type'];
 			$cur_single = ( 0 != absint( @$_REQUEST['is_single'] ) );
 		} else {
 			// Via wp_footer
-			$cur_cats = wp_list_pluck( get_the_category( $post->ID ), 'term_id' );
+			$cur_type = get_post_type();
 			$cur_single = is_singular();
 		}
 
 		if ( $cur_single && in_array( 'singular', $url_types ) ) {
-			if ( empty( $categories ) ) {
-				$response = true; // Any cat, singular.
+			if ( empty( $posttype ) ) {
+				$response = true; // Any posttype, singular.
 			} else {
-				foreach ( $cur_cats as $term_id ) {
-					if ( in_array( $term_id, $categories ) ) {
-						$response = true; // We have a cat.
-						break;
-					}
-				}
+				$response = in_array( $cur_type, $posttype ); // We have the post type!
 			}
 		}
 		else if ( ! $cur_single && in_array( 'plural', $url_types ) ) {
-			if ( empty( $categories ) ) {
-				$response = true; // Any cat, archive
+			if ( empty( $posttype ) ) {
+				$response = true; // Any posttype, archive
 			} else {
-				foreach ( $cur_cats as $term_id ) {
-					if ( in_array( $term_id, $categories ) ) {
-						$response = true; // We have a cat.
-						break;
-					}
-				}
+				return in_array( $cur_type, $posttype ); // We have the post type!
 			}
 		}
 
@@ -302,4 +292,4 @@ class IncPopupRule_Category extends IncPopupRule {
 
 };
 
-IncPopupRules::register( 'IncPopupRule_Category' );
+IncPopupRules::register( 'IncPopupRule_Posttype' );
