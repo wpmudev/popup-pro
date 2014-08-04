@@ -54,7 +54,7 @@ class IncPopupRule_Category extends IncPopupRule {
 
 		add_action(
 			'wp_footer',
-			array( $this, 'inject_script' )
+			array( $this, 'inject_script_category' )
 		);
 	}
 
@@ -63,7 +63,7 @@ class IncPopupRule_Category extends IncPopupRule {
 	 *
 	 * @since  4.6
 	 */
-	public function inject_script() {
+	public function inject_script_category() {
 		$categories = json_encode( wp_list_pluck( get_the_category(), 'term_id' ) );
 		$is_singular = is_singular() ? 1 : 0;
 		?>

@@ -97,10 +97,10 @@ class IncPopup_Rules_OnClick {
 	}
 
 	private function _add_hooks () {
-		add_action('wp_footer', array($this, 'inject_script'));
+		add_action('wp_footer', array($this, 'inject_script_click'));
 	}
 
-	public function inject_script () {
+	public function inject_script_click () {
 		echo <<<EOJS
 <script>
 (function ($) {

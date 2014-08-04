@@ -6,7 +6,7 @@
  * Available variables: $popup
  */
 
-$styles = apply_filters( 'popover-styles', array() );
+$styles = apply_filters( 'popup-styles', array() );
 
 ?>
 <div class="wpmui-grid-12">

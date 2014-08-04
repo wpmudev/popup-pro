@@ -11,6 +11,7 @@ require_once PO_INC_DIR . 'class-popup-rule-geo.php';
 require_once PO_INC_DIR . 'class-popup-rule-popup.php';
 require_once PO_INC_DIR . 'class-popup-rule-referer.php';
 require_once PO_INC_DIR . 'class-popup-rule-user.php';
+require_once PO_INC_DIR . 'class-popup-rule-browser.php';
 
 /**
  * Defines common functions that are used in admin and frontpage.
@@ -290,7 +291,7 @@ abstract class IncPopupBase {
 			case 'get-data':
 				$this->select_popup();
 				if ( ! empty( $this->popup ) ) {
-					$data = $this->popup->script_data;
+					$data = $this->popup->get_script_data();
 					$data['html'] = $this->popup->load_html();
 					$data['styles'] = $this->popup->load_styles();
 					echo 'po_data(' . json_encode( $data ) . ')';
@@ -321,7 +322,7 @@ abstract class IncPopupBase {
 		$this->popup = null;
 
 		if ( empty( $items ) ) {
-			return $data;
+			return;
 		}
 
 		// Use the first popup item from the list.

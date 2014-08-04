@@ -350,8 +350,6 @@ class IncPopupItem {
 			default:  $this->script_data['delay'] = $this->delay * 1000;
 		}
 
-		$this->script_data = apply_filters( 'popup-output-data', $this->script_data, $this );
-
 		// Validation only done when editing popups.
 		if ( is_admin() ) {
 			// Name.
@@ -613,6 +611,16 @@ class IncPopupItem {
 			$style = str_replace( '%styleurl%', $details->url, $style );
 		}
 		return $style;
+	}
+
+	/**
+	 * Returns the script-data collection.
+	 *
+	 * @since  4.6
+	 * @return array
+	 */
+	public function get_script_data() {
+		return apply_filters( 'popup-output-data', $this->script_data, $this );
 	}
 
 	/**

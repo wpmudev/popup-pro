@@ -87,8 +87,13 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function setup_module_specific( $hook ) {
 		if ( IncPopupItem::POST_TYPE === @$hook->post_type ) {
+			// WordPress core scripts
+			TheLib::add_js( 'jquery-ui-slider' );
+			TheLib::add_js( 'jquery-ui-sortable' );
+
 			TheLib::add_ui( 'core' );
 			TheLib::add_ui( 'select' );
+
 			TheLib::add_ui( PO_CSS_URL . 'popup-admin.css' );
 			TheLib::add_ui( PO_JS_URL . 'popup-admin.min.js' );
 			TheLib::add_ui( PO_JS_URL . 'public.min.js' ); // For Preview.
@@ -116,8 +121,6 @@ class IncPopup extends IncPopupBase {
 			// -- POP UP LIST -----------------------
 
 			if ( 'edit' === @$hook->base ) {
-				TheLib::add_js( 'jquery-ui-sortable' ); // WordPress core script
-
 				// Customize the columns in the popup list.
 				add_filter(
 					'manage_' . IncPopupItem::POST_TYPE . '_posts_columns',
@@ -274,7 +277,7 @@ class IncPopup extends IncPopupBase {
 
 				if ( ! empty( $this->popup ) ) {
 					$this->popup->preview_mode();
-					$data = $this->popup->script_data;
+					$data = $this->popup->get_script_data();
 					$data['html'] = $this->popup->load_html();
 					$data['styles'] = $this->popup->load_styles();
 					echo 'po_data(' . json_encode( $data ) . ')';

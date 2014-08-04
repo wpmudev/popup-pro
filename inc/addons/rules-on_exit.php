@@ -92,10 +92,10 @@ class IncPopup_Rules_OnExit {
 	}
 
 	private function _add_hooks () {
-		add_action('wp_footer', array($this, 'inject_script'));
+		add_action('wp_footer', array($this, 'inject_script_exit'));
 	}
 
-	public function inject_script () {
+	public function inject_script_exit () {
 		echo <<<EOJS
 <script>
 (function ($) {

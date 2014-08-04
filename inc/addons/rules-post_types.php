@@ -147,10 +147,10 @@ class IncPopup_Rules_PostTypes {
 	}
 
 	private function _add_hooks () {
-		add_action('wp_footer', array($this, 'inject_script'));
+		add_action('wp_footer', array($this, 'inject_script_posttype'));
 	}
 
-	public function inject_script () {
+	public function inject_script_posttype () {
 		$post_type = esc_js(get_post_type());
 		$is_singular = is_singular() ? 1 : 0;
 		echo <<<EOJS

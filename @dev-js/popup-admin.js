@@ -167,6 +167,60 @@ jQuery(function init_admin() {
 			});
 		}
 
+		var create_sliders = function create_sliders() {
+			console.log ('init sliders!')
+			jQuery( '.slider' ).each(function() {
+				var me = jQuery( this ),
+					wrap = me.closest( '.slider-wrap' ),
+					inp_base = me.data( 'input' ),
+					inp_min = wrap.find( inp_base + 'min' ),
+					inp_max = wrap.find( inp_base + 'max' ),
+					min_input = wrap.find( '.slider-min-input' ),
+					min_ignore = wrap.find( '.slider-min-ignore' ),
+					max_input = wrap.find( '.slider-max-input' ),
+					max_ignore = wrap.find( '.slider-max-ignore' ),
+					min = me.data( 'min' ),
+					max = me.data( 'max' );
+
+				if ( isNaN( min ) ) { min = 0; }
+				if ( isNaN( max ) ) { max = 9999; }
+				inp_min.prop( 'readonly', true );
+				inp_max.prop( 'readonly', true );
+
+				var update_fields = function update_fields( val1, val2 ) {
+					inp_min.val( val1 );
+					inp_max.val( val2 );
+
+					if ( val1 == min ) {
+						min_input.hide();
+						min_ignore.show();
+					} else {
+						min_input.show();
+						min_ignore.hide();
+					}
+					if ( val2 == max ) {
+						max_input.hide();
+						max_ignore.show();
+					} else {
+						max_input.show();
+						max_ignore.hide();
+					}
+				};
+
+				me.slider({
+					range: true,
+					min: min,
+					max: max,
+					values: [ inp_min.val(), inp_max.val() ],
+					slide: function( event, ui ) {
+						update_fields( ui.values[0], ui.values[1] );
+					}
+				});
+
+				update_fields( inp_min.val(), inp_max.val() );
+			});
+		}
+
 		chk_colors.click( toggle_section );
 		chk_size.click( toggle_section );
 		chk_can_hide.click( toggle_section );
@@ -182,6 +236,8 @@ jQuery(function init_admin() {
 		toggle_section.call( opt_disp_delay );
 		toggle_section.call( opt_disp_scroll );
 		toggle_section.call( opt_disp_anchor );
+
+		create_sliders();
 	}
 
 	// Toggle rules on/off

@@ -201,7 +201,7 @@ class IncPopup extends IncPopupBase {
 
 		if ( empty( $this->popup ) ) { return; }
 
-		$data = $this->popup->script_data;
+		$data = $this->popup->get_script_data();
 		$this->script_data['popup'] = $data;
 		$this->load_scripts();
 

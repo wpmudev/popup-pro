@@ -136,11 +136,18 @@ class IncPopupRules {
 	 * @return bool Updated decission to display popup or not.
 	 */
 	static public function _apply( $show, $popup ) {
+		if ( ! $show ) { return false; }
+
 		foreach ( self::$rules as $prio => $list ) {
 			foreach ( $list as $key => $rule ) {
-				$rule->obj->_apply( $key, $show, $popup );
+				if ( ! $popup->uses_rule( $key ) ) { continue; }
+
+				if ( ! $rule->obj->_apply( $key, $show, $popup ) ) {
+					return false;
+				}
 			}
 		}
+		return true;
 	}
 
 	/**
@@ -322,13 +329,12 @@ abstract class IncPopupRule {
 		if ( ! $show ) { return $show; }
 
 		// Skip the rule if the popup does not use it.
-		if ( ! in_array( $key, $popup->rule ) ) { continue; }
+		if ( ! in_array( $key, $popup->rule ) ) { return; }
 
 		$method = 'apply_' . $key;
 		if ( method_exists( $this, $method ) ) {
 			if ( ! $this->$method( @$popup->rule_data[$key], $popup ) ) {
 				$show = false;
-				break;
 			}
 		}
 
