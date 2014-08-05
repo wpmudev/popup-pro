@@ -124,7 +124,7 @@ class IncPopupRules {
 				return $list[ $key ]->label;
 			}
 		}
-		return $rule;
+		return '';
 	}
 
 	/**

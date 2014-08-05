@@ -217,6 +217,42 @@ class IncPopupDatabase {
 			case 'frontloading': $cur_method = 'front'; break;
 		}
 		$settings['loadingmethod'] = $cur_method;
+
+		// Migrate Add-Ons to new settings.
+		$addons = self::_get_option( 'popover_activated_addons', $default );
+		$rules = array(
+			'class-popup-rule-browser.php',
+			'class-popup-rule-geo.php',
+			'class-popup-rule-popup.php',
+			'class-popup-rule-referer.php',
+			'class-popup-rule-url.php',
+			'class-popup-rule-user.php',
+		);
+		foreach ( $addons as $addon ) {
+			switch ( $addon ) {
+				case 'anonymous_loading.php':
+				case 'testheadfooter.php':
+					/* Integrated; no option. */ break;
+				case 'localgeodatabase.php':
+					$settings['geo_db'] = true; break;
+				case 'rules-advanced_url.php':
+					$rules[] = 'class-popup-rule-advurl.php'; break;
+				case 'rules-categories.php':
+					$rules[] = 'class-popup-rule-category.php'; break;
+				case 'rules-max_width.php':
+					$rules[] = 'class-popup-rule-width.php'; break;
+				case 'rules-on_exit.php':
+					$rules[] = 'class-popup-rule-events.php'; break;
+				case 'rules-onclick.php':
+					$rules[] = 'class-popup-rule-events.php'; break;
+				case 'rules-post_types.php':
+					$rules[] = 'class-popup-rule-posttype.php'; break;
+				case 'rules-xprofile_value.php':
+					$rules[] = 'class-popup-rule-xprofile.php'; break;
+			}
+		}
+		$settings['rules'] = $rules;
+
 		self::set_settings( $settings );
 
 		// Save the new DB version to options table.
@@ -358,10 +394,29 @@ class IncPopupDatabase {
 	 * @return array.
 	 */
 	public function get_settings() {
-		$value = false;
+		$defaults = array(
+			'loadingmethod' => 'ajax',
+			'geo_db' => false,
+			'rules' => array(
+				'class-popup-rule-browser.php',
+				'class-popup-rule-geo.php',
+				'class-popup-rule-popup.php',
+				'class-popup-rule-referer.php',
+				'class-popup-rule-url.php',
+				'class-popup-rule-user.php',
+			)
+		);
 
-		$default = array( 'loadingmethod' => 'ajax' );
-		return self::_get_option( 'popover-settings', $default );
+		$data = (array) self::_get_option( 'popover-settings', array() );
+
+		if ( ! is_array( $data ) ) { $data = array(); }
+		foreach ( $defaults as $key => $def_value ) {
+			if ( ! isset( $data[$key] ) ) {
+				$data[$key] = $def_value;
+			}
+		}
+
+		return $data;
 	}
 
 	/**
@@ -372,29 +427,6 @@ class IncPopupDatabase {
 	 */
 	public function set_settings( $value ) {
 		self::_set_option( 'popover-settings', $value );
-	}
-
-	/**
-	 * Returns all active add-ons.
-	 *
-	 * @since  4.6
-	 * @return array.
-	 */
-	public function get_active_addons() {
-		$value = false;
-
-		$default = array();
-		return self::_get_option( 'popover_activated_addons', $default );
-	}
-
-	/**
-	 * Saves an option to the database.
-	 *
-	 * @since  4.6
-	 * @param  array $value The value to save.
-	 */
-	public function set_active_addons( $value ) {
-		self::_set_option( 'popover_activated_addons', $value );
 	}
 
 	/**

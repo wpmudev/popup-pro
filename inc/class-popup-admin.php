@@ -70,14 +70,6 @@ class IncPopup extends IncPopupBase {
 			'load-inc_popup_page_settings',
 			array( 'IncPopup', 'handle_settings_update' )
 		);
-
-		// -- ADD ONS ---------------------------
-
-		// Save changes from addons page (activate/deactivate).
-		add_action(
-			'load-inc_popup_page_addons',
-			array( 'IncPopup', 'handle_addons_update' )
-		);
 	}
 
 	/**
@@ -219,15 +211,6 @@ class IncPopup extends IncPopupBase {
 	static public function admin_menus() {
 		add_submenu_page(
 			'edit.php?post_type=' . IncPopupItem::POST_TYPE,
-			__( 'Manage Add-ons Plugins', PO_LANG ),
-			__( 'Add-ons', PO_LANG ),
-			IncPopupPosttype::$perms,
-			'addons',
-			array( 'IncPopup', 'handle_addons_page' )
-		);
-
-		add_submenu_page(
-			'edit.php?post_type=' . IncPopupItem::POST_TYPE,
 			__( 'Settings', PO_LANG ),
 			__( 'Settings', PO_LANG ),
 			IncPopupPosttype::$perms,
@@ -255,35 +238,6 @@ class IncPopup extends IncPopupBase {
 		}
 
 		die();
-	}
-
-	/**
-	 * Returns the popup content as JSON object and then ends the request.
-	 *
-	 * @since  4.6
-	 */
-	public function ajax_load_popup() {
-		$action = @$_REQUEST['do'];
-
-		switch ( $action ) {
-			case 'get-data':
-				if ( IncPopupItem::POST_TYPE == @$_REQUEST['data']['post_type'] ) {
-					$this->popup = new IncPopupItem();
-					$data = self::prepare_formdata( $_REQUEST['data'] );
-					$this->popup->populate( $data );
-				} else {
-					$this->select_popup();
-				}
-
-				if ( ! empty( $this->popup ) ) {
-					$this->popup->preview_mode();
-					$data = $this->popup->get_script_data();
-					$data['html'] = $this->popup->load_html();
-					$data['styles'] = $this->popup->load_styles();
-					echo 'po_data(' . json_encode( $data ) . ')';
-				}
-				die();
-		}
 	}
 
 
@@ -314,120 +268,17 @@ class IncPopup extends IncPopupBase {
 		if ( @$_POST['action'] == 'updatesettings' ) {
 			check_admin_referer( 'update-popup-settings' );
 
-			$settings = array(
-				'loadingmethod' => @$_POST['loadingmethod'],
-			);
+			$settings = array();
+			$settings['loadingmethod'] = @$_POST['po_option']['loadingmethod'];
+			$settings['geo_db'] = isset( $_POST['po_option']['geo_db'] );
+
+			$rules = @$_POST['po_option']['rules'];
+			if ( ! is_array( $rules ) ) { $rules = array(); }
+			$settings['rules'] = array_keys( $rules );
 
 			IncPopupDatabase::set_settings( $settings );
 
 			TheLib::message( __( 'Your settings have been updated.', PO_LANG ) );
-			$redirect_url = remove_query_arg( array( 'message', 'count' ), wp_get_referer() );
-			wp_safe_redirect( $redirect_url );
-			die();
-		}
-	}
-
-
-	/*=============================*\
-	=================================
-	==                             ==
-	==           ADD ONS           ==
-	==                             ==
-	=================================
-	\*=============================*/
-
-
-	/**
-	 * Displays the addons page
-	 *
-	 * @since  4.6
-	 */
-	static public function handle_addons_page() {
-		include PO_VIEWS_DIR . 'addons.php';
-	}
-
-	/**
-	 * Called every time the addons page is loaded. Saves changes.
-	 *
-	 * @since  4.6
-	 */
-	static public function handle_addons_update() {
-		$action = false;
-		if ( isset( $_REQUEST['do_action_1'] ) ) {
-			$action = @$_REQUEST['action_1'];
-		} else if ( isset( $_REQUEST['do_action_2'] ) ) {
-			$action = @$_REQUEST['action_2'];
-		} else {
-			$action = @$_REQUEST['action'];
-		}
-		if ( empty( $action ) ) { return; }
-
-		$keys = @$_REQUEST['addon'];
-		if ( is_string( $keys ) ) {
-			$keys = array( $keys );
-		}
-		check_admin_referer( 'popup-addon' );
-		if ( empty( $keys ) ) { return; }
-
-		$active_addons = IncPopupDatabase::get_active_addons();
-		if ( ! is_array( $active_addons ) ) { $active_addons = array(); }
-		$count = 0;
-
-		foreach ( $keys as $key ) {
-			$addon_ind = array_search( $key, $active_addons );
-			$is_active = false !== $addon_ind;
-
-			switch ( $action ) {
-				case 'activate':
-					if ( ! $is_active ) {
-						$active_addons[] = $key;
-						$count += 1;
-					}
-					break;
-
-				case 'deactivate':
-					if ( $is_active ) {
-						unset( $active_addons[$addon_ind] );
-						$count += 1;
-					}
-					break;
-
-				case 'toggle':
-					if ( $is_active ) {
-						unset( $active_addons[$addon_ind] );
-					} else {
-						$active_addons[] = $key;
-					}
-					$count += 1;
-					break;
-			}
-		}
-
-		$msg = false;
-		switch ( $action ) {
-			case 'activate':
-				1 === $count ?
-				$msg = __( 'One Add-on activated', PO_LANG ) :
-				$msg = __( '%1$s Add-ons activated', PO_LANG );
-				break;
-
-			case 'deactivate':
-				1 === $count ?
-				$msg = __( 'One Add-on deactivated', PO_LANG ) :
-				$msg = __( '%1$s Add-ons deactivated', PO_LANG );
-				break;
-
-			case 'toggle':
-				1 === $count ?
-				$msg = __( 'One Add-on toggled', PO_LANG ) :
-				$msg = __( '%1$s Add-ons toggled', PO_LANG );
-				break;
-		}
-
-		if ( $count > 0 && ! empty ( $msg ) ) {
-			IncPopupDatabase::set_active_addons( array_unique( $active_addons ) );
-
-			TheLib::message( sprintf( $msg, $count ) );
 			$redirect_url = remove_query_arg( array( 'message', 'count' ), wp_get_referer() );
 			wp_safe_redirect( $redirect_url );
 			die();
@@ -582,15 +433,17 @@ class IncPopup extends IncPopupBase {
 				break;
 
 			case 'po_cond':
+				$rule_count = 0;
 				?>
 				<div class="rules">
-				<?php if ( empty( $popup->rule ) ) : ?>
+				<?php foreach ( $popup->rule as $key ) : ?>
+					<?php $label = IncPopupItem::condition_label( $key ); ?>
+					<?php if ( empty( $label ) ) { continue; } ?>
+					<?php $rule_count += 1; ?>
+					<span class="rule"><?php echo esc_html( $label ); ?></span>
+				<?php endforeach; ?>
+				<?php if ( ! $rule_count ) : ?>
 					<span class="rule"><?php _e( 'Always', PO_LANG ); ?></span>
-				<?php else : ?>
-					<?php foreach ( $popup->rule as $key ) : ?>
-						<?php $label = IncPopupItem::condition_label( $key ); ?>
-						<span class="rule"><?php echo esc_html( $label ); ?></span>
-					<?php endforeach; ?>
 				<?php endif; ?>
 				</div>
 				<?php

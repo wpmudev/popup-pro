@@ -5,13 +5,10 @@ require_once PO_INC_DIR . 'class-popup-database.php';
 require_once PO_INC_DIR . 'class-popup-posttype.php';
 require_once PO_INC_DIR . 'class-popup-rule.php';
 
-// Load core rules.
-require_once PO_INC_DIR . 'class-popup-rule-url.php';
-require_once PO_INC_DIR . 'class-popup-rule-geo.php';
-require_once PO_INC_DIR . 'class-popup-rule-popup.php';
-require_once PO_INC_DIR . 'class-popup-rule-referer.php';
-require_once PO_INC_DIR . 'class-popup-rule-user.php';
-require_once PO_INC_DIR . 'class-popup-rule-browser.php';
+// Load extra functions.
+require_once PO_INC_DIR . 'addons/class-popup-addon-headerfooter.php';
+require_once PO_INC_DIR . 'addons/class-popup-addon-anonymous.php';
+require_once PO_INC_DIR . 'addons/class-popup-addon-geo-db.php';
 
 /**
  * Defines common functions that are used in admin and frontpage.
@@ -46,7 +43,7 @@ abstract class IncPopupBase {
 		// Load active add-ons.
 		add_action(
 			'init',
-			array( 'IncPopup', 'load_addons' )
+			array( 'IncPopup', 'load_optional_files' )
 		);
 
 		// Return a list of all popup style URLs.
@@ -228,28 +225,22 @@ abstract class IncPopupBase {
 	}
 
 	/**
-	 * Returns a list with all available add-on files.
+	 * Returns a list with all available rule-files.
 	 *
 	 * @since  4.6
-	 * @return array List of add-on files.
+	 * @return array List of rule-files.
 	 */
-	public function get_addons() {
+	public function get_rules() {
 		$List = null;
 
 		if ( null === $List ) {
 			$List = array();
-			$base_len = strlen( PO_INC_DIR . 'addons/' );
-			foreach ( glob( PO_INC_DIR . 'addons/*.php' ) as $path ) {
+			$base_len = strlen( PO_INC_DIR . 'rules/' );
+			foreach ( glob( PO_INC_DIR . 'rules/*.php' ) as $path ) {
 				$List[] = substr( $path, $base_len );
 			}
 
-			/**
-			 * Filter the add-on list to add or remove items.
-			 */
-			$List = apply_filters( 'popup-available-addons', $List );
-
-			// Legacy filter (with underscore)
-			$List = apply_filters( 'popover_available_addons', $List );
+			$List = apply_filters( 'popup-available-rules', $List );
 
 			sort( $List );
 		}
@@ -262,18 +253,19 @@ abstract class IncPopupBase {
 	 *
 	 * @since  4.6
 	 */
-	public function load_addons() {
-		$active = IncPopupDatabase::get_active_addons();
-		$active = (array) $active;
+	public function load_optional_files() {
+		$settings = IncPopupDatabase::get_settings();
 
-		if ( empty( $active ) ) { return; }
+		if ( $settings['geo_db'] ) {
+			IncPopupAddon_GeoDB::init();
+		}
 
-		// $available uses apply_filter to customize the results:
-		$available = self::get_addons();
+		// $available uses apply_filter to customize the results.
+		$available = self::get_rules();
 
-		foreach ( $available as $addon ) {
-			$path = PO_INC_DIR . 'addons/'. $addon;
-			if ( in_array( $addon, $active ) && file_exists( $path ) ) {
+		foreach ( $available as $rule ) {
+			$path = PO_INC_DIR . 'rules/'. $rule;
+			if ( in_array( $rule, $settings['rules'] ) && file_exists( $path ) ) {
 				include_once $path;
 			}
 		}
@@ -289,11 +281,20 @@ abstract class IncPopupBase {
 
 		switch ( $action ) {
 			case 'get-data':
-				$this->select_popup();
+				if ( IncPopupItem::POST_TYPE == @$_REQUEST['data']['post_type'] ) {
+					$this->popup = new IncPopupItem();
+					$data = self::prepare_formdata( $_REQUEST['data'] );
+					$this->popup->populate( $data );
+				} else {
+					$this->select_popup();
+				}
+
 				if ( ! empty( $this->popup ) ) {
 					$data = $this->popup->get_script_data();
-					$data['html'] = $this->popup->load_html();
-					$data['styles'] = $this->popup->load_styles();
+
+					if ( ! empty( $_REQUEST['preview'] ) ) {
+						$data = $this->popup->preview_mode( $data );
+					}
 					echo 'po_data(' . json_encode( $data ) . ')';
 				}
 				die();
@@ -351,12 +352,11 @@ abstract class IncPopupBase {
 	 * @return array List of all popups that fit the current page.
 	 */
 	protected function find_popups() {
-		$popup_id = false;
 		$popups = array();
 
-		if ( isset( $_REQUEST['po_id'] ) ) {
+		$popup_id = absint( @$_REQUEST['po_id'] );
+		if ( $popup_id ) {
 			// Check for forced popup.
-			$popup_id = absint( $_REQUEST['po_id'] );
 			$active_ids = array( $popup_id );
 		} else {
 			$active_ids = IncPopupDatabase::get_active_ids();

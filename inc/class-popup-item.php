@@ -572,20 +572,28 @@ class IncPopupItem {
 	 * @since  4.6
 	 * @return string HTML code.
 	 */
-	public function load_html() {
-		$styles = apply_filters( 'popup-styles', array() );
-		$details = $styles[$this->style];
+	protected function load_html() {
+		static $Html = null;
 
-		$html = '';
-		$tpl_file = $details->dir . 'popover.php';
+		if ( null === $Html ) {
+			$styles = apply_filters( 'popup-styles', array() );
+			$details = $styles[$this->style];
 
-		if ( file_exists( $tpl_file ) ) {
-			ob_start();
-			include_once( $tpl_file );
-			$html = ob_get_contents();
-			ob_end_clean();
+			$Html = '';
+			$tpl_file = $details->dir . 'popover.php';
+
+			if ( file_exists( $tpl_file ) ) {
+				ob_start();
+				include_once( $tpl_file );
+				$Html = ob_get_contents();
+				ob_end_clean();
+
+				$Html = str_replace( array( "\t", "\r", "\n", '     ' ), ' ', $Html );
+				$Html = str_replace( array( '    ', '   ', '  ' ), ' ', $Html );
+			}
 		}
-		return $html;
+
+		return $Html;
 	}
 
 	/**
@@ -594,23 +602,27 @@ class IncPopupItem {
 	 * @since  4.6
 	 * @return string CSS code.
 	 */
-	public function load_styles() {
-		$styles = apply_filters( 'popup-styles', array() );
-		$details = $styles[$this->style];
+	protected function load_styles() {
+		static $Code = null;
 
-		$style = '';
-		$tpl_file = $details->dir . 'style.css';
+		if ( null === $Code ) {
+			$styles = apply_filters( 'popup-styles', array() );
+			$details = $styles[$this->style];
 
-		if ( file_exists( $tpl_file ) ) {
-			ob_start();
-			include_once( $tpl_file );
-			$style = ob_get_contents();
-			ob_end_clean();
+			$Code = '';
+			$tpl_file = $details->dir . 'style.css';
 
-			$style = str_replace( '#messagebox', '#' . $this->code->id, $style );
-			$style = str_replace( '%styleurl%', $details->url, $style );
+			if ( file_exists( $tpl_file ) ) {
+				ob_start();
+				include_once( $tpl_file );
+				$Code = ob_get_contents();
+				ob_end_clean();
+
+				$Code = str_replace( '#messagebox', '#' . $this->code->id, $Code );
+				$Code = str_replace( '%styleurl%', $details->url, $Code );
+			}
 		}
-		return $style;
+		return $Code;
 	}
 
 	/**
@@ -620,19 +632,35 @@ class IncPopupItem {
 	 * @return array
 	 */
 	public function get_script_data() {
-		return apply_filters( 'popup-output-data', $this->script_data, $this );
+		static $Data = null;
+
+		#if ( null === $Data ) {
+			$Data = $this->script_data;
+			$Data['html'] = $this->load_html();
+			$Data['styles'] = $this->load_styles();
+
+			$Data = apply_filters( 'popup-output-data', $Data, $this );
+		#}
+
+		return $Data;
 	}
 
 	/**
 	 * Change some script_data properties for displaying a popup-preview.
 	 *
 	 * @since  4.6
+	 * @param  array $data The Pop Up data collection.
+	 * @return array Modified data collection.
 	 */
-	public function preview_mode() {
-		$this->script_data['popup_id'] = 'preview-' . $this->id;
-		$this->script_data['delay'] = 0;
-		$this->script_data['close_hide'] = false;
-		$this->script_data['preview'] = true;
+	public function preview_mode( $data ) {
+		$data['popup_id'] = 'preview-' . $this->id;
+		$data['delay'] = 0;
+		$data['close_hide'] = false;
+		$data['wait_for_event'] = false;
+		$data['multi_open'] = false;
+		$data['fire_on_exit'] = false;
+		$data['preview'] = true;
+		return $data;
 	}
 
 

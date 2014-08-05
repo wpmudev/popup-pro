@@ -1,13 +1,19 @@
 <?php
-/**
- * Core rule: Login / No Login / No Comment / No ProSite
- *
- * NOTE: DON'T RENAME THIS FILE!!
- * This filename is saved as metadata with each popup that uses these rules.
- * Renaming the file will DISABLE the rules, which is very bad!
- *
- * @since  4.6
- */
+/*
+Name:        User status
+Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
+Description: Conditions based on the current user.
+Author:      Philipp (Incsub)
+Author URI:  http://premium.wpmudev.org
+Type:        Rule
+Rules:       Visitor is logged in, Visitor is not logged in, Visitor has commented before, Visitor has never commented
+Version:     1.0
+
+NOTE: DON'T RENAME THIS FILE!!
+This filename is saved as metadata with each popup that uses these rules.
+Renaming the file will DISABLE the rules, which is very bad!
+*/
+
 class IncPopupRule_User extends IncPopupRule {
 
 	/**
@@ -61,17 +67,6 @@ class IncPopupRule_User extends IncPopupRule {
 			'comment',
 			20
 		);
-
-		if ( function_exists( 'is_pro_site' ) ) {
-			// 'no_prosite' rule.
-			$this->add_rule(
-				'no_prosite',
-				__( 'Site is not a Pro-Site', PO_LANG ),
-				__( 'Shows the Pop Up if the site is not a Pro-Site.', PO_LANG ),
-				'',
-				20
-			);
-		}
 	}
 
 
@@ -158,28 +153,6 @@ class IncPopupRule_User extends IncPopupRule {
 	protected function apply_comment( $data ) {
 		$comments = $this->did_user_comment();
 		return 0 < $comments;
-	}
-
-
-	/*================================*\
-	====================================
-	==                                ==
-	==           NO_PROSITE           ==
-	==                                ==
-	====================================
-	\*================================*/
-
-
-	/**
-	 * Apply the rule-logic to the specified popup
-	 *
-	 * @since  4.6
-	 * @param  mixed $data Rule-data which was saved via the save_() handler.
-	 * @return bool Decission to display popup or not.
-	 */
-	protected function apply_no_prosite( $data ) {
-		$prosite = function_exists( 'is_pro_site' ) && is_pro_site();
-		return ! $prosite;
 	}
 
 

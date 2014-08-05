@@ -1,14 +1,20 @@
 <?php
-/**
- * Core rule: On Url / Not On Url
- *
- * NOTE: DON'T RENAME THIS FILE!!
- * This filename is saved as metadata with each popup that uses these rules.
- * Renaming the file will DISABLE the rules, which is very bad!
- *
- * @since  4.6
- */
-class IncPopupRule_Url extends IncPopupRule {
+/*
+Name:        Advanced URL
+Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
+Description: Adds advanced URL matching with regex support.
+Author:      Ve (Incsub)
+Author URI:  http://premium.wpmudev.org
+Type:        Rule
+Rules:       On approximate URL, Not on approximate URL
+Version:     1.0
+
+NOTE: DON'T RENAME THIS FILE!!
+This filename is saved as metadata with each popup that uses these rules.
+Renaming the file will DISABLE the rules, which is very bad!
+*/
+
+class IncPopupRule_AdvUrl extends IncPopupRule {
 
 	/**
 	 * Initialize the rule object.
@@ -20,31 +26,31 @@ class IncPopupRule_Url extends IncPopupRule {
 
 		// 'url' rule.
 		$this->add_rule(
-			'url',
-			__( 'On specific URL', PO_LANG ),
+			'adv_url',
+			__( 'On approximate URL', PO_LANG ),
 			__( 'Shows the Pop Up if the user is on a certain URL.', PO_LANG ),
-			'no_url',
-			20
+			'no_adv_url',
+			30
 		);
 
 		// 'no_url' rule.
 		$this->add_rule(
-			'no_url',
-			__( 'Not on specific URL', PO_LANG ),
+			'no_adv_url',
+			__( 'Not on approximate URL', PO_LANG ),
 			__( 'Shows the Pop Up if the user is not on a certain URL.', PO_LANG ),
-			'url',
-			20
+			'adv_url',
+			30
 		);
 	}
 
 
-	/*=========================*\
-	=============================
-	==                         ==
-	==           URL           ==
-	==                         ==
-	=============================
-	\*=========================*/
+	/*=============================*\
+	=================================
+	==                             ==
+	==           ADV_URL           ==
+	==                             ==
+	=================================
+	\*=============================*/
 
 
 	/**
@@ -54,11 +60,12 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 * @return bool Decission to display popup or not.
 	 */
-	protected function apply_url( $data ) {
-		$data = $this->sanitize_values( $data );
+	protected function apply_adv_url( $data ) {
+		if ( is_string( $data ) ) { $data = array( $data ); }
+		if ( ! is_array( $data ) ) { return true; }
 		$url = $this->current_url();
 
-		return $this->check_url( $url, $data );
+		return $this->check_adv_url( $url, $data );
 	}
 
 	/**
@@ -67,14 +74,15 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @since  4.6
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 */
-	protected function form_url( $data ) {
-		$data = $this->sanitize_values( $data );
-		$urls = implode( "\n", $data );
+	protected function form_adv_url( $data ) {
+		if ( is_string( $data ) ) { $urls = $data; }
+		else if ( is_array( $data ) ) { $urls = implode( "\n", $data ); }
+		else { $urls = ''; }
 		?>
-		<label for="po-rule-data-url">
-			<?php _e( 'URLs (one per line):', PO_LANG ); ?>
+		<label for="po-rule-data-adv-url">
+			<?php _e( 'URL regex (one per line):', PO_LANG ); ?>
 		</label>
-		<textarea name="po_rule_data[url]" id="po-rule-data-url" class="block"><?php
+		<textarea name="po_rule_data[adv-url]" id="po-rule-data-adv-url" class="block"><?php
 			echo esc_html( $urls );
 		?></textarea>
 		<?php
@@ -86,18 +94,18 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @since  4.6
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_url() {
-		return $this->sanitize_values( @$_POST['po_rule_data']['url'] );
+	protected function save_adv_url() {
+		return explode( "\n", @$_POST['po_rule_data']['adv-url'] );
 	}
 
 
-	/*============================*\
-	================================
-	==                            ==
-	==           NO_URL           ==
-	==                            ==
-	================================
-	\*============================*/
+	/*================================*\
+	====================================
+	==                                ==
+	==           NO_ADV_URL           ==
+	==                                ==
+	====================================
+	\*================================*/
 
 
 	/**
@@ -107,11 +115,12 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 * @return bool Decission to display popup or not.
 	 */
-	protected function apply_no_url( $data ) {
-		$data = $this->sanitize_values( $data );
+	protected function apply_no_adv_url( $data ) {
+		if ( is_string( $data ) ) { $data = array( $data ); }
+		if ( ! is_array( $data ) ) { return true; }
 		$url = $this->current_url();
 
-		return ! $this->check_url( $url, $data );
+		return ! $this->check_adv_url( $url, $data );
 	}
 
 	/**
@@ -120,14 +129,15 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @since  4.6
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 */
-	protected function form_no_url( $data ) {
-		$data = $this->sanitize_values( $data );
-		$urls = implode( "\n", $data );
+	protected function form_no_adv_url( $data ) {
+		if ( is_string( $data ) ) { $urls = $data; }
+		else if ( is_array( $data ) ) { $urls = implode( "\n", $data ); }
+		else { $urls = ''; }
 		?>
-		<label for="po-rule-data-no-url">
-			<?php _e( 'URLs (one per line):', PO_LANG ); ?>
+		<label for="po-rule-data-no-adv-url">
+			<?php _e( 'URL regex (one per line):', PO_LANG ); ?>
 		</label>
-		<textarea name="po_rule_data[no_url]" id="po-rule-data-no-url" class="block"><?php
+		<textarea name="po_rule_data[no_adv_url]" id="po-rule-data-no-adv-url" class="block"><?php
 			echo esc_html( $urls );
 		?></textarea>
 		<?php
@@ -139,8 +149,8 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @since  4.6
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_no_url() {
-		return $this->sanitize_values( @$_POST['po_rule_data']['no_url'] );
+	protected function save_no_adv_url() {
+		return explode( "\n", @$_POST['po_rule_data']['no_adv_url'] );
 	}
 
 
@@ -152,23 +162,6 @@ class IncPopupRule_Url extends IncPopupRule {
 	==========================================
 	\*======================================*/
 
-
-	/**
-	 * Sanitizes the data parameter so it can be savely used by other functions.
-	 *
-	 * @since  4.6
-	 * @param  mixed $data
-	 * @return array
-	 */
-	protected function sanitize_values( $data ) {
-		if ( is_string( $data ) ) {
-			$data = explode( "\n", $data );
-		} else if ( ! is_array( $data ) ) {
-			$data = array();
-		}
-
-		return $data;
-	}
 
 	/**
 	 * Returns the URL which can be defined by REQUEST[theform] or wp->request.
@@ -197,7 +190,7 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @param  array $list List of URL-patterns to test against.
 	 * @return bool
 	 */
-	protected function check_url( $test_url, $list ) {
+	protected function check_adv_url( $test_url, $list ) {
 		$response = false;
 		$list = array_map( 'trim', $list );
 
@@ -205,7 +198,7 @@ class IncPopupRule_Url extends IncPopupRule {
 			$response = true;
 		} else {
 			foreach ( $list as $match ) {
-				if ( preg_match( '#^' . $match . '$#i', $test_url ) ) {
+				if ( preg_match( '#' . $match . '#i', $test_url ) ) {
 					$response = true;
 					break;
 				}
@@ -217,4 +210,4 @@ class IncPopupRule_Url extends IncPopupRule {
 
 };
 
-IncPopupRules::register( 'IncPopupRule_Url' );
+IncPopupRules::register( 'IncPopupRule_AdvUrl' );

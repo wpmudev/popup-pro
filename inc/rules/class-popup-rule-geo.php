@@ -1,13 +1,19 @@
 <?php
-/**
- * Core rule: In Country / Not In Country
- *
- * NOTE: DON'T RENAME THIS FILE!!
- * This filename is saved as metadata with each popup that uses these rules.
- * Renaming the file will DISABLE the rules, which is very bad!
- *
- * @since  4.6
- */
+/*
+Name:        Visitor Location
+Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
+Description: Conditions based on the location of the visitor.
+Author:      Philipp (Incsub)
+Author URI:  http://premium.wpmudev.org
+Type:        Rule
+Rules:       In a specific Country, Not in a specific Country
+Version:     1.0
+
+NOTE: DON'T RENAME THIS FILE!!
+This filename is saved as metadata with each popup that uses these rules.
+Renaming the file will DISABLE the rules, which is very bad!
+*/
+
 class IncPopupRule_Country extends IncPopupRule {
 
 	/**
@@ -181,7 +187,7 @@ class IncPopupRule_Country extends IncPopupRule {
 		$country = false;
 
 		// See if an add-on provides the country for us.
-		$country = apply_filters( 'popover-get-country', false, $ip );
+		$country = apply_filters( 'popup-get-country', $ip );
 		if ( ! empty( $country ) ) {
 			return $country;
 		}

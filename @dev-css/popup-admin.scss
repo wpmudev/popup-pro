@@ -96,6 +96,25 @@ fieldset {
 	}
 }
 
+div.msg-ok,
+div.msg-err {
+	padding: 0 0.6em;
+	padding: 1px 12px;
+	background-color: #FAFAFA;
+	-webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+	clear: both;
+	margin: 15px 0 0;
+}
+
+div.msg-ok {
+	border-left: 4px solid #7AD03A;
+}
+
+div.msg-err {
+	border-left: 4px solid #DD3D36;
+}
+
 
 /*=================================*\
 =====================================
@@ -107,50 +126,22 @@ fieldset {
 
 
 .tbl-addons {
-	.column-name {
-		width: 300px;
-	}
-	.column-type {
-		width: 100px;
-	}
-	.column-desc {
-	}
-	.column-active {
-		width: 100px;
-	}
-
 	tbody td,
 	tbody th {
 		-webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 		box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 	}
 
-	th.check-column {
-		border-left: 4px solid transparent;
+	code {
+		display: inline-block;
+		margin: 0 1px 1px 0;
+		font-size: 12px;
 	}
 
-	.the-name {
-		display: block;
-		margin-bottom: .2em;
-		font-size: 14px;
-	}
-
-	.secondary {
-		padding-bottom: 5px;
-	}
-
-	.active {
-		th.check-column {
-			border-left: 4px solid #2EA2CC;
-		}
-
-		td,
-		th {
-			background-color: #F7FCFE;
-		}
-
-		.the-name {
-			font-weight: bold;
+	.column-name {
+		width: 35%;
+		@media screen and (max-width: $break_large) {
+			width: 50%;
 		}
 	}
 }

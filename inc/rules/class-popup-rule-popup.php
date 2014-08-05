@@ -1,13 +1,19 @@
 <?php
-/**
- * Core rule: Count
- *
- * NOTE: DON'T RENAME THIS FILE!!
- * This filename is saved as metadata with each popup that uses these rules.
- * Renaming the file will DISABLE the rules, which is very bad!
- *
- * @since  4.6
- */
+/*
+Name:        Pop Up Details
+Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
+Description: Test for Pop Up specific values.
+Author:      Philipp (Incsub)
+Author URI:  http://premium.wpmudev.org
+Type:        Rule
+Rules:       Pop Up shown less than
+Version:     1.0
+
+NOTE: DON'T RENAME THIS FILE!!
+This filename is saved as metadata with each popup that uses these rules.
+Renaming the file will DISABLE the rules, which is very bad!
+*/
+
 class IncPopupRule_Count extends IncPopupRule {
 
 	/**

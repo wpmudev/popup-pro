@@ -1,12 +1,17 @@
 <?php
 /*
-Addon Name:  Javascript Events
+Name:        Javascript Events
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Show Pop Up when user leaves the page or clicks somewhere.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
+Rules:       When user leaves the page, Show on click
 Version:     1.0
+
+NOTE: DON'T RENAME THIS FILE!!
+This filename is saved as metadata with each popup that uses these rules.
+Renaming the file will DISABLE the rules, which is very bad!
 */
 
 class IncPopupRule_Events extends IncPopupRule {
@@ -80,6 +85,8 @@ class IncPopupRule_Events extends IncPopupRule {
 				array( $this, 'inject_script_on_exit' )
 			);
 		}
+
+		return $script_data;
 	}
 
 	/**

@@ -68,9 +68,6 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6
 	 */
 	public function init_public() {
-		// Load the active add-ons.
-		$this->load_addons();
-
 		// Load plugin settings.
 		$settings = IncPopupDatabase::get_settings();
 
@@ -108,8 +105,7 @@ class IncPopup extends IncPopupBase {
 				/**
 				 * Custom loading handler can be processed by an add-on.
 				 */
-				do_action( 'popup-init-loading-method', $cur_method );
-				do_action( 'popup-ajax-loading-method', $cur_method, $this );
+				do_action( 'popup-init-loading-method', $cur_method, $this );
 				break;
 		}
 	}
@@ -202,6 +198,8 @@ class IncPopup extends IncPopupBase {
 		if ( empty( $this->popup ) ) { return; }
 
 		$data = $this->popup->get_script_data();
+		unset( $data['html'] );
+		unset( $data['styles'] );
 		$this->script_data['popup'] = $data;
 		$this->load_scripts();
 
@@ -224,8 +222,8 @@ class IncPopup extends IncPopupBase {
 	public function show_header() {
 		if ( empty( $this->popup ) ) { return; }
 
-		$styles = $this->popup->load_styles();
-		echo '<style type="text/css">' . $styles . '</style>';
+		$data = $this->popup->get_script_data();
+		echo '<style type="text/css">' . $data['styles'] . '</style>';
 	}
 
 	/**
@@ -236,8 +234,8 @@ class IncPopup extends IncPopupBase {
 	public function show_footer() {
 		if ( empty( $this->popup ) ) { return; }
 
-		$html = $this->popup->load_html();
-		echo '' . $html;
+		$data = $this->popup->get_script_data();
+		echo '' . $data['html'];
 	}
 
 };

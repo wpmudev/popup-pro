@@ -188,7 +188,8 @@
 		 * Load popup data via ajax.
 		 */
 		this.load_popup = function load_popup( id, data ) {
-			var po_id = 0,
+			var ajax_args, ajax_data,
+				po_id = 0,
 				thefrom = window.location,
 				thereferrer = document.referrer;
 
@@ -213,26 +214,29 @@
 				po_id = id.toString();
 			}
 
-			return jQuery.ajax({
+			ajax_data = {
+				'action':    'inc_popup',
+				'do':        _options['do'],
+				thefrom:     thefrom.toString(),
+				thereferrer: thereferrer.toString()
+			};
+			if ( po_id ) { ajax_data['po_id'] = po_id; }
+			if ( data ) { ajax_data['data'] = data; }
+			if ( _options['preview'] ) { ajax_data['preview'] = true; }
+
+			ajax_args = {
 				url:           _options['ajaxurl'],
 				dataType:      'jsonp',
 				jsonpCallback: 'po_data',
-				data: {
-					'action':    'inc_popup',
-					'do':        _options['do'],
-					thefrom:     thefrom.toString(),
-					thereferrer: thereferrer.toString(),
-					po_id:       po_id,
-					data:        data || {}
-				},
+				data: ajax_data,
 				success: function( data ) {
 					handle_done( data );
 				},
 				complete: function() {
 					$doc.trigger( 'popup-load-done', [me.data, me] );
 				}
-			});
-			return false;
+			};
+			return jQuery.ajax(ajax_args);
 		};
 
 		/**

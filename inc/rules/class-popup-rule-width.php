@@ -1,12 +1,17 @@
 <?php
 /*
-Addon Name:  Screen Size rule
+Name:        Screen Size
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Adds a condition that can limit Pop Ups to certain screen sizes.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
+Rules:       Depending on screen size
 Version:     1.0
+
+NOTE: DON'T RENAME THIS FILE!!
+This filename is saved as metadata with each popup that uses these rules.
+Renaming the file will DISABLE the rules, which is very bad!
 */
 
 class IncPopupRule_Width extends IncPopupRule {
@@ -39,7 +44,7 @@ class IncPopupRule_Width extends IncPopupRule {
 
 		add_filter(
 			'popup-output-data',
-			array( $this, 'append_data' ),
+			array( $this, 'append_data_width' ),
 			10, 2
 		);
 	}
@@ -82,7 +87,7 @@ class IncPopupRule_Width extends IncPopupRule {
 	 * @param  IncPopupItem $popup The original popup object.
 	 * @return array Modified data collection.
 	 */
-	public function append_data( $script_data, $popup ) {
+	public function append_data_width( $script_data, $popup ) {
 		if ( $popup->uses_rule( 'width' ) ) {
 			$data = $this->sanitize_values( @$popup->rule_data['width'] );
 
