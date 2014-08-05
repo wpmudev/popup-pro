@@ -1,88 +1,148 @@
-div#messagebox {
-	position: absolute;
-	background: transparent url(%styleurl%img/opaque.png) repeat;
-	z-index: 999;
-	padding: 10px;
-	visibility: visible;
-}
+/**
+ * Style: Simple
+ */
 
-div#messagebox div.claimbutton {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	width: 100%;
-	background: transparent url(%styleurl%img/opaque.png) repeat;
-	text-align: right;
-	padding-top: 5px;
-	padding-bottom: 5px;
-}
+#messagebox {
+	.wdpu-container {
+		position: fixed;
+		z-index: 99999;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		overflow: auto;
+		background: rgba(0, 0, 0, 0.5);
+	}
 
-div#messagebox div.claimbutton a:visited, div#messagebox div.claimbutton a {
-	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-	color: #FFF;
-	text-shadow: #000 1px 1px 0px;
-	font-weight: bold;
-	padding-right: 5px;
-}
+	.wdpu-holder {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		padding: 0 8px 0 0;
+		text-align: center;
 
-#message p {
-	position: relative;
-	clear: both;
-}
+		&:before {
+			content: '';
+			display: inline-block;
+			height: 100%;
+			vertical-align: middle;
+		}
+	}
 
-#messagebox #closebox {
-	position: absolute;
-	width: 30px;
-	height: 29px;
-	background: transparent url(%styleurl%img/closemessagebland.png) no-repeat;
-	top: -5px;
-	left: -5px;
-	z-index: 5;
-}
+	.wdpu-wrap {
+		position: relative;
+		display: inline-block;
+		vertical-align: middle;
+		margin: 0 auto;
+		text-align: left;
+		padding: 5px;
+		border-radius: 10px;
+		background-color: rgba(255, 255, 255, 0.5);
 
-div#message {
-	position: relative;
-	background: #fff;
-	font: 0.9em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-	min-height: 90%;
-	overflow: hidden;
-}
+		.wdpu-close {
+			position: absolute;
+			top: -12px;
+			right: -12px;
+			width: 29px;
+			height: 29px;
+			line-height: 28px;
+			text-align: center;
+			border-radius: 30px;
+			background: #333;
+			color: #EEE;
+			z-index: 10;
+			transition: background .3s, color .3s, border .3s;
+			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+			border: 2px solid #EEE;
+			text-decoration: none;
 
-div#message.waiting {
-	background: #fff url(%styleurl%img/loading.gif) no-repeat center center;
-}
+			&:before {
+				content: '\D7';
+				margin: 0 -2px 0 0;
+				position: relative;
+				font-weight: bold;
+				font-size: 24px;
+				font-family: helvetica, sans-serif !important;
+			}
 
-div#message h2 {
-	color: #000;
-	font: bold 1.3em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-	margin-top: 0px;
-}
-div#message h2 a {
-	text-decoration: none;
-	color: #000;
-}
+			&:hover {
+				background: #000;
+				color: #FFF;
+				border-color: #FFF;
+			}
+		}
+	}
 
-div#message blockquote {
-	padding: 0px;
-	font-weight: bold;
-	border-left: 5px solid #ccc;
-}
+	.wdpu-msg {
+		border-radius: 6px;
+		overflow: hidden;
+		max-width: 800px;
+		min-width: 100px;
+		margin: 0px auto;
+		background: #F2F2F2;
+		position: relative;
+		z-index: 1;
 
-div#message blockquote p{
-	padding: 2px 5px;
-}
+		&.custom-size {
+			max-width: none;
+			min-width: 0;
+		}
 
-div#message img {
-}
+		& > .wdpu-text,
+		& > .wdpu-image {
+			vertical-align: middle;
+			display: inline-block;
+			margin: 0 0;
+			box-sizing: border-box;
+			border: 1px solid red;
+		}
 
-div#messagebox.visiblebox {
-	display: block;
-}
-div#messagebox.hiddenbox {
-	display: none;
-}
-.hide { display: none; }
+		& > .wdpu-text {
+			padding: 20px;
+		}
 
-.clear {
-	clear: both;
+		& > .wdpu-image {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+
+			img {
+				max-height: 100%;
+				max-width: 100%;
+			}
+		}
+	}
+
+	/* Default: Image on right side */
+	.wdpu-text {
+		margin-right: 40%;
+	}
+	.wdpu-image {
+		text-align: right;
+		right: 0;
+		width: 40%;
+	}
+
+	&.img-left {
+		.wdpu-text {
+			margin-left: 40%;
+			margin-right: 0;
+		}
+		.wdpu-image {
+			text-align: left;
+			right: auto;
+			left: 0;
+		}
+	}
+
+	&.no-img {
+		.wdpu-text {
+			margin: 0;
+		}
+		.wdpu-image {
+			display: none;
+		}
+	}
 }

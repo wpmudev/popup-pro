@@ -8,7 +8,8 @@
 			$po_div = null,
 			$po_msg = null,
 			$po_close = null,
-			$po_hide = null
+			$po_hide = null,
+			$po_resize = null
 			;
 
 		this.data = {};
@@ -54,25 +55,20 @@
 
 		this.move_popup = function move_popup() {
 			if ( me.data.custom_size ) {
-				$po_div.width(me.data.width)
+				$po_resize.width(me.data.width)
 					.height(me.data.height);
 			}
 
-			if ( ! $po_div.is( ":visible" ) ) {
-				$po_div.css({
-					'top': $win.height()
-				});
-				$po_div.show();
+			if ( ! $po_resize.hasClass( 'no-move' ) ) {
+				// Short delay before positioning the popup to give the browser time
+				// to show/resize the popup (20ms ~ 1 screen refresh)
+				window.setTimeout(function() {
+					$po_resize.css({
+						'top':  ($win.height() - $po_msg.height()) / 2,
+						'left': ($win.width()  - $po_msg.width()) / 2
+					});
+				}, 20);
 			}
-
-			// Short delay before positioning the popup to give the browser time
-			// to show/resize the popup (20ms ~ 1 screen refresh)
-			window.setTimeout(function() {
-				$po_div.css({
-					'top':  ($win.height() - $po_msg.height()) / 2,
-					'left': ($win.width()  - $po_msg.width()) / 2
-				});
-			}, 20);
 		};
 
 		/**
@@ -159,9 +155,12 @@
 		 */
 		this.fetch_dom = function fetch_dom() {
 			$po_div = jQuery( '#' + me.data['html_id'] );
-			$po_msg = $po_div.find( '#message' );
-			$po_close = $po_div.find( '#closebox' );
-			$po_hide = $po_div.find( '#clearforever' );
+			$po_resize = $po_div.find( '.resize' );
+			$po_msg = $po_div.find( '.wdpu-msg' );
+			$po_close = $po_div.find( '.wdpu-close' );
+			$po_hide = $po_div.find( '.wdpu-hide-forever' );
+
+			if ( ! $po_resize.length ) { $po_resize = $po_div; }
 		};
 
 		/**

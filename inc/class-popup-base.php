@@ -272,6 +272,57 @@ abstract class IncPopupBase {
 	}
 
 	/**
+	 * Returns an array with all relevant popup fields extracted from the
+	 * submitted form data.
+	 *
+	 * @since  4.6
+	 * @param  array $form Raw form array, submitted from WP admin.
+	 * @return array Data extracted from the $form array.
+	 */
+	static protected function prepare_formdata( $form ) {
+		$data = array(
+			// Meta: Content
+			'name' => @$form['po_name'],
+			'content' => stripslashes( @$form['po_content'] ),
+			'title' => @$form['po_heading'],
+			'subtitle' => @$form['po_subheading'],
+			'cta_label' => @$form['po_cta'],
+			'cta_link' => @$form['po_cta_link'],
+
+			// Meta: Appearance
+			'style' => @$form['po_style'],
+			'round_corners' => ! isset( $form['po_round_corners'] ),
+			'custom_colors' => isset( $form['po_custom_colors'] ),
+			'color' => array(
+				'back' => @$form['po_color_back'],
+				'fore' => @$form['po_color_fore'],
+			),
+			'custom_size' => isset( $form['po_custom_size'] ),
+			'size' => array(
+				'width' => @$form['po_size_width'],
+				'height' => @$form['po_size_height'],
+			),
+
+			// Meta: Behavior
+			'display' => @$form['po_display'],
+			'delay' => @$form['po_delay'],
+			'delay_type' => @$form['po_delay_type'],
+			'scroll' => @$form['po_scroll'],
+			'anchor' => @$form['po_anchor'],
+			'can_hide' => isset( $form['po_can_hide'] ),
+			'close_hides' => isset( $form['po_close_hides'] ),
+			'hide_expire' => @$form['po_hide_expire'],
+			'overlay_close' => ! isset( $form['po_overlay_close'] ),
+
+			// Meta: Rules:
+			'rule' => @$form['po_rule'],
+			'rule_data' => apply_filters( 'popup-save-rules', array() ),
+		);
+
+		return $data;
+	}
+
+	/**
 	 * Returns the popup content as JSON object and then ends the request.
 	 *
 	 * @since  4.6
