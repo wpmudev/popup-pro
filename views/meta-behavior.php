@@ -12,7 +12,7 @@
 		<strong><?php _e( 'When to show the Pop Up:', PO_LANG ); ?></strong>
 	</div>
 </div>
-<div class="wpmui-grid-12">
+<div class="wpmui-grid-12" style="overflow: visible">
 	<div class="col-12 inp-row">
 		<label>
 			<input type="radio"

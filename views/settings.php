@@ -216,6 +216,7 @@ $ordered_rules = array();
 				$ordered_rules[ $name ] = $data;
 				$ordered_rules[ $name ]['key'] = $rule;
 				$ordered_rules[ $name ]['name'] = $name;
+				$ordered_rules[ $name ]['active'] = $is_active;
 				$ordered_rules[ $name ]['desc'] = __( trim( $data['desc'] ), PO_LANG );
 			} ?>
 			<?php ksort( $ordered_rules ); ?>
@@ -230,7 +231,7 @@ $ordered_rules = array();
 						<input type="checkbox"
 							id="<?php echo esc_attr( $rule_id ); ?>"
 							name="po_option[rules][<?php echo esc_attr( $data['key'] ); ?>]"
-							<?php checked( $is_active ); ?>/>
+							<?php checked( $data['active'] ); ?>/>
 					</th>
 					<td class="column-name">
 						<label for="<?php echo esc_attr( $rule_id ); ?>">
@@ -240,6 +241,8 @@ $ordered_rules = array();
 					</td>
 					<td class="column-items">
 					<?php foreach ( $data['rules'] as $rule_name ) : ?>
+						<?php $rule_name = trim( $rule_name ); ?>
+						<?php if ( empty( $rule_name ) ) { continue; } ?>
 						<code><?php _e( trim( $rule_name ), PO_LANG ); ?></code><br />
 					<?php endforeach; ?>
 					</td>

@@ -2,7 +2,7 @@
 /*
 Name:        Javascript Events
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: New behavior: Show Pop Up when the mouse leaves the browser window or when the user clicks somewhere.
+Description: New Behavior Options: Show Pop Up when the mouse leaves the browser window or when the user clicks somewhere.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
