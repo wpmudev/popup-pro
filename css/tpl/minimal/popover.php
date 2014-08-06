@@ -11,7 +11,11 @@ $has_img = ! empty( $this->image );
 $has_buttons = $has_cta || $this->can_hide;
 
 $msg_class = '';
-if ( ! $has_img ) { $msg_class .= 'no-img '; }
+if ( $has_img ) {
+	$msg_class .= 'img-' . $this->image_pos . ' ';
+} else {
+	$msg_class .= 'no-img ';
+}
 if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 
 ?>
@@ -37,19 +41,21 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 					<?php endif; ?>
 				</div>
 
-				<div class="wdpu-text">
-					<div class="wdpu-inner <?php if ( ! $has_buttons ) { echo esc_attr( 'no-bm' ); } ?>">
-						<div class="wdpu-content">
-							<?php echo '' . apply_filters( 'the_content', $this->content ); ?>
+				<div class="wdpu-middle">
+					<div class="wdpu-text">
+						<div class="wdpu-inner <?php if ( ! $has_buttons ) { echo esc_attr( 'no-bm' ); } ?>">
+							<div class="wdpu-content">
+								<?php echo '' . apply_filters( 'the_content', $this->content ); ?>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<?php if ( $has_img ) : ?>
-					<div class="wdpu-image">
-						...
-					</div>
-				<?php endif; ?>
+					<?php if ( $has_img ) : ?>
+						<div class="wdpu-image">
+							<img src="<?php echo esc_url( $this->image ); ?>" />
+						</div>
+					<?php endif; ?>
+				</div>
 
 				<?php if ( $has_buttons ) : ?>
 					<div class="wdpu-buttons">

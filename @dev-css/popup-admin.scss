@@ -435,12 +435,114 @@ div.msg-err {
 		top: 0;
 		right: 12px;
 
-		.dropzone {
-			height: 224px;
+		.featured-img {
 			width: 224px;
-			line-height: 224px;
+			height: 224px;
+			margin: 10px 0;
+			background: #F8F8F8;
+			position: relative;
+
+			.lbl-empty {
+				display: block;
+				height: 224px;
+				padding-top: 100px;
+				text-align: center;
+			}
+
+			&.has-image:hover {
+				.reset {
+					display: block;
+				}
+			}
+		}
+
+		img {
+			max-width: 100%;
+			max-height: 100%;
+			margin: 0 auto;
+			display: block;
+		}
+
+		.reset,
+		.reset .dashicons {
+			font-size: 13px;
+			text-decoration: none;
+		}
+
+		.reset .dashicons {
+			display: inline;
+		}
+
+		.reset {
+			position: absolute;
+			display: none;
+			z-index: 10;
+			margin-top: -36px;
+			background: rgba(255, 255, 255, 0.85);
+			padding: 5px;
+			height: 26px;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			color: #666;
+
+			&:hover {
+				color: #000;
+			}
 		}
 	}
+
+	.img-pos {
+		text-align: center;
+		margin: 10px 0;
+
+		.option {
+			display: inline-block;
+			background: #F1F1F1;
+			padding: 12px 10px;
+			text-align: left;
+			margin: 2px;
+			cursor: pointer;
+			position: relative;
+			overflow: hidden;
+
+			&:hover {
+				background: #DDD;
+			}
+
+			.image {
+				color: #000;
+				padding: 4px;
+				display: inline-block;
+				border: 1px solid #666;
+				margin: -5px;
+				background: #FFF;
+
+				&.left {
+					margin-right: 0;
+				}
+
+				&.right {
+					margin-left: 0;
+				}
+			}
+
+			&.selected {
+				background: #0074A2;
+				color: #FFF;
+
+				.image {
+				}
+			}
+
+			input {
+				position: absolute;
+				left: -30px;
+				top: -30px;
+			}
+		}
+	}
+
 
 	.add_image {
 		padding-left: 5px;

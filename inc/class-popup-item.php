@@ -57,6 +57,9 @@ class IncPopupItem {
 	// Image dispalyed in the popup.
 	public $image = '';
 
+	// Image position (left/right)
+	public $image_pos = '';
+
 	// -- Appearance
 
 	// CSS style of the popup.
@@ -172,6 +175,7 @@ class IncPopupItem {
 		$this->cta_label = '';
 		$this->cta_link = '';
 		$this->image = '';
+		$this->image_pos = 'right';
 		$this->custom_size = false;
 		$this->size = array(
 			'width' => '',
@@ -229,6 +233,7 @@ class IncPopupItem {
 
 		isset( $data['content'] ) && $this->content = $data['content'];
 		isset( $data['image'] ) && $this->image = $data['image'];
+		isset( $data['image_pos'] ) && $this->image_pos = $data['image_pos'];
 		isset( $data['title'] ) && $this->title = $data['title'];
 		isset( $data['subtitle'] ) && $this->subtitle = $data['subtitle'];
 		isset( $data['cta_label'] ) && $this->cta_label = $data['cta_label'];
@@ -419,6 +424,7 @@ class IncPopupItem {
 		// Read metadata of the popup.
 		$this->title = get_post_meta( $this->id, 'po_title', true );
 		$this->image = get_post_meta( $this->id, 'po_image', true );
+		$this->image_pos = get_post_meta( $this->id, 'po_image_pos', true );
 		$this->subtitle = get_post_meta( $this->id, 'po_subtitle', true );
 		$this->cta_label = get_post_meta( $this->id, 'po_cta_label', true );
 		$this->cta_link = get_post_meta( $this->id, 'po_cta_link', true );
@@ -491,6 +497,7 @@ class IncPopupItem {
 			// Save metadata of the popup.
 			update_post_meta( $this->id, 'po_title', $this->title );
 			update_post_meta( $this->id, 'po_image', $this->image );
+			update_post_meta( $this->id, 'po_image_pos', $this->image_pos );
 			update_post_meta( $this->id, 'po_subtitle', $this->subtitle );
 			update_post_meta( $this->id, 'po_cta_label', $this->cta_label );
 			update_post_meta( $this->id, 'po_cta_link', $this->cta_link );

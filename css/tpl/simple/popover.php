@@ -11,7 +11,11 @@ $has_img = ! empty( $this->image );
 $has_buttons = $has_cta || $this->can_hide;
 
 $msg_class = '';
-if ( ! $has_img ) { $msg_class .= 'no-img '; }
+if ( $has_img ) {
+	$msg_class .= 'img-' . $this->image_pos . ' ';
+} else {
+	$msg_class .= 'no-img ';
+}
 if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 
 ?>
@@ -64,7 +68,7 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 
 				<?php if ( $has_img ) : ?>
 					<div class="wdpu-image">
-						...
+						<img src="<?php echo esc_url( $this->image ); ?>" />
 					</div>
 				<?php endif; ?>
 			</div>

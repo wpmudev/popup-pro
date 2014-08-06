@@ -288,6 +288,8 @@ abstract class IncPopupBase {
 			'subtitle' => @$form['po_subheading'],
 			'cta_label' => @$form['po_cta'],
 			'cta_link' => @$form['po_cta_link'],
+			'image' => @$form['po_image'],
+			'image_pos' => @$form['po_image_pos'],
 
 			// Meta: Appearance
 			'style' => @$form['po_style'],

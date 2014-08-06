@@ -6,6 +6,8 @@
  * Available variables: $popup
  */
 
+$has_image = ! empty( $popup->image );
+
 ?>
 <div class="content-main">
 	<div class="wpmui-grid-12">
@@ -85,12 +87,61 @@
 	<div class="wpmui-grid-12">
 		<button class="button add_image"
 			type="button"
-			title="<?php _e( 'Add featured image to Pop Up.', PO_LANG ); ?>">
+			title="<?php _e( 'Add featured image to Pop Up.', PO_LANG ); ?>"
+			data-title="<?php _e( 'Pop Up Featured Image', PO_LANG ); ?>"
+			data-button="<?php _e( 'Select Image', PO_LANG ); ?>" >
 			<i class="add-image-icon dashicons dashicons-format-image"></i>
 			<?php _e( 'Add Image', PO_LANG ); ?>
 		</button>
-		<div class="dropzone">
-			Drop image here
+
+		<input type="hidden"
+			name="po_image"
+			class="po-image"
+			value="<?php echo esc_url( $popup->image ); ?>" />
+
+		<div class="featured-img <?php if ( $has_image ) : ?>has-image<?php endif; ?>">
+			<img src="<?php echo esc_url( $popup->image ); ?>"
+				class="img-preview"
+				<?php if ( ! $has_image ) : ?>
+				style="display: none;"
+				<?php endif; ?> />
+
+			<span class="lbl-empty"
+				<?php if ( $has_image ) : ?>
+				style="display: none;"
+				<?php endif; ?> >
+				<?php _e( '(No image selected)', PO_LANG ); ?>
+			</span>
+			<div class="drop-marker" style="display:none">
+				<div class="drop-marker-content" title="<?php _e( 'Drop here', PO_LANG ); ?>">
+				</div>
+			</div>
+
+			<a href="#remove-image" class="reset"
+				<?php if ( ! $has_image ) : ?>
+				style="display: none;"
+				<?php endif; ?> >
+				<i class="dashicons dashicons-dismiss"></i>
+				<?php _e( 'Remove image', PO_LANG ); ?>
+			</a>
+		</div>
+
+		<div class="img-pos">
+			<label class="option <?php if ( 'left' == $popup->image_pos ) : ?>selected<?php endif; ?>">
+				<input type="radio" name="po_image_pos" value="left" <?php checked( $popup->image_pos, 'left' ); ?> />
+				<span class="image left">
+					<i class="dashicons dashicons-format-image"></i>
+				</span>
+				<i class="dashicons dashicons-editor-alignleft"></i>
+			</label>
+
+			<label class="option <?php if ( 'right' == $popup->image_pos ) : ?>selected<?php endif; ?>">
+				<input type="radio" name="po_image_pos" value="right" <?php checked( $popup->image_pos, 'right' ); ?> />
+				<i class="dashicons dashicons-editor-alignleft"></i>
+				<span class="image right">
+					<i class="dashicons dashicons-format-image"></i>
+				</span>
+			</label>
 		</div>
 	</div>
 </div>

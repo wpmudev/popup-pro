@@ -168,7 +168,6 @@ jQuery(function init_admin() {
 		}
 
 		var create_sliders = function create_sliders() {
-			console.log ('init sliders!')
 			jQuery( '.slider' ).each(function() {
 				var me = jQuery( this ),
 					wrap = me.closest( '.slider-wrap' ),
@@ -312,6 +311,83 @@ jQuery(function init_admin() {
 		jQuery( '.init-loading' ).removeClass( 'wpmui-loading' );
 	}
 
+	// Hook up the "Featured image" button.
+	function init_image() {
+		// Uploading files
+		var box = jQuery( '.content-image' ),
+			btn = box.find( '.add_image' ),
+			dropzone = box.find( '.featured-img' ),
+			reset = box.find( '.reset' ),
+			inp = box.find( '.po-image' ),
+			img_preview = box.find( '.img-preview' ),
+			img_label = box.find( '.lbl-empty' ),
+			img_pos = box.find( '.img-pos' ),
+			file_frame;
+
+		// User selected an image (via drag-drop or file_frame)
+		var use_image = function use_image( url ) {
+			inp.val( url );
+			img_preview.attr( 'src', url ).show();
+			img_label.hide();
+			img_pos.show();
+			dropzone.addClass( 'has-image' );
+			//reset.show();
+		};
+
+		// User selected an image (via drag-drop or file_frame)
+		var reset_image = function reset_image( url ) {
+			inp.val( '' );
+			img_preview.attr( 'src', '' ).hide();
+			img_label.show();
+			img_pos.hide();
+			dropzone.removeClass( 'has-image' );
+			//reset.hide();
+		};
+
+		// User clicks on the "Add image" button.
+		var select_clicked = function select_clicked( ev ) {
+			ev.preventDefault();
+
+			// If the media frame already exists, reopen it.
+			if ( file_frame ) {
+				file_frame.open();
+				return;
+			}
+
+			// Create the media frame.
+			file_frame = wp.media.frames.file_frame = wp.media({
+				title: btn.attr( 'data-title' ),
+				button: {
+					text: btn.attr( 'data-button' ),
+				},
+				multiple: false  // Set to true to allow multiple files to be selected
+			});
+
+			// When an image is selected, run a callback.
+			file_frame.on( 'select', function() {
+				// We set multiple to false so only get one image from the uploader
+				attachment = file_frame.state().get('selection').first().toJSON();
+
+				// Do something with attachment.id and/or attachment.url here
+				use_image( attachment.url );
+			});
+
+			// Finally, open the modal
+			file_frame.open();
+		};
+
+		var select_pos = function select_pos( ev ) {
+			var me = jQuery( this );
+
+			img_pos.find( '.option' ).removeClass( 'selected' );
+			me.addClass( 'selected' );
+		}
+
+		btn.on( 'click', select_clicked );
+		reset.on( 'click', reset_image );
+		img_pos.on( 'click', '.option', select_pos );
+	}
+
 	// ----- POPUP LIST --
 
 	// Adds custom bulk actions to the popup list.
@@ -431,6 +507,7 @@ jQuery(function init_admin() {
 		init_edit_controls();
 		init_rules();
 		init_preview();
+		init_image();
 
 		wpmUi.upgrade_multiselect();
 	}

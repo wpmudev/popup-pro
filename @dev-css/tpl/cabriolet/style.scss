@@ -100,17 +100,22 @@ $col_secondary: #FFF;
 			min-width: 0;
 		}
 
-		.wdpu-text-wrap {
+		.wdpu-message-wrap {
 			padding: 4px;
 			background: rgba(0,0,0,0.3);
 			// box-shadow: 0 2px 40px rgba(0,0,0,0.3);
 			box-shadow: 0 0px 1px 1px rgba(255, 255, 255, 0.08);
+			position: relative;
+		}
+
+		.wdpu-message {
+			background: #F2F2F2;
+			position: relative;
+			box-sizing: border-box;
 		}
 
 		.wdpu-text {
 			padding: 20px;
-			background: #F2F2F2;
-			position: relative;
 			box-sizing: border-box;
 		}
 
@@ -118,6 +123,7 @@ $col_secondary: #FFF;
 			position: absolute;
 			top: 0;
 			bottom: 0;
+			overflow: hidden;
 
 			img {
 				max-height: 100%;
@@ -172,7 +178,7 @@ $col_secondary: #FFF;
 		line-height: 1.3em;
 		margin: 0 0 6px 0;
 		color: #FDFDFC;
-		text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+		text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 	}
 
 	.wdpu-title {
@@ -215,6 +221,7 @@ $col_secondary: #FFF;
 		text-align: right;
 		right: 0;
 		width: 40%;
+		border-radius: 0 5px 5px 0;
 	}
 
 	&.img-left {
@@ -226,6 +233,10 @@ $col_secondary: #FFF;
 			text-align: left;
 			right: auto;
 			left: 0;
+			border-radius: 5px 0 0 5px;
+		}
+		.wdpu-buttons {
+			left: 40%;
 		}
 	}
 
@@ -242,10 +253,10 @@ $col_secondary: #FFF;
 		.wdpu-cta {
 			border-radius: 5px;
 		}
-		.wdpu-text-wrap {
+		.wdpu-message-wrap {
 			border-radius: 10px;
 		}
-		.wdpu-text {
+		.wdpu-message {
 			border-radius: 6px;
 		}
 	}
