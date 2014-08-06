@@ -13,7 +13,7 @@ class IncPopupItem {
 	public $styles = null;
 
 	// The available options for the display setting.
-	public $display_opts = array(
+	static public $display_opts = array(
 		'delay'  /* show popup after X seconds */,
 		'scroll' /* show popup when user scrolls X % down */,
 		'anchor' /* show popup when user scrolls past element X */,
@@ -102,17 +102,8 @@ class IncPopupItem {
 	// When to display the popup (delay/scroll/anchor).
 	public $display = 'delay';
 
-	// Appear after <delay> seconds.
-	public $delay = 0;
-
-	// s (seconds) or m (minutes).
-	public $delay_type = 's';
-
-	// Appear after scrolling <scroll> % of the page.
-	public $scroll = 0;
-
-	// Appear after scrolling to element <anchor>.
-	public $anchor = '';
+	// Collection of additional options for the $display option (e.g. delay, ...)
+	public $display_data = array();
 
 	// -- Conditions
 
@@ -194,10 +185,13 @@ class IncPopupItem {
 		$this->hide_expire = 365;
 		$this->overlay_close = true;
 		$this->display = 'delay';
-		$this->delay = 0;
-		$this->delay_type = 's';
-		$this->scroll = 0;
-		$this->anchor = '';
+		$this->display_data = array(
+			'delay' => 0,
+			'delay_type' => 0,
+			'scroll' => 0,
+			'scroll_type' => '%',
+			'anchor' => '',
+		);
 		$this->rule = array();
 		$this->rule_files = array();
 		$this->rule_data = array();
@@ -260,11 +254,10 @@ class IncPopupItem {
 		is_numeric( @$data['hide_expire'] ) && $this->hide_expire = absint( $data['hide_expire'] );
 		isset( $data['overlay_close'] ) && $this->overlay_close = ( true == $data['overlay_close'] );
 
-		in_array( @$data['display'], $this->display_opts ) && $this->display = $data['display'];
-		is_numeric( @$data['delay'] ) && $this->delay = absint( $data['delay'] );
-		isset( $data['delay_type'] ) && $this->delay_type = $data['delay_type'];
-		is_numeric( @$data['scroll'] ) && $this->scroll = absint( $data['scroll'] );
-		isset( $data['anchor'] ) && $this->anchor = $data['anchor'];
+		in_array( @$data['display'], self::$display_opts ) && $this->display = $data['display'];
+
+		is_array( @$data['display_data'] ) || $data['display_data'] = array();
+		$this->display_data = $data['display_data'];
 
 		is_array( @$data['rule'] ) && $this->rule = $data['rule'];
 		is_array( @$data['rule_data'] ) && $this->rule_data = $data['rule_data'];
@@ -311,11 +304,16 @@ class IncPopupItem {
 
 		// Numeric types.
 		$this->hide_expire = absint( $this->hide_expire );
-		$this->delay = absint( $this->delay );
-		$this->scroll = absint( $this->scroll );
+		$this->display_data['delay'] = absint( @$this->display_data['delay'] );
+		$this->display_data['scroll'] = absint( @$this->display_data['scroll'] );
+		$this->display_data['delay_type'] = @$this->display_data['delay_type'];
+		$this->display_data['scroll_type'] = @$this->display_data['scroll_type'];
+		$this->display_data['anchor'] = @$this->display_data['anchor'];
 
 		// Display behavior.
-		if ( ! in_array( $this->display, $this->display_opts ) ) { $this->display = 'delay'; }
+		if ( ! in_array( $this->display, self::$display_opts ) ) { $this->display = 'delay'; }
+		if ( 'm' != $this->display_data['delay_type'] ) { $this->display_data['delay_type'] = 's'; }
+		if ( 'px' != $this->display_data['scroll_type'] ) { $this->display_data['scroll_type'] = '%'; }
 
 		// Rules.
 		if ( ! is_array( $this->rule ) ) { $this->rule = array(); }
@@ -334,12 +332,18 @@ class IncPopupItem {
 			if ( empty( $key ) ) { unset( $this->rule_data[$ind] ); }
 		}
 
-		// Display data.
+		// Display data (legacy code for old styles).
 		if ( $this->custom_colors ) {
 			$this->code->colors = 'color:' . $this->color['fore'] . ';background:' . $this->color['back'] . ';';
 		} else {
 			$this->code->colors = '';
 		}
+
+		// Display data.
+		$this->code->color1 = $this->color['back'];
+		$this->code->color2 = $this->color['fore'];
+		if ( empty ( $this->code->color1 ) ) { $this->code->color1 = '#488CFD'; }
+		if ( empty ( $this->code->color2 ) ) { $this->code->color2 = '#FFFFFF'; }
 
 		$this->script_data['html_id'] = $this->code->id;
 		$this->script_data['popup_id'] = $this->id;
@@ -348,12 +352,9 @@ class IncPopupItem {
 		$this->script_data['custom_size'] = $this->custom_size;
 		$this->script_data['width'] = $this->size['width'];
 		$this->script_data['height'] = $this->size['height'];
-
-		switch ( $this->delay_type ) {
-			case 'm': $this->script_data['delay'] = $this->delay * 60000;
-			case 's':
-			default:  $this->script_data['delay'] = $this->delay * 1000;
-		}
+		$this->script_data['overlay_close'] = $this->overlay_close;
+		$this->script_data['display'] = $this->display;
+		$this->script_data['display_data'] = $this->display_data;
 
 		// Validation only done when editing popups.
 		if ( is_admin() ) {
@@ -439,10 +440,7 @@ class IncPopupItem {
 		$this->hide_expire = get_post_meta( $this->id, 'po_hide_expire', true );
 		$this->overlay_close = get_post_meta( $this->id, 'po_overlay_close', true );
 		$this->display = get_post_meta( $this->id, 'po_display', true );
-		$this->delay = get_post_meta( $this->id, 'po_delay', true );
-		$this->delay_type = get_post_meta( $this->id, 'po_delay_type', true );
-		$this->scroll = get_post_meta( $this->id, 'po_scroll', true );
-		$this->anchor = get_post_meta( $this->id, 'po_anchor', true );
+		$this->display_data = get_post_meta( $this->id, 'po_display_data', true );
 		$this->rule = get_post_meta( $this->id, 'po_rule', true );
 		$this->rule_files = get_post_meta( $this->id, 'po_rule_files', true );
 		$this->rule_data = get_post_meta( $this->id, 'po_rule_data', true );
@@ -512,10 +510,7 @@ class IncPopupItem {
 			update_post_meta( $this->id, 'po_hide_expire', $this->hide_expire );
 			update_post_meta( $this->id, 'po_overlay_close', $this->overlay_close );
 			update_post_meta( $this->id, 'po_display', $this->display );
-			update_post_meta( $this->id, 'po_delay', $this->delay );
-			update_post_meta( $this->id, 'po_delay_type', $this->delay_type );
-			update_post_meta( $this->id, 'po_scroll', $this->scroll );
-			update_post_meta( $this->id, 'po_anchor', $this->anchor );
+			update_post_meta( $this->id, 'po_display_data', $this->display_data );
 			update_post_meta( $this->id, 'po_rule', $this->rule );
 			update_post_meta( $this->id, 'po_rule_files', $this->rule_files );
 			update_post_meta( $this->id, 'po_rule_data', $this->rule_data );
@@ -597,6 +592,8 @@ class IncPopupItem {
 
 				$Html = str_replace( array( "\t", "\r", "\n", '     ' ), ' ', $Html );
 				$Html = str_replace( array( '    ', '   ', '  ' ), ' ', $Html );
+				$Html = str_replace( '#000001', $this->code->color1, $Html );
+				$Html = str_replace( '#000002', $this->code->color2, $Html );
 			}
 		}
 
@@ -627,6 +624,8 @@ class IncPopupItem {
 
 				$Code = str_replace( '#messagebox', '#' . $this->code->id, $Code );
 				$Code = str_replace( '%styleurl%', $details->url, $Code );
+				$Code = str_replace( '#000001', $this->code->color1, $Code );
+				$Code = str_replace( '#000002', $this->code->color2, $Code );
 			}
 		}
 		return $Code;
@@ -661,11 +660,10 @@ class IncPopupItem {
 	 */
 	public function preview_mode( $data ) {
 		$data['popup_id'] = 'preview-' . $this->id;
-		$data['delay'] = 0;
+		$data['display'] = 'delay';
+		$data['display_data']['delay'] = 0;
+		$data['display_data']['click_multi'] = false;
 		$data['close_hide'] = false;
-		$data['wait_for_event'] = false;
-		$data['multi_open'] = false;
-		$data['fire_on_exit'] = false;
 		$data['preview'] = true;
 		return $data;
 	}

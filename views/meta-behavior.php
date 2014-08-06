@@ -28,20 +28,21 @@
 				min="0"
 				max="999"
 				maxlength="3"
-				name="po_delay"
+				name="po_display_data[delay]"
 				class="inp-small"
-				value="<?php echo esc_attr( $popup->delay ); ?>"
+				value="<?php echo esc_attr( $popup->display_data['delay'] ); ?>"
 				placeholder="10" />
-			<select name="po_delay_type">
-				<option value="s" <?php selected( $popup->delay_type, 's' ); ?>>
+			<select name="po_display_data[delay_type]">
+				<option value="s" <?php selected( $popup->display_data['delay_type'], 's' ); ?>>
 					<?php _e( 'Seconds', PO_LANG ); ?>
 				</option>
-				<option value="m" <?php selected( $popup->delay_type, 'm' ); ?>>
+				<option value="m" <?php selected( $popup->display_data['delay_type'], 'm' ); ?>>
 					<?php _e( 'Minutes', PO_LANG ); ?>
 				</option>
 			</select>
 		</span>
 	</div>
+
 	<div class="col-12 inp-row">
 		<label>
 			<input type="radio"
@@ -55,14 +56,22 @@
 		<span class="opt-display-scroll">
 			<input type="number"
 				min="0"
-				max="100"
-				maxlength="3"
-				name="po_scroll"
+				max="9999"
+				maxlength="4"
+				name="po_display_data[scroll]"
 				class="inp-small"
-				value="<?php echo esc_attr( $popup->scroll ); ?>"
+				value="<?php echo esc_attr( $popup->display_data['scroll'] ); ?>"
 				placeholder="25" />
+			<select name="po_display_data[scroll_type]">
+				<option value="%" <?php selected( $popup->display_data['scroll_type'], '%' ); ?>>
+					<?php _e( '%', PO_LANG ); ?>
+				</option>
+				<option value="px" <?php selected( $popup->display_data['scroll_type'], 'px' ); ?>>
+					<?php _e( 'px', PO_LANG ); ?>
+				</option>
+			</select>
 		</span>
-		<?php _e( '% of the page has been scrolled.', PO_LANG ); ?>
+		<?php _e( 'of the page has been scrolled.', PO_LANG ); ?>
 	</div>
 	<div class="col-12 inp-row">
 		<label>
@@ -72,16 +81,17 @@
 				value="anchor"
 				data-toggle=".opt-display-anchor"
 				<?php checked( $popup->display, 'anchor' ); ?> />
-			<?php _e( 'Appear after user scrolled past a CSS selector', PO_LANG ); ?>
+			<?php _e( 'Appear after user scrolled until CSS selector', PO_LANG ); ?>
 		</label>
 		<span class="opt-display-anchor">
 			<input type="text"
 				maxlength="50"
-				name="po_anchor"
-				value="<?php echo esc_attr( $popup->anchor ); ?>"
+				name="po_display_data[anchor]"
+				value="<?php echo esc_attr( $popup->display_data['anchor'] ); ?>"
 				placeholder="<?php _e( '.class or #id', PO_LANG ); ?>" />
 		</span>
 	</div>
+	<?php do_action( 'popup-display-behavior', $popup ); ?>
 </div>
 
 <hr />

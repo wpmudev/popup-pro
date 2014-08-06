@@ -307,10 +307,7 @@ abstract class IncPopupBase {
 
 			// Meta: Behavior
 			'display' => @$form['po_display'],
-			'delay' => @$form['po_delay'],
-			'delay_type' => @$form['po_delay_type'],
-			'scroll' => @$form['po_scroll'],
-			'anchor' => @$form['po_anchor'],
+			'display_data' => @$form['po_display_data'],
 			'can_hide' => isset( $form['po_can_hide'] ),
 			'close_hides' => isset( $form['po_close_hides'] ),
 			'hide_expire' => @$form['po_hide_expire'],

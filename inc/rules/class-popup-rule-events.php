@@ -2,11 +2,11 @@
 /*
 Name:        Javascript Events
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Show Pop Up when user leaves the page or clicks somewhere.
+Description: New behavior: Show Pop Up when the mouse leaves the browser window or when the user clicks somewhere.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
-Rules:       When user leaves the page, Show on click
+Rules:
 Version:     1.0
 
 NOTE: DON'T RENAME THIS FILE!!
@@ -24,33 +24,22 @@ class IncPopupRule_Events extends IncPopupRule {
 	protected function init() {
 		$this->filename = basename( __FILE__ );
 
-		// 'on_exit' rule.
-		$this->add_rule(
-			'on_exit',
-			__( 'When user leaves the page', PO_LANG ),
-			__( 'Shows the Pop Up when the user tries to leave the page.', PO_LANG ),
-			'',
-			30
+		IncPopupItem::$display_opts[] = 'leave';
+		IncPopupItem::$display_opts[] = 'click';
+
+		add_action(
+			'popup-display-behavior',
+			array( $this, 'display_options' ),
+			10, 1
 		);
 
-		// 'on_click' rule.
-		$this->add_rule(
-			'on_click',
-			__( 'Show on click', PO_LANG ),
-			__( 'Shows the Pop Up when the user clicks at a certain element on the page.', PO_LANG ),
-			'',
-			30
-		);
-
-		// -- Initialize rule.
-
-		add_filter(
+		add_action(
 			'popup-output-data',
 			array( $this, 'append_data_on_exit' ),
 			10, 2
 		);
 
-		add_filter(
+		add_action(
 			'popup-output-data',
 			array( $this, 'append_data_on_click' ),
 			10, 2
@@ -67,6 +56,59 @@ class IncPopupRule_Events extends IncPopupRule {
 	\*=============================*/
 
 
+	public function display_options( $popup ) {
+		$this->form_mouseleave( $popup );
+		$this->form_click( $popup );
+	}
+
+	protected function form_mouseleave( $popup ) {
+		?>
+		<div class="col-12 inp-row">
+			<label class="inp-height">
+				<input type="radio"
+					name="po_display"
+					id="po-display-leave"
+					value="leave"
+					data-toggle=".opt-display-leave"
+					<?php checked( $popup->display, 'leave' ); ?> />
+				<?php _e( 'Appear when the mouse leaves the browser window', PO_LANG ); ?>
+			</label>
+		</div>
+		<?php
+	}
+
+	protected function form_click( $popup ) {
+		?>
+		<div class="col-12 inp-row">
+			<label>
+				<input type="radio"
+					name="po_display"
+					id="po-display-click"
+					value="click"
+					data-toggle=".opt-display-click"
+					<?php checked( $popup->display, 'click' ); ?> />
+				<?php _e( 'Appear when user clicks on a CSS selector', PO_LANG ); ?>
+			</label>
+			<span class="opt-display-click">
+				<input type="text"
+					maxlength="50"
+					name="po_display_data[click]"
+					value="<?php echo esc_attr( @$popup->display_data['click'] ); ?>"
+					placeholder="<?php _e( '.class or #id', PO_LANG ); ?>" />
+			</span>
+			<span class="opt-display-click">
+				<label data-tooltip="Repeated: The Pop Up will be displayed on every click. Otherwise it will be opened only once (on the first click)" data-pos="top" data-width="200">
+					<input type="checkbox"
+						name="po_display_data[click_multi]"
+						<?php checked( @$popup->display_data['click_multi'] ); ?>/>
+					<?php _e( 'Repeated', PO_LANG ); ?>
+				</label>
+			</span>
+		</div>
+		<?php
+	}
+
+
 	/**
 	 * Append data to the popup javascript-variable.
 	 *
@@ -76,10 +118,7 @@ class IncPopupRule_Events extends IncPopupRule {
 	 * @return array Modified data collection.
 	 */
 	public function append_data_on_exit( $script_data, $popup ) {
-		if ( $popup->uses_rule( 'on_exit' ) ) {
-			$script_data['wait_for_event'] = true;
-			$script_data['fire_on_exit'] = true;
-
+		if ( 'leave' == $popup->display ) {
 			add_action(
 				'wp_footer',
 				array( $this, 'inject_script_on_exit' )
@@ -97,22 +136,16 @@ class IncPopupRule_Events extends IncPopupRule {
 	public function inject_script_on_exit() {
 		?>
 		<script>
-			(function() {
-				//
-				// TODO: REVIEW AND FIX THIS. LOOKS STRANGE (why "mouseleave"??)....
-				//
-				jQuery(document).on('popup-init', function( e, popover, data ) {
-					var data = data || {};
-					if ( ! data.wait_for_event || ! data.fire_on_exit ) {
-						return true;
-					}
-
-					jQuery(document).one('mouseleave', function() {
-						popover.resolve();
-						return false;
-					});
-				});
-			})();
+			jQuery(function(){
+				setTimeout(function(){
+					inc_popup.extend.custom_handler = function( popup ) {
+						jQuery(document).one( 'mouseleave', function() {
+							popup.show();
+							return false;
+						});
+					};
+				}, 10);
+			});
 		</script>
 		<?php
 	}
@@ -127,53 +160,6 @@ class IncPopupRule_Events extends IncPopupRule {
 	\*==============================*/
 
 
-	/**
-	 * Output the Admin-Form for the active rule.
-	 *
-	 * @since  4.6
-	 * @param  mixed $data Rule-data which was saved via the save_() handler.
-	 */
-	protected function form_on_click( $data ) {
-		?>
-		<div>
-			<label for="po-rule-data-on-click-selector">
-				<?php _e( 'Element selector', PO_LANG ); ?>
-			</label>
-			<input type="text"
-				name="po_rule_data[on_click][selector]"
-				id="po-rule-data-on-click-selector"
-				value="<?php echo esc_attr( @$data['selector'] ); ?>" />
-		</div>
-		<div>
-			<label>
-				<input type="radio"
-					name="po_rule_data[on_click][multi_open]"
-					id="po-rule-data-on-click-multi-off"
-					value="0"
-					<?php checked( ! @$data['multi_open'] ); ?>/>
-				<?php _e( 'Open Pop Up only once (on first click)', PO_LANG ); ?>
-			</label><br />
-			<label>
-				<input type="radio"
-					name="po_rule_data[on_click][multi_open]"
-					id="po-rule-data-on-click-multi-on"
-					value="1"
-					<?php checked( ! ! @$data['multi_open'] ); ?>/>
-				<?php _e( 'Open Pop Up on every click', PO_LANG ); ?>
-			</label>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Update and return the $settings array to save the form values.
-	 *
-	 * @since  4.6
-	 * @return mixed Data collection of this rule.
-	 */
-	protected function save_on_click() {
-		return @$_POST['po_rule_data']['on_click'];
-	}
 
 	/**
 	 * Append data to the popup javascript-variable.
@@ -184,11 +170,7 @@ class IncPopupRule_Events extends IncPopupRule {
 	 * @return array Modified data collection.
 	 */
 	public function append_data_on_click( $script_data, $popup ) {
-		if ( $popup->uses_rule( 'on_exit' ) ) {
-			$script_data['wait_for_event'] = true;
-			$script_data['click_selector'] = $popup->rule_data['on_click']['selector'];
-			$script_data['multi_open'] = ! ! $popup->rule_data['on_click']['multi_open'];
-
+		if ( 'click' == $popup->display ) {
 			add_action(
 				'wp_footer',
 				array( $this, 'inject_script_on_click' )
@@ -206,22 +188,18 @@ class IncPopupRule_Events extends IncPopupRule {
 	public function inject_script_on_click() {
 		?>
 		<script>
-			(function() {
-				//
-				// TODO: REVIEW AND FIX THIS. LOOKS STRANGE (why "mouseleave"??)....
-				//
-				jQuery(document).on('popup-init', function( e, popover, data ) {
-					var data = data || {};
-					if ( ! data.wait_for_event || ! data.click_selector ) {
-						return true;
-					}
-
-					jQuery(document).one('click', data.click_selector, function (e) {
-						popover.resolve();
-						return false;
-					});
-				});
+			jQuery(function(){
+				setTimeout(function(){
+					inc_popup.extend.custom_handler = function( popup ) {
+						if ( popup.data.display_data['click_multi'] ) {
+							jQuery(document).on( 'click', popup.data.display_data['click'], popup.show );
+						} else {
+							jQuery(document).one( 'click', popup.data.display_data['click'], popup.show );
+						}
+					};
+				}, 10);
 			});
+
 		</script>
 		<?php
 	}

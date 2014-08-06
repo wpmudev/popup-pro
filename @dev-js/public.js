@@ -34,7 +34,7 @@
 		 * Depending on the "multi_open" flag it can be opened again.
 		 */
 		this.close_popup = function close_popup() {
-			if ( me.data.multi_open ) {
+			if ( me.data.display_data['click_multi'] ) {
 				$po_old_bg.hide();
 				$po_div.hide();
 			} else {
@@ -55,15 +55,14 @@
 		};
 
 		/**
-		 * When user clicked on the background-layer
+		 * When user clicked on the background-layer.
 		 */
 		this.background_clicked = function background_clicked( ev ) {
-			console.log ('Background clicked');
 			var el = jQuery( ev.target );
 
 			if ( el.hasClass( 'wdpu-background' ) ) {
-				console.log ('Close the layer');
-				// TODO: Check condition "Close on background-click"
+				if ( ! me.data.overlay_close ) { return; }
+
 				me.close_popup();
 			}
 		}
@@ -121,31 +120,98 @@
 
 			$doc.trigger( 'popup-init', [me, me.data] );
 
-			if ( ! me.have_popup ) {
+			if ( me.have_popup ) {
+				switch ( me.data.display ) {
+					case 'scroll':
+						$win.on( 'scroll', me.show_at_position );
+						break;
+
+					case 'anchor':
+						$win.on( 'scroll', me.show_at_element );
+						break;
+
+					case 'delay':
+						var delay = me.data.display_data.delay * 1000;
+						if ( 'm' == me.data.display_data.delay_type ) {
+							delay *= 60;
+						}
+
+						window.setTimeout( function() {
+							me.show();
+						}, delay );
+						break;
+
+					default:
+						// A custom action will show the Pop Up (e.g. click/leave)
+						setTimeout(function() {
+							if ( 'function' == typeof me.custom_handler ) {
+								me.custom_handler( me );
+							}
+						}, 20);
+				}
+
+			} else {
 				// Pop Up was rejected during popup-init event. Do not display.
 				me.next_popup();
-			} else {
-				setTimeout(function () {
-					// We're waiting for some javascript event before showing the Pop Up.
-					if ( me.data.wait_for_event ) { return false; }
-
-					$po_back.on( 'click', me.background_clicked );
-
-					window.setTimeout(function() {
-						me.show();
-						if ( me.data.multi_open ) {
-							$doc.on('popup-closed', me.reinit);
-						}
-					}, me.data.delay);
-				}, 50);
 			}
-		}
+		};
+
+		/**
+		 * Observe the scroll-top to trigger the Pop Up.
+		 */
+		this.show_at_position = function show_at_position( ev ) {
+			var height, perc,
+				el = jQuery( this ),
+				top = el.scrollTop();
+
+			switch ( me.data.display_data.scroll_type ) {
+				case 'px':
+					if ( top >= me.data.display_data.scroll ) {
+						$win.off( 'scroll', me.show_at_position );
+						me.show();
+					}
+					break;
+
+				case '%':
+				default:
+					height = $doc.height() - $win.height();
+					perc = 100 * top / height;
+
+					if ( perc >= me.data.display_data.scroll ) {
+						$win.off( 'scroll', me.show_at_position );
+						me.show();
+					}
+					break;
+			}
+		};
+
+		/**
+		 * Tests if a specific HTML element is visible to trigger the Pop Up.
+		 * We intentionally calculate el_top every time this function is called
+		 * because the element may be hidden or not present at page load.
+		 */
+		this.show_at_element = function show_at_element( ev ) {
+			var anchor = jQuery( me.data.display_data.anchor ),
+				view_top = $win.scrollTop(),
+				view_bottom = view_top + $win.height(),
+				el_top = anchor.offset().top,
+				offset = view_bottom - el_top;
+
+			// When 10px of the element are visible show the Pop Up.
+			if ( offset > 10 ) {
+				$win.off( 'scroll', me.show_at_element );
+				me.show();
+			}
+		};
 
 		/**
 		 * Display the Pop Up!
 		 */
 		this.show = function show() {
 			me.move_popup(me.data);
+
+			$po_back.on( 'click', me.background_clicked );
+			$doc.on( 'popup-closed', me.reinit );
 
 			$win.off("resize.popup").on("resize.popup", function () {
 				me.move_popup(me.data);
@@ -158,11 +224,11 @@
 				.on( "click", me.close_forever );
 
 			if ( me.data && me.data.close_hide ) {
-				$po_close.off( "click", me.close_forever )
-					.on( "click", me.close_forever );
+				$po_close.off( 'click', me.close_forever )
+					.on( 'click', me.close_forever );
 			} else {
-				$po_close.off( "click", me.close_popup )
-					.on( "click", me.close_popup );
+				$po_close.off( 'click', me.close_popup )
+					.on( 'click', me.close_popup );
 			}
 
 			$po_msg.hover(function() {
@@ -316,10 +382,12 @@
 
 		/**
 		 * Used for certain rules (e.g. on-click rule) to show the Pop Up
-		 * again when the rule validates a second time
+		 * again when the rule validates a second time.
 		 */
 		this.reinit = function reinit() {
-			me.maybe_show_popup();
+			if ( me.data.display_data['click_multi'] ) {
+				me.maybe_show_popup();
+			}
 		};
 
 
@@ -384,8 +452,9 @@
 
 		// Only expose the "init" and "load" functions of the Pop Up.
 		return {
-			init: this.init,
-			load: this.load_popup
+			init: me.init,
+			load: me.load_popup,
+			extend: me
 		};
 	};
 

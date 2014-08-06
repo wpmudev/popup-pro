@@ -114,9 +114,7 @@ jQuery(function init_admin() {
 	function init_edit_controls() {
 		var chk_colors = jQuery( '#po-custom-colors' ),
 			chk_size = jQuery( '#po-custom-size' ),
-			opt_disp_delay = jQuery( '#po-display-delay' ),
-			opt_disp_scroll = jQuery( '#po-display-scroll' ),
-			opt_disp_anchor = jQuery( '#po-display-anchor' ),
+			opt_display = jQuery( '[name=po_display]' ),
 			chk_can_hide = jQuery( '#po-can-hide' ),
 			chk_close_hides = jQuery( '#po-close-hides' );
 
@@ -129,8 +127,6 @@ jQuery(function init_admin() {
 				group_or = me.data( 'or' ),
 				group_and = me.data( 'and' ),
 				is_active = false;
-
-			if ( ! sect.length ) { return; }
 
 			if ( group_or ) {
 				var group = jQuery( group_or );
@@ -149,7 +145,7 @@ jQuery(function init_admin() {
 					.removeClass( 'disabled' );
 			} else {
 				sect.addClass( 'inactive' );
-				// Don't set .prop('disabled', true)!
+				// Do NOT set .prop('disabled', true)!
 				sect.find( 'input,select,textarea,a' )
 					.prop( 'readonly', true )
 					.addClass( 'disabled' );
@@ -224,17 +220,16 @@ jQuery(function init_admin() {
 		chk_size.click( toggle_section );
 		chk_can_hide.click( toggle_section );
 		chk_close_hides.click( toggle_section );
-		opt_disp_delay.click( toggle_section_group );
-		opt_disp_scroll.click( toggle_section_group );
-		opt_disp_anchor.click( toggle_section_group );
+		opt_display.click( toggle_section_group );
 
 		toggle_section.call( chk_colors );
 		toggle_section.call( chk_size );
 		toggle_section.call( chk_can_hide );
 		toggle_section.call( chk_close_hides );
-		toggle_section.call( opt_disp_delay );
-		toggle_section.call( opt_disp_scroll );
-		toggle_section.call( opt_disp_anchor );
+
+		opt_display.each(function() {
+			toggle_section.call( jQuery( this ) );
+		})
 
 		create_sliders();
 	}
