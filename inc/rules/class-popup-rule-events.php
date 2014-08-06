@@ -101,7 +101,7 @@ class IncPopupRule_Events extends IncPopupRule {
 				//
 				// TODO: REVIEW AND FIX THIS. LOOKS STRANGE (why "mouseleave"??)....
 				//
-				jQuery(document).on('popover-init', function( e, popover, data ) {
+				jQuery(document).on('popup-init', function( e, popover, data ) {
 					var data = data || {};
 					if ( ! data.wait_for_event || ! data.fire_on_exit ) {
 						return true;
@@ -210,7 +210,7 @@ class IncPopupRule_Events extends IncPopupRule {
 				//
 				// TODO: REVIEW AND FIX THIS. LOOKS STRANGE (why "mouseleave"??)....
 				//
-				jQuery(document).on('popover-init', function( e, popover, data ) {
+				jQuery(document).on('popup-init', function( e, popover, data ) {
 					var data = data || {};
 					if ( ! data.wait_for_event || ! data.click_selector ) {
 						return true;

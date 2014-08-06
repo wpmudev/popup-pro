@@ -199,7 +199,7 @@ class IncPopupItem {
 		$this->rule_data = array();
 
 		$this->code = (object) array();
-		$this->code->id     = 'a' . md5( date( 'd' ) ) . '-po';
+		$this->code->id     = 'a' . md5( date( 'dis' ) );
 		$this->code->colors = '';
 	}
 

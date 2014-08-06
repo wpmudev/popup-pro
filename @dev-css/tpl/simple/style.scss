@@ -2,17 +2,19 @@
  * Style: Simple
  */
 
+$font_size: 15px;
+$col_primary: #488cfd;
+$col_secondary: #FFF;
+
 #messagebox {
-	.wdpu-container {
-		position: fixed;
-		z-index: 99999;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		overflow: auto;
-		background: rgba(0, 0, 0, 0.5);
-	}
+	position: fixed;
+	z-index: 99999;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+	background: rgba(0, 0, 0, 0.5);
 
 	.wdpu-holder {
 		position: absolute;
@@ -38,8 +40,21 @@
 		margin: 0 auto;
 		text-align: left;
 		padding: 5px;
-		border-radius: 10px;
 		background-color: rgba(255, 255, 255, 0.5);
+		box-shadow: 0 2px 40px rgba(0,0,0,0.3);
+
+		font-size: $font_size;
+
+		p {
+			font-size: $font_size;
+
+			&:first-child {
+				margin-top: 0;
+			}
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
 
 		.wdpu-close {
 			position: absolute;
@@ -54,7 +69,7 @@
 			color: #EEE;
 			z-index: 10;
 			transition: background .3s, color .3s, border .3s;
-			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+			box-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
 			border: 2px solid #EEE;
 			text-decoration: none;
 
@@ -71,12 +86,12 @@
 				background: #000;
 				color: #FFF;
 				border-color: #FFF;
+				box-shadow: 0 1px 11px rgba(0, 0, 0, 0.45);
 			}
 		}
 	}
 
 	.wdpu-msg {
-		border-radius: 6px;
 		overflow: hidden;
 		max-width: 800px;
 		min-width: 100px;
@@ -90,20 +105,18 @@
 			min-width: 0;
 		}
 
-		& > .wdpu-text,
-		& > .wdpu-image {
+		.wdpu-text,
+		.wdpu-image {
 			vertical-align: middle;
 			display: inline-block;
-			margin: 0 0;
 			box-sizing: border-box;
-			border: 1px solid red;
 		}
 
-		& > .wdpu-text {
+		.wdpu-text {
 			padding: 20px;
 		}
 
-		& > .wdpu-image {
+		.wdpu-image {
 			position: absolute;
 			top: 0;
 			bottom: 0;
@@ -113,11 +126,92 @@
 				max-width: 100%;
 			}
 		}
+
+		.wdpu-inner {
+			margin-bottom: 60px;
+			overflow: auto;
+
+			&.no-bm {
+				margin: 0;
+			}
+		}
+
+		.wdpu-buttons {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			padding: 20px;
+			height: 24px;
+		}
+	}
+
+
+
+	a {
+		color: $col_primary;
+		text-decoration: underline;
+		opacity: .9;
+
+		&:visited {
+			color: $col_primary;
+		}
+
+		&:hover,
+		&:active,
+		&:focus {
+			color: $col_primary;
+			opacity: 1;
+		}
+	}
+
+	.wdpu-head {
+		border-bottom: 1px solid #DDD;
+		padding-bottom: .5em;
+		margin-bottom: 1em;
+	}
+
+	.wdpu-title,
+	.wdpu-subtitle {
+		font-size: 1.5 * $font_size;
+		line-height: 1.3em;
+		margin: 0 0 .5em 0;
+		color: $col_primary;
+	}
+
+	.wdpu-title {
+		font-weight: bold;
+	}
+
+	.wdpu-subtitle {
+		font-weight: 100;
+	}
+
+	.wdpu-cta {
+		line-height: 1.2em;
+		padding: 10px 30px;
+		opacity: .9;
+		margin: 0 20px 0 0;
+		text-decoration: none;
+
+		background: $col_primary;
+		color: $col_secondary;
+
+		&:visited {
+			color: $col_secondary;
+		}
+
+		&:hover,
+		&:active,
+		&:focus {
+			color: $col_secondary;
+			opacity: 1;
+		}
 	}
 
 	/* Default: Image on right side */
 	.wdpu-text {
-		margin-right: 40%;
+		margin: 0 40% 0 0;
 	}
 	.wdpu-image {
 		text-align: right;
@@ -127,7 +221,7 @@
 
 	&.img-left {
 		.wdpu-text {
-			margin-left: 40%;
+			margin: 0 0 0 40%;
 			margin-right: 0;
 		}
 		.wdpu-image {
@@ -143,6 +237,18 @@
 		}
 		.wdpu-image {
 			display: none;
+		}
+	}
+
+	&.rounded {
+		.wdpu-cta {
+			border-radius: 5px;
+		}
+		.wdpu-msg {
+			border-radius: 6px;
+		}
+		.wdpu-wrap {
+			border-radius: 10px;
 		}
 	}
 }

@@ -4,12 +4,13 @@
 		var me = this,
 			$doc = jQuery( document ),
 			$win = jQuery( window ),
-			$po_bg = jQuery( '#darkbackground' ),
+			$po_old_bg = jQuery( '#darkbackground' ),
 			$po_div = null,
 			$po_msg = null,
 			$po_close = null,
 			$po_hide = null,
-			$po_resize = null
+			$po_resize = null,
+			$po_back = null
 			;
 
 		this.data = {};
@@ -24,7 +25,7 @@
 			me.close_popup();
 			if ( _options['preview'] ) { return false; }
 
-			me.set_cookie( 'po_h-', 1, expiry );
+			me.set_cookie( 'po_h', 1, expiry );
 			return false;
 		};
 
@@ -34,10 +35,10 @@
 		 */
 		this.close_popup = function close_popup() {
 			if ( me.data.multi_open ) {
-				$po_bg.hide();
+				$po_old_bg.hide();
 				$po_div.hide();
 			} else {
-				$po_bg.remove();
+				$po_old_bg.remove();
 				$po_div.remove();
 
 				me.have_popup = false;
@@ -53,6 +54,24 @@
 			return false;
 		};
 
+		/**
+		 * When user clicked on the background-layer
+		 */
+		this.background_clicked = function background_clicked( ev ) {
+			console.log ('Background clicked');
+			var el = jQuery( ev.target );
+
+			if ( el.hasClass( 'wdpu-background' ) ) {
+				console.log ('Close the layer');
+				// TODO: Check condition "Close on background-click"
+				me.close_popup();
+			}
+		}
+
+		/**
+		 * Resize and move the Pop Up. Triggered when Pop Up is loaded and
+		 * window is resized.
+		 */
 		this.move_popup = function move_popup() {
 			if ( me.data.custom_size ) {
 				$po_resize.width(me.data.width)
@@ -85,20 +104,32 @@
 		 */
 		this.maybe_show_popup = function maybe_show_popup() {
 			me.fetch_dom();
+			// Move the Pop Up out of the viewport but make it visible.
+			// This way the browser will start to render the contents and there
+			// will be no delay when the Pop Up is made visible later.
+			$po_div.css({
+				'opacity': 0,
+				'z-index': -1,
+				'position': 'absolute',
+				'left': -1000,
+				'width': 100,
+				'right': 'auto',
+				'top': -1000,
+				'height': 100,
+				'bottom': 'auto'
+			}).show();
 
 			$doc.trigger( 'popup-init', [me, me.data] );
-			// Legacy trigger.
-			$doc.trigger( 'popover-init', [me, me.data] );
 
 			if ( ! me.have_popup ) {
 				// Pop Up was rejected during popup-init event. Do not display.
 				me.next_popup();
 			} else {
 				setTimeout(function () {
-					$po_div.hide();
-
-					// We're waiting for some javascript event before showing the popup.
+					// We're waiting for some javascript event before showing the Pop Up.
 					if ( me.data.wait_for_event ) { return false; }
+
+					$po_back.on( 'click', me.background_clicked );
 
 					window.setTimeout(function() {
 						me.show();
@@ -106,12 +137,12 @@
 							$doc.on('popup-closed', me.reinit);
 						}
 					}, me.data.delay);
-				}, 500);
+				}, 50);
 			}
 		}
 
 		/**
-		 * Display the popup!
+		 * Display the Pop Up!
 		 */
 		this.show = function show() {
 			me.move_popup(me.data);
@@ -120,8 +151,8 @@
 				me.move_popup(me.data);
 			});
 
-			$po_div.show();
-			$po_bg.show();
+			$po_div.show().removeAttr( 'style' );
+			$po_old_bg.show();
 
 			$po_hide.off( "click", me.close_forever )
 				.on( "click", me.close_forever );
@@ -154,13 +185,36 @@
 		 * variables for easy access.
 		 */
 		this.fetch_dom = function fetch_dom() {
+			// The top container of the Pop Up.
 			$po_div = jQuery( '#' + me.data['html_id'] );
+
+			// The container that should be resized (custom size).
 			$po_resize = $po_div.find( '.resize' );
+
+			// The container that holds the message:
+			// For new styles this is same as $po_resize.
+			// For old popup styles this is a different contianer...
 			$po_msg = $po_div.find( '.wdpu-msg' );
+
+			// Close button.
 			$po_close = $po_div.find( '.wdpu-close' );
+
+			// Hide forever button.
 			$po_hide = $po_div.find( '.wdpu-hide-forever' );
 
-			if ( ! $po_resize.length ) { $po_resize = $po_div; }
+			// The modal background.
+			if ( $po_div.hasClass( 'wdpu-background' ) ) {
+				$po_back = $po_div;
+			} else {
+				$po_back = $po_div.find( '.wdpu-background' );
+				if ( ! $po_back.length && $po_old_bg.length ) {
+					$po_back = $po_old_bg;
+				}
+			}
+
+			if ( ! $po_resize.length ) {
+				$po_resize = $po_div;
+			}
 		};
 
 		/**
@@ -178,7 +232,7 @@
 			me.fetch_dom();
 
 			$po_div.hide();
-			$po_bg.hide();
+			$po_old_bg.hide();
 
 			me.maybe_show_popup();
 		};
