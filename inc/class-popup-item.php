@@ -174,8 +174,8 @@ class IncPopupItem {
 		);
 		$this->custom_colors = false;
 		$this->color = array(
-			'back' => '',
-			'fore' => '',
+			'col1' => '',
+			'col2' => '',
 		);
 		$this->style = 'default';
 		$this->deprecated_style = false;
@@ -239,12 +239,12 @@ class IncPopupItem {
 		is_numeric( $this->size['width'] ) && $this->size['width'] .= 'px';
 		is_numeric( $this->size['height'] ) && $this->size['height'] .= 'px';
 
-		isset( $data['color']['back'] ) && $this->color['back'] = $data['color']['back'];
-		isset( $data['color']['fore'] ) && $this->color['fore'] = $data['color']['fore'];
+		isset( $data['color']['col1'] ) && $this->color['col1'] = $data['color']['col1'];
+		isset( $data['color']['col2'] ) && $this->color['col2'] = $data['color']['col2'];
 		if ( isset( $data['custom_colors'] ) ) {
 			$this->custom_colors = (true == $data['custom_colors']);
 		} else {
-			$this->custom_colors = ( ! empty( $this->color['back'] ) && ! empty( $this->color['fore'] ) );
+			$this->custom_colors = ( ! empty( $this->color['col1'] ) && ! empty( $this->color['col2'] ) );
 		}
 
 		in_array( @$data['style'], $style_keys ) && $this->style = $data['style'];
@@ -275,13 +275,13 @@ class IncPopupItem {
 
 		// Color.
 		if ( ! is_array( $this->color ) ) { $this->color = array(); }
-		if ( ! isset( $this->color['back'] ) ) { $this->color['back'] = ''; }
-		if ( ! isset( $this->color['fore'] ) ) { $this->color['fore'] = ''; }
-		if ( ! empty( $this->color['back'] ) && $this->color['back'][0] !== '#' ) {
-			$this->color['back'] = '#' . $this->color['back'];
+		if ( ! isset( $this->color['col1'] ) ) { $this->color['col1'] = ''; }
+		if ( ! isset( $this->color['col2'] ) ) { $this->color['col2'] = ''; }
+		if ( ! empty( $this->color['col1'] ) && $this->color['col1'][0] !== '#' ) {
+			$this->color['col1'] = '#' . $this->color['col1'];
 		}
-		if ( ! empty( $this->color['fore'] ) && $this->color['fore'][0] !== '#' ) {
-			$this->color['fore'] = '#' . $this->color['fore'];
+		if ( ! empty( $this->color['col2'] ) && $this->color['col2'][0] !== '#' ) {
+			$this->color['col2'] = '#' . $this->color['col2'];
 		}
 
 		// Size.
@@ -334,14 +334,14 @@ class IncPopupItem {
 
 		// Display data (legacy code for old styles).
 		if ( $this->custom_colors ) {
-			$this->code->colors = 'color:' . $this->color['fore'] . ';background:' . $this->color['back'] . ';';
+			$this->code->colors = 'color:' . $this->color['col2'] . ';background:' . $this->color['col1'] . ';';
 		} else {
 			$this->code->colors = '';
 		}
 
 		// Display data.
-		$this->code->color1 = $this->color['back'];
-		$this->code->color2 = $this->color['fore'];
+		$this->code->color1 = $this->color['col1'];
+		$this->code->color2 = $this->color['col2'];
 		if ( empty ( $this->code->color1 ) ) { $this->code->color1 = '#488CFD'; }
 		if ( empty ( $this->code->color2 ) ) { $this->code->color2 = '#FFFFFF'; }
 

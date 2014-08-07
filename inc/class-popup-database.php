@@ -130,6 +130,7 @@ class IncPopupDatabase {
 				'Default Fixed' => 'old-fixed',
 				'Dark Background Fixed' => 'old-fullbackground',
 			);
+			$count = 0;
 
 			// Migrate data from build 5 to build 6!
 			foreach ( $res as $item ) {
@@ -147,6 +148,10 @@ class IncPopupDatabase {
 				} else {
 					$style = @$raw['popover_style'];
 				}
+				$colors = array(
+					'col1' => @$raw['popover_colour']['back'],
+					'col2' => @$raw['popover_colour']['fore'],
+				);
 
 				$data = array(
 					'name'          => $item->popover_title,
@@ -154,7 +159,7 @@ class IncPopupDatabase {
 					'order'         => $item->popover_order,
 					'active'        => $item->popover_active,
 					'size'          => @$raw['popover_size'],
-					'color'         => @$raw['popover_colour'],
+					'color'         => $colors,
 					'style'         => $style,
 					'can_hide'      => (true != @$raw['popoverhideforeverlink']),
 					'close_hides'   => @$raw['popover_close_hideforever'],
@@ -185,6 +190,7 @@ class IncPopupDatabase {
 				// Save the popup as custom posttype.
 				$popup = new IncPopupItem( $data );
 				$popup->save();
+				$count += 1;
 			}
 		}
 
@@ -200,13 +206,21 @@ class IncPopupDatabase {
 
 		dbDelta( $sql );
 
-		TheLib::message(
-			__(
-				'<strong>Pop Up!</strong><br />' .
-				'Your installation was successfully updated to use the ' .
-				'latest version of the plugin!', PO_LANG
-			)
-		);
+		if ( $count > 0 ) {
+			TheLib::message(
+				sprintf(
+					__(
+					'<strong>Pop Up!</strong><br />' .
+					'Your installation was successfully updated to use the ' .
+					'latest version of the plugin!<br />' .
+					'<em>Note: Some Pop Up options changed or were replaced. ' .
+					'You should have a look at your <a href="%s">Pop Ups</a> ' .
+					'to see if they still look as intended.', PO_LANG
+					),
+					admin_url( 'edit.php?post_type=' . IncPopupItem::POST_TYPE )
+				)
+			);
+		}
 
 		// Migrate the Plugin Settings.
 		$settings = IncPopupDatabase::get_settings();
