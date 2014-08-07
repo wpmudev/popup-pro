@@ -211,7 +211,8 @@ class IncPopupRule_Url extends IncPopupRule {
 			$response = true;
 		} else {
 			foreach ( $list as $match ) {
-				if ( false != stripos( $test_url, $match ) ) {
+				$res = stripos( $test_url, $match );
+				if ( false !== $res ) {
 					$response = true;
 					break;
 				}
