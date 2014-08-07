@@ -699,6 +699,13 @@ class IncPopup extends IncPopupBase {
 		$ids = array();
 		$new_order = array();
 
+		// Don't do the full re-order after every popup is saved.
+		remove_action(
+			'save_post_' . IncPopupItem::POST_TYPE,
+			array( 'IncPopup', 'post_check_order' ),
+			99, 3
+		);
+
 		foreach ( $order as $item ) {
 			if ( ! is_numeric( $item ) ) {
 				$item = preg_replace( '/[^0-9,.]/', '', $item );
@@ -710,7 +717,6 @@ class IncPopup extends IncPopupBase {
 			$popup = IncPopupDatabase::get( $id );
 			$popup->order = $pos + 1;
 			$popup->save( false );
-
 			$new_order[ $id ] = $popup->order;
 		}
 
