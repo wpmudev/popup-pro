@@ -126,7 +126,10 @@ $has_image = ! empty( $popup->image );
 			</a>
 		</div>
 
-		<div class="img-pos">
+		<div class="img-pos"
+			<?php if ( ! $has_image ) : ?>
+			style="display: none;"
+			<?php endif; ?> >
 			<label class="option <?php if ( 'left' == $popup->image_pos ) : ?>selected<?php endif; ?>">
 				<input type="radio" name="po_image_pos" value="left" <?php checked( $popup->image_pos, 'left' ); ?> />
 				<span class="image left">

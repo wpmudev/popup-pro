@@ -396,7 +396,7 @@ class IncPopupItem {
 		$this->reset();
 
 		// Item does not exist.
-		if ( ! $post ) {
+		if ( ! $post || 'auto-draft' == $post->post_status ) {
 			return;
 		}
 

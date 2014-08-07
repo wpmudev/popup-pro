@@ -45,8 +45,8 @@ $styles = apply_filters( 'popup-styles', array() );
 	<div class="col-5">
 		<label>
 			<input type="checkbox"
-				name="po_round_corners"
-				<?php checked( ! $popup->round_corners ); ?> />
+				name="po_no_round_corners"
+				<?php checked( $popup->round_corners, false ); ?> />
 			<?php _e( 'No rounded corners', PO_LANG ); ?>
 		</label>
 	</div>

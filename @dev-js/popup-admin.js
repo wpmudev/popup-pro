@@ -326,7 +326,6 @@ jQuery(function init_admin() {
 			img_label.hide();
 			img_pos.show();
 			dropzone.addClass( 'has-image' );
-			//reset.show();
 		};
 
 		// User selected an image (via drag-drop or file_frame)
@@ -336,7 +335,6 @@ jQuery(function init_admin() {
 			img_label.show();
 			img_pos.hide();
 			dropzone.removeClass( 'has-image' );
-			//reset.hide();
 		};
 
 		// User clicks on the "Add image" button.
