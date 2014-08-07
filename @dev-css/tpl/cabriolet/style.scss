@@ -209,7 +209,6 @@ $col_secondary: #000002;
 		text-align: right;
 		right: 0;
 		width: 40%;
-		border-radius: 0 5px 5px 0;
 	}
 
 	&.img-left {
@@ -221,7 +220,6 @@ $col_secondary: #000002;
 			text-align: left;
 			right: auto;
 			left: 0;
-			border-radius: 5px 0 0 5px;
 		}
 		.wdpu-buttons {
 			left: 40%;
@@ -246,6 +244,14 @@ $col_secondary: #000002;
 		}
 		.wdpu-message {
 			border-radius: 6px;
+		}
+		.wdpu-image {
+			border-radius: 0 5px 5px 0;
+		}
+		&.img-left {
+			.wdpu-image {
+				border-radius: 5px 0 0 5px;
+			}
 		}
 	}
 }
