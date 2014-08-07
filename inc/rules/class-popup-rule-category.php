@@ -2,7 +2,7 @@
 /*
 Name:        Post Categories
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Adds post category related rules.
+Description: *NOT WORKING YET* Adds post category related rules.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
@@ -28,7 +28,7 @@ class IncPopupRule_Category extends IncPopupRule {
 		$this->add_rule(
 			'category',
 			__( 'On post category', PO_LANG ),
-			__( 'Shows the Pop Up on pages that match any of the specified categories.', PO_LANG ),
+			__( '*NOT WORKING YET* Shows the Pop Up on pages that match any of the specified categories.', PO_LANG ),
 			'no_category',
 			30
 		);
@@ -37,7 +37,7 @@ class IncPopupRule_Category extends IncPopupRule {
 		$this->add_rule(
 			'no_category',
 			__( 'Not on post category', PO_LANG ),
-			__( 'Shows the Pop Up on pages that do not match any of the specified categories.', PO_LANG ),
+			__( '*NOT WORKING YET* Shows the Pop Up on pages that do not match any of the specified categories.', PO_LANG ),
 			'category',
 			30
 		);
@@ -65,7 +65,8 @@ class IncPopupRule_Category extends IncPopupRule {
 	}
 
 	/**
-	 * Injects some javascript for buddypress pages to the page footer.
+	 * Injects category details into the ajax-data collection.
+	 * (Required for any ajax loading method)
 	 *
 	 * @since  4.6
 	 */
@@ -74,12 +75,12 @@ class IncPopupRule_Category extends IncPopupRule {
 		$is_singular = is_singular() ? 1 : 0;
 		?>
 		<script>
-			jQuery(document).ajaxSend(function(e, xhr, opts) {
+			jQuery(function() {
+				console.log ('extend popup data', inc_popup);
 				var cats = JSON.stringify(<?php echo esc_js( $categories ); ?>);
 				var single = <?php echo esc_js( $is_singular ); ?>;
-				if ( opts.url.match( /\bpo_[a-z]/ ) ) {
-					opts.url += '&categories=' + cats + '&is_single=' + single;
-				}
+				inc_popup._extend.ajax_data['categories'] = cats;
+				inc_popup._extend.ajax_data['is_single'] = single;
 			});
 		</script>
 		<?php

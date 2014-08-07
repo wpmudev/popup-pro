@@ -2,7 +2,7 @@
 /*
 Name:        Post Types
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Adds post type-related rules.
+Description: *NOT WORKING YET* Adds post type-related rules.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
@@ -28,7 +28,7 @@ class IncPopupRule_Posttype extends IncPopupRule {
 		$this->add_rule(
 			'posttype',
 			__( 'For specific Post Types', PO_LANG ),
-			__( 'Shows the Pop Up on pages that match any of the specified Post Types.', PO_LANG ),
+			__( '*NOT WORKING YET* Shows the Pop Up on pages that match any of the specified Post Types.', PO_LANG ),
 			'no_posttype',
 			30
 		);
@@ -37,7 +37,7 @@ class IncPopupRule_Posttype extends IncPopupRule {
 		$this->add_rule(
 			'no_posttype',
 			__( 'Not for specific Post Types', PO_LANG ),
-			__( 'Shows the Pop Up on pages that do not match any of the specified Post Type.', PO_LANG ),
+			__( '*NOT WORKING YET* Shows the Pop Up on pages that do not match any of the specified Post Type.', PO_LANG ),
 			'posttype',
 			30
 		);

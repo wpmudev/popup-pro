@@ -16,6 +16,7 @@
 
 		this.data = {};
 		this.have_popup = false;
+		this.ajax_data = {};
 
 		/**
 		 * Close Pop Up and set the "never see again" flag.
@@ -377,12 +378,13 @@
 				po_id = id.toString();
 			}
 
-			ajax_data = {
-				'action':    'inc_popup',
-				'do':        _options['do'],
-				thefrom:     thefrom.toString(),
-				thereferrer: thereferrer.toString()
-			};
+			ajax_data = jQuery.extend( {}, me.ajax_data );
+
+			ajax_data['action']      = 'inc_popup',
+			ajax_data['do']          = _options['do'],
+			ajax_data['thefrom']     = thefrom.toString(),
+			ajax_data['thereferrer'] = thereferrer.toString()
+
 			if ( po_id ) { ajax_data['po_id'] = po_id; }
 			if ( data ) { ajax_data['data'] = data; }
 			if ( _options['preview'] ) { ajax_data['preview'] = true; }
@@ -391,7 +393,7 @@
 				url:           _options['ajaxurl'],
 				dataType:      'jsonp',
 				jsonpCallback: 'po_data',
-				data: ajax_data,
+				data:          ajax_data,
 				success: function( data ) {
 					handle_done( data );
 				},
