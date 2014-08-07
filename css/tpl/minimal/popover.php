@@ -23,10 +23,10 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 	class="wdpu-container wdpu-background <?php echo esc_attr( $msg_class ); ?>"
 	style="display: none;">
 
-	<div class="wdpu-msg resize">
+	<div class="wdpu-msg resize move">
 		<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
 
-		<div class="wdpu-msg-inner">
+		<div class="wdpu-msg-inner resize">
 			<div class="wdpu-head">
 				<?php if ( $has_title ) : ?>
 					<div class="wdpu-title">

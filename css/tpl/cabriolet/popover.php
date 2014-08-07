@@ -23,9 +23,9 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 	class="wdpu-container wdpu-background <?php echo esc_attr( $msg_class ); ?>"
 	style="display: none;">
 
-		<div class="wdpu-msg resize">
+		<div class="wdpu-msg resize move">
 
-		<div class="wdpu-msg-inner">
+		<div class="wdpu-msg-inner resize">
 			<?php if ( $has_title || $has_subtitle ) : ?>
 				<div class="wdpu-head">
 				<?php if ( $has_title ) : ?>

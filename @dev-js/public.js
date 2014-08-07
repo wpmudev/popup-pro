@@ -9,6 +9,7 @@
 			$po_msg = null,
 			$po_close = null,
 			$po_hide = null,
+			$po_move = null,
 			$po_resize = null,
 			$po_back = null
 			;
@@ -79,7 +80,7 @@
 					.height(me.data.height);
 			}
 
-			if ( ! $po_resize.hasClass( 'no-move' ) ) {
+			if ( ! $po_move.hasClass( 'no-move' ) ) {
 				// Short delay before positioning the popup to give the browser time
 				// to show/resize the popup (20ms ~ 1 screen refresh)
 				window.setTimeout(function() {
@@ -93,18 +94,18 @@
 					if ( msg_width+30 > win_width || msg_left < 0 ) {
 						if ( isNaN( me.data._switch_width ) ) {
 							me.data._switch_width = win_width;
-							$po_resize.addClass('small-width').css({ 'left': '' });
+							$po_move.addClass('small-width').css({ 'left': '' });
 						}
 					} else if ( me.data._switch_width < win_width ) {
 						me.data._switch_width = undefined;
-						$po_resize.removeClass('small-width');
-						$po_resize.css({ 'left': msg_left });
+						$po_move.removeClass('small-width');
+						$po_move.css({ 'left': msg_left });
 					} else {
-						$po_resize.css({ 'left': msg_left });
+						$po_move.css({ 'left': msg_left });
 					}
 
 					if ( msg_top < 10 ) { msg_top = 10; }
-					$po_resize.css({ 'top': msg_top });
+					$po_move.css({ 'top': msg_top });
 				}, 20);
 			}
 		};
@@ -279,6 +280,9 @@
 			// The container that should be resized (custom size).
 			$po_resize = $po_div.find( '.resize' );
 
+			// The container that should be moved (centered on screen).
+			$po_move = $po_div.find( '.move' );
+
 			// The container that holds the message:
 			// For new styles this is same as $po_resize.
 			// For old popup styles this is a different contianer...
@@ -300,9 +304,8 @@
 				}
 			}
 
-			if ( ! $po_resize.length ) {
-				$po_resize = $po_div;
-			}
+			if ( ! $po_move.length ) { $po_move = $po_div; }
+			if ( ! $po_resize.length ) { $po_resize = $po_div; }
 		};
 
 		/**
