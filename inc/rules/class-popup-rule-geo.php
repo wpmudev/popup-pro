@@ -128,7 +128,7 @@ class IncPopupRule_Country extends IncPopupRule {
 		if ( is_string( $data ) ) { $data = array( $data ); }
 		if ( ! is_array( $data ) ) { return true; }
 
-		return $this->test_country( $data );
+		return ! $this->test_country( $data );
 	}
 
 	/**
@@ -187,7 +187,7 @@ class IncPopupRule_Country extends IncPopupRule {
 		$country = false;
 
 		// See if an add-on provides the country for us.
-		$country = apply_filters( 'popup-get-country', $ip );
+		$country = apply_filters( 'popup-get-country', false, $ip );
 		if ( ! empty( $country ) ) {
 			return $country;
 		}

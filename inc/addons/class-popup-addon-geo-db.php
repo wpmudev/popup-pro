@@ -56,10 +56,11 @@ class IncPopupAddon_GeoDB {
 	 * associated country code.
 	 *
 	 * @since  1.0.0
+	 * @param  string $country The default value suggested by the filter caller.
 	 * @param  string $ip IP address to look up.
 	 * @return string The country code of the IP address.
 	 */
-	static public function get_country( $ip ) {
+	static public function get_country( $country, $ip ) {
 		global $wpdb;
 
 		$sql = '
