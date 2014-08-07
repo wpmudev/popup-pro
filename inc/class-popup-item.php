@@ -353,8 +353,8 @@ class IncPopupItem {
 		$this->script_data['close_hide'] = $this->close_hides;
 		$this->script_data['expiry'] = $this->hide_expire;
 		$this->script_data['custom_size'] = $this->custom_size;
-		$this->script_data['width'] = $this->size['width'];
-		$this->script_data['height'] = $this->size['height'];
+		$this->script_data['width'] = trim( str_replace( 'px', '', $this->size['width'] ) );
+		$this->script_data['height'] = trim( str_replace( 'px', '', $this->size['height'] ) );
 		$this->script_data['overlay_close'] = $this->overlay_close;
 		$this->script_data['display'] = $this->display;
 		$this->script_data['display_data'] = $this->display_data;

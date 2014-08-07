@@ -75,9 +75,28 @@
 		 * window is resized.
 		 */
 		this.move_popup = function move_popup() {
+			var new_width, new_height, reduce_el, reduce_w_by = 0, reduce_h_by = 0;
+
 			if ( me.data.custom_size ) {
-				$po_resize.width(me.data.width)
-					.height(me.data.height);
+				if ( me.data.height && ! isNaN( me.data.height ) ) {
+					if ( $po_resize.data( 'reduce-height' ) ) {
+						reduce_el = jQuery( $po_resize.data( 'reduce-height' ) );
+						reduce_h_by = reduce_el.outerHeight();
+					}
+					new_height = me.data.height - reduce_h_by;
+					if ( new_height < 100 ) { new_height = 100; }
+					$po_resize.height( new_height );
+				}
+
+				if ( me.data.width && ! isNaN( me.data.width ) ) {
+					if ( $po_resize.data( 'reduce-width' ) ) {
+						reduce_el = jQuery( $po_resize.data( 'reduce-width' ) );
+						reduce_w_by = reduce_el.outerWidth();
+					}
+					new_width = me.data.width - reduce_w_by;
+					if ( new_width < 100 ) { new_width = 100; }
+					$po_resize.width( new_width );
+				}
 			}
 
 			if ( ! $po_move.hasClass( 'no-move' ) ) {

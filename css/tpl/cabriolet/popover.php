@@ -23,9 +23,9 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 	class="wdpu-container wdpu-background <?php echo esc_attr( $msg_class ); ?>"
 	style="display: none;">
 
-		<div class="wdpu-msg resize move">
+		<div class="wdpu-msg move">
 
-		<div class="wdpu-msg-inner resize">
+		<div class="wdpu-msg-inner">
 			<?php if ( $has_title || $has_subtitle ) : ?>
 				<div class="wdpu-head">
 				<?php if ( $has_title ) : ?>
@@ -41,9 +41,9 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 				</div>
 			<?php endif; ?>
 
-			<div class="wdpu-message-wrap">
+			<div class="wdpu-message-wrap resize" data-reduce-height=".wdpu-head">
 				<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
-				<div class="wdpu-message">
+				<div class="wdpu-message resize" data-reduce-height=".wdpu-head">
 					<div class="wdpu-text">
 						<div class="wdpu-inner <?php if ( ! $has_buttons ) { echo esc_attr( 'no-bm' ); } ?>">
 							<div class="wdpu-content">
