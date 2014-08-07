@@ -23,7 +23,7 @@ There should be NO PLUGIN ACTIVE at this point (not even WPMU DEV dashboard)
   - Check JS console for errors.
   - Check the form if all options are available, esp
     a) the rules that were activated in Settings screen
-    b) The styles "Minimal/Simple/Cabriolet"
+    b) The styles exist "Minimal/Simple/Cabriolet"
     c) Add image function works
     d) Color-pickers work (custom color)
   - Change some options and see if the input fields are correctly disabled/enabled

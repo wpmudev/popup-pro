@@ -117,10 +117,7 @@ $has_image = ! empty( $popup->image );
 				</div>
 			</div>
 
-			<a href="#remove-image" class="reset"
-				<?php if ( ! $has_image ) : ?>
-				style="display: none;"
-				<?php endif; ?> >
+			<a href="#remove-image" class="reset">
 				<i class="dashicons dashicons-dismiss"></i>
 				<?php _e( 'Remove image', PO_LANG ); ?>
 			</a>
