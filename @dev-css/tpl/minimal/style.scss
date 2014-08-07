@@ -3,15 +3,21 @@
  */
 
 $font_size: 15px;
-$col_primary: #488cfd;
-$col_secondary: #FFF;
 
 $col_primary: #000001;
 $col_secondary: #000002;
 
+.has-popup {
+	overflow: hidden;
+
+	body {
+		overflow: hidden;
+	}
+}
+
 #messagebox {
 	position: fixed;
-	z-index: 99999;
+	z-index: 100000;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -19,32 +25,23 @@ $col_secondary: #000002;
 	overflow: auto;
 	background: rgba(0, 0, 0, 0.5);
 
-	.wdpu-holder {
+	.wdpu-msg {
 		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		padding: 0 8px 0 0;
-		text-align: center;
-
-		&:before {
-			content: '';
-			display: inline-block;
-			height: 100%;
-			vertical-align: middle;
-		}
-	}
-
-	.wdpu-wrap {
-		position: relative;
 		display: inline-block;
-		vertical-align: middle;
-		margin: 0 auto;
+		margin: 0 0 30px;
 		text-align: left;
 		box-shadow: 0 2px 40px rgba(0,0,0,0.3);
-
 		font-size: $font_size;
+
+		/* Size / responsiveness */
+		max-width: 800px;
+		min-width: 100px;
+
+		&.small-width {
+			left: 10px;
+			right: 10px;
+			width: auto;
+		}
 
 		p {
 			font-size: $font_size;
@@ -85,14 +82,13 @@ $col_secondary: #000002;
 		}
 	}
 
-	.wdpu-msg {
-		overflow: hidden;
-		max-width: 800px;
-		min-width: 100px;
+	.wdpu-msg-inner {
 		margin: 0px auto;
 		background: #FFF;
 		position: relative;
 		z-index: 1;
+		overflow: hidden;
+		max-height: 100%;
 
 		&.custom-size {
 			max-width: none;
@@ -256,10 +252,10 @@ $col_secondary: #000002;
 			border-radius: 5px;
 		}
 		.wdpu-msg {
-			border-radius: 6px;
-		}
-		.wdpu-wrap {
 			border-radius: 10px;
+		}
+		.wdpu-msg-inner {
+			border-radius: 6px;
 		}
 	}
 }

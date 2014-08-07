@@ -3,15 +3,21 @@
  */
 
 $font_size: 15px;
-$col_primary: #488cfd;
-$col_secondary: #FFF;
 
 $col_primary: #000001;
 $col_secondary: #000002;
 
+.has-popup {
+	overflow: hidden;
+
+	body {
+		overflow: hidden;
+	}
+}
+
 #messagebox {
 	position: fixed;
-	z-index: 99999;
+	z-index: 100000;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -19,31 +25,22 @@ $col_secondary: #000002;
 	overflow: auto;
 	background: rgba(0, 0, 0, 0.55);
 
-	.wdpu-holder {
+	.wdpu-msg {
 		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		padding: 0 8px 0 0;
-		text-align: center;
-
-		&:before {
-			content: '';
-			display: inline-block;
-			height: 100%;
-			vertical-align: middle;
-		}
-	}
-
-	.wdpu-wrap {
-		position: relative;
 		display: inline-block;
-		vertical-align: middle;
-		margin: 0 auto;
+		margin: 0 0 30px;
 		text-align: left;
-
 		font-size: $font_size;
+
+		/* Size / responsiveness */
+		max-width: 800px;
+		min-width: 100px;
+
+		&.small-width {
+			left: 10px;
+			right: 14px;
+			width: auto;
+		}
 
 		p {
 			font-size: $font_size;
@@ -60,43 +57,30 @@ $col_secondary: #000002;
 			position: absolute;
 			top: -12px;
 			right: -12px;
-			width: 29px;
-			height: 29px;
-			line-height: 28px;
-			text-align: center;
-			border-radius: 30px;
-			background: #333;
-			color: #EEE;
-			z-index: 10;
-			transition: background .3s, color .3s, border .3s;
-			box-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
-			border: 2px solid #EEE;
+			width: 30px;
+			height: 30px;
 			text-decoration: none;
+			opacity: .9;
+			z-index: 10;
 
-			&:before {
-				content: '\D7';
-				margin: 0 -2px 0 0;
-				position: relative;
-				font-weight: bold;
-				font-size: 24px;
-				font-family: helvetica, sans-serif !important;
+			background: transparent url(%styleurl%img/close.png) no-repeat;
+
+			@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+				background: transparent url(%styleurl%img/close@2x.png) no-repeat;
+				background-size: 30px 30px;
 			}
 
 			&:hover {
-				background: #000;
-				color: #FFF;
-				border-color: #FFF;
-				box-shadow: 0 1px 11px rgba(0, 0, 0, 0.45);
+				opacity: 1;
 			}
 		}
 	}
 
-	.wdpu-msg {
-		max-width: 800px;
-		min-width: 100px;
+	.wdpu-msg-inner {
 		margin: 0px auto;
 		position: relative;
 		z-index: 1;
+		max-height: 100%;
 
 		&.custom-size {
 			max-width: none;
@@ -106,7 +90,6 @@ $col_secondary: #000002;
 		.wdpu-message-wrap {
 			padding: 4px;
 			background: rgba(0,0,0,0.3);
-			// box-shadow: 0 2px 40px rgba(0,0,0,0.3);
 			box-shadow: 0 0px 1px 1px rgba(255, 255, 255, 0.08);
 			position: relative;
 		}
@@ -115,6 +98,8 @@ $col_secondary: #000002;
 			background: #F2F2F2;
 			position: relative;
 			box-sizing: border-box;
+			overflow: hidden;
+			max-height: 100%;
 		}
 
 		.wdpu-text {

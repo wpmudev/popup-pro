@@ -9,10 +9,21 @@ else
 	exit 1;
 fi
 
+if [ "$1" == "multisite" ]; then
+	MULTISITE=1
+else
+	MULTISITE=0
+fi
+
 CUR_DIR="$( pwd )"
 
 # Display a sumary of all parameters for the user.
 show_infos() {
+	echo "Usage:"
+	echo "  sh $0"
+	echo "  sh $0 multisite"
+	echo ""
+	echo "------------------------------------------"
 	echo "Current Plugin"
 	echo "  Plugin version:     $VER"
 	echo "  Install Dir:        wp-content/plugins/$EXPORT_FOLDER"
@@ -23,6 +34,7 @@ show_infos() {
 	echo "  WordPress User:     $WP_USER"
 	echo "  WordPress Pass:     $WP_PASS"
 	echo "  WordPress version:  $WP_VERSION"
+	echo "  WordPress source:   $WP_INSTALL_FILE"
 	echo "Test database"
 	echo "  DB Host:            $DB_HOST"
 	echo "  DB Name:            $DB_NAME"
@@ -30,6 +42,9 @@ show_infos() {
 	echo "  DB Pass:            $DB_PASS"
 	echo "------------------------------------------"
 	echo "Task: Setup a fresh WordPress installation and install this plugin"
+	if [ $MULTISITE == 1 ]; then
+		echo "      Do Multisite Installation"
+	fi
 	echo "------------------------------------------"
 }
 
@@ -49,18 +64,16 @@ create_dir() {
 	echo "- Created new WordPress directory"
 }
 
-# Download WordPress core files
+# Install WordPress core files
 install_wp() {
-	if [ $WP_VERSION == 'latest' ]; then
-		local ARCHIVE_NAME='latest'
-	else
-		local ARCHIVE_NAME="wordpress-$WP_VERSION"
+	if [ ! -f $WP_INSTALL_FILE ]; then
+		echo "- WordPress source not found. Please first download the files using this command:"
+		echo "  sh ./get-wordpress.sh"
+		exit 1;
 	fi
 
-	echo "- Download and install WordPress files (version '$WP_VERSION') ..."
-	curl -s -o "$WP_DIR"/wordpress.tar.gz http://wordpress.org/${ARCHIVE_NAME}.tar.gz
-	tar --strip-components=1 -zxmf "$WP_DIR"/wordpress.tar.gz -C "$WP_DIR"
-	rm  "$WP_DIR"/wordpress.tar.gz
+	echo "- Install WordPress files (version '$WP_VERSION') ..."
+	tar --strip-components=1 -zxmf $WP_INSTALL_FILE -C "$WP_DIR"
 	echo "- Installation finished"
 }
 
@@ -113,9 +126,20 @@ END
 		--admin_user=$WP_USER \
 		--admin_password=$WP_PASS \
 		--admin_email=$WP_EMAIL
+
+	if [ $MULTISITE == 1 ]; then
+		echo "- Convert installation to multisite..."
+		wp core multisite-convert --title="Testing network"
+
+		echo "- Create 3 more Test-Sites..."
+		wp site create --slug="site2" --title="Test Site 2"
+		wp site create --slug="site3" --title="Test Site 3"
+		wp site create --slug="site4" --title="Test Site 4"
+	fi
 }
 
 install_plugin() {
+	echo "- Installing plugin... All changes must be commited in git!"
 	if [ -f "$CUR_DIR"/archive.sh ]; then
 		cd "$CUR_DIR"
 		"$CUR_DIR"/archive.sh "$CUR_DIR"/plugin.zip

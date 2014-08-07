@@ -34,6 +34,8 @@
 		 * Depending on the "multi_open" flag it can be opened again.
 		 */
 		this.close_popup = function close_popup() {
+			jQuery( 'html' ).removeClass( 'has-popup' );
+
 			if ( me.data.display_data['click_multi'] ) {
 				$po_old_bg.hide();
 				$po_div.hide();
@@ -81,10 +83,28 @@
 				// Short delay before positioning the popup to give the browser time
 				// to show/resize the popup (20ms ~ 1 screen refresh)
 				window.setTimeout(function() {
-					$po_resize.css({
-						'top':  ($win.height() - $po_msg.height()) / 2,
-						'left': ($win.width()  - $po_msg.width()) / 2
-					});
+					var win_width = $win.width(),
+						win_height = $win.height(),
+						msg_width = $po_msg.outerWidth(),
+						msg_height = $po_msg.outerHeight(),
+						msg_left = (win_width - msg_width) / 2,
+						msg_top = (win_height - msg_height) / 2;
+
+					if ( msg_width+30 > win_width || msg_left < 0 ) {
+						if ( isNaN( me.data._switch_width ) ) {
+							me.data._switch_width = win_width;
+							$po_resize.addClass('small-width').css({ 'left': '' });
+						}
+					} else if ( me.data._switch_width < win_width ) {
+						me.data._switch_width = undefined;
+						$po_resize.removeClass('small-width');
+						$po_resize.css({ 'left': msg_left });
+					} else {
+						$po_resize.css({ 'left': msg_left });
+					}
+
+					if ( msg_top < 10 ) { msg_top = 10; }
+					$po_resize.css({ 'top': msg_top });
 				}, 20);
 			}
 		};
@@ -208,8 +228,6 @@
 		 * Display the Pop Up!
 		 */
 		this.show = function show() {
-			me.move_popup(me.data);
-
 			$po_back.on( 'click', me.background_clicked );
 			$doc.on( 'popup-closed', me.reinit );
 
@@ -219,6 +237,10 @@
 
 			$po_div.show().removeAttr( 'style' );
 			$po_old_bg.show();
+
+			me.move_popup(me.data);
+
+			jQuery( 'html' ).addClass( 'has-popup' );
 
 			$po_hide.off( "click", me.close_forever )
 				.on( "click", me.close_forever );

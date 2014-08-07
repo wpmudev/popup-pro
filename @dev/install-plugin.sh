@@ -13,6 +13,10 @@ CUR_DIR="$( pwd )"
 
 # Display a sumary of all parameters for the user.
 show_infos() {
+	echo "Usage:"
+	echo "  sh $0"
+	echo ""
+	echo "------------------------------------------"
 	echo "Current Plugin"
 	echo "  Plugin version:     $VER"
 	echo "  Install Dir:        wp-content/plugins/$EXPORT_FOLDER"
