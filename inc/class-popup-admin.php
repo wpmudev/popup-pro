@@ -89,14 +89,18 @@ class IncPopup extends IncPopupBase {
 			TheLib::add_ui( PO_CSS_URL . 'popup-admin.css' );
 			TheLib::add_ui( PO_JS_URL . 'popup-admin.min.js' );
 			TheLib::add_ui( PO_JS_URL . 'public.min.js' ); // For Preview.
-			TheLib::add_data(
-				'po_bulk',
-				array(
-					'activate' => __( 'Activate', PO_LANG ),
-					'deactivate' => __( 'Deactivate', PO_LANG ),
-					'toggle' => __( 'Toggle activation', PO_LANG ),
-				)
-			);
+
+			if ( @$_REQUEST['post_status'] != 'trash' ) {
+				TheLib::add_data(
+					'po_bulk',
+					array(
+						'activate' => __( 'Activate', PO_LANG ),
+						'deactivate' => __( 'Deactivate', PO_LANG ),
+						'toggle' => __( 'Toggle activation', PO_LANG ),
+					)
+				);
+			}
+
 			// For Preview
 			TheLib::add_data(
 				'_popup_data',
