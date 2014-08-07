@@ -146,6 +146,9 @@ install_dashboard() {
 		wp plugin install $WP_DASHBOARD_FILE --activate
 
 		wp option add wpmudev_apikey $WPMUDEV_APIKEY
+		if [ $MULTISITE == 1 ]; then
+			wp db query "INSERT INTO test_sitemeta (meta_key, meta_value) VALUES ('wpmudev_apikey', '$WPMUDEV_APIKEY')"
+		fi
 	else
 		echo "- Did not find the WPMU Dev Dashboard archive..."
 	fi

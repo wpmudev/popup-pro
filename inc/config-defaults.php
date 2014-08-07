@@ -28,14 +28,3 @@ if ( ! defined( 'PO_DEFAULT_COUNTRY' ) ) {
 if ( ! defined( 'PO_DEFAULT_EXPIRY' ) ) {
 	define( 'PO_DEFAULT_EXPIRY', 365, true );
 }
-
-// Should Pop Up content be parsed before displaying the popup (... -> &helip; etc.)?
-if ( ! defined( 'PO_ALLOW_CONTENT_FILTERING' ) ) {
-	define( 'PO_ALLOW_CONTENT_FILTERING', false, true );
-}
-
-// Should Pop Up content be filtered via the_content (allows shortcodes, etc.)?
-// For this to work, the flag PO_ALLOW_CONTENT_FILTERING has to be TRUE!
-if ( ! defined( 'PO_USE_FULL_CONTENT_FILTERING' ) ) {
-	define( 'PO_USE_FULL_CONTENT_FILTERING', false, true );
-}

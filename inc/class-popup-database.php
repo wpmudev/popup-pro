@@ -89,6 +89,7 @@ class IncPopupDatabase {
 
 		$tbl_popover = self::db_prefix( 'popover' );
 		$tbl_ip_cache = self::db_prefix( 'popover_ip_cache' );
+		$count = 0;
 
 		if ( $wpdb->get_var( 'SHOW TABLES LIKE "' . $tbl_popover . '" ' ) == $tbl_popover ) {
 			// Migrate to custom post type.
@@ -130,7 +131,6 @@ class IncPopupDatabase {
 				'Default Fixed' => 'old-fixed',
 				'Dark Background Fixed' => 'old-fullbackground',
 			);
-			$count = 0;
 
 			// Migrate data from build 5 to build 6!
 			foreach ( $res as $item ) {
