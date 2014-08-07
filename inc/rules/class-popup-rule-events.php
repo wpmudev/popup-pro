@@ -100,7 +100,7 @@ class IncPopupRule_Events extends IncPopupRule {
 				<label data-tooltip="Repeated: The Pop Up will be displayed on every click. Otherwise it will be opened only once (on the first click)" data-pos="top" data-width="200">
 					<input type="checkbox"
 						name="po_display_data[click_multi]"
-						<?php checked( @$popup->display_data['click_multi'] ); ?>/>
+						<?php checked( ! empty( $popup->display_data['click_multi'] ) ); ?>/>
 					<?php _e( 'Repeated', PO_LANG ); ?>
 				</label>
 			</span>
