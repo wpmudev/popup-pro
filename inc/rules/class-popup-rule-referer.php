@@ -176,7 +176,9 @@ class IncPopupRule_Referer extends IncPopupRule {
 			$response = true;
 		} else {
 			foreach ( $list as $item ) {
-				if ( preg_match( '#' . $item . '#i', $referer ) ) {
+				$item = trim( $item );
+				$res = stripos( $referer, $item );
+				if ( false !== $res ) {
 					$response = true;
 					break;
 				}
@@ -209,7 +211,7 @@ class IncPopupRule_Referer extends IncPopupRule {
 		);
 
 		foreach ( $patterns as $url ) {
-			if ( strpos( $referer, $url ) !== false ) {
+			if ( false !== stripos( $referer, $url ) ) {
 				if ( $url == '.google.' ) {
 					if ( $this->is_googlesearch( $referer ) ) {
 						$response = true;
