@@ -129,7 +129,7 @@ class IncPopupRule_User extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_no_comment( $data ) {
-		return $this->did_user_comment();
+		return ! $this->did_user_comment();
 	}
 
 
@@ -150,7 +150,7 @@ class IncPopupRule_User extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_comment( $data ) {
-		return ! $this->did_user_comment();
+		return $this->did_user_comment();
 	}
 
 
