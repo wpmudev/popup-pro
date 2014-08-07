@@ -219,7 +219,7 @@ class IncPopupDatabase {
 		$settings['loadingmethod'] = $cur_method;
 
 		// Migrate Add-Ons to new settings.
-		$addons = self::_get_option( 'popover_activated_addons', $default );
+		$addons = self::_get_option( 'popover_activated_addons', array() );
 		$rules = array(
 			'class-popup-rule-browser.php',
 			'class-popup-rule-geo.php',

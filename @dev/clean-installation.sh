@@ -126,7 +126,9 @@ END
 		--admin_user=$WP_USER \
 		--admin_password=$WP_PASS \
 		--admin_email=$WP_EMAIL
+}
 
+install_multisite() {
 	if [ $MULTISITE == 1 ]; then
 		echo "- Convert installation to multisite..."
 		wp core multisite-convert --title="Testing network"
@@ -135,6 +137,17 @@ END
 		wp site create --slug="site2" --title="Test Site 2"
 		wp site create --slug="site3" --title="Test Site 3"
 		wp site create --slug="site4" --title="Test Site 4"
+	fi
+}
+
+install_dashboard() {
+	if [ -f "$WP_DASHBOARD_FILE" ]; then
+		echo "- Install and activate WPMU DEV Dashboard."
+		wp plugin install $WP_DASHBOARD_FILE --activate
+
+		wp option add wpmudev_apikey $WPMUDEV_APIKEY
+	else
+		echo "- Did not find the WPMU Dev Dashboard archive..."
 	fi
 }
 
@@ -152,10 +165,25 @@ install_plugin() {
 	fi
 }
 
+populate() {
+	# Error "Can't select database":
+	# https://github.com/wp-cli/wp-cli/wiki/FAQ#error-cant-connect-to-the-database
+
+	echo "- Creating some demo posts/pages"
+	wp post generate --count=50 --post_type="post"
+	wp post generate --count=30 --post_type="page" --max_depth=3
+	wp term generate category --count=20 --max_depth=3
+	wp term generate post_tag --count=20
+	wp user generate --count=15
+}
+
 show_infos
 create_dir
 install_wp
 install_db
+populate
+install_multisite
+install_dashboard
 install_plugin
 
 echo ""

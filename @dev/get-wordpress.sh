@@ -21,6 +21,7 @@ show_infos() {
 	echo "  Download Version:   $WP_VERSION"
 	echo "  Download Dir:       $WP_INSTALL_DIR"
 	echo "  Download File:      $WP_INSTALL_FILE"
+	echo "  Dashboard File:     $WP_DASHBOARD_FILE"
 	echo "Test installation"
 	echo "  WordPress Dir:      $WP_DIR"
 	echo "  WordPress URL:      $WP_URL"
@@ -52,9 +53,17 @@ download_wp() {
 	echo "- File downloaded"
 }
 
+# Download the WPMU DEV Dashboard installer
+download_dashboard() {
+	echo "- Download WPMU DEV Dashboard ..."
+	curl -s -o $WP_DASHBOARD_FILE http://premium.wpmudev.org/wdp-un.php?action=install_wpmudev_dash
+	echo "- File downloaded"
+}
+
 show_infos
 create_dir
 download_wp
+download_dashboard
 
 echo ""
 echo "There you go: Latest WordPress files downloaded!"

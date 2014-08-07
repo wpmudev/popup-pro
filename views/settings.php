@@ -58,7 +58,7 @@ if ( IncPopupAddon_GeoDB::table_exists() ) {
 	$geo_msg = '';
 } else {
 	$geo_class = 'inactive';
-	$geo_readonly = 'readonly="readonly"';
+	$geo_readonly = 'disabled="disabled"'; // Checkboxes cannot be "readonly"...
 	$settings['geo_db'] = false;
 	$geo_msg = '<p>' . __(
 		'<strong>Note</strong>: Cannot be used, because no geo-data table ' .

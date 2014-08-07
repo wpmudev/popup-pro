@@ -7,10 +7,12 @@ Use script `clean-installation.sh` to create a fresh WordPress installation.
 1. Clean installation
 Setup a brand new WordPress installation (single site)
 Keep debugging console open to monitor network infos and JS errors.
+There should be NO PLUGIN ACTIVE at this point (not even WPMU DEV dashboard)
 
 1.1 Install and activate the plugin
   - There should be no warning and no error.
   - A new main menu item will be displayed: "Pop Up"
+  - The WPMU DEV Dashboard notice should be displayed
 
 1.2 Open Pop Up > Settings page
   - Check JS console for errors
