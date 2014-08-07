@@ -280,6 +280,8 @@ abstract class IncPopupBase {
 	 * @return array Data extracted from the $form array.
 	 */
 	static protected function prepare_formdata( $form ) {
+		if ( ! is_array( $form ) ) { $form = array(); }
+
 		$data = array(
 			// Meta: Content
 			'name' => @$form['po_name'],
@@ -295,10 +297,7 @@ abstract class IncPopupBase {
 			'style' => @$form['po_style'],
 			'round_corners' => ! isset( $form['po_no_round_corners'] ),
 			'custom_colors' => isset( $form['po_custom_colors'] ),
-			'color' => array(
-				'back' => @$form['po_color_back'],
-				'fore' => @$form['po_color_fore'],
-			),
+			'color' => @$form['po_color'],
 			'custom_size' => isset( $form['po_custom_size'] ),
 			'size' => array(
 				'width' => @$form['po_size_width'],

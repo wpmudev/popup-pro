@@ -239,12 +239,9 @@ class IncPopupItem {
 		is_numeric( $this->size['width'] ) && $this->size['width'] .= 'px';
 		is_numeric( $this->size['height'] ) && $this->size['height'] .= 'px';
 
-		isset( $data['color']['col1'] ) && $this->color['col1'] = $data['color']['col1'];
-		isset( $data['color']['col2'] ) && $this->color['col2'] = $data['color']['col2'];
+		is_array( @$data['color'] ) && $this->color = $data['color'];
 		if ( isset( $data['custom_colors'] ) ) {
 			$this->custom_colors = (true == $data['custom_colors']);
-		} else {
-			$this->custom_colors = ( ! empty( $this->color['col1'] ) && ! empty( $this->color['col2'] ) );
 		}
 
 		in_array( @$data['style'], $style_keys ) && $this->style = $data['style'];
@@ -340,10 +337,16 @@ class IncPopupItem {
 		}
 
 		// Display data.
-		$this->code->color1 = $this->color['col1'];
-		$this->code->color2 = $this->color['col2'];
-		if ( empty ( $this->code->color1 ) ) { $this->code->color1 = '#488CFD'; }
-		if ( empty ( $this->code->color2 ) ) { $this->code->color2 = '#FFFFFF'; }
+		if ( ! $this->custom_colors || empty ( $this->color['col1'] ) ) {
+			$this->code->color1 = '#488CFD';
+		} else {
+			$this->code->color1 = $this->color['col1'];
+		}
+		if ( ! $this->custom_colors || empty ( $this->color['col2'] ) ) {
+			$this->code->color2 = '#FFFFFF';
+		} else {
+			$this->code->color2 = $this->color['col2'];
+		}
 
 		$this->script_data['html_id'] = $this->code->id;
 		$this->script_data['popup_id'] = $this->id;

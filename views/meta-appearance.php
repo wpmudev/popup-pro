@@ -68,14 +68,14 @@ $styles = apply_filters( 'popup-styles', array() );
 	<div class="col-5 inp-row">
 		<input type="text"
 			class="colorpicker inp-small"
-			name="po_color_back"
-			value="<?php echo esc_attr( $popup->color['back'] ); ?>" />
+			name="po_color[col1]"
+			value="<?php echo esc_attr( $popup->color['col1'] ); ?>" />
 	</div>
 	<div class="col-5 inp-row">
 		<input type="text"
 			class="colorpicker inp-small"
-			name="po_color_fore"
-			value="<?php echo esc_attr( $popup->color['fore'] ); ?>" />
+			name="po_color[col2]"
+			value="<?php echo esc_attr( $popup->color['col2'] ); ?>" />
 	</div>
 </div>
 <div class="wpmui-grid-12 chk-custom-colors">
