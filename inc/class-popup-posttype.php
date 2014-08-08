@@ -42,8 +42,10 @@ class IncPopupPosttype {
 		// Legacy filter (with underscore)
 		self::$perms = apply_filters( 'popover-admin-access_capability', self::$perms );
 
-		// Register the posttype
-		self::setup_posttype();
+		if ( IncPopup::correct_level() ) {
+			// Register the posttype
+			self::setup_posttype();
+		}
 	}
 
 	/**
@@ -70,6 +72,13 @@ class IncPopupPosttype {
 			'not_found'           => __( 'Not found', PO_LANG ),
 			'not_found_in_trash'  => __( 'No Pop Up found in Trash', PO_LANG ),
 		);
+
+		if ( IncPopup::use_global() ) {
+			$labels['name']          = _x( 'Global Pop Ups', 'Post Type General Name', PO_LANG );
+			$labels['singular_name'] = _x( 'Global Pop Up', 'Post Type Singular Name', PO_LANG );
+			$labels['all_items']     = __( 'Global Pop Ups', PO_LANG );
+		}
+
 		$args = array(
 			'label'               => __( 'Pop Up', PO_LANG ),
 			'description'         => __( 'Display Pop Up messages on your website!', PO_LANG ),
@@ -80,7 +89,7 @@ class IncPopupPosttype {
 			'show_ui'             => true,
 			'show_in_menu'        => true,
 			'show_in_nav_menus'   => false,
-			'show_in_admin_bar'   => false,
+			'show_in_admin_bar'   => true,
 			'menu_position'       => 100,
 			'menu_icon'           => PO_IMG_URL . 'window.png',
 			'can_export'          => true,

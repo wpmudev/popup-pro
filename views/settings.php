@@ -71,6 +71,7 @@ $rule_headers = array(
 	'name'  => 'Name',
 	'desc'  => 'Description',
 	'rules' => 'Rules',
+	'limit' => 'Limit',
 );
 $ordered_rules = array();
 
@@ -210,6 +211,8 @@ $ordered_rules = array();
 				);
 				$is_active = ( in_array( $rule, $settings['rules'] ) );
 				if ( empty( $data['name'] ) ) { continue; }
+				$data['limit'] = explode( ',', @$data['limit'] );
+				$data['limit'] = array_map( 'trim', $data['limit'] );
 
 				$name = __( trim( $data['name'] ), PO_LANG );
 
@@ -218,6 +221,14 @@ $ordered_rules = array();
 				$ordered_rules[ $name ]['name'] = $name;
 				$ordered_rules[ $name ]['active'] = $is_active;
 				$ordered_rules[ $name ]['desc'] = __( trim( $data['desc'] ), PO_LANG );
+
+				if ( IncPopup::use_global() && in_array( 'no global', $data['limit'] ) ) {
+					$ordered_rules[ $name ]['disabled'] = __( 'These conditions are not available for global Pop Ups', PO_LANG );
+				} else if ( ! IncPopup::use_global() && in_array( 'global', $data['limit'] ) ) {
+					$ordered_rules[ $name ]['disabled'] = true;
+				} else {
+					$ordered_rules[ $name ]['disabled'] = false;
+				}
 			} ?>
 			<?php ksort( $ordered_rules ); ?>
 
@@ -225,19 +236,26 @@ $ordered_rules = array();
 				// Ignore Addons that have no name.
 				$data['rules'] = explode( ',', $data['rules'] );
 				$rule_id = 'po-rule-' . sanitize_html_class( $data['key'] );
+				if ( true === $data['disabled'] ) { continue; }
 				?>
 				<tr valign="top">
 					<th class="check-column" scope="row">
+						<?php if ( false == $data['disabled'] ) : ?>
 						<input type="checkbox"
 							id="<?php echo esc_attr( $rule_id ); ?>"
 							name="po_option[rules][<?php echo esc_attr( $data['key'] ); ?>]"
-							<?php checked( $data['active'] ); ?>/>
+							<?php checked( $data['active'] ); ?>
+							/>
+						<?php endif; ?>
 					</th>
 					<td class="column-name">
 						<label for="<?php echo esc_attr( $rule_id ); ?>">
 							<strong><?php echo esc_html( $data['name'] ); ?></strong>
 						</label>
 						<div><em><?php echo '' . $data['desc']; ?></em></div>
+						<?php if ( $data['disabled'] ) : ?>
+							<div><?php echo $data['disabled']; ?></div>
+						<?php endif; ?>
 					</td>
 					<td class="column-items">
 					<?php foreach ( $data['rules'] as $rule_name ) : ?>

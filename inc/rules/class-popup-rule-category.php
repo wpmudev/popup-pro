@@ -7,6 +7,7 @@ Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
 Rules:       On post category, Not on post category
+Limit:       no global
 Version:     1.0
 
 NOTE: DON'T RENAME THIS FILE!!
@@ -23,6 +24,8 @@ class IncPopupRule_Category extends IncPopupRule {
 	 */
 	protected function init() {
 		$this->filename = basename( __FILE__ );
+
+		if ( IncPopup::use_global() ) { return; }
 
 		// 'category' rule.
 		$this->add_rule(

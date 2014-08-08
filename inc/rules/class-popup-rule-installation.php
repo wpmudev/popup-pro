@@ -7,6 +7,7 @@ Author:      Philipp (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
 Rules:       Site is not a Pro-Site
+Limit:       global
 Version:     1.0
 
 NOTE: DON'T RENAME THIS FILE!!

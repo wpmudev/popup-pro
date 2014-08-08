@@ -213,14 +213,71 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6
 	 */
 	static public function admin_menus() {
-		add_submenu_page(
-			'edit.php?post_type=' . IncPopupItem::POST_TYPE,
-			__( 'Settings', PO_LANG ),
-			__( 'Settings', PO_LANG ),
-			IncPopupPosttype::$perms,
-			'settings',
-			array( 'IncPopup', 'handle_settings_page' )
-		);
+		// correct_level checks:
+		// PO_GLOBAL is true .. We have to be on network-admin/main blog.
+		// PO_GLOBAL is false .. we have to be NOT on network-admin.
+		if ( ! self::correct_level() ) { return; }
+
+		if ( is_network_admin() ) {
+			if ( 'hide' == @$_REQUEST['popup_network'] ) {
+				IncPopupDatabase::set_flag( 'network_dismiss', true );
+				wp_safe_redirect( admin_url( 'network' ) );
+				die();
+			} else if ( 'show' == @$_REQUEST['popup_network'] ) {
+				IncPopupDatabase::set_flag( 'network_dismiss', false );
+			}
+
+			if ( true == IncPopupDatabase::get_flag( 'network_dismiss' ) ) {
+				return;
+			}
+
+			add_menu_page(
+				__( 'Pop Up', PO_LANG ),
+				__( 'Pop Up', PO_LANG ),
+				IncPopupPosttype::$perms,
+				IncPopupItem::POST_TYPE . '-list',
+				array( 'IncPopup', 'network_menu_notice' ),
+				PO_IMG_URL . 'window.png',
+				100
+			);
+
+			add_submenu_page(
+				IncPopupItem::POST_TYPE . '-list',
+				__( 'Add New', PO_LANG ),
+				__( 'Add New', PO_LANG ),
+				IncPopupPosttype::$perms,
+				IncPopupItem::POST_TYPE . '-create',
+				array( 'IncPopup', 'network_menu_notice' )
+			);
+
+			add_submenu_page(
+				IncPopupItem::POST_TYPE . '-list',
+				__( 'Settings', PO_LANG ),
+				__( 'Settings', PO_LANG ),
+				IncPopupPosttype::$perms,
+				IncPopupItem::POST_TYPE . '-settings',
+				array( 'IncPopup', 'network_menu_notice' )
+			);
+		} else {
+			add_submenu_page(
+				'edit.php?post_type=' . IncPopupItem::POST_TYPE,
+				__( 'Settings', PO_LANG ),
+				__( 'Settings', PO_LANG ),
+				IncPopupPosttype::$perms,
+				'settings',
+				array( 'IncPopup', 'handle_settings_page' )
+			);
+		}
+	}
+
+	/**
+	 * The Post-Editor does not work on Multisite Network dashboard.
+	 * So display a notice and tell the user to go to the Main Site.
+	 *
+	 * @since  4.6
+	 */
+	static public function network_menu_notice() {
+		include PO_VIEWS_DIR . 'network.php';
 	}
 
 	/**

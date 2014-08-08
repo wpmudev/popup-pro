@@ -20,8 +20,7 @@ CUR_DIR="$( pwd )"
 # Display a sumary of all parameters for the user.
 show_infos() {
 	echo "Usage:"
-	echo "  sh $0"
-	echo "  sh $0 multisite"
+	echo "  sh $0 [multisite]"
 	echo ""
 	echo "------------------------------------------"
 	echo "Current Plugin"
@@ -147,7 +146,7 @@ install_dashboard() {
 
 		wp option add wpmudev_apikey $WPMUDEV_APIKEY
 		if [ $MULTISITE == 1 ]; then
-			wp db query "INSERT INTO test_sitemeta (meta_key, meta_value) VALUES ('wpmudev_apikey', '$WPMUDEV_APIKEY')"
+			wp db query "INSERT INTO test_sitemeta (site_id, meta_key, meta_value) VALUES (1, 'wpmudev_apikey', '$WPMUDEV_APIKEY')"
 		fi
 	else
 		echo "- Did not find the WPMU Dev Dashboard archive..."
@@ -180,6 +179,38 @@ populate() {
 	wp user generate --count=15
 }
 
+# The .htaccess file is for some reason not created by the above functions...
+create_htaccess() {
+	# This is a sub-directory setup
+	if [ $MULTISITE == 1 ]; then
+		cat <<EOF >"$WP_DIR"/.htaccess
+		RewriteEngine On
+		RewriteBase /
+		RewriteRule ^index\.php$ - [L]
+
+		# add a trailing slash to /wp-admin
+		RewriteRule ^([_0-9a-zA-Z-]+/)?wp-admin$ $1wp-admin/ [R=301,L]
+
+		RewriteCond %{REQUEST_FILENAME} -f [OR]
+		RewriteCond %{REQUEST_FILENAME} -d
+		RewriteRule ^ - [L]
+		RewriteRule ^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*) $2 [L]
+		RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ $2 [L]
+		RewriteRule . index.php [L]
+EOF
+	else
+		cat <<EOF >"$WP_DIR"/.htaccess
+		RewriteEngine On
+		RewriteBase /
+		RewriteRule ^index\.php$ - [L]
+
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteRule . /index.php [L]
+EOF
+	fi
+}
+
 show_infos
 create_dir
 install_wp
@@ -188,6 +219,7 @@ populate
 install_multisite
 install_dashboard
 install_plugin
+create_htaccess
 
 echo ""
 echo "There you go: $WP_URL is a fresh and clean WordPress installation!"

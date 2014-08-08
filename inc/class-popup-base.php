@@ -111,7 +111,17 @@ abstract class IncPopupBase {
 		$State = null;
 
 		if ( null === $State ) {
-			$State = self::use_global() === is_network_admin();
+			$State = false;
+			if ( ! self::use_global() ) {
+				if ( is_admin() && ! is_network_admin() ) {
+					$State = true;
+				}
+			} else {
+				$blog_id = defined( 'BLOG_ID_CURRENT_SITE' )  ? BLOG_ID_CURRENT_SITE : 0;
+				if ( is_network_admin() || $blog_id == get_current_blog_id() ) {
+					$State = true;
+				}
+			}
 		}
 
 		return $State;

@@ -285,7 +285,9 @@ class IncPopupDatabase {
 		$popup = wp_cache_get( $post_id, IncPopupItem::POST_TYPE );
 
 		if ( false === $popup ) {
+			self::before_db();
 			$popup = new IncPopupItem( $post_id );
+			self::after_db();
 			wp_cache_set( $post_id, $popup, IncPopupItem::POST_TYPE );
 		}
 		return $popup;
@@ -303,6 +305,7 @@ class IncPopupDatabase {
 		static $List = null;
 
 		if ( null === $List ) {
+			self::before_db();
 			$sql_get = "
 				SELECT ID
 				FROM {$wpdb->posts}
@@ -316,6 +319,7 @@ class IncPopupDatabase {
 				'publish'
 			);
 			$List = $wpdb->get_col( $sql );
+			self::after_db();
 		}
 
 		return $List;
@@ -329,6 +333,7 @@ class IncPopupDatabase {
 	 */
 	public function next_order() {
 		global $wpdb;
+		self::before_db();
 
 		$sql = "
 			SELECT menu_order
@@ -343,6 +348,7 @@ class IncPopupDatabase {
 		);
 		//wp_die( $sql );
 		$pos = $wpdb->get_var( $sql );
+		self::after_db();
 
 		return absint( $pos ) + 1;
 	}
@@ -354,6 +360,7 @@ class IncPopupDatabase {
 	 */
 	public function refresh_order() {
 		global $wpdb;
+		self::before_db();
 
 		// 1. Set all trashed popups to order=999999.
 		$sql_fix = "
@@ -399,6 +406,7 @@ class IncPopupDatabase {
 			);
 			$wpdb->query( $sql );
 		}
+		self::after_db();
 	}
 
 	/**
@@ -444,30 +452,91 @@ class IncPopupDatabase {
 	}
 
 	/**
+	 * Returns the value of a named flag of the current user.
+	 * Table: User-Meta
+	 *
+	 * @since  4.6
+	 * @param  string $key
+	 * @return mixed
+	 */
+	public function get_flag( $key ) {
+		$data = get_user_meta( get_current_user_id(), 'po_data', true );
+		if ( is_object( $data ) ) { $data = (array) $data; }
+		if ( ! is_array( $data ) ) { $data = array(); }
+
+		return @$data[$key];
+	}
+
+	/**
+	 * Saves a flag for the current user.
+	 * Table: User-Meta
+	 *
+	 * @since 4.6
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public function set_flag( $key, $value ) {
+		$data = get_user_meta( get_current_user_id(), 'po_data', true );
+		if ( is_object( $data ) ) { $data = (array) $data; }
+		if ( ! is_array( $data ) ) { $data = array(); }
+		$data[$key] = $value;
+
+		update_user_meta( get_current_user_id(), 'po_data', $data );
+	}
+
+	/**
 	 * Internal function to get a option value from correct options table.
+	 * Table: Blog-Options
 	 *
 	 * @since  4.6
 	 */
 	static protected function _get_option( $key, $default ) {
 		$value = $default;
+		self::before_db();
 		if ( IncPopup::use_global() ) {
 			$value = get_site_option( $key, $default );
 		} else {
 			$value = get_option( $key, $default );
 		}
+		self::after_db();
 		return $value;
 	}
 
 	/**
 	 * Internal function to save a value to the correct options table.
+	 * Table: Blog-Options
 	 *
 	 * @since 4.6
 	 */
 	static protected function _set_option( $key, $value ) {
+		self::before_db();
 		if ( IncPopup::use_global() ) {
 			update_site_option( $key, $value );
 		} else {
 			update_option( $key, $value );
+		}
+		self::after_db();
+	}
+
+	/**
+	 * Selects the correct database, in case the PO_GLOBAL flag is true.
+	 *
+	 * @since  4.6
+	 */
+	static public function before_db() {
+		if ( IncPopup::use_global() ) {
+			switch_to_blog( BLOG_ID_CURRENT_SITE );
+		}
+	}
+
+	/**
+	 * Selects the correct database, in case the PO_GLOBAL flag is true.
+	 *
+	 * @since  4.6
+	 */
+	static public function after_db() {
+		if ( IncPopup::use_global() ) {
+			restore_current_blog();
 		}
 	}
 
