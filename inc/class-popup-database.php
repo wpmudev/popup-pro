@@ -194,7 +194,7 @@ class IncPopupDatabase {
 					'rule'          => $checks,
 					'rule_data' => array(
 						'count'          => @$raw['popover_count'],
-						'ereg'           => @$raw['popover_ereg'],
+						'referrer'       => @$raw['popover_ereg'],
 						'exit'           => @$raw['on_exit'],
 						'url'            => @$raw['onurl'],
 						'no_url'         => @$raw['notonurl'],
@@ -269,7 +269,7 @@ class IncPopupDatabase {
 			'class-popup-rule-browser.php',
 			'class-popup-rule-geo.php',
 			'class-popup-rule-popup.php',
-			'class-popup-rule-referer.php',
+			'class-popup-rule-referrer.php',
 			'class-popup-rule-url.php',
 			'class-popup-rule-user.php',
 			'class-popup-rule-installation.php',
@@ -456,9 +456,10 @@ class IncPopupDatabase {
 				'class-popup-rule-browser.php',
 				'class-popup-rule-geo.php',
 				'class-popup-rule-popup.php',
-				'class-popup-rule-referer.php',
+				'class-popup-rule-referrer.php',
 				'class-popup-rule-url.php',
 				'class-popup-rule-user.php',
+				'class-popup-rule-installation.php',
 			)
 		);
 
