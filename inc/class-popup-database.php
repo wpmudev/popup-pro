@@ -138,8 +138,8 @@ class IncPopupDatabase {
 				'referrer' => 'referrer',
 				'count' => 'count',
 				'max_width' => 'width',
-				'on_exit' => 'on_exit',
-				'on_click' => 'on_click',
+				//'on_exit' => 'on_exit',
+				//'on_click' => 'on_click',
 			);
 
 			// Translate style to new keys
@@ -169,6 +169,9 @@ class IncPopupDatabase {
 					'col1' => @$raw['popover_colour']['back'],
 					'col2' => @$raw['popover_colour']['fore'],
 				);
+				$display = 'delay';
+				if ( isset( $raw['on_exit'] ) ) { $display = 'leave'; }
+				if ( isset( $raw['on_click'] ) ) { $display = 'click'; }
 
 				$data = array(
 					'name'          => $item->popover_title,
@@ -181,22 +184,22 @@ class IncPopupDatabase {
 					'can_hide'      => ('no' == @$raw['popoverhideforeverlink']),
 					'close_hides'   => ('no' != @$raw['popover_close_hideforever']),
 					'hide_expire'   => absint( @$raw['popover_hideforever_expiry'] ),
-					'display'       => 'delay',
+					'display'       => $display,
 					'display_data'  => array(
 						'delay'      => absint( @$raw['popoverdelay'] ),
 						'delay_type' => 's',
+						'click'      => @$raw['on_click']['selector'],
+						'click_multi' => ! empty( $raw['on_click']['selector'] ),
 					),
 					'rule'          => $checks,
 					'rule_data' => array(
 						'count'          => @$raw['popover_count'],
 						'ereg'           => @$raw['popover_ereg'],
-						'min_width'      => @$raw['max_width'],
 						'exit'           => @$raw['on_exit'],
-						'click'          => @$raw['on_click'],
 						'url'            => @$raw['onurl'],
 						'no_url'         => @$raw['notonurl'],
-						'adv_url'        => @$raw['advanced_urls'],
-						'no_adv_url'     => @$raw['not-advanced_urls'],
+						'adv_url'        => @$raw['advanced_urls']['urls'],
+						'no_adv_url'     => @$raw['not-advanced_urls']['urls'],
 						'country'        => @$raw['incountry'],
 						'no_country'     => @$raw['notincountry'],
 						'category'       => @$raw['categories'],
@@ -205,6 +208,9 @@ class IncPopupDatabase {
 						'no_posttype'    => @$raw['not-post_types'],
 						'xprofile'       => @$raw['xprofile_value'],
 						'no_xprofile'    => @$raw['not-xprofile_value'],
+						'width' => array(
+							'min'        => @$raw['max_width']['width'],
+						),
 					)
 				);
 				// Save the popup as custom posttype.
