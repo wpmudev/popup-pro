@@ -278,6 +278,12 @@ jQuery(function init_admin() {
 				excl1 = all_rules.find( '.rule-' + keys[ ind ] );
 				excl2 = active_rules.find( '#po-rule-' + keys[ ind ] );
 
+				if ( excl1.hasClass( 'on' ) ) {
+					// Rule is active; possibly migrated from old Pop Up editor
+					// so we cannot disable the rule now...
+					continue;
+				}
+
 				excl1.prop( 'disabled', active );
 				if ( active ) {
 					excl1.addClass( 'inactive off' ).removeClass( 'on' );

@@ -24,6 +24,18 @@ class IncPopupDatabase {
 	}
 
 	/**
+	 * Checks the database version and migrates to latest version is required.
+	 *
+	 * @since  4.6
+	 */
+	static public function check_db() {
+		// Update the DB if required.
+		if ( ! IncPopupDatabase::db_is_current() ) {
+			IncPopupDatabase::db_update();
+		}
+	}
+
+	/**
 	 * Checks the state of the database and returns true when the DB has a valid
 	 * format for the current plugin version.
 	 *
@@ -31,8 +43,13 @@ class IncPopupDatabase {
 	 * @return boolean Database state (true = everything okay)
 	 */
 	static public function db_is_current() {
-		// This value is only changed by function db_update() below.
 		$cur_version = self::_get_option( 'popover_installed', 0 );
+
+		// When no DB-Values exist yet then don't even show the notice in
+		// the Network dashboard.
+		if ( ! $cur_version ) {
+			IncPopupDatabase::set_flag( 'network_dismiss', true );
+		}
 
 		return $cur_version == PO_BUILD;
 	}
@@ -134,13 +151,13 @@ class IncPopupDatabase {
 
 			// Migrate data from build 5 to build 6!
 			foreach ( $res as $item ) {
-				$raw = unserialize( $item->popover_settings );
+				$raw = maybe_unserialize( $item->popover_settings );
 				$checks = explode( ',', @$raw['popover_check']['order'] );
 				foreach ( $checks as $ind => $key ) {
-					if ( empty ( $key ) ) {
-						unset( $checks[$ind] );
+					if ( isset( $mapping[$key] ) ) {
+						$checks[$ind] = $mapping[$key];
 					} else {
-						$checks[$ind] = isset( $mapping[$key])  ? $mapping[$key] : $key;
+						unset( $checks[$ind] );
 					}
 				}
 				if ( isset( $style_mapping[ @$raw['popover_style'] ] ) ) {
@@ -157,16 +174,19 @@ class IncPopupDatabase {
 					'name'          => $item->popover_title,
 					'content'       => $item->popover_content,
 					'order'         => $item->popover_order,
-					'active'        => $item->popover_active,
+					'active'        => (true == $item->popover_active),
 					'size'          => @$raw['popover_size'],
 					'color'         => $colors,
 					'style'         => $style,
-					'can_hide'      => (true != @$raw['popoverhideforeverlink']),
-					'close_hides'   => @$raw['popover_close_hideforever'],
-					'hide_expire'   => @$raw['popover_hideforever_expiry'],
+					'can_hide'      => ('no' == @$raw['popoverhideforeverlink']),
+					'close_hides'   => ('no' != @$raw['popover_close_hideforever']),
+					'hide_expire'   => absint( @$raw['popover_hideforever_expiry'] ),
 					'display'       => 'delay',
-					'delay'         => @$raw['popoverdelay'],
-					'rules'         => $checks,
+					'display_data'  => array(
+						'delay'      => absint( @$raw['popoverdelay'] ),
+						'delay_type' => 's',
+					),
+					'rule'          => $checks,
 					'rule_data' => array(
 						'count'          => @$raw['popover_count'],
 						'ereg'           => @$raw['popover_ereg'],
@@ -223,8 +243,9 @@ class IncPopupDatabase {
 		}
 
 		// Migrate the Plugin Settings.
-		$settings = IncPopupDatabase::get_settings();
-		$cur_method = @$settings['loadingmethod'];
+		$old_settings = IncPopupDatabase::_get_option( 'popover-settings', array() );
+		$settings = array();
+		$cur_method = @$old_settings['loadingmethod'];
 		switch ( $cur_method ) {
 			case '':
 			case 'external':     $cur_method = 'ajax'; break;
@@ -233,7 +254,11 @@ class IncPopupDatabase {
 		$settings['loadingmethod'] = $cur_method;
 
 		// Migrate Add-Ons to new settings.
-		$addons = self::_get_option( 'popover_activated_addons', array() );
+		// Add-Ons were always saved in the local Options-table by old version.
+		self::before_db();
+		$addons = get_option( 'popover_activated_addons', array() );
+		self::after_db();
+
 		$rules = array(
 			'class-popup-rule-browser.php',
 			'class-popup-rule-geo.php',
@@ -241,7 +266,9 @@ class IncPopupDatabase {
 			'class-popup-rule-referer.php',
 			'class-popup-rule-url.php',
 			'class-popup-rule-user.php',
+			'class-popup-rule-installation.php',
 		);
+
 		foreach ( $addons as $addon ) {
 			switch ( $addon ) {
 				case 'anonymous_loading.php':
@@ -429,7 +456,7 @@ class IncPopupDatabase {
 			)
 		);
 
-		$data = (array) self::_get_option( 'popover-settings', array() );
+		$data = (array) self::_get_option( 'inc_popup-config', array() );
 
 		if ( ! is_array( $data ) ) { $data = array(); }
 		foreach ( $defaults as $key => $def_value ) {
@@ -448,7 +475,7 @@ class IncPopupDatabase {
 	 * @param  array $value The value to save.
 	 */
 	public function set_settings( $value ) {
-		self::_set_option( 'popover-settings', $value );
+		self::_set_option( 'inc_popup-config', $value );
 	}
 
 	/**

@@ -29,16 +29,17 @@ abstract class IncPopupBase {
 
 		TheLib::translate_plugin( PO_LANG, PO_LANG_DIR );
 
-		// Update the DB if required.
-		if ( ! IncPopupDatabase::db_is_current() ) {
-			IncPopupDatabase::db_update();
-		}
-
 		// Register the popup post type.
 		add_action(
 			'init',
 			array( 'IncPopupPosttype', 'instance' ),
 			99
+		);
+
+		// Register the popup post type.
+		add_action(
+			'wp_loaded',
+			array( 'IncPopupDatabase', 'check_db' )
 		);
 
 		// Load active add-ons.
