@@ -13,6 +13,13 @@ class IncPopupPosttype {
 	static public $perms = '';
 
 	/**
+	 * The position of the Pop Up main menu.
+	 * We use a trick to avoid collissions with other menu-items
+	 * @var int
+	 */
+	static public $menu_pos = 101;
+
+	/**
 	 * Returns the singleton instance of the popup database class.
 	 *
 	 * @since  4.6
@@ -41,6 +48,14 @@ class IncPopupPosttype {
 
 		// Legacy filter (with underscore)
 		self::$perms = apply_filters( 'popover-admin-access_capability', self::$perms );
+
+		/**
+		 * Allows users to avoid conflicts with other menu items by assigning a
+		 * different menu position.
+		 *
+		 * @var int
+		 */
+		self::$menu_pos = apply_filters( 'popover-admin-menu-position', self::$menu_pos );
 
 		// Register the posttype
 		self::setup_posttype();
@@ -89,6 +104,7 @@ class IncPopupPosttype {
 			'show_in_menu'        => $manage_popups,
 			'show_in_nav_menus'   => false,
 			'show_in_admin_bar'   => $manage_popups,
+			'menu_position'       => self::$menu_pos,
 			'menu_icon'           => PO_IMG_URL . 'window.png',
 			'can_export'          => true,
 			'has_archive'         => false,

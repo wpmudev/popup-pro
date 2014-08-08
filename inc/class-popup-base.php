@@ -37,7 +37,8 @@ abstract class IncPopupBase {
 		// Register the popup post type.
 		add_action(
 			'init',
-			array( 'IncPopupPosttype', 'instance' )
+			array( 'IncPopupPosttype', 'instance' ),
+			99
 		);
 
 		// Load active add-ons.

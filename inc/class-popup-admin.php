@@ -43,7 +43,6 @@ class IncPopup extends IncPopupBase {
 			array( 'IncPopup', 'admin_menus' )
 		);
 
-
 		// Initialize hooks that are used only in the current module.
 		add_action(
 			'current_screen',
@@ -162,6 +161,13 @@ class IncPopup extends IncPopupBase {
 					array( 'IncPopup', 'post_query' )
 				);
 
+				// Filter should return the custom "items per page" value.
+				add_filter(
+					'edit_posts_per_page',
+					array( 'IncPopup', 'post_item_per_page' ),
+					10, 2
+				);
+
 				// Remove the posts-per-page filter from screen options.
 				add_action(
 					'admin_head',
@@ -237,7 +243,8 @@ class IncPopup extends IncPopupBase {
 				IncPopupPosttype::$perms,
 				IncPopupItem::POST_TYPE . '-list',
 				array( 'IncPopup', 'network_menu_notice' ),
-				PO_IMG_URL . 'window.png'
+				PO_IMG_URL . 'window.png',
+				IncPopupPosttype::$menu_pos
 			);
 
 			add_submenu_page(
@@ -735,6 +742,23 @@ class IncPopup extends IncPopupBase {
 		$query->set( 'posts_per_page', -1 );
 		$query->set( 'order', 'ASC' );
 		$query->set( 'orderby', 'menu_order' );
+	}
+
+	/**
+	 * Returns the custom value of "items-per-page".
+	 * This value is used by WordPress to generate the pagination links.
+	 *
+	 * @since  4.6
+	 * @param  int $value Default value set in Database
+	 * @param  string $post_type
+	 * @return int Customized value
+	 */
+	static public function post_item_per_page( $value, $post_type ) {
+		if ( $post_type == IncPopupItem::POST_TYPE ) {
+			// Setting to -1 works, but will not display text "17 items" in the top/right corner.
+			$value = 100000;
+		}
+		return $value;
 	}
 
 	/**
