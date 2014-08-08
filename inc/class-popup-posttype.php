@@ -42,10 +42,8 @@ class IncPopupPosttype {
 		// Legacy filter (with underscore)
 		self::$perms = apply_filters( 'popover-admin-access_capability', self::$perms );
 
-		if ( IncPopup::correct_level() ) {
-			// Register the posttype
-			self::setup_posttype();
-		}
+		// Register the posttype
+		self::setup_posttype();
 	}
 
 	/**
@@ -55,6 +53,7 @@ class IncPopupPosttype {
 	 */
 	static private function setup_posttype() {
 		// Code generated at http://generatewp.com/post-type/
+		$manage_popups = ( true == IncPopup::correct_level() );
 
 		// Register Custom Post Type
 		$labels = array(
@@ -86,11 +85,10 @@ class IncPopupPosttype {
 			'supports'            => array( '' ),
 			'hierarchical'        => false,
 			'public'              => false,
-			'show_ui'             => true,
-			'show_in_menu'        => true,
+			'show_ui'             => $manage_popups,
+			'show_in_menu'        => $manage_popups,
 			'show_in_nav_menus'   => false,
-			'show_in_admin_bar'   => true,
-			'menu_position'       => 100,
+			'show_in_admin_bar'   => $manage_popups,
 			'menu_icon'           => PO_IMG_URL . 'window.png',
 			'can_export'          => true,
 			'has_archive'         => false,

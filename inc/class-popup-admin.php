@@ -237,8 +237,7 @@ class IncPopup extends IncPopupBase {
 				IncPopupPosttype::$perms,
 				IncPopupItem::POST_TYPE . '-list',
 				array( 'IncPopup', 'network_menu_notice' ),
-				PO_IMG_URL . 'window.png',
-				100
+				PO_IMG_URL . 'window.png'
 			);
 
 			add_submenu_page(
@@ -258,6 +257,9 @@ class IncPopup extends IncPopupBase {
 				IncPopupItem::POST_TYPE . '-settings',
 				array( 'IncPopup', 'network_menu_notice' )
 			);
+
+			global $submenu;
+			$submenu[IncPopupItem::POST_TYPE . '-list'][0][0] = _x( 'Global Pop Ups', 'Post Type General Name', PO_LANG );
 		} else {
 			add_submenu_page(
 				'edit.php?post_type=' . IncPopupItem::POST_TYPE,
@@ -730,7 +732,7 @@ class IncPopup extends IncPopupBase {
 	static public function post_query( $query ) {
 		if ( ! $query->is_main_query() ) { return; }
 
-		$query->set( 'posts_per_page', 0 );
+		$query->set( 'posts_per_page', -1 );
 		$query->set( 'order', 'ASC' );
 		$query->set( 'orderby', 'menu_order' );
 	}
@@ -968,6 +970,9 @@ class IncPopup extends IncPopupBase {
 
 		// This save event is for a different post type... ??
 		if ( IncPopupItem::POST_TYPE != @$_POST['post_type'] ) { return; }
+
+		// Global Pop Up modified in a Network-Blog that is not the Main-Blog.
+		if ( ! IncPopup::correct_level() ) { return; }
 
 		// User does not have permissions for this.
 		if ( ! current_user_can( IncPopupPosttype::$perms ) ) { return; }
