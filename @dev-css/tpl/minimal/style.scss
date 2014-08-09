@@ -67,6 +67,12 @@ $col_secondary: #000002;
 			transition: color .3s;
 			text-decoration: none;
 
+			&.no-title {
+			width: 30px;
+			height: 30px;
+			line-height: 30px;
+			}
+
 			&:before {
 				content: '\D7';
 				margin: 0 -2px 0 0;

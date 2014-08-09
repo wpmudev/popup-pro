@@ -9,6 +9,7 @@ $has_subtitle = ! empty( $this->subtitle );
 $has_cta = ! empty( $this->cta_label ) && ! empty( $this->cta_link );
 $has_img = ! empty( $this->image );
 $has_buttons = $has_cta || $this->can_hide;
+$show_title = $has_title || $has_subtitle;
 
 $msg_class = '';
 if ( $has_img ) {
@@ -24,9 +25,12 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 	style="display: none;">
 
 	<div class="wdpu-msg resize move">
-		<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
+		<a href="#"
+			class="wdpu-close <?php echo esc_attr( $show_title ? '' : 'no-title' ); ?>"
+			title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
 
 		<div class="wdpu-msg-inner resize">
+			<?php if ( $show_title ) : ?>
 			<div class="wdpu-head">
 				<?php if ( $has_title ) : ?>
 					<div class="wdpu-title">
@@ -39,6 +43,7 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 					</div>
 				<?php endif; ?>
 			</div>
+			<?php endif; ?>
 
 			<div class="wdpu-middle">
 				<div class="wdpu-text">
