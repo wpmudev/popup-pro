@@ -181,6 +181,9 @@ class IncPopup extends IncPopupBase {
 				TheLib::add_css( 'wp-color-picker' ); // WordPress core script
 				TheLib::add_js( 'wp-color-picker' ); // WordPress core script
 
+				// See if a custom action should be executed (e.g. duplicate)
+				self::form_check_actions();
+
 				// Display the "Pop Up Title" field in top of the form.
 				add_action(
 					'edit_form_after_title',
@@ -475,7 +478,8 @@ class IncPopup extends IncPopupBase {
 				}
 
 				if ( $can_edit ) : ?>
-					<a href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>">
+					<a href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>"
+						title="<?php _e( 'Edit this Pop Up', PO_LANG ); ?>">
 						<span class="the-title"><?php echo esc_html( $popup->name ); ?></span>
 					</a>
 				<?php else : ?>
@@ -838,6 +842,34 @@ class IncPopup extends IncPopupBase {
 	=======================================
 	\*===================================*/
 
+
+	/**
+	 * Executes custom form actions, such as "duplicate Pop Up"
+	 *
+	 * @since  4.6
+	 */
+	static protected function form_check_actions() {
+		$popup_id = absint( @$_REQUEST['post'] );
+		$action = @$_REQUEST['do'];
+
+		if ( empty( $popup_id ) || empty( $action ) ) { return; }
+
+		switch ( $action ) {
+			case 'duplicate':
+				$item = IncPopupDatabase::get( $popup_id );
+				$item->id = 0;
+				$item->name = '(Copy) ' . $item->name;
+				$item->save();
+
+				// Show the new item in the editor.
+				$new_url = remove_query_arg( array( 'post', 'do' ) );
+				$new_url = add_query_arg( array( 'post' => $item->id ), $new_url );
+				wp_safe_redirect( $new_url );
+				die();
+
+				break;
+		}
+	}
 
 	/**
 	 * Register custom metaboxes for the Pop Up editor

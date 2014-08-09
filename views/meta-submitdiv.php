@@ -6,6 +6,9 @@
  * Available variables: $popup
  */
 
+$delete_url = get_delete_post_link( $post->ID );
+$duplicate_url = add_query_arg( 'do', 'duplicate' );
+
 ?>
 <div class="submitbox" id="submitpost">
 	<?php /* Save/Deactivate/Preview */ ?>
@@ -56,7 +59,7 @@
 	<div id="major-publishing-actions" class="non-sticky">
 		<div class="delete-action">
 		<?php if ( current_user_can( 'delete_post', $post->ID ) ) : ?>
-			<a class="submitdelete deletion" href="<?php echo esc_url( get_delete_post_link( $post->ID ) ); ?>">
+			<a class="submitdelete deletion" href="<?php echo esc_url( $delete_url ); ?>">
 			<?php _e( 'Move to Trash', PO_LANG ); ?>
 			</a>
 		<?php endif; ?>
@@ -64,6 +67,11 @@
 
 		<div class="publishing-action">
 			<span class="spinner"></span>
+			<?php if ( ! empty( $popup->id ) ) : ?>
+				<a href="<?php echo esc_url( $duplicate_url ); ?>" class="do-duplicate">
+					<?php _e( 'Duplicate', PO_LANG ); ?>
+				</a>
+			<?php endif; ?>
 			<?php if ( 'inactive' === $popup->status ) : ?>
 				<button class="button-primary" id="publish" name="po-action" value="activate">
 				<?php _e( 'Activate', PO_LANG ); ?>
@@ -82,7 +90,7 @@
 	<div class="sticky-actions" style="display:none">
 		<div class="delete-action">
 		<?php if ( current_user_can( 'delete_post', $post->ID ) ) : ?>
-			<a class="submitdelete deletion" href="<?php echo esc_url( get_delete_post_link( $post->ID ) ); ?>">
+			<a class="submitdelete deletion" href="<?php echo esc_url( $delete_url ); ?>">
 			<?php _e( 'Move to Trash', PO_LANG ); ?>
 			</a>
 		<?php endif; ?>
@@ -113,11 +121,19 @@
 		</div>
 
 		<div class="preview-action">
-			<span class="spinner"></span>
 			<?php if ( ! empty( $popup->id ) ) : ?>
 				<button type="button" class="preview button">
 				<?php _e( 'Preview', PO_LANG ); ?>
 				</button>
+			<?php endif; ?>
+		</div>
+
+		<div class="duplicate-action">
+			<span class="spinner"></span>
+			<?php if ( ! empty( $popup->id ) ) : ?>
+				<a href="<?php echo esc_url( $duplicate_url ); ?>" class="do-duplicate">
+					<?php _e( 'Duplicate', PO_LANG ); ?>
+				</a>
 			<?php endif; ?>
 		</div>
 

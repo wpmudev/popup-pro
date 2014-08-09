@@ -333,7 +333,7 @@ class IncPopupItem {
 		if ( $this->custom_colors ) {
 			$this->code->colors = 'color:' . $this->color['col2'] . ';background:' . $this->color['col1'] . ';';
 		} else {
-			$this->code->colors = '';
+			$this->code->colors = 'color:#000000;background:#FFFFFF;';
 		}
 
 		// Display data.

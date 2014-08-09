@@ -160,18 +160,29 @@ class IncPopupDatabase {
 						unset( $checks[$ind] );
 					}
 				}
+
 				if ( isset( $style_mapping[ @$raw['popover_style'] ] ) ) {
 					$style = $style_mapping[ @$raw['popover_style'] ];
 				} else {
 					$style = @$raw['popover_style'];
 				}
+
 				$colors = array(
 					'col1' => @$raw['popover_colour']['back'],
 					'col2' => @$raw['popover_colour']['fore'],
 				);
+
 				$display = 'delay';
 				if ( isset( $raw['on_exit'] ) ) { $display = 'leave'; }
 				if ( isset( $raw['on_click'] ) ) { $display = 'click'; }
+
+				$custom_colors = false;
+				if ( $colors['col1'] != 'FFFFFF' ) { $custom_colors = true; }
+				if ( $colors['col2'] != '000000' ) { $custom_colors = true; }
+
+				$custom_size = false;
+				if ( ! empty( $raw['popover_size']['usejs'] ) ) { $custom_size = true; }
+				if ( 'no' != @$raw['popover_usejs'] ) { $custom_size = true; }
 
 				$data = array(
 					'name'          => $item->popover_title,
@@ -180,6 +191,8 @@ class IncPopupDatabase {
 					'active'        => (true == $item->popover_active),
 					'size'          => @$raw['popover_size'],
 					'color'         => $colors,
+					'custom_colors' => $custom_colors,
+					'custom_colors' => $custom_size,
 					'style'         => $style,
 					'can_hide'      => ('no' == @$raw['popoverhideforeverlink']),
 					'close_hides'   => ('no' != @$raw['popover_close_hideforever']),

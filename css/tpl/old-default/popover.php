@@ -4,15 +4,24 @@
  *  All variables of the object are available in this template.
  */
 
+// Compatibility mode to keep formatting of old Pop Ups (not used in new styles)
+$content = stripslashes( $this->content );
+
+if ( defined( 'PO_ALLOW_CONTENT_FILTERING' ) && PO_ALLOW_CONTENT_FILTERING ) {
+	$content = defined( 'PO_USE_FULL_CONTENT_FILTERING' ) && PO_USE_FULL_CONTENT_FILTERING
+		? apply_filters( 'the_content', stripslashes( $content ) )
+		: wptexturize( wpautop( $content ) );
+}
+
 ?>
+
 <div id="<?php echo esc_attr( $this->code->id ); ?>"
-	class="visiblebox"
-	style="z-index: 999999; left: -1000px; top: 100px; display: none;">
+	style="left: -1000px; top: 100px; display: none;">
 
-	<a href="#" class="wdpu-clise" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
-	<div id="message" style="<?php echo esc_attr( $this->code->colors ); ?>">
+	<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
+	<div id="message" class="wdpu-msg resize" style="<?php echo esc_attr( $this->code->colors ); ?>">
 
-		<?php echo apply_filters( 'the_content', $this->content ); ?>
+		<?php echo '' . $content; ?>
 
 		<div class="clear"></div>
 		<?php if ( $this->can_hide ) : ?>

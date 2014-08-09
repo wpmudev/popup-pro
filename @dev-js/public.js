@@ -4,7 +4,6 @@
 		var me = this,
 			$doc = jQuery( document ),
 			$win = jQuery( window ),
-			$po_old_bg = jQuery( '#darkbackground' ),
 			$po_div = null,
 			$po_msg = null,
 			$po_close = null,
@@ -39,10 +38,10 @@
 			jQuery( 'html' ).removeClass( 'has-popup' );
 
 			if ( me.data.display_data['click_multi'] ) {
-				$po_old_bg.hide();
+				$po_back.hide();
 				$po_div.hide();
 			} else {
-				$po_old_bg.remove();
+				$po_back.remove();
 				$po_div.remove();
 
 				me.have_popup = false;
@@ -257,7 +256,7 @@
 			});
 
 			$po_div.show().removeAttr( 'style' );
-			$po_old_bg.show();
+			$po_back.show();
 
 			me.move_popup(me.data);
 
@@ -319,8 +318,9 @@
 				$po_back = $po_div;
 			} else {
 				$po_back = $po_div.find( '.wdpu-background' );
-				if ( ! $po_back.length && $po_old_bg.length ) {
-					$po_back = $po_old_bg;
+
+				if ( ! $po_back.length ) {
+					$po_back = jQuery( '.wdpu-background' );
 				}
 			}
 
@@ -343,7 +343,7 @@
 			me.fetch_dom();
 
 			$po_div.hide();
-			$po_old_bg.hide();
+			$po_back.hide();
 
 			me.maybe_show_popup();
 		};

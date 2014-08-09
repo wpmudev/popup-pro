@@ -333,11 +333,16 @@ div.msg-err {
 			float: left;
 		}
 
+		.duplicate-action,
 		.save-action,
 		.preview-action,
 		.publishing-action {
 			float: right;
 			margin-right: 10px;
+		}
+
+		.do-duplicate {
+			margin: 0;
 		}
 	}
 
@@ -383,6 +388,12 @@ div.msg-err {
 		text-align: right;
 		float: right;
 		line-height: 23px;
+	}
+
+	.do-duplicate {
+		margin: 0 10px 0 0;
+		line-height: 28px;
+		display: inline-block;
 	}
 }
 
