@@ -106,6 +106,9 @@ There should be NO PLUGIN ACTIVE at this point (not even WPMU DEV dashboard)
   - Save and validate on front end that the condition works
   - Repeat this with all the other conditions (only have 1 condition active at a time)
 
+  Special attention:
+  - Post-type/Category conditions must be tested with ALL 4 loading methods!!
+
 --------------------------------------------------------------------------------
 
 2. Upgrade from 4.5 to 4.6 version

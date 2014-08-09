@@ -31,13 +31,13 @@ $styles = apply_filters( 'popup-styles', array() );
 		<select class="block" id="po-style" name="po_style">
 			<?php foreach ( $styles as $key => $data ) : ?>
 				<?php if ( $data->deprecated && $popup->style != $key ) {
-					//continue;
+					continue;
 				} ?>
 				<option value="<?php echo esc_attr( $key ); ?>"
 					data-old="<?php echo esc_attr( $data->deprecated ); ?>"
 					<?php selected( $key, $popup->style ); ?>>
 					<?php echo esc_attr( $data->name ); ?>
-					<?php if ( $data->deprecated ) : ?>*<?php endif; ?>
+					<?php if ( $data->deprecated ) : ?>*)<?php endif; ?>
 				</option>
 			<?php endforeach; ?>
 		</select>
@@ -51,6 +51,22 @@ $styles = apply_filters( 'popup-styles', array() );
 		</label>
 	</div>
 </div>
+<?php if ( $popup->deprecated_style ) :
+	?>
+	<div class="wpmui-grid-12">
+		<div class="col-12">
+			<p style="margin-top:0"><em><?php _e(
+				'*) This style is outdated and does not support all options '.
+				'on this page. ' .
+				'Once you save your Pop Up with a new style you cannot ' .
+				'revert to this style!<br />' .
+				'Tipp: Use the Preview function to test this Pop Up with any ' .
+				'of the new styles without saving it.', PO_LANG
+			); ?></em></p>
+		</div>
+	</div>
+	<?php
+endif; ?>
 
 <div class="wpmui-grid-12">
 	<div class="col-12 inp-row">
