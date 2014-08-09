@@ -63,7 +63,7 @@ class IncPopupItem {
 	// -- Appearance
 
 	// CSS style of the popup.
-	public $style = 'default';
+	public $style = 'minimal';
 
 	// Info if the used popup-style is old (4.5 or earlier)
 	public $deprecated_style = false;
@@ -177,7 +177,7 @@ class IncPopupItem {
 			'col1' => '',
 			'col2' => '',
 		);
-		$this->style = 'default';
+		$this->style = 'minimal';
 		$this->deprecated_style = false;
 		$this->round_corners = true;
 		$this->can_hide = false;
@@ -287,7 +287,7 @@ class IncPopupItem {
 		if ( ! isset( $this->size['height'] ) ) { $this->size['height'] = ''; }
 
 		// Style.
-		if ( ! isset( $styles[ $this->style ] ) ) { $this->style = 'simple'; } // default style.
+		if ( ! isset( $styles[ $this->style ] ) ) { $this->style = 'minimal'; } // default style.
 		$this->deprecated_style = @$styles[ $this->style ]->deprecated;
 
 		// Boolean types.
