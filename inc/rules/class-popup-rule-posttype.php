@@ -2,7 +2,7 @@
 /*
 Name:        Post Types
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: *NOT WORKING YET* Adds post type-related rules.
+Description: Adds post type-related rules.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
@@ -48,9 +48,8 @@ class IncPopupRule_Posttype extends IncPopupRule {
 		// -- Initialize rule.
 
 		add_filter(
-			'popup-output-data',
-			array( $this, 'append_data_posttype' ),
-			10, 2
+			'popup-ajax-data',
+			array( $this, 'inject_ajax_posttype' )
 		);
 
 		$this->posttypes = get_post_types(
@@ -67,45 +66,22 @@ class IncPopupRule_Posttype extends IncPopupRule {
 	}
 
 	/**
-	 * Injects some javascript for the rule into the page footer.
+	 * Injects posttype details into the ajax-data collection.
+	 * (Required for any ajax loading method)
 	 *
 	 * @since  4.6
 	 */
-	public function inject_script_posttype() {
-		$post_type = esc_js( get_post_type() );
+	public function inject_ajax_posttype( $data ) {
+		$posttype = get_post_type();
 		$is_singular = is_singular() ? 1 : 0;
-		?>
-		<script>
-		jQuery(document).ajaxSend(function(e, xhr, opts) {
-			if ( opts.url.match(/po_onsuccess/) ) {
-				var posttype = <?php echo esc_js( $post_type ); ?>;
-				var single = <?php echo esc_js( $is_singular ); ?>;
-				if ( opts.url.match( /\bpo_[a-z]/ ) ) {
-					opts.url += '&post_type=' + posttype + '&is_single=' + single;
-				}
-			}
-		});
-		</script>
-		<?php
-	}
 
-	/**
-	 * Append data to the popup javascript-variable.
-	 *
-	 * @since  4.6
-	 * @param  array $data Data collection that is printed to javascript.
-	 * @param  IncPopupItem $popup The original popup object.
-	 * @return array Modified data collection.
-	 */
-	public function append_data_posttype( $script_data, $popup ) {
-		if ( $popup->uses_rule( 'posttype' ) || $popup->uses_rule( 'no_posttype' ) ) {
-			add_action(
-				'wp_footer',
-				array( $this, 'inject_script_posttype' )
-			);
+		if ( ! is_array( @$data['ajax_data'] ) ) {
+			$data['ajax_data'] = array();
 		}
+		$data['ajax_data']['posttype'] = $posttype;
+		$data['ajax_data']['is_single'] = $is_singular;
 
-		return $script_data;
+		return $data;
 	}
 
 
@@ -272,7 +248,7 @@ class IncPopupRule_Posttype extends IncPopupRule {
 
 		if ( isset( $_REQUEST['posttype'] ) ) {
 			// Via URL/AJAX
-			$cur_type = $_REQUEST['post_type'];
+			$cur_type = $_REQUEST['posttype'];
 			$cur_single = ( 0 != absint( @$_REQUEST['is_single'] ) );
 		} else {
 			// Via wp_footer

@@ -378,7 +378,8 @@
 				po_id = id.toString();
 			}
 
-			ajax_data = jQuery.extend( {}, me.ajax_data );
+			_options['ajax_data'] = _options['ajax_data'] || {};
+			ajax_data = jQuery.extend( {}, _options['ajax_data'] );
 
 			ajax_data['action']      = 'inc_popup',
 			ajax_data['do']          = _options['do'],

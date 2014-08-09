@@ -115,7 +115,17 @@ class IncPopup extends IncPopupBase {
 	 *
 	 * @since  4.6
 	 */
-	protected function load_scripts() {
+	public function load_scripts() {
+		if ( ! did_action( 'wp' ) ) {
+			// We have to make sure that wp is fully initialized:
+			// Some rules that use filter 'popup-ajax-data' depend on this.
+			add_action(
+				'wp',
+				array( __CLASS__, 'load_scripts' )
+			);
+			return;
+		}
+
 		wp_register_script(
 			'popup-public',
 			PO_JS_URL . 'public.min.js',
@@ -124,10 +134,12 @@ class IncPopup extends IncPopupBase {
 			true
 		);
 
+		$popup_data = apply_filters( 'popup-ajax-data', $this->script_data );
+
 		wp_localize_script(
 			'popup-public',
 			'_popup_data',
-			$this->script_data
+			$popup_data
 		);
 
 		wp_enqueue_script( 'popup-public' );

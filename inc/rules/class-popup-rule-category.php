@@ -2,7 +2,7 @@
 /*
 Name:        Post Categories
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: *NOT WORKING YET* Adds post category related rules.
+Description: Adds post category related rules.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
@@ -48,9 +48,8 @@ class IncPopupRule_Category extends IncPopupRule {
 		// -- Initialize rule.
 
 		add_filter(
-			'popup-output-data',
-			array( $this, 'append_data' ),
-			10, 2
+			'popup-ajax-data',
+			array( $this, 'inject_ajax_category' )
 		);
 
 		$this->categories = get_terms(
@@ -73,39 +72,17 @@ class IncPopupRule_Category extends IncPopupRule {
 	 *
 	 * @since  4.6
 	 */
-	public function inject_script_category() {
+	public function inject_ajax_category( $data ) {
 		$categories = json_encode( wp_list_pluck( get_the_category(), 'term_id' ) );
 		$is_singular = is_singular() ? 1 : 0;
-		?>
-		<script>
-			jQuery(function() {
-				console.log ('extend popup data', inc_popup);
-				var cats = JSON.stringify(<?php echo esc_js( $categories ); ?>);
-				var single = <?php echo esc_js( $is_singular ); ?>;
-				inc_popup._extend.ajax_data['categories'] = cats;
-				inc_popup._extend.ajax_data['is_single'] = single;
-			});
-		</script>
-		<?php
-	}
 
-	/**
-	 * Append data to the popup javascript-variable.
-	 *
-	 * @since  4.6
-	 * @param  array $data Data collection that is printed to javascript.
-	 * @param  IncPopupItem $popup The original popup object.
-	 * @return array Modified data collection.
-	 */
-	public function append_data( $script_data, $popup ) {
-		if ( $popup->uses_rule( 'category' ) || $popup->uses_rule( 'no_category' ) ) {
-			add_action(
-				'wp_footer',
-				array( $this, 'inject_script_category' )
-			);
+		if ( ! is_array( @$data['ajax_data'] ) ) {
+			$data['ajax_data'] = array();
 		}
+		$data['ajax_data']['categories'] = $categories;
+		$data['ajax_data']['is_single'] = $is_singular;
 
-		return $script_data;
+		return $data;
 	}
 
 
@@ -269,7 +246,6 @@ class IncPopupRule_Category extends IncPopupRule {
 		$response = false;
 		if ( ! is_array( $categories ) ) { $categories = array(); }
 		if ( ! is_array( $url_types ) ) { $url_types = array(); }
-
 
 		if ( isset( $_REQUEST['categories'] ) ) {
 			// Via URL/AJAX

@@ -100,7 +100,7 @@ class IncPopupAddon_AnonyousLoading {
 		// Generate a random Script URL.
 		$slug = self::$_slug;
 		$val = self::_rot( time(), rand( 1, 22 ) );
-		$script_url = add_query_arg( array( $slug => $val ), home_url() );
+		$script_url = add_query_arg( array( $slug => $val ) );
 
 		// The script is the home URL with a special URL-param.
 		wp_enqueue_script(
@@ -200,7 +200,7 @@ class IncPopupAddon_AnonyousLoading {
 
 		// The URL param is set, this is the <script> request.
 		self::render_script();
-		die();
+		ob_start();
 	}
 
 	/**
@@ -209,23 +209,37 @@ class IncPopupAddon_AnonyousLoading {
 	 * @return [type] [description]
 	 */
 	static public function render_script() {
+		if ( ! did_action( 'wp' ) ) {
+			// We have to make sure that wp is fully initialized:
+			// Some rules that use filter 'popup-ajax-data' depend on this.
+			add_action(
+				'wp',
+				array( __CLASS__, 'render_script' )
+			);
+			return;
+		}
+
 		$file = PO_JS_DIR . 'public.min.js';
+		$popup_data = array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'do' => 'get-data',
+		);
+
+		$popup_data = apply_filters( 'popup-ajax-data', $popup_data );
 
 		$data = sprintf(
 			'window._popup_data = %s',
-			json_encode(
-				array(
-					'ajaxurl' => admin_url( 'admin-ajax.php' ),
-					'do' => 'get-data',
-				)
-			)
+			json_encode( $popup_data )
 		);
 		$script = self::_filter( file_get_contents( $file ) );
+
+		while ( ob_get_level() ) { ob_end_clean(); }
 
 		// Output the modified script.
 		header( 'Content-type: text/javascript' );
 		echo ';' . $data;
 		echo ';' . $script;
+		die();
 	}
 
 	/**
