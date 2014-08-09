@@ -151,6 +151,22 @@ div.msg-err {
 	}
 }
 
+.locked td,
+.locked th {
+	color: #AAA;
+
+	.locked-msg {
+		color: #333;
+
+		&:before {
+			content: '- ';
+		}
+		&:after {
+			content: ' -';
+		}
+	}
+}
+
 
 /*================================*\
 ====================================

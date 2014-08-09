@@ -53,14 +53,14 @@ $theme_class = $theme_compat->okay ? 'msg-ok' : 'msg-err';
 
 // Add-Ons
 if ( IncPopupAddon_GeoDB::table_exists() ) {
-	$geo_class = '';
 	$geo_readonly = '';
 	$geo_msg = '';
+	$no_geo = false;
 } else {
-	$geo_class = 'inactive';
+	$no_geo = true;
 	$geo_readonly = 'disabled="disabled"'; // Checkboxes cannot be "readonly"...
 	$settings['geo_db'] = false;
-	$geo_msg = '<p>' . __(
+	$geo_msg = '<p class="locked-msg">' . __(
 		'<strong>Note</strong>: Cannot be used, because no geo-data table ' .
 		'was found in local database!', PO_LANG
 	) . '</p>';
@@ -129,11 +129,10 @@ $ordered_rules = array();
 					</tr>
 
 					<?php /* === GEO DB SETTING === */ ?>
-					<tr>
+					<tr class="<?php echo esc_attr( $no_geo ? 'locked' : '' ); ?>">
 						<th><?php _e( 'Country Lookup', PO_LANG ); ?></th>
 						<td>
-
-							<label class="<?php echo esc_attr( $geo_class );?>" >
+							<label>
 								<input type="checkbox"
 									name="po_option[geo_db]"
 									<?php checked( $settings['geo_db'] ); ?>
@@ -144,12 +143,12 @@ $ordered_rules = array();
 									'country-code.', PO_LANG
 								); ?>
 							</label>
-							<?php echo '' . $geo_msg; ?>
 							<p><em><?php _e(
 								'This option is relevant for the Pop Up ' .
 								'conditions "Visitor Location" (see below).',
 								PO_LANG
 							); ?></em></p>
+							<?php echo '' . $geo_msg; ?>
 						</td>
 					</tr>
 				</tbody>
@@ -223,7 +222,7 @@ $ordered_rules = array();
 				$ordered_rules[ $name ]['desc'] = __( trim( $data['desc'] ), PO_LANG );
 
 				if ( IncPopup::use_global() && in_array( 'no global', $data['limit'] ) ) {
-					$ordered_rules[ $name ]['disabled'] = __( 'These conditions are not available for global Pop Ups', PO_LANG );
+					$ordered_rules[ $name ]['disabled'] = __( 'Not available for global Pop Ups', PO_LANG );
 				} else if ( ! IncPopup::use_global() && in_array( 'global', $data['limit'] ) ) {
 					$ordered_rules[ $name ]['disabled'] = true;
 				} else {
@@ -238,7 +237,7 @@ $ordered_rules = array();
 				$rule_id = 'po-rule-' . sanitize_html_class( $data['key'] );
 				if ( true === $data['disabled'] ) { continue; }
 				?>
-				<tr valign="top">
+				<tr valign="top" class="<?php echo esc_attr( $data['disabled'] ? 'locked' : '' ); ?>">
 					<th class="check-column" scope="row">
 						<?php if ( false == $data['disabled'] ) : ?>
 						<input type="checkbox"
@@ -254,7 +253,9 @@ $ordered_rules = array();
 						</label>
 						<div><em><?php echo '' . $data['desc']; ?></em></div>
 						<?php if ( $data['disabled'] ) : ?>
-							<div><?php echo $data['disabled']; ?></div>
+							<div class="locked-msg">
+								<?php echo '' . $data['disabled']; ?>
+							</div>
 						<?php endif; ?>
 					</td>
 					<td class="column-items">
