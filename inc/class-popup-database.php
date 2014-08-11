@@ -192,7 +192,7 @@ class IncPopupDatabase {
 					'size'          => @$raw['popover_size'],
 					'color'         => $colors,
 					'custom_colors' => $custom_colors,
-					'custom_colors' => $custom_size,
+					'custom_size'   => $custom_size,
 					'style'         => $style,
 					'can_hide'      => ('no' == @$raw['popoverhideforeverlink']),
 					'close_hides'   => ('no' != @$raw['popover_close_hideforever']),
