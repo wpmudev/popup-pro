@@ -2,7 +2,7 @@
 /*
 Name:        Installation
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: WordPress Multisite: Condition based on the WordPress installation.
+Description: WordPress Multisite: Condition based on the WordPress installation. Conditions are only available for global Pop Ups.
 Author:      Philipp (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule

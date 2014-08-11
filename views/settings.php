@@ -60,10 +60,17 @@ if ( IncPopupAddon_GeoDB::table_exists() ) {
 	$no_geo = true;
 	$geo_readonly = 'disabled="disabled"'; // Checkboxes cannot be "readonly"...
 	$settings['geo_db'] = false;
-	$geo_msg = '<p class="locked-msg">' . __(
-		'<strong>Note</strong>: Cannot be used, because no geo-data table ' .
-		'was found in local database!', PO_LANG
-	) . '</p>';
+	$geo_msg = '<p class="locked-msg">' .
+		sprintf(
+			__(
+				'<strong>Note</strong>: Cannot be used, because no geo-data ' .
+				'table was found in local database! For details check the ' .
+				'section "Using a Local Geo-Database" in the ' .
+				'<a href="%1$s" target="_blank">Usage docs</a>.', PO_LANG
+			),
+			'http://premium.wpmudev.org/project/the-pop-over-plugin/#usage'
+		).
+	'</p>';
 }
 
 $rules = IncPopup::get_rules();

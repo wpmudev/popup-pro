@@ -181,29 +181,66 @@ class IncPopupRule_Country extends IncPopupRule {
 	\*======================================*/
 
 
+	/**
+	 * Tries to get the public IP address of the current user.
+	 *
+	 * @since  4.6
+	 * @return string The IP Address
+	 */
+	protected function get_users_ip() {
+		static $Ip_address = null;
+
+		if ( null === $Ip_address ) {
+			if ( getenv( 'HTTP_CLIENT_IP' ) ) {
+				$Ip_address = getenv( 'HTTP_CLIENT_IP' );
+			} else if ( getenv( 'HTTP_X_FORWARDED_FOR' ) ) {
+				$Ip_address = getenv( 'HTTP_X_FORWARDED_FOR' );
+			} else if ( getenv( 'HTTP_X_FORWARDED' ) ) {
+				$Ip_address = getenv( 'HTTP_X_FORWARDED' );
+			} else if ( getenv( 'HTTP_FORWARDED_FOR' ) ) {
+				$Ip_address = getenv( 'HTTP_FORWARDED_FOR' );
+			} else if ( getenv( 'HTTP_FORWARDED' ) ) {
+				$Ip_address = getenv( 'HTTP_FORWARDED' );
+			} else if ( getenv( 'REMOTE_ADDR' ) ) {
+				$Ip_address = getenv( 'REMOTE_ADDR' );
+			} else {
+				$Ip_address = 'UNKNOWN';
+			}
+		}
+
+		return $Ip_address;
+	}
+
+	/**
+	 * Checks if the users IP address belongs to a certain country.
+	 *
+	 * @since  4.6
+	 * @return bool
+	 */
 	protected function get_user_country() {
 		// Grab the users IP address
-		$ip = $_SERVER['REMOTE_ADDR'];
+		$ip = $this->get_users_ip();
 		$country = false;
 
 		// See if an add-on provides the country for us.
-		$country = apply_filters( 'popup-get-country', false, $ip );
-		if ( ! empty( $country ) ) {
-			return $country;
+		$country = apply_filters( 'popup-get-country', $country, $ip );
+
+		if ( empty( $country ) ) {
+			// Next check the local caching-table.
+			$country = IncPopupDatabase::get_country( $ip );
 		}
 
-		// Next check the local caching-table.
-		$country = IncPopupDatabase::get_country( $ip );
-		if ( ! empty( $country ) ) {
-			return $country;
+		if ( empty( $country ) ) {
+			// Finally use the external API to find the country.
+			$country = $this->country_from_api( $ip );
+
+			// Locally cache the API result.
+			if ( ! empty( $country ) ) {
+				IncPopupDatabase::add_ip( $ip, $country );
+			}
 		}
 
-		// Finally use the external API to find the country.
-		$country = $this->country_from_api( $ip );
-
-		if ( ! empty( $country ) ) {
-			IncPopupDatabase::add_ip( $ip, $country );
-		} else {
+		if ( empty( $country ) ) {
 			$country = 'XX';
 		}
 
