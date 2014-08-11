@@ -1,26 +1,35 @@
 Plugin Name: Pop Up!
-Author: Barry (Incsub), Marko Miljus (Incsub)
+Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 
 Change Log:
 ----------------------------------------------------------------------
-----------------------------------------------------------------------
 
-v4.5.3 - 2013-11-15
+4.6 - 2014-08-11
+----------------------------------------------------------------------
+- Completely re-build the UI from ground up!
+- Migrated Pop Ups to a much more flexible data structure.
+- Merged sections "Add-Ons" and "Settings" to a single page.
+- Removed old legacy code; plugin is cleaner and faster.
+- New feature: Preview Pop Up inside the Editor!
+- Three new, modern Pop Up styles added.
+- Featured Image support for new Pop Up styles.
+
+4.5.3 - 2013-11-15
 ----------------------------------------------------------------------
 - Fix for argument passing issue.
 - Fix for popup pending inital state.
 
-v4.5.2 - 2013-11-05
+4.5.2 - 2013-11-05
 ----------------------------------------------------------------------
 - Fix for display issue with absolute sizes/positioning.
 - Added the XProfile fields value matching add-on.
 
-v4.5.1 - 2013-10-30
+4.5.1 - 2013-10-30
 ----------------------------------------------------------------------
 - Sizing calculus update.
 - Performance update.
 
-v4.5 - 2013-10-16
+4.5 - 2013-10-16
 ----------------------------------------------------------------------
 - Javascript update.
 - Separated size and positioning javascript.
