@@ -180,9 +180,9 @@ class IncPopupDatabase {
 				if ( $colors['col1'] != 'FFFFFF' ) { $custom_colors = true; }
 				if ( $colors['col2'] != '000000' ) { $custom_colors = true; }
 
-				$custom_size = false;
-				if ( ! empty( $raw['popover_size']['usejs'] ) ) { $custom_size = true; }
-				if ( 'no' != @$raw['popover_usejs'] ) { $custom_size = true; }
+				$custom_size = true;
+				if ( ! empty( $raw['popover_size']['usejs'] ) ) { $custom_size = false; }
+				if ( 'no' != @$raw['popover_usejs'] ) { $custom_size = false; }
 
 				$data = array(
 					'name'          => $item->popover_title,
