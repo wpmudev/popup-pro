@@ -1,6 +1,5 @@
 #!/usr/bin/bash
 # v 2014-08-07 21:04
-clear
 
 if [ -f local.config.sh ]; then
 	. local.config.sh
@@ -10,6 +9,11 @@ else
 fi
 
 CUR_DIR="$( pwd )"
+
+SILENT=0
+if [ "silent" == "$1" ]; then
+	SILENT=1
+fi
 
 # Display a sumary of all parameters for the user.
 show_infos() {
@@ -60,7 +64,10 @@ download_dashboard() {
 	echo "- File downloaded"
 }
 
-show_infos
+if [ 0 == $SILENT ]; then
+	clear
+	show_infos
+fi
 create_dir
 download_wp
 download_dashboard

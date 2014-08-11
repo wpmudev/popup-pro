@@ -66,9 +66,14 @@ create_dir() {
 # Install WordPress core files
 install_wp() {
 	if [ ! -f $WP_INSTALL_FILE ]; then
-		echo "- WordPress source not found. Please first download the files using this command:"
-		echo "  sh ./get-wordpress.sh"
-		exit 1;
+		if [ -f "$CUR_DIR/get-wordpress.sh" ]; then
+			cd "$CUR_DIR"
+			sh ./get-wordpress.sh silent
+		else
+			echo "- WordPress source not found. Please first download the files using this command:"
+			echo "  sh ./get-wordpress.sh"
+			exit 1;
+		fi
 	fi
 
 	echo "- Install WordPress files (version '$WP_VERSION') ..."
