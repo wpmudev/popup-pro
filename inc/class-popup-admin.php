@@ -1034,9 +1034,10 @@ class IncPopup extends IncPopupBase {
 		if ( ! current_user_can( IncPopupPosttype::$perms ) ) { return; }
 
 		$action = @$_POST['po-action'];
+		$status = false;
 		switch ( $action ) {
 			case 'save':
-				$status = $popup->status;
+				// Don't force a status...
 				break;
 
 			case 'activate':
@@ -1056,7 +1057,7 @@ class IncPopup extends IncPopupBase {
 		$data = self::prepare_formdata( $_POST );
 		$data['id'] = $post_id;
 		$data['order'] = $popup->order;
-		$data['status'] = $status;
+		if ( $status ) { $data['status'] = $status; }
 		$popup->populate( $data );
 
 		// Prevent infinite loop when saving.

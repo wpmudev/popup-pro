@@ -294,6 +294,7 @@ abstract class IncPopupBase {
 	static protected function prepare_formdata( $form ) {
 		if ( ! is_array( $form ) ) { $form = array(); }
 
+
 		$data = array(
 			// Meta: Content
 			'name' => @$form['po_name'],
@@ -304,6 +305,8 @@ abstract class IncPopupBase {
 			'cta_link' => @$form['po_cta_link'],
 			'image' => @$form['po_image'],
 			'image_pos' => @$form['po_image_pos'],
+			'image_mobile' => ! isset( $form['po_image_no_mobile'] ),
+			'active' => isset( $form['po_active'] ),
 
 			// Meta: Appearance
 			'style' => @$form['po_style'],

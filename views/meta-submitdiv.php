@@ -19,41 +19,31 @@ $duplicate_url = add_query_arg( 'do', 'duplicate' );
 		</div>
 
 		<div id="minor-publishing-actions" class="non-sticky">
-			<div class="save-action">
-				<?php if ( 'inactive' === $popup->status ) : ?>
-					<button id="save-post" class="button" name="po-action" value="save">
-					<?php _e( 'Save', PO_LANG ); ?>
-					</button>
-				<?php else : ?>
-					<button id="save-post" class="button" name="po-action" value="deactivate">
-					<?php _e( 'Deactivate', PO_LANG ); ?>
-					</button>
-				<?php endif; ?>
-				<span class="spinner"></span>
+			<div class="status">
+				<label for="po-status"><?php _e( 'Status:', PO_LANG ); ?></label>
+				<div class="status-switch">
+					<input type="checkbox"
+						name="po_active"
+						id="po-status"
+						<?php checked( $popup->status, 'active' ); ?>/>
+					<label class="status-box" for="po-status">
+						<span class="indicator"></span>
+						<span class="label-active"><strong><?php _e( 'Active', PO_LANG ); ?></strong></span>
+						<span class="label-inactive"><?php _e( 'Inactive', PO_LANG ); ?></span>
+					</label>
+				</div>
 			</div>
+
 			<div class="preview-action">
-				<?php if ( ! empty( $popup->id ) ) : ?>
-					<button type="button" class="preview button">
-					<?php _e( 'Preview', PO_LANG ); ?>
-					</button>
-				<?php endif; ?>
+				<button type="button" class="preview button">
+				<i class="dashicons dashicons-visibility"></i>
+				<?php _e( 'Preview Pop Up', PO_LANG ); ?>
+				</button>
 			</div>
+
 			<div class="clear"></div>
 		</div>
 	</div>
-
-
-	<?php /* *** Status *** */ ?>
-	<div id="misc-publishing-actions" class="non-sticky">
-		<div class="misc-pub-section misc-pub-post-status status-<?php echo esc_attr( $popup->status ); ?>">
-			<label for="post_status"><?php _e( 'Status:', PO_LANG ); ?></label>
-			<span id="post-status-display">
-				<?php echo esc_html( $popup->status_label( $popup->status ) ); ?>
-				<i class="status-icon dashicons" style="display:none"></i>
-			</span>
-		</div><!-- .misc-pub-section -->
-	</div>
-
 
 	<?php /* *** Trash/Save/Activate *** */ ?>
 	<div id="major-publishing-actions" class="non-sticky">
@@ -72,15 +62,9 @@ $duplicate_url = add_query_arg( 'do', 'duplicate' );
 					<?php _e( 'Duplicate', PO_LANG ); ?>
 				</a>
 			<?php endif; ?>
-			<?php if ( 'inactive' === $popup->status ) : ?>
-				<button class="button-primary" id="publish" name="po-action" value="activate">
-				<?php _e( 'Activate', PO_LANG ); ?>
-				</button>
-			<?php else : ?>
-				<button class="button-primary" id="publish" name="po-action" value="save">
-				<?php _e( 'Save', PO_LANG ); ?>
-				</button>
-			<?php endif; ?>
+			<button class="button-primary" id="publish" name="po-action" value="save">
+			<?php _e( 'Save', PO_LANG ); ?>
+			</button>
 		</div>
 
 		<div class="clear"></div>
@@ -97,35 +81,16 @@ $duplicate_url = add_query_arg( 'do', 'duplicate' );
 		</div>
 
 		<div class="publishing-action">
-			<?php if ( 'inactive' === $popup->status ) : ?>
-				<button class="button-primary" name="po-action" value="activate">
-				<?php _e( 'Activate', PO_LANG ); ?>
-				</button>
-			<?php else : ?>
-				<button class="button-primary" name="po-action" value="save">
-				<?php _e( 'Save', PO_LANG ); ?>
-				</button>
-			<?php endif; ?>
-		</div>
-
-		<div class="save-action">
-			<?php if ( 'inactive' === $popup->status ) : ?>
-				<button class="button" name="po-action" value="save">
-				<?php _e( 'Save', PO_LANG ); ?>
-				</button>
-			<?php else : ?>
-				<button class="button" name="po-action" value="deactivate">
-				<?php _e( 'Deactivate', PO_LANG ); ?>
-				</button>
-			<?php endif; ?>
+			<button class="button-primary" name="po-action" value="save">
+			<?php _e( 'Save', PO_LANG ); ?>
+			</button>
 		</div>
 
 		<div class="preview-action">
-			<?php if ( ! empty( $popup->id ) ) : ?>
-				<button type="button" class="preview button">
-				<?php _e( 'Preview', PO_LANG ); ?>
-				</button>
-			<?php endif; ?>
+			<button type="button" class="preview button">
+			<i class="dashicons dashicons-visibility"></i>
+			<?php _e( 'Preview Pop Up', PO_LANG ); ?>
+			</button>
 		</div>
 
 		<div class="duplicate-action">

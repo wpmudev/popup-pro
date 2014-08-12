@@ -11,13 +11,24 @@ $has_img = ! empty( $this->image );
 $has_buttons = $has_cta || $this->can_hide;
 $show_title = $has_title || $has_subtitle;
 
+if ( ! $this->image_mobile && wp_is_mobile() ) { $has_img = false; }
+
 $msg_class = '';
 if ( $has_img ) {
+	$img_left = ($this->image_pos == 'left');
 	$msg_class .= 'img-' . $this->image_pos . ' ';
 } else {
 	$msg_class .= 'no-img ';
 }
 if ( $this->round_corners ) { $msg_class .= 'rounded '; }
+
+function show_img( $popup ) {
+	?>
+	<div class="wdpu-image">
+		<img src="<?php echo esc_url( $popup->image ); ?>" />
+	</div>
+	<?php
+}
 
 ?>
 <div id="<?php echo esc_attr( $this->code->id ); ?>"
@@ -46,6 +57,8 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 			<?php endif; ?>
 
 			<div class="wdpu-middle">
+				<?php if ( $has_img && $img_left ) { show_img( $this ); } ?>
+
 				<div class="wdpu-text">
 					<div class="wdpu-inner <?php if ( ! $has_buttons ) { echo esc_attr( 'no-bm' ); } ?>">
 						<div class="wdpu-content">
@@ -54,11 +67,7 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 					</div>
 				</div>
 
-				<?php if ( $has_img ) : ?>
-					<div class="wdpu-image">
-						<img src="<?php echo esc_url( $this->image ); ?>" />
-					</div>
-				<?php endif; ?>
+				<?php if ( $has_img && ! $img_left ) { show_img( $this ); } ?>
 			</div>
 
 			<?php if ( $has_buttons ) : ?>

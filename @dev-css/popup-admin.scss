@@ -1,5 +1,7 @@
 $break_large:     900px;
+$break_tablet:    782px;
 $break_small:     600px;
+$break_phone:     $break_small;
 
 
 /*====================================*\
@@ -366,8 +368,28 @@ div.msg-err {
 		left: 36px;
 	}
 
+	@media only screen and (max-width: 900px) {
+		&.auto-fold #submitdiv {
+			left: 36px;
+		}
+	}
+
 	#post-body {
 		margin-top: 75px;
+	}
+
+	@media screen and (max-width: $break_tablet) {
+		#submitdiv {
+			left: 0 !important;
+			top: 46px !important;
+		}
+	}
+
+	@media screen and (max-width: $break_phone) {
+		#submitdiv {
+			left: 0 !important;
+			top: 0 !important;
+		}
 	}
 }
 
@@ -382,6 +404,116 @@ div.msg-err {
 }
 
 #submitdiv {
+	#minor-publishing-actions {
+		text-align: left;
+		padding: 20px 10px;
+		overflow: hidden;
+	}
+
+	#major-publishing-actions {
+		z-index: 10;
+		position: relative;
+	}
+
+	.handlediv,
+	.hndle {
+		display: none;
+	}
+
+	.preview {
+		float: none;
+	}
+
+	.status {
+		float: right;
+
+		& > label {
+			float: left;
+			line-height: 26px;
+			margin-right: 10px;
+		}
+	}
+
+	.status-switch {
+		width: 40px;
+		margin: 0;
+		padding: 0;
+		float: left;
+		position: relative;
+
+		input {
+			position: absolute;
+			left: -3000px;
+			top: -3000px;
+			display: none;
+		}
+
+		.label-active,
+		.label-inactive {
+			position: absolute;
+			top: 26px;
+			right: 0;
+			text-align: right;
+			z-index: 0;
+
+			transition: all .3s;
+		}
+
+		.status-box {
+			background: #AAA;
+			border-radius: 20px;
+			height: 24px;
+			padding: 0;
+			cursor: pointer;
+			display: block;
+			position: relative;
+
+			.label-active {
+				opacity: 0;
+				/*top: 36px;*/
+				right: -20px;
+			}
+
+			.label-inactive {
+				opacity: 1;
+				/*top: 26px;*/
+				right: 0;
+			}
+
+			.indicator {
+				width: 18px;
+				height: 18px;
+				position: absolute;
+				left: 3px;
+				top: 3px;
+				background: #FFF;
+				border-radius: 20px;
+
+				transition: left .2s;
+			}
+		}
+
+		input:checked + .status-box {
+			background: #3A3;
+
+			.indicator {
+				left: 18px;
+			}
+
+			.label-active {
+				opacity: 1;
+				/*top: 26px;*/
+				right: 0;
+			}
+
+			.label-inactive {
+				opacity: 0;
+				/*top: 16px;*/
+				right: 20px;
+			}
+		}
+	}
+
 	.preview-action .spinner,
 	.publishing-action .spinner,
 	.save-action .spinner {
@@ -444,11 +576,21 @@ div.msg-err {
 		#meta-appearance {
 			float: left;
 			width: 49%;
+
+			@media screen and (max-width: $break_large) {
+				width: 100%;
+				float: none;
+			}
 		}
 
 		#meta-behavior {
 			float: right;
 			width: 49%;
+
+			@media screen and (max-width: $break_large) {
+				width: 100%;
+				float: none;
+			}
 		}
 
 		#meta-content,

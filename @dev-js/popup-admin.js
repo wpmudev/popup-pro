@@ -31,27 +31,47 @@ jQuery(function init_admin() {
 		if ( ! submitdiv.length ) { return; }
 		top_offset = submitdiv.position().top;
 
-		jQuery( window ).scroll(function(){
-			if ( postbody.hasClass( 'columns-1' ) ) {
+		var small_make_sticky = function() {
+			if ( ! body.hasClass( 'sticky-submit' ) ) {
+				body.addClass( 'sticky-submit' );
+				submitdiv.css({ 'marginTop': 0 } );
+				submitdiv.find( '.sticky-actions' ).show();
+				submitdiv.find( '.non-sticky' ).hide();
+			}
+		};
+
+		var small_remove_sticky = function() {
+			if ( body.hasClass( 'sticky-submit' ) ) {
+				body.removeClass( 'sticky-submit' );
+				submitdiv.find( '.sticky-actions' ).hide();
+				submitdiv.find( '.non-sticky' ).show();
+			}
+		};
+
+		jQuery( window ).resize(function() {
+			var is_small = jQuery( window ).width() <= 850;
+
+			if ( is_small ) {
+				if ( ! body.hasClass( 'po-small' ) ) {
+					body.addClass( 'po-small' );
+				}
+			} else {
+				if ( body.hasClass( 'po-small' ) ) {
+					body.removeClass( 'po-small' );
+					small_remove_sticky();
+				}
+			}
+		}).scroll(function(){
+			if ( postbody.hasClass( 'columns-1' ) || body.hasClass( 'po-small' ) ) {
 				// 1-column view:
 				// The div stays as sticky toolbar when scrolling down.
 
-				var scroll_top = jQuery( window ).scrollTop() - top_offset - 36;
-						// 36 is the height of the submitdiv title
+				var scroll_top = jQuery( window ).scrollTop() - top_offset;
 
 				if ( scroll_top > 0 ) {
-					if ( ! body.hasClass( 'sticky-submit' ) ) {
-						body.addClass( 'sticky-submit' );
-						submitdiv.css({ 'marginTop': 0 } );
-						submitdiv.find( '.sticky-actions' ).show();
-						submitdiv.find( '.non-sticky' ).hide();
-					}
+					small_make_sticky();
 				} else {
-					if ( body.hasClass( 'sticky-submit' ) ) {
-						body.removeClass( 'sticky-submit' );
-						submitdiv.find( '.sticky-actions' ).hide();
-						submitdiv.find( '.non-sticky' ).show();
-					}
+					small_remove_sticky();
 				}
 			} else {
 				// 2-column view:

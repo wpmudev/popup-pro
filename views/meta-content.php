@@ -127,21 +127,33 @@ $has_image = ! empty( $popup->image );
 			<?php if ( ! $has_image ) : ?>
 			style="display: none;"
 			<?php endif; ?> >
-			<label class="option <?php if ( 'left' == $popup->image_pos ) : ?>selected<?php endif; ?>">
-				<input type="radio" name="po_image_pos" value="left" <?php checked( $popup->image_pos, 'left' ); ?> />
-				<span class="image left">
-					<i class="dashicons dashicons-format-image"></i>
-				</span>
-				<i class="dashicons dashicons-editor-alignleft"></i>
-			</label>
 
-			<label class="option <?php if ( 'right' == $popup->image_pos ) : ?>selected<?php endif; ?>">
-				<input type="radio" name="po_image_pos" value="right" <?php checked( $popup->image_pos, 'right' ); ?> />
-				<i class="dashicons dashicons-editor-alignleft"></i>
-				<span class="image right">
-					<i class="dashicons dashicons-format-image"></i>
-				</span>
-			</label>
+			<div>
+				<label>
+					<input type="checkbox"
+						name="po_image_no_mobile"
+						<?php checked( $popup->image_mobile, false ); ?>>
+					<?php _e( 'Hide on mobile devices', PO_LANG ); ?>
+				</label>
+			</div>
+
+			<div>
+				<label class="option <?php if ( 'left' == $popup->image_pos ) : ?>selected<?php endif; ?>">
+					<input type="radio" name="po_image_pos" value="left" <?php checked( $popup->image_pos, 'left' ); ?> />
+					<span class="image left">
+						<i class="dashicons dashicons-format-image"></i>
+					</span>
+					<i class="dashicons dashicons-editor-alignleft"></i>
+				</label>
+
+				<label class="option <?php if ( 'right' == $popup->image_pos ) : ?>selected<?php endif; ?>">
+					<input type="radio" name="po_image_pos" value="right" <?php checked( $popup->image_pos, 'right' ); ?> />
+					<i class="dashicons dashicons-editor-alignleft"></i>
+					<span class="image right">
+						<i class="dashicons dashicons-format-image"></i>
+					</span>
+				</label>
+			</div>
 		</div>
 	</div>
 </div>

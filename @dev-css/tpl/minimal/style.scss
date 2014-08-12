@@ -3,6 +3,7 @@
  */
 
 $font_size: 15px;
+$break_point: 750px;
 
 $col_primary: #000001;
 $col_secondary: #000002;
@@ -115,10 +116,12 @@ $col_secondary: #000002;
 			position: absolute;
 			top: 0;
 			bottom: 0;
+			overflow: hidden;
 
 			img {
-				max-height: 100%;
-				max-width: 100%;
+				height: 100%;
+				width: auto;
+				position: relative;
 			}
 		}
 
@@ -262,6 +265,29 @@ $col_secondary: #000002;
 		}
 		.wdpu-msg-inner {
 			border-radius: 6px;
+		}
+	}
+
+	@media screen and (max-width: $break_point) {
+		&,
+		&.img-right,
+		&.img-left,
+		&.no-img {
+			.wdpu-image {
+				width: 100%;
+				position: relative;
+				display: block;
+				max-height: 500px;
+
+				img {
+					height: auto;
+					width: 100%;
+				}
+			}
+
+			.wdpu-text {
+				margin: 0;
+			}
 		}
 	}
 }

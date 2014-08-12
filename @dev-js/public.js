@@ -10,6 +10,7 @@
 			$po_hide = null,
 			$po_move = null,
 			$po_resize = null,
+			$po_img = null,
 			$po_back = null
 			;
 
@@ -77,6 +78,7 @@
 		this.move_popup = function move_popup() {
 			var new_width, new_height, reduce_el, reduce_w_by = 0, reduce_h_by = 0;
 
+			// Resize, if custom-size is active.
 			if ( me.data.custom_size ) {
 				if ( me.data.height && ! isNaN( me.data.height ) ) {
 					if ( $po_resize.data( 'reduce-height' ) ) {
@@ -99,10 +101,10 @@
 				}
 			}
 
-			if ( ! $po_move.hasClass( 'no-move' ) ) {
-				// Short delay before positioning the popup to give the browser time
-				// to show/resize the popup (20ms ~ 1 screen refresh)
-				window.setTimeout(function() {
+			// Short delay before positioning the popup to give the browser time
+			// to show/resize the popup (20ms ~ 1 screen refresh)
+			window.setTimeout(function() {
+				if ( ! $po_move.hasClass( 'no-move' ) ) {
 					var win_width = $win.width(),
 						win_height = $win.height(),
 						msg_width = $po_msg.outerWidth(),
@@ -125,8 +127,24 @@
 
 					if ( msg_top < 10 ) { msg_top = 10; }
 					$po_move.css({ 'top': msg_top });
-				}, 20);
-			}
+				}
+
+				// Move the image.
+				if ( $po_img.length ) {
+					var img_width = $po_img.width(),
+						box_width = $po_img.parent().width();
+						console.log ('move image', img_width, box_width);
+
+					if ( img_width > box_width ) {
+						// Center image.
+						offset_x = (box_width - img_width) / 2;
+						$po_img.css({ 'margin-left': offset_x });
+					} else {
+						// Align image according to layout.
+						$po_img.css({ 'margin-left': 0 });
+					}
+				}
+			}, 20);
 		};
 
 		/**
@@ -312,6 +330,9 @@
 
 			// Hide forever button.
 			$po_hide = $po_div.find( '.wdpu-hide-forever' );
+
+			// Featured image.
+			$po_img = $po_div.find( '.wdpu-image > img' );
 
 			// The modal background.
 			if ( $po_div.hasClass( 'wdpu-background' ) ) {
