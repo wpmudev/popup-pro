@@ -427,6 +427,8 @@ div.msg-err {
 	.status {
 		float: right;
 		position: relative;
+		width: 100px;
+		top: -6px;
 
 		& > label {
 			float: left;
@@ -439,7 +441,7 @@ div.msg-err {
 		width: 40px;
 		margin: 0;
 		padding: 0;
-		float: left;
+		float: right;
 
 		input {
 			position: absolute;
@@ -451,10 +453,10 @@ div.msg-err {
 		.label-active,
 		.label-inactive {
 			position: absolute;
-			top: 26px;
+			top: 18px;
 			right: 0;
 			left: 0;
-			text-align: center;
+			text-align: left;
 			z-index: 0;
 
 			transition: all .3s;
@@ -463,7 +465,7 @@ div.msg-err {
 		.status-box {
 			background: #AAA;
 			border-radius: 20px;
-			height: 24px;
+			height: 16px;
 			padding: 0;
 			cursor: pointer;
 			display: block;
@@ -483,10 +485,10 @@ div.msg-err {
 			}
 
 			.indicator {
-				width: 18px;
-				height: 18px;
+				width: 10px;
+				height: 10px;
 				position: absolute;
-				right: 18px;
+				right: 26px;
 				top: 3px;
 				background: #FFF;
 				border-radius: 20px;

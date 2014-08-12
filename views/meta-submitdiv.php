@@ -20,7 +20,6 @@ $duplicate_url = add_query_arg( 'do', 'duplicate' );
 
 		<div id="minor-publishing-actions" class="non-sticky">
 			<div class="status">
-				<label for="po-status"><?php _e( 'Status:', PO_LANG ); ?></label>
 				<div class="status-switch">
 					<input type="checkbox"
 						name="po_active"
@@ -28,8 +27,8 @@ $duplicate_url = add_query_arg( 'do', 'duplicate' );
 						<?php checked( $popup->status, 'active' ); ?>/>
 					<label class="status-box" for="po-status">
 						<span class="indicator"></span>
-						<span class="label-active"><strong><?php _e( 'Active', PO_LANG ); ?></strong></span>
-						<span class="label-inactive"><?php _e( 'Inactive', PO_LANG ); ?></span>
+						<span class="label-active"><?php _e( 'Status: <strong>Active</strong>', PO_LANG ); ?></span>
+						<span class="label-inactive"><?php _e( 'Status: Inactive', PO_LANG ); ?></span>
 					</label>
 				</div>
 			</div>
