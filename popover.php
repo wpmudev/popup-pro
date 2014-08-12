@@ -1,13 +1,13 @@
 <?php
 /*
-Plugin Name: Pop Up!
+Plugin Name: Pop Up! Pro
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Allows you to display a fancy Pop Up to visitors sitewide or per blog. A *very* effective way of advertising a mailing list, special offer or running a plain old ad.
 Version:     4.6
 Author:      WPMU DEV
 Author URI:  http://premium.wpmudev.org
 Textdomain:  popover
-WDP ID:      123            : TODO THIS NEEDS TO BE UPDATED
+WDP ID:      123
 
 Copyright 2007-2013 Incsub (http://incsub.com)
 Author - Barry (Incsub)
@@ -103,8 +103,9 @@ if ( is_admin() ) {
 			'id' => 123,
 			'name' => 'Pop Up!',
 			'screens' => array(
-				// TODO: THIS NEEDS TO BE UPDATED!!!
-				'popover',
+				'edit-inc_popup',
+				'inc_popup',
+				'inc_popup_page_settings',
 			),
 		);
 		require_once PO_INC_DIR . 'external/wpmudev-dashboard/wpmudev-dash-notification.php';
