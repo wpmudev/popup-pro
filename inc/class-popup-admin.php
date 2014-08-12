@@ -79,18 +79,18 @@ class IncPopup extends IncPopupBase {
 	static public function setup_module_specific( $hook ) {
 		if ( IncPopupItem::POST_TYPE === @$hook->post_type ) {
 			// WordPress core scripts
-			TheLib::add_js( 'jquery-ui-slider' );
-			TheLib::add_js( 'jquery-ui-sortable' );
+			WDev()->add_js( 'jquery-ui-slider' );
+			WDev()->add_js( 'jquery-ui-sortable' );
 
-			TheLib::add_ui( 'core' );
-			TheLib::add_ui( 'select' );
+			WDev()->add_ui( 'core' );
+			WDev()->add_ui( 'select' );
 
-			TheLib::add_ui( PO_CSS_URL . 'popup-admin.css' );
-			TheLib::add_ui( PO_JS_URL . 'popup-admin.min.js' );
-			TheLib::add_ui( PO_JS_URL . 'public.min.js' ); // For Preview.
+			WDev()->add_ui( PO_CSS_URL . 'popup-admin.css' );
+			WDev()->add_ui( PO_JS_URL . 'popup-admin.min.js' );
+			WDev()->add_ui( PO_JS_URL . 'public.min.js' ); // For Preview.
 
 			if ( @$_REQUEST['post_status'] != 'trash' ) {
-				TheLib::add_data(
+				WDev()->add_data(
 					'po_bulk',
 					array(
 						'activate' => __( 'Activate', PO_LANG ),
@@ -101,7 +101,7 @@ class IncPopup extends IncPopupBase {
 			}
 
 			// For Preview
-			TheLib::add_data(
+			WDev()->add_data(
 				'_popup_data',
 				array(
 					'ajaxurl' => admin_url( 'admin-ajax.php' ),
@@ -178,8 +178,8 @@ class IncPopup extends IncPopupBase {
 			// -- POP UP EDITOR -----------------
 
 			if ( 'post' === @$hook->base ) {
-				TheLib::add_css( 'wp-color-picker' ); // WordPress core script
-				TheLib::add_js( 'wp-color-picker' ); // WordPress core script
+				WDev()->add_css( 'wp-color-picker' ); // WordPress core script
+				WDev()->add_js( 'wp-color-picker' ); // WordPress core script
 
 				// See if a custom action should be executed (e.g. duplicate)
 				self::form_check_actions();
@@ -351,7 +351,7 @@ class IncPopup extends IncPopupBase {
 
 			IncPopupDatabase::set_settings( $settings );
 
-			TheLib::message( __( 'Your settings have been updated.', PO_LANG ) );
+			WDev()->message( __( 'Your settings have been updated.', PO_LANG ) );
 			$redirect_url = remove_query_arg( array( 'message', 'count' ), wp_get_referer() );
 			wp_safe_redirect( $redirect_url );
 			die();
@@ -703,7 +703,7 @@ class IncPopup extends IncPopupBase {
 				}
 
 				if ( $count > 0 && ! empty( $msg ) ) {
-					TheLib::message( sprintf( $msg, $count ) );
+					WDev()->message( sprintf( $msg, $count ) );
 				}
 			}
 			else {

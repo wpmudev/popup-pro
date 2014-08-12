@@ -202,7 +202,7 @@ class IncPopup extends IncPopupBase {
 		 * In an ajax request they would already be defined by the ajax url.
 		 */
 		$_REQUEST['thereferrer'] = @$_SERVER['HTTP_REFERER'];
-		$_REQUEST['thefrom'] = TheLib::current_url();
+		$_REQUEST['thefrom'] = WDev()->current_url();
 
 		// Populates $this->popup
 		$this->select_popup();

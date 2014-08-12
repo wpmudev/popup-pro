@@ -27,7 +27,7 @@ abstract class IncPopupBase {
 	protected function __construct() {
 		$this->db = IncPopupDatabase::instance();
 
-		TheLib::translate_plugin( PO_LANG, PO_LANG_DIR );
+		WDev()->translate_plugin( PO_LANG, PO_LANG_DIR );
 
 		// Register the popup post type.
 		add_action(

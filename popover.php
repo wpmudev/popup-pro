@@ -76,7 +76,7 @@ if ( ! defined( 'PO_LANG' ) ) {
 
 // Only Pro version: Notify user when a possibly collission is detected.
 if ( $something_fishy && is_admin() ) {
-	TheLib::message(
+	WDev()->message(
 		sprintf(
 			__(
 				'<strong>Pop Up!</strong><br />' .

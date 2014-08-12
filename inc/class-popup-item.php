@@ -542,9 +542,9 @@ class IncPopupItem {
 							break;
 					}
 				}
-				TheLib::message( sprintf( $msg, $this->name ) );
+				WDev()->message( sprintf( $msg, $this->name ) );
 			} else {
-				TheLib::message( __( 'Could not save Pop Up.', PO_LANG ), 'err' );
+				WDev()->message( __( 'Could not save Pop Up.', PO_LANG ), 'err' );
 			}
 		}
 

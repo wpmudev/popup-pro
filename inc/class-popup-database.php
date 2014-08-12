@@ -246,7 +246,7 @@ class IncPopupDatabase {
 		dbDelta( $sql );
 
 		if ( $count > 0 ) {
-			TheLib::message(
+			WDev()->message(
 				sprintf(
 					__(
 					'<strong>Pop Up!</strong><br />' .
