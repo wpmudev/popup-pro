@@ -1,45 +1,21 @@
 #!/usr/bin/bash
-# v 2014-07-03 21:04
+# v 2014-08-12 15:28
 clear
 
-if [ -f local.config.sh ]; then
-	. local.config.sh
-else
-	echo "There must be a local.config.sh file in the current directory."
-	exit 1;
-fi
+. do/.load-config.sh
 
+MULTISITE=0
 if [ "$1" == "multisite" ]; then
 	MULTISITE=1
-else
-	MULTISITE=0
 fi
-
-CUR_DIR="$( pwd )"
 
 # Display a sumary of all parameters for the user.
 show_infos() {
 	echo "Usage:"
 	echo "  sh $0 [multisite]"
-	echo ""
-	echo "------------------------------------------"
-	echo "Current Plugin"
-	echo "  Plugin version:     $VER"
-	echo "  Install Dir:        wp-content/plugins/$EXPORT_FOLDER"
-	echo "  Script Dir:         $CUR_DIR"
-	echo "Test installation"
-	echo "  WordPress Dir:      $WP_DIR"
-	echo "  WordPress URL:      $WP_URL"
-	echo "  WordPress User:     $WP_USER"
-	echo "  WordPress Pass:     $WP_PASS"
-	echo "  WordPress version:  $WP_VERSION"
-	echo "  WordPress source:   $WP_INSTALL_FILE"
-	echo "Test database"
-	echo "  DB Host:            $DB_HOST"
-	echo "  DB Name:            $DB_NAME"
-	echo "  DB User:            $DB_USER"
-	echo "  DB Pass:            $DB_PASS"
-	echo "------------------------------------------"
+
+	show_config
+
 	echo "Task: Setup a fresh WordPress installation and install this plugin"
 	if [ $MULTISITE == 1 ]; then
 		echo "      Do Multisite Installation"
@@ -66,13 +42,12 @@ create_dir() {
 # Install WordPress core files
 install_wp() {
 	if [ ! -f $WP_INSTALL_FILE ]; then
-		if [ -f "$CUR_DIR/get-wordpress.sh" ]; then
+		if [ -f "$CUR_DIR/do/get-wordpress.sh" ]; then
 			cd "$CUR_DIR"
-			sh ./get-wordpress.sh silent
+			sh do/get-wordpress.sh silent
 		else
-			echo "- WordPress source not found. Please first download the files using this command:"
-			echo "  sh ./get-wordpress.sh"
-			exit 1;
+			error "WordPress source not found. Please first download the files using this command:" \
+				"$ sh do/get-wordpress.sh"
 		fi
 	fi
 
@@ -160,9 +135,9 @@ install_dashboard() {
 
 install_plugin() {
 	echo "- Installing plugin... All changes must be commited in git!"
-	if [ -f "$CUR_DIR"/archive.sh ]; then
+	if [ -f "$CUR_DIR"/do/archive.sh ]; then
 		cd "$CUR_DIR"
-		"$CUR_DIR"/archive.sh "$CUR_DIR"/plugin.zip
+		"$CUR_DIR"/do/archive.sh "$CUR_DIR"/plugin.zip
 		echo "- Created a clean export of the current plugin"
 	fi
 	if [ -f "$CUR_DIR"/plugin.zip ]; then

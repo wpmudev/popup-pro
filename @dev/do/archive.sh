@@ -1,5 +1,5 @@
 #!/bin/bash
-# v 2014-07-03 21:04
+# v 2014-08-12 15:28
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -8,16 +8,19 @@
 #                                                                             #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-if [ -f "local.config.sh" ]; then
-	. local.config.sh
-else
-	echo "There must be a local.config.sh file in the current directory."
-	exit 1;
-fi
+. do/.load-config.sh
 
-# Allow the output filename to be overwritten
+# Allow the output filename to be overwritten.
+# Example:
+#   $ sh do/archive.sh plugin_file.zip
 if [ $# -gt 0 ]; then
 	EXPORT_ARCHIVE=$1
+fi
+
+# Check if the git-archive-all script is available.
+if [ ! -f "/usr/local/bin/git-archive-all" ]; then
+	error "git-archive-all must be located in folder /usr/local/bin" \
+		"See: https://github.com/Kentzo/git-archive-all"
 fi
 
 cd ..

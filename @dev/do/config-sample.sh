@@ -82,3 +82,6 @@ WP_INSTALL_FILE="$WP_INSTALL_DIR"/wordpress-$WP_VERSION.tar.gz
 
 # Generate the filename to the local WPMU DEV Dashboard archive.
 WP_DASHBOARD_FILE="$WP_INSTALL_DIR"/wpmudev-dashboard.zip
+
+# This is the full path to the current @dev folder.
+CUR_DIR="$( pwd )"

@@ -1,7 +1,7 @@
 
 
 ======================  NOTES ON DEVELOPMENT AND TESTING  ======================
-                                - PLUGINNAME -
+                                - POP UP PRO -
 
 --------------------------------------------------------------------------------
 Philipp Stracker                                     Scripts are written for OSX
@@ -15,11 +15,12 @@ Philipp Stracker                                     Scripts are written for OSX
   - @dev/config.txt .. Options for clean-installation.sh and install-plugin.sh
                        Create a local copy and name it @dev/local.config.txt !!
 
-  Not plugin specific (no changes required):
-  - @dev/archive.sh
-  - @dev/clean-installation.sh
-  - @dev/install-plugin.sh
-  - @dev/svn-update.sh
+Available scripts; run them from the @dev folder!
+  - sh do/archive.sh
+  - sh do/get-wordpress.sh
+  - sh do/clean-installation.sh [multisite]
+  - sh do/install-plugin.sh
+  - sh do/svn-update.sh
 
 
 --------------------------------------------------------------------------------
