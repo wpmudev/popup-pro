@@ -426,6 +426,7 @@ div.msg-err {
 
 	.status {
 		float: right;
+		position: relative;
 
 		& > label {
 			float: left;
@@ -439,7 +440,6 @@ div.msg-err {
 		margin: 0;
 		padding: 0;
 		float: left;
-		position: relative;
 
 		input {
 			position: absolute;
@@ -453,7 +453,8 @@ div.msg-err {
 			position: absolute;
 			top: 26px;
 			right: 0;
-			text-align: right;
+			left: 0;
+			text-align: center;
 			z-index: 0;
 
 			transition: all .3s;
@@ -466,30 +467,31 @@ div.msg-err {
 			padding: 0;
 			cursor: pointer;
 			display: block;
-			position: relative;
 
 			.label-active {
-				opacity: 0;
-				/*top: 36px;*/
-				right: -20px;
+				// opacity: 0;
+				// top: 36px;
+				// right: -20px;
+				display: none;
 			}
 
 			.label-inactive {
-				opacity: 1;
-				/*top: 26px;*/
-				right: 0;
+				// opacity: 1;
+				// top: 26px;
+				// right: 0;
+				display: block;
 			}
 
 			.indicator {
 				width: 18px;
 				height: 18px;
 				position: absolute;
-				left: 3px;
+				right: 18px;
 				top: 3px;
 				background: #FFF;
 				border-radius: 20px;
 
-				transition: left .2s;
+				transition: right .2s;
 			}
 		}
 
@@ -497,19 +499,21 @@ div.msg-err {
 			background: #3A3;
 
 			.indicator {
-				left: 18px;
+				right: 3px;
 			}
 
 			.label-active {
-				opacity: 1;
-				/*top: 26px;*/
-				right: 0;
+				// opacity: 1;
+				// top: 26px;
+				// right: 0;
+				display: block;
 			}
 
 			.label-inactive {
-				opacity: 0;
-				/*top: 16px;*/
-				right: 20px;
+				// opacity: 0;
+				// top: 16px;
+				// right: 20px;
+				display: none;
 			}
 		}
 	}
