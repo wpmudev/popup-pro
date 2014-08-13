@@ -26,10 +26,10 @@ Contributors - Marko Miljus (Incsub), Ve Bailovity (Incsub)
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-$something_fishy = false;
 if ( ! defined( 'PO_LANG' ) ) {
 	// Used for more readable i18n functions: __( 'text', PO_LANG );
 	define( 'PO_LANG', 'popover' );
+	define( 'PO_VERSION', 'pro' );
 
 	/**
 	 * The current DB/build version. NOT THE SAME AS THE PLUGIN VERSION!
@@ -70,28 +70,6 @@ if ( ! defined( 'PO_LANG' ) ) {
 
 	// Initialize the plugin as soon as we have identified the current user.
 	add_action( 'set_current_user', array( 'IncPopup', 'instance' ) );
-} else {
-	$something_fishy = true;
-}
-
-// Only Pro version: Notify user when a possibly collission is detected.
-if ( $something_fishy && is_admin() ) {
-	WDev()->message(
-		sprintf(
-			__(
-				'<strong>Pop Up!</strong><br />' .
-				'It seems that you have more than one version of the plugin ' .
-				'installed. To avoid problems please check your ' .
-				'<a href="%1$s">plugins</a> and deactivate other versions of ' .
-				'this plugin!<br />' .
-				'You might see this notice, because the free and pro '.
-				'versions of this plugin are installed at the same time.',
-				CSB_LANG
-			),
-			admin_url( 'plugins.php' )
-		),
-		'err'
-	);
 }
 
 // Pro: Integrate WPMU Dev Dashboard
