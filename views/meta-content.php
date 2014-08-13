@@ -133,21 +133,21 @@ $has_image = ! empty( $popup->image );
 					<input type="checkbox"
 						name="po_image_no_mobile"
 						<?php checked( $popup->image_mobile, false ); ?>>
-					<?php _e( 'Hide on mobile devices', PO_LANG ); ?>
+					<?php _e( 'Hide image for mobile devices', PO_LANG ); ?>
 				</label>
 			</div>
 
 			<div>
 				<label class="option <?php if ( 'left' == $popup->image_pos ) : ?>selected<?php endif; ?>">
-					<input type="radio" name="po_image_pos" value="left" <?php checked( $popup->image_pos, 'left' ); ?> />
+					<input type="radio" name="po_image_pos" value="left" <?php checked( 'left' == $popup->image_pos ); ?> />
 					<span class="image left">
 						<i class="dashicons dashicons-format-image"></i>
 					</span>
 					<i class="dashicons dashicons-editor-alignleft"></i>
 				</label>
 
-				<label class="option <?php if ( 'right' == $popup->image_pos ) : ?>selected<?php endif; ?>">
-					<input type="radio" name="po_image_pos" value="right" <?php checked( $popup->image_pos, 'right' ); ?> />
+				<label class="option <?php if ( 'left' != $popup->image_pos ) : ?>selected<?php endif; ?>">
+					<input type="radio" name="po_image_pos" value="right" <?php checked( 'left' != $popup->image_pos ); ?> />
 					<i class="dashicons dashicons-editor-alignleft"></i>
 					<span class="image right">
 						<i class="dashicons dashicons-format-image"></i>

@@ -354,11 +354,9 @@ abstract class IncPopupBase {
 				}
 
 				if ( ! empty( $this->popup ) ) {
-					$data = $this->popup->get_script_data();
+					$is_preview = ! empty( $_REQUEST['preview'] );
+					$data = $this->popup->get_script_data( $is_preview );
 
-					if ( ! empty( $_REQUEST['preview'] ) ) {
-						$data = $this->popup->preview_mode( $data );
-					}
 					echo 'po_data(' . json_encode( $data ) . ')';
 				}
 				die();

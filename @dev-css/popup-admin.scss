@@ -441,7 +441,7 @@ div.msg-err {
 		width: 40px;
 		margin: 0;
 		padding: 0;
-		float: right;
+		float: left;
 
 		input {
 			position: absolute;
@@ -488,12 +488,12 @@ div.msg-err {
 				width: 10px;
 				height: 10px;
 				position: absolute;
-				right: 26px;
+				left: 3px;
 				top: 3px;
 				background: #FFF;
 				border-radius: 20px;
 
-				transition: right .2s;
+				transition: right .2s, left .2s;
 			}
 		}
 
@@ -501,7 +501,7 @@ div.msg-err {
 			background: #3A3;
 
 			.indicator {
-				right: 3px;
+				left: 26px;
 			}
 
 			.label-active {

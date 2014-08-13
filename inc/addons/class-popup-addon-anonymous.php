@@ -79,8 +79,8 @@ class IncPopupAddon_AnonyousLoading {
 			'id'    => self::METHOD,
 			'label' => __( 'Anonymous Script', PO_LANG ),
 			'info'  => __(
-				'Similar to the option "WordPress Ajax", but the URL to the ' .
-				'javascript-file will be masked', PO_LANG
+				'Load Pop Up like WordPress AJAX, but the URL to the ' .
+				'JavaScript file will be masked.', PO_LANG
 				),
 		);
 		return $loading_methods;

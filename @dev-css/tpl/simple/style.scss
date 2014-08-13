@@ -267,5 +267,10 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 				margin: 0;
 			}
 		}
+		&.mobile-no-img {
+			.wdpu-image {
+				display: none;
+			}
+		}
 	}
 }

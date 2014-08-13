@@ -278,5 +278,10 @@ $col_secondary: #000002;
 				margin: 0;
 			}
 		}
+		&.mobile-no-img {
+			.wdpu-image {
+				display: none;
+			}
+		}
 	}
 }

@@ -9,28 +9,26 @@ $loading_methods[] = (object) array(
 	'id'    => 'footer',
 	'label' => __( 'Page Footer', PO_LANG ),
 	'info'  => __(
-		'The Pop Up is included as part of the page html (no Ajax call).',
+		'Include Pop Up as part of your site\'s HTML (no AJAX call).',
 		PO_LANG
 		),
 );
 
 $loading_methods[] = (object) array(
 	'id'    => 'ajax',
-	'label' => __( 'WordPress Ajax', PO_LANG ),
+	'label' => __( 'WordPress AJAX', PO_LANG ),
 	'info'  => __(
-		'The Pop Up is loaded separately from the page ' .
-		'(via a normal WordPress Ajax call). ' .
-		'This is the best option if you are running a caching system',
+		'Load Pop Up separately from the page via a WordPress AJAX call. ' .
+		'This is the best option if you use caching.',
 		PO_LANG
 	),
 );
 
 $loading_methods[] = (object) array(
 	'id'    => 'front',
-	'label' => __( 'Custom Ajax', PO_LANG ),
+	'label' => __( 'Custom AJAX', PO_LANG ),
 	'info'  => __(
-		'The Pop Up is loaded separately from the page '. // ,
-		'(via custom front end Ajax call)',
+		'Load Pop Up separately from the page via a custom front-end AJAX call.',
 		PO_LANG
 		),
 );
@@ -63,10 +61,11 @@ if ( IncPopupAddon_GeoDB::table_exists() ) {
 	$geo_msg = '<p class="locked-msg">' .
 		sprintf(
 			__(
-				'<strong>Note</strong>: Cannot be used, because no geo-data ' .
-				'table was found in local database! For details check the ' .
-				'section "Using a Local Geo-Database" in the ' .
-				'<a href="%1$s" target="_blank">Usage docs</a>.', PO_LANG
+				'<strong>Note</strong>: This option is unavailable because a ' .
+				'geo-data table was not found in your database. For details, ' .
+				'read the "Using a Local Geo-Database" in the ' .
+				'<a href="%1$s" target="_blank">Pop Up usage guide</a>.',
+				PO_LANG
 			),
 			'http://premium.wpmudev.org/project/the-pop-over-plugin/#usage'
 		).
@@ -96,13 +95,12 @@ $ordered_rules = array();
 
 		<div class="postbox">
 			<h3 class="hndle" style="cursor:auto;">
-				<span><?php _e( 'Pop Up loading method', PO_LANG ); ?></span>
+				<span><?php _e( 'Pop Up Loading Method', PO_LANG ); ?></span>
 			</h3>
 
 			<div class="inside">
 				<p><?php _e(
-					'Select the loading method you want to use for your ' .
-					'Pop Ups.', PO_LANG
+					'Select how you would like to load Pop Up.', PO_LANG
 				); ?></p>
 
 				<table class="form-table">
@@ -111,7 +109,7 @@ $ordered_rules = array();
 					<?php /* === LOADING METHOD === */ ?>
 					<tr valign="top">
 						<th scope="row">
-							<?php _e( 'Pop Up loaded using', PO_LANG ); ?>
+							<?php _e( 'Load Pop Up using', PO_LANG ); ?>
 						</th>
 						<td>
 							<select name="po_option[loadingmethod]" id="loadingmethod">
@@ -128,7 +126,7 @@ $ordered_rules = array();
 								<?php foreach ( $loading_methods as $item ) : ?>
 									<li>
 										<?php _e( $item->label, PO_LANG ); ?>:
-										<em><?php echo '' . $item->info; ?>.
+										<em><?php echo '' . $item->info; ?>
 									</em></li>
 								<?php endforeach; ?>
 							</ul>
@@ -145,14 +143,14 @@ $ordered_rules = array();
 									<?php checked( $settings['geo_db'] ); ?>
 									<?php echo '' . $geo_readonly; ?> />
 								<?php _e(
-									'Use a local IP Cache table instead of a ' .
-									'webservice to resolve IP Addresses to a ' .
-									'country-code.', PO_LANG
+									'Use a local IP cache table instead of a web ' .
+									'service to resolve IP addresses to a ' .
+									'country code.', PO_LANG
 								); ?>
 							</label>
 							<p><em><?php _e(
-								'This option is relevant for the Pop Up ' .
-								'conditions "Visitor Location" (see below).',
+								'This option is relevant for the ' .
+								'"Visitor Location" condition.',
 								PO_LANG
 							); ?></em></p>
 							<?php echo '' . $geo_msg; ?>

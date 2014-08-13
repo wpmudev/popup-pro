@@ -20,6 +20,12 @@ if ( $has_img ) {
 } else {
 	$msg_class .= 'no-img ';
 }
+if ( $this->is_preview ) {
+	$msg_class .= 'preview ';
+	if ( ! $this->image_mobile ) {
+		$msg_class .= 'mobile-no-img ';
+	}
+}
 if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 
 function show_img( $popup ) {

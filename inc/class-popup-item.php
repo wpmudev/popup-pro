@@ -128,6 +128,9 @@ class IncPopupItem {
 	// render the popup.
 	public $script_data = array();
 
+	// Flag that defines if the Pop Up is displayed in preview-mode.
+	public $is_preview = false;
+
 	// -------------------------------------------------------------------------
 
 	/**
@@ -645,18 +648,25 @@ class IncPopupItem {
 	 * Returns the script-data collection.
 	 *
 	 * @since  4.6
+	 * @param  bool $is_preview Optional. Defines if we display a preview of the
+	 *                Pop Up (Dashboard) or the real Pop Up (Front End)
 	 * @return array
 	 */
-	public function get_script_data() {
+	public function get_script_data( $is_preview = false ) {
 		static $Data = null;
 
-		#if ( null === $Data ) {
+		if ( null === $Data ) {
+			$this->is_preview = $is_preview;
 			$Data = $this->script_data;
 			$Data['html'] = $this->load_html();
 			$Data['styles'] = $this->load_styles();
 
 			$Data = apply_filters( 'popup-output-data', $Data, $this );
-		#}
+
+			if ( $is_preview ) {
+				$Data = $this->preview_mode( $Data );
+			}
+		}
 
 		return $Data;
 	}
