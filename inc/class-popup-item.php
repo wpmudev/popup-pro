@@ -256,7 +256,7 @@ class IncPopupItem {
 		isset( $data['round_corners'] ) && $this->round_corners = (true == $data['round_corners']);
 		isset( $data['can_hide'] ) && $this->can_hide = (true == $data['can_hide']);
 		isset( $data['close_hides'] ) && $this->close_hides = (true == $data['close_hides']);
-		is_numeric( @$data['hide_expire'] ) && $this->hide_expire = absint( $data['hide_expire'] );
+		absint( @$data['hide_expire'] ) > 0 && $this->hide_expire = absint( $data['hide_expire'] );
 		isset( $data['overlay_close'] ) && $this->overlay_close = ( true == $data['overlay_close'] );
 
 		in_array( @$data['display'], self::$display_opts ) && $this->display = $data['display'];

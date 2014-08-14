@@ -415,7 +415,6 @@ div.msg-err {
 	#minor-publishing-actions {
 		text-align: left;
 		padding: 20px 10px;
-		overflow: hidden;
 	}
 
 	#major-publishing-actions {
@@ -443,6 +442,10 @@ div.msg-err {
 			line-height: 26px;
 			margin-right: 10px;
 		}
+	}
+
+	.status-hint-box {
+		float: right;
 	}
 
 	.status-switch {
@@ -1159,4 +1162,54 @@ div.msg-err {
 }
 .ui-state-disabled .ui-icon {
 	filter:Alpha(Opacity=35); /* For IE8 - See #6059 */
+}
+
+
+/*===================================*\
+=======================================
+==                                   ==
+==           UPGRADE NOTES           ==
+==                                   ==
+=======================================
+\*===================================*/
+
+
+.pro-only {
+	position: relative;
+	margin: 3px 0;
+	clear: both;
+
+	&:after {
+		content: ' ';
+		display: table;
+		clear: both;
+	}
+
+	.pro-note {
+		opacity: 0;
+		position: absolute;
+		top: -3px;
+		left: -3px;
+		right: -3px;
+		bottom: -3px;
+		text-align: center;
+		background: rgba(0, 0, 0, 0.6);
+		color: #FFF;
+		font-family: "Source Sans Pro", "Open Sans", sans-serif;
+		font-weight: 100;
+		font-size: 20px;
+		z-index: 9999;
+
+		transition: opacity .2s;
+
+		a {
+			color: rgb( 126,211,33 );
+		}
+	}
+
+	&:hover {
+		.pro-note {
+			opacity: 1;
+		}
+	}
 }

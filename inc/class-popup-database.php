@@ -456,6 +456,45 @@ class IncPopupDatabase {
 	}
 
 	/**
+	 * Count active Pop Ups
+	 *
+	 * @since  4.6
+	 * @param  int $id Optional. Don't count this Pop Up in the results.
+	 * @return int Number of active Pop Ups
+	 */
+	public function count_active( $id = '' ) {
+		global $wpdb;
+
+		if ( ! is_scalar( $id ) ) { $id = ''; }
+		$sql = "
+			SELECT COUNT(1)
+			FROM {$wpdb->posts}
+			WHERE post_type=%s AND post_status=%s AND ID!=%s
+		";
+		$sql = $wpdb->prepare( $sql, IncPopupItem::POST_TYPE, 'publish', $id );
+		$count = $wpdb->get_var( $sql );
+
+		return $count;
+	}
+
+	/**
+	 * Deactivate all active Pop Ups
+	 *
+	 * @since  4.6
+	 */
+	public function deactivate_all() {
+		global $wpdb;
+
+		$sql = "
+			UPDATE {$wpdb->posts}
+			SET post_status=%s
+			WHERE post_type=%s AND post_status=%s
+		";
+		$sql = $wpdb->prepare( $sql, 'draft', IncPopupItem::POST_TYPE, 'publish' );
+		$wpdb->query( $sql );
+	}
+
+	/**
 	 * Returns the plugin settings.
 	 *
 	 * @since  4.6

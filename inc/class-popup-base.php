@@ -48,26 +48,6 @@ abstract class IncPopupBase {
 			array( 'IncPopup', 'load_optional_files' )
 		);
 
-		// Return a list of all popup style URLs.
-		add_filter(
-			'popup-available-styles-url',
-			array( 'IncPopupBase', 'style_urls' )
-		);
-		add_filter(
-			'popover_available_styles_url',
-			array( 'IncPopupBase', 'style_urls' )
-		);
-
-		// Return a list of all popup style paths (absolute directory).
-		add_filter(
-			'popup-available-styles-directory',
-			array( 'IncPopupBase', 'style_paths' )
-		);
-		add_filter(
-			'popover_available_styles_directory',
-			array( 'IncPopupBase', 'style_paths' )
-		);
-
 		// Returns a list of all style infos (id, url, path, deprecated)
 		add_filter(
 			'popup-styles',
@@ -159,44 +139,6 @@ abstract class IncPopupBase {
 	}
 
 	/**
-	 * Returns a list of all core popup styles (URL to each style dir)
-	 * Handles filter `popup-available-styles-url`
-	 *
-	 * @since  4.6
-	 * @param  array $list
-	 * @return array The updated list.
-	 */
-	static public function style_urls( $list = array() ) {
-		$core_styles = self::_get_styles();
-
-		if ( ! is_array( $list ) ) { $list = array(); }
-		foreach ( $core_styles as $key => $data ) {
-			$list[ $data->name ] = PO_TPL_URL . $key;
-		}
-
-		return $list;
-	}
-
-	/**
-	 * Returns a list of all core popup styles (absolute path to each style dir)
-	 * Handles filter `popup-available-styles-directory`
-	 *
-	 * @since  4.6
-	 * @param  array $list
-	 * @return array The updated list.
-	 */
-	static public function style_paths( $list = array() ) {
-		$core_styles = self::_get_styles();
-
-		if ( ! is_array( $list ) ) { $list = array(); }
-		foreach ( $core_styles as $key => $data ) {
-			$list[ $data->name ] = PO_TPL_DIR . $key;
-		}
-
-		return $list;
-	}
-
-	/**
 	 * Returns a list of all style infos (id, url, path, deprecated)
 	 * Handles filter `popup-styles`
 	 *
@@ -217,6 +159,7 @@ abstract class IncPopupBase {
 				'url' => trailingslashit( PO_TPL_URL . $key ),
 				'dir' => trailingslashit( PO_TPL_DIR . $key ),
 				'name' => $data->name,
+				'pro' => (true == @$data->pro),
 				'deprecated' => (true == @$data->deprecated),
 			);
 			if ( isset( $urls[$data->name] ) ) { unset( $urls[$data->name] ); }
@@ -229,6 +172,7 @@ abstract class IncPopupBase {
 				'url' => $url,
 				'dir' => @$paths[$key],
 				'name' => $key,
+				'pro' => false,
 				'deprecated' => false,
 			);
 		}

@@ -30,9 +30,7 @@ $styles = apply_filters( 'popup-styles', array() );
 			value="<?php echo esc_attr( $popup->deprecated_style ); ?>" />
 		<select class="block" id="po-style" name="po_style">
 			<?php foreach ( $styles as $key => $data ) : ?>
-				<?php if ( $data->deprecated && $popup->style != $key ) {
-					continue;
-				} ?>
+				<?php if ( $data->deprecated && $popup->style != $key ) { continue; } ?>
 				<option value="<?php echo esc_attr( $key ); ?>"
 					data-old="<?php echo esc_attr( $data->deprecated ); ?>"
 					<?php selected( $key, $popup->style ); ?>>
