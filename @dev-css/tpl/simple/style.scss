@@ -87,7 +87,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		position: relative;
 		z-index: 1;
 		overflow: hidden;
-		max-height: 100%;
+		height: 100%;
 
 		&.custom-size {
 			max-width: none;
@@ -102,7 +102,11 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		}
 
 		.wdpu-text {
-			padding: 20px;
+			padding: 20px 20px 64px;
+			background: #F2F2F2;
+			position: relative;
+			z-index: 10;
+			height: 100%;
 		}
 
 		.wdpu-image {
@@ -110,6 +114,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 			top: 0;
 			bottom: 0;
 			overflow: hidden;
+			z-index: -1;
 
 			img {
 				height: 100%;
@@ -120,6 +125,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 
 		.wdpu-inner {
 			overflow: auto;
+			height: 100%;
 
 			&.no-bm {
 				margin: 0;
@@ -127,7 +133,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		}
 
 		.wdpu-buttons {
-			position: relative;
+			position: absolute;
 			padding: 20px;
 			height: 24px;
 			margin: 0 -20px -20px;
@@ -202,6 +208,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 	/* Default: Image on right side */
 	.wdpu-text {
 		margin: 0 40% 0 0;
+		width: 60%;
 	}
 	.wdpu-image {
 		text-align: right;
@@ -213,6 +220,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		.wdpu-text {
 			margin: 0 0 0 40%;
 			margin-right: 0;
+			width: 60%;
 		}
 		.wdpu-image {
 			text-align: left;
@@ -224,6 +232,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 	&.no-img {
 		.wdpu-text {
 			margin: 0;
+			width: 100%;
 		}
 		.wdpu-image {
 			display: none;
