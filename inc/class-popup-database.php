@@ -228,7 +228,7 @@ class IncPopupDatabase {
 				);
 				// Save the popup as custom posttype.
 				$popup = new IncPopupItem( $data );
-				$popup->save();
+				$popup->save( false );
 				$count += 1;
 			}
 		}
