@@ -20,10 +20,12 @@ copy_files() {
 		error "SVN path not found: $SVN_DIR"
 	fi
 
-	if [ -f "$CUR_DIR"/archive.sh ]; then
+	if [ -f "$CUR_DIR"/do/archive.sh ]; then
 		cd "$CUR_DIR"
-		"$CUR_DIR"/archive.sh "$CUR_DIR"/plugin.zip
+		"$CUR_DIR"/do/archive.sh "$CUR_DIR"/plugin.zip
 		echo "- Created a clean export of the current plugin"
+	else
+		error "Could not find do/archive.sh script"
 	fi
 	if [ -f "$CUR_DIR"/plugin.zip ]; then
 		rm -rf "$CUR_DIR/plugin"
@@ -43,6 +45,8 @@ copy_files() {
 		done
 		echo ""
 		rm -rf "$CUR_DIR/plugin"
+	else
+		error "Could not find plugin archive"
 	fi
 }
 

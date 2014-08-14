@@ -25,15 +25,19 @@ install_plugin() {
 			"$ sh do/clean-install.sh"
 	fi
 
-	if [ -f "$CUR_DIR"/archive.sh ]; then
+	if [ -f "$CUR_DIR"/do/archive.sh ]; then
 		cd "$CUR_DIR"
-		"$CUR_DIR"/archive.sh "$CUR_DIR"/plugin.zip
+		"$CUR_DIR"/do/archive.sh "$CUR_DIR"/plugin.zip
 		echo "- Created a clean export of the current plugin"
+	else
+		error "Could not find do/archive.sh script"
 	fi
 	if [ -f "$CUR_DIR"/plugin.zip ]; then
 		unzip -o -q plugin.zip -d "$WP_DIR"/wp-content/plugins/
 		echo "- Plugin extracted to new WordPress installation"
 		rm "$CUR_DIR"/plugin.zip
+	else
+		error "Could not find plugin archive"
 	fi
 }
 
