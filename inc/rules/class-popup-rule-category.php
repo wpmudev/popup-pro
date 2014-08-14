@@ -7,7 +7,7 @@ Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
 Rules:       On post category, Not on post category
-Limit:       no global
+Limit:       no global, pro
 Version:     1.0
 
 NOTE: DON'T RENAME THIS FILE!!

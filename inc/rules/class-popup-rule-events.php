@@ -7,6 +7,7 @@ Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
 Rules:
+Limit:       pro
 Version:     1.0
 
 NOTE: DON'T RENAME THIS FILE!!

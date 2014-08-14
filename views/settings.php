@@ -226,7 +226,9 @@ $ordered_rules = array();
 				$ordered_rules[ $name ]['active'] = $is_active;
 				$ordered_rules[ $name ]['desc'] = __( trim( $data['desc'] ), PO_LANG );
 
-				if ( IncPopup::use_global() && in_array( 'no global', $data['limit'] ) ) {
+				if ( PO_VERSION != 'pro' && in_array( 'pro', $data['limit'] ) ) {
+					$ordered_rules[ $name ]['disabled'] = __( 'Available in the PRO version', PO_LANG );
+				} else if ( IncPopup::use_global() && in_array( 'no global', $data['limit'] ) ) {
 					$ordered_rules[ $name ]['disabled'] = __( 'Not available for global Pop Ups', PO_LANG );
 				} else if ( ! IncPopup::use_global() && in_array( 'global', $data['limit'] ) ) {
 					$ordered_rules[ $name ]['disabled'] = true;
