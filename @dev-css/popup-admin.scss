@@ -263,14 +263,22 @@ div.msg-err {
 			text-align: center;
 		}
 
-		.rule {
-			background: #999;
+		.rule,
+		.rule-always {
 			color: #FFF;
 			padding: 1px 6px;
 			border-radius: 3px;
 			margin: 0 4px 1px 0;
 			font-size: 12px;
 			float: left;
+		}
+
+		.rule {
+			background: #999;
+		}
+
+		.rule-always {
+			background: #CCC;
 		}
 
 		#the-list {
@@ -737,6 +745,41 @@ div.msg-err {
 		padding-bottom: 10px;
 	}
 
+	.wpmui-toggle {
+		width: 40px;
+	}
+
+	.wpmui-toggle-label {
+		border: 0;
+		height: 16px;
+		background: #CCC;
+	}
+
+	.wpmui-toggle-inner {
+		display: none;
+	}
+
+	.wpmui-toggle-switch {
+		margin: 3px;
+		width: 10px;
+		height: 10px;
+		right: 24px;
+		border: 0;
+		box-shadow: none;
+
+		transition: right .2s;
+	}
+
+	.wpmui-toggle-checkbox:checked {
+		& + .wpmui-toggle-label {
+			background: #3A3;
+		}
+
+		& + .wpmui-toggle-label .wpmui-toggle-switch {
+			right: 0;
+		}
+	}
+
 	.all-rules-box,
 	.active-rules-box {
 		border: 1px solid #E5E5E5;
@@ -776,6 +819,10 @@ div.msg-err {
 				background: #FFF;
 				box-shadow: 0 1px 3px #E9E9E9;
 			}
+		}
+
+		.wpmui-toggle {
+			margin: 2px 6px;
 		}
 	}
 

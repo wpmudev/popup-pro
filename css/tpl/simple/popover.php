@@ -25,6 +25,9 @@ if ( $this->is_preview ) {
 		$msg_class .= 'mobile-no-img ';
 	}
 }
+if ( $has_buttons ) {
+	$msg_class .= 'buttons ';
+}
 if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 
 function show_img( $popup ) {

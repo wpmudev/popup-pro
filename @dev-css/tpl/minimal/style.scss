@@ -130,7 +130,6 @@ $col_secondary: #000002;
 		}
 
 		.wdpu-inner {
-			margin-bottom: 75px;
 			overflow: auto;
 
 			&.no-bm {
@@ -265,6 +264,15 @@ $col_secondary: #000002;
 		}
 		.wdpu-msg-inner {
 			border-radius: 6px;
+		}
+	}
+
+	&.buttons {
+		.wdpu-inner {
+			margin-bottom: 75px;
+		}
+		.wdpu-image {
+			margin-bottom: 75px;
 		}
 	}
 

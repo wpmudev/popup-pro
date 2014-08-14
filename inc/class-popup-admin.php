@@ -517,7 +517,7 @@ class IncPopup extends IncPopupBase {
 					<span class="rule"><?php echo esc_html( $label ); ?></span>
 				<?php endforeach; ?>
 				<?php if ( ! $rule_count ) : ?>
-					<span class="rule"><?php _e( 'Always', PO_LANG ); ?></span>
+					<span class="rule-always"><?php _e( 'Always Show Pop Up', PO_LANG ); ?></span>
 				<?php endif; ?>
 				</div>
 				<?php
