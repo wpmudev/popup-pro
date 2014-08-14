@@ -221,7 +221,6 @@ class IncPopupItem {
 		if ( ! is_array( $data ) ) {
 			return;
 		}
-		$this->reset();
 
 		$styles = apply_filters( 'popup-styles', array() );
 		$style_keys = array_keys( $styles );
