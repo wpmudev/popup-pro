@@ -133,7 +133,6 @@
 				if ( $po_img.length ) {
 					var img_width = $po_img.width(),
 						box_width = $po_img.parent().width();
-						console.log ('move image', img_width, box_width);
 
 					if ( img_width > box_width ) {
 						// Center image.
@@ -385,6 +384,7 @@
 
 				if ( data ) {
 					me.have_popup = true;
+					me.exec_scripts();
 					me.prepare_dom();
 				}
 			};
@@ -444,6 +444,7 @@
 			} else {
 				me.have_popup = true;
 				me.data = _options['popup'];
+				me.exec_scripts();
 				me.maybe_show_popup();
 			}
 		};
@@ -453,10 +454,22 @@
 		 * again when the rule validates a second time.
 		 */
 		this.reinit = function reinit() {
-			if ( me.data.display_data['click_multi'] ) {
+			if ( me.data.display == 'click' && me.data.display_data['click_multi'] ) {
 				me.maybe_show_popup();
 			}
 		};
+
+		/**
+		 * If the popup provides custom javascript code we execute it here.
+		 * Custom script might be provided by rules that are executed in JS such
+		 * as the window-width rule or on-click behavior.
+		 */
+		this.exec_scripts = function exec_scripts() {
+			if ( undefined !== me.data.script ) {
+				var fn = new Function( 'me', me.data.script );
+				fn( me );
+			}
+		}
 
 
 		/*======================================*\
@@ -516,7 +529,6 @@
 
 
 		/*-----  Finished  ------*/
-
 
 		// Only expose the "init" and "load" functions of the Pop Up.
 		return {

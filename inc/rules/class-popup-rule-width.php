@@ -51,33 +51,32 @@ class IncPopupRule_Width extends IncPopupRule {
 	}
 
 	/**
-	 * This javascript is the actual condition.
+	 * Returns the javascript to evaluate the rule.
 	 *
 	 * @since  4.6
 	 */
-	public function inject_script_width() {
+	public function script_width() {
+		ob_start();
 		?>
-		<script>
-			(function() {
-				var apply_rule = function (e, popup, data) {
-					var reject = false, width = jQuery(window).width();
-					data = data || {};
-					if ( ! isNaN(data.width_min) && data.width_min > 0 ) {
-						if ( width < data.width_min ) { reject = true; }
-					}
-					if ( ! isNaN(data.width_max) && data.width_max > 0 ) {
-						if ( width > data.width_max ) { reject = true; }
-					}
+		var apply_rule = function (e, popup, data) {
+			var reject = false, width = jQuery(window).width();
+			data = data || {};
+			if ( ! isNaN(data.width_min) && data.width_min > 0 ) {
+				if ( width < data.width_min ) { reject = true; }
+			}
+			if ( ! isNaN(data.width_max) && data.width_max > 0 ) {
+				if ( width > data.width_max ) { reject = true; }
+			}
 
-					if ( reject ) {
-						popup.reject();
-					}
-				};
+			if ( reject ) {
+				popup.reject();
+			}
+		};
 
-				jQuery(document).on( 'popup-init', apply_rule );
-			})();
-		</script>
+		jQuery(document).on( 'popup-init', apply_rule );
 		<?php
+		$code = ob_get_clean();
+		return $code;
 	}
 
 	/**
@@ -96,11 +95,7 @@ class IncPopupRule_Width extends IncPopupRule {
 
 			$script_data['width_min'] = $data['min'];
 			$script_data['width_max'] = $data['max'];
-
-			add_action(
-				'wp_footer',
-				array( $this, 'inject_script_width' )
-			);
+			$script_data['script'] = $this->script_width();
 		}
 
 		return $script_data;

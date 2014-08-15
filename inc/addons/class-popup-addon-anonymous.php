@@ -100,7 +100,7 @@ class IncPopupAddon_AnonyousLoading {
 		// Generate a random Script URL.
 		$slug = self::$_slug;
 		$val = self::_rot( time(), rand( 1, 22 ) );
-		$script_url = add_query_arg( array( $slug => $val ) );
+		$script_url = add_query_arg( array( $slug => $val ), WDev()->current_url() );
 
 		// The script is the home URL with a special URL-param.
 		wp_enqueue_script(

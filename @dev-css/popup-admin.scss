@@ -894,8 +894,15 @@ div.msg-err {
 		}
 	}
 
+	.col-colorpicker {
+		width: 41.66%;
+		min-width: 260px;
+		margin-bottom: 10px;
+	}
 
 	.wp-picker-container {
+		width: 260px;
+
 		* {
 			box-sizing: content-box;
 		}

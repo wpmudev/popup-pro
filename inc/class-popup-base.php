@@ -276,6 +276,8 @@ abstract class IncPopupBase {
 			'rule_data' => apply_filters( 'popup-save-rules', array() ),
 		);
 
+		if ( ! is_array( $data['rule'] ) ) { $data['rule'] = array(); }
+
 		return $data;
 	}
 

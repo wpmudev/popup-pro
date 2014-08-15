@@ -47,6 +47,17 @@ class IncPopupRule_Events extends IncPopupRule {
 		);
 	}
 
+	/**
+	 * Renders the new display options on the meta_behavior.php view
+	 *
+	 * @since  4.6
+	 * @param  IncPopupItem $popup The Pop Up that is displayed
+	 */
+	public function display_options( $popup ) {
+		$this->form_mouseleave( $popup );
+		$this->form_click( $popup );
+	}
+
 
 	/*=============================*\
 	=================================
@@ -56,11 +67,6 @@ class IncPopupRule_Events extends IncPopupRule {
 	=================================
 	\*=============================*/
 
-
-	public function display_options( $popup ) {
-		$this->form_mouseleave( $popup );
-		$this->form_click( $popup );
-	}
 
 	protected function form_mouseleave( $popup ) {
 		?>
@@ -77,6 +83,52 @@ class IncPopupRule_Events extends IncPopupRule {
 		</div>
 		<?php
 	}
+
+
+	/**
+	 * Append data to the popup javascript-variable.
+	 *
+	 * @since  4.6
+	 * @param  array $data Data collection that is printed to javascript.
+	 * @param  IncPopupItem $popup The original popup object.
+	 * @return array Modified data collection.
+	 */
+	public function append_data_on_exit( $script_data, $popup ) {
+		if ( 'leave' == $popup->display ) {
+			$script_data['script'] = 'me.custom_handler = ' . $this->script_on_exit();
+		}
+
+		return $script_data;
+	}
+
+	/**
+	 * Returns the javascript code that triggers the exit event.
+	 *
+	 * @since  4.6
+	 */
+	public function script_on_exit() {
+		ob_start();
+		?>
+		function( me ) {
+			jQuery(document).one( 'mouseleave', function() {
+				me.show();
+				return false;
+			});
+		}
+		<?php
+		$code = ob_get_clean();
+		return $code;
+	}
+
+
+	/*==============================*\
+	==================================
+	==                              ==
+	==           ON_CLICK           ==
+	==                              ==
+	==================================
+	\*==============================*/
+
 
 	protected function form_click( $popup ) {
 		?>
@@ -109,59 +161,6 @@ class IncPopupRule_Events extends IncPopupRule {
 		<?php
 	}
 
-
-	/**
-	 * Append data to the popup javascript-variable.
-	 *
-	 * @since  4.6
-	 * @param  array $data Data collection that is printed to javascript.
-	 * @param  IncPopupItem $popup The original popup object.
-	 * @return array Modified data collection.
-	 */
-	public function append_data_on_exit( $script_data, $popup ) {
-		if ( 'leave' == $popup->display ) {
-			add_action(
-				'wp_footer',
-				array( $this, 'inject_script_on_exit' )
-			);
-		}
-
-		return $script_data;
-	}
-
-	/**
-	 * Injects some javascript for the rule into the page footer.
-	 *
-	 * @since  4.6
-	 */
-	public function inject_script_on_exit() {
-		?>
-		<script>
-			jQuery(function(){
-				setTimeout(function(){
-					inc_popup.extend.custom_handler = function( popup ) {
-						jQuery(document).one( 'mouseleave', function() {
-							popup.show();
-							return false;
-						});
-					};
-				}, 10);
-			});
-		</script>
-		<?php
-	}
-
-
-	/*==============================*\
-	==================================
-	==                              ==
-	==           ON_CLICK           ==
-	==                              ==
-	==================================
-	\*==============================*/
-
-
-
 	/**
 	 * Append data to the popup javascript-variable.
 	 *
@@ -172,37 +171,30 @@ class IncPopupRule_Events extends IncPopupRule {
 	 */
 	public function append_data_on_click( $script_data, $popup ) {
 		if ( 'click' == $popup->display ) {
-			add_action(
-				'wp_footer',
-				array( $this, 'inject_script_on_click' )
-			);
+			$script_data['script'] = 'me.custom_handler = ' . $this->script_on_click();
 		}
 
 		return $script_data;
 	}
 
 	/**
-	 * Injects some javascript for the rule into the page footer.
+	 * Returns the javascript code that triggers the click event.
 	 *
 	 * @since  4.6
 	 */
-	public function inject_script_on_click() {
+	public function script_on_click() {
+		ob_start();
 		?>
-		<script>
-			jQuery(function(){
-				setTimeout(function(){
-					inc_popup.extend.custom_handler = function( popup ) {
-						if ( popup.data.display_data['click_multi'] ) {
-							jQuery(document).on( 'click', popup.data.display_data['click'], popup.show );
-						} else {
-							jQuery(document).one( 'click', popup.data.display_data['click'], popup.show );
-						}
-					};
-				}, 10);
-			});
-
-		</script>
+		function( me ) {
+			if ( me.data.display_data['click_multi'] ) {
+				jQuery(document).on( 'click', me.data.display_data['click'], me.show );
+			} else {
+				jQuery(document).one( 'click', me.data.display_data['click'], me.show );
+			}
+		}
 		<?php
+		$code = ob_get_clean();
+		return $code;
 	}
 
 };

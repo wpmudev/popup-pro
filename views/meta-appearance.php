@@ -58,7 +58,7 @@ $styles = apply_filters( 'popup-styles', array() );
 				'on this page. ' .
 				'Once you save your Pop Up with a new style you cannot ' .
 				'revert to this style!<br />' .
-				'Tipp: Use the Preview function to test this Pop Up with any ' .
+				'Tipp: Use the Preview function to test this Pop Up with one ' .
 				'of the new styles without saving it.', PO_LANG
 			); ?></em></p>
 		</div>
@@ -79,24 +79,20 @@ endif; ?>
 	</div>
 </div>
 <div class="wpmui-grid-12 chk-custom-colors">
-	<div class="col-5 inp-row">
+	<div class="col-colorpicker inp-row">
 		<input type="text"
 			class="colorpicker inp-small"
 			name="po_color[col1]"
 			value="<?php echo esc_attr( $popup->color['col1'] ); ?>" />
+		<br />
+		<?php _e( 'Links, button background, heading and subheading', PO_LANG ); ?>
 	</div>
-	<div class="col-5 inp-row">
+	<div class="col-colorpicker inp-row">
 		<input type="text"
 			class="colorpicker inp-small"
 			name="po_color[col2]"
 			value="<?php echo esc_attr( $popup->color['col2'] ); ?>" />
-	</div>
-</div>
-<div class="wpmui-grid-12 chk-custom-colors">
-	<div class="col-5">
-		<?php _e( 'Links, button background, heading and subheading', PO_LANG ); ?>
-	</div>
-	<div class="col-5">
+		<br />
 		<?php _e( 'Button text', PO_LANG ); ?>
 	</div>
 </div>
