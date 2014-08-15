@@ -59,7 +59,7 @@ $styles = apply_filters( 'popup-styles', array() );
 				'Once you save your Pop Up with a new style you cannot ' .
 				'revert to this style!<br />' .
 				'Tipp: Use the Preview function to test this Pop Up with one ' .
-				'of the new styles without saving it.', PO_LANG
+				'of the new styles before saving it.', PO_LANG
 			); ?></em></p>
 		</div>
 	</div>
