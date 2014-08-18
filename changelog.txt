@@ -1,4 +1,4 @@
-Plugin Name: Pop Up!
+Plugin Name: Pop Up Pro
 Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 
 Change Log:

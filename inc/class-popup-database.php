@@ -249,7 +249,7 @@ class IncPopupDatabase {
 			WDev()->message(
 				sprintf(
 					__(
-					'<strong>Pop Up!</strong><br />' .
+					'<strong>Pop Up Pro</strong><br />' .
 					'Your installation was successfully updated to use the ' .
 					'latest version of the plugin!<br />' .
 					'<em>Note: Some Pop Up options changed or were replaced. ' .
