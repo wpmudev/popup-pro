@@ -128,7 +128,7 @@ class IncPopupItem {
 	// render the popup.
 	public $script_data = array();
 
-	// Flag that defines if the Pop Up is displayed in preview-mode.
+	// Flag that defines if the PopUp is displayed in preview-mode.
 	public $is_preview = false;
 
 	// -------------------------------------------------------------------------
@@ -370,7 +370,7 @@ class IncPopupItem {
 		if ( is_admin() ) {
 			// Name.
 			if ( empty( $this->name ) ) {
-				$this->name = __( 'New Pop Up', PO_LANG );
+				$this->name = __( 'New PopUp', PO_LANG );
 			}
 
 			// Order.
@@ -531,29 +531,29 @@ class IncPopupItem {
 		if ( $show_message ) {
 			if ( ! empty( $res ) ) {
 				if ( $this->orig_status === $this->status ) {
-					$msg = __( 'Saved Pop Up "<strong>%1$s</strong>"', PO_LANG );
+					$msg = __( 'Saved PopUp "<strong>%1$s</strong>"', PO_LANG );
 				} else {
 					switch ( $status ) {
 						case 'publish':
-							$msg = __( 'Activated Pop Up "<strong>%1$s</strong>".', PO_LANG );
+							$msg = __( 'Activated PopUp "<strong>%1$s</strong>".', PO_LANG );
 							break;
 
 						case 'draft':
-							$msg = __( 'Deactivated Pop Up "<strong>%1$s</strong>".', PO_LANG );
+							$msg = __( 'Deactivated PopUp "<strong>%1$s</strong>".', PO_LANG );
 							break;
 
 						case 'trash':
-							$msg = __( 'Moved Pop Up "<strong>%1$s</strong>" to trash.', PO_LANG );
+							$msg = __( 'Moved PopUp "<strong>%1$s</strong>" to trash.', PO_LANG );
 							break;
 
 						default:
-							$msg = __( 'Saved Pop Up "<strong>%1$s</strong>".', PO_LANG );
+							$msg = __( 'Saved PopUp "<strong>%1$s</strong>".', PO_LANG );
 							break;
 					}
 				}
 				WDev()->message( sprintf( $msg, $this->name ) );
 			} else {
-				WDev()->message( __( 'Could not save Pop Up.', PO_LANG ), 'err' );
+				WDev()->message( __( 'Could not save PopUp.', PO_LANG ), 'err' );
 			}
 		}
 
@@ -581,7 +581,7 @@ class IncPopupItem {
 	}
 
 	/**
-	 * Load the Pop Up HTML code from the popup.php template.
+	 * Load the PopUp HTML code from the popup.php template.
 	 *
 	 * @since  4.6
 	 * @return string HTML code.
@@ -613,7 +613,7 @@ class IncPopupItem {
 	}
 
 	/**
-	 * Load the Pop Up CSS styles from the style.css template.
+	 * Load the PopUp CSS styles from the style.css template.
 	 *
 	 * @since  4.6
 	 * @return string CSS code.
@@ -648,7 +648,7 @@ class IncPopupItem {
 	 *
 	 * @since  4.6
 	 * @param  bool $is_preview Optional. Defines if we display a preview of the
-	 *                Pop Up (Dashboard) or the real Pop Up (Front End)
+	 *                PopUp (Dashboard) or the real PopUp (Front End)
 	 * @return array
 	 */
 	public function get_script_data( $is_preview = false ) {
@@ -674,7 +674,7 @@ class IncPopupItem {
 	 * Change some script_data properties for displaying a popup-preview.
 	 *
 	 * @since  4.6
-	 * @param  array $data The Pop Up data collection.
+	 * @param  array $data The PopUp data collection.
 	 * @return array Modified data collection.
 	 */
 	public function preview_mode( $data ) {

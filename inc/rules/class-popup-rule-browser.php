@@ -28,7 +28,7 @@ class IncPopupRule_Browser extends IncPopupRule {
 		$this->add_rule(
 			'mobile',
 			__( 'Only on mobile devices', PO_LANG ),
-			__( 'Shows the Pop Up to visitors that are using a mobile device (Phone or Tablet).', PO_LANG ),
+			__( 'Shows the PopUp to visitors that are using a mobile device (Phone or Tablet).', PO_LANG ),
 			'no_mobile',
 			6
 		);
@@ -37,7 +37,7 @@ class IncPopupRule_Browser extends IncPopupRule {
 		$this->add_rule(
 			'no_mobile',
 			__( 'Not on mobile devices', PO_LANG ),
-			__( 'Shows the Pop Up to visitors that are using a normal computer or laptop (i.e. not a Phone or Tablet).', PO_LANG ),
+			__( 'Shows the PopUp to visitors that are using a normal computer or laptop (i.e. not a Phone or Tablet).', PO_LANG ),
 			'mobile',
 			6
 		);

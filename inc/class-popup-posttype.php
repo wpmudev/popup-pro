@@ -13,7 +13,7 @@ class IncPopupPosttype {
 	static public $perms = '';
 
 	/**
-	 * The position of the Pop Up main menu.
+	 * The position of the PopUp main menu.
 	 * We use a trick to avoid collissions with other menu-items
 	 * @var int
 	 */
@@ -72,30 +72,30 @@ class IncPopupPosttype {
 
 		// Register Custom Post Type
 		$labels = array(
-			'name'                => _x( 'Pop Ups', 'Post Type General Name', PO_LANG ),
-			'singular_name'       => _x( 'Pop Up', 'Post Type Singular Name', PO_LANG ),
-			'menu_name'           => __( 'Pop Up', PO_LANG ),
+			'name'                => _x( 'PopUps', 'Post Type General Name', PO_LANG ),
+			'singular_name'       => _x( 'PopUp', 'Post Type Singular Name', PO_LANG ),
+			'menu_name'           => __( 'PopUp', PO_LANG ),
 			'parent_item_colon'   => __( 'Parent Item:', PO_LANG ),
-			'all_items'           => __( 'Pop Ups', PO_LANG ),
+			'all_items'           => __( 'PopUps', PO_LANG ),
 			'view_item'           => __( 'View Item', PO_LANG ),
-			'add_new_item'        => __( 'Add New Pop Up', PO_LANG ),
+			'add_new_item'        => __( 'Add New PopUp', PO_LANG ),
 			'add_new'             => __( 'Add New', PO_LANG ),
-			'edit_item'           => __( 'Edit Pop Up', PO_LANG ),
-			'update_item'         => __( 'Update Pop Up', PO_LANG ),
-			'search_items'        => __( 'Search Pop Up', PO_LANG ),
+			'edit_item'           => __( 'Edit PopUp', PO_LANG ),
+			'update_item'         => __( 'Update PopUp', PO_LANG ),
+			'search_items'        => __( 'Search PopUp', PO_LANG ),
 			'not_found'           => __( 'Not found', PO_LANG ),
-			'not_found_in_trash'  => __( 'No Pop Up found in Trash', PO_LANG ),
+			'not_found_in_trash'  => __( 'No PopUp found in Trash', PO_LANG ),
 		);
 
 		if ( IncPopup::use_global() ) {
-			$labels['name']          = _x( 'Global Pop Ups', 'Post Type General Name', PO_LANG );
-			$labels['singular_name'] = _x( 'Global Pop Up', 'Post Type Singular Name', PO_LANG );
-			$labels['all_items']     = __( 'Global Pop Ups', PO_LANG );
+			$labels['name']          = _x( 'Global PopUps', 'Post Type General Name', PO_LANG );
+			$labels['singular_name'] = _x( 'Global PopUp', 'Post Type Singular Name', PO_LANG );
+			$labels['all_items']     = __( 'Global PopUps', PO_LANG );
 		}
 
 		$args = array(
-			'label'               => __( 'Pop Up', PO_LANG ),
-			'description'         => __( 'Display Pop Up messages on your website!', PO_LANG ),
+			'label'               => __( 'PopUp', PO_LANG ),
+			'description'         => __( 'Display PopUp messages on your website!', PO_LANG ),
 			'labels'              => $labels,
 			'supports'            => array( '' ),
 			'hierarchical'        => false,

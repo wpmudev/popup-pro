@@ -1,5 +1,5 @@
 /**
- * Admin Javascript functions for Pop Up
+ * Admin Javascript functions for PopUp
  */
 
 jQuery(function init_admin() {
@@ -299,7 +299,7 @@ jQuery(function init_admin() {
 				excl2 = active_rules.find( '#po-rule-' + keys[ ind ] );
 
 				if ( excl1.hasClass( 'on' ) ) {
-					// Rule is active; possibly migrated from old Pop Up editor
+					// Rule is active; possibly migrated from old PopUp editor
 					// so we cannot disable the rule now...
 					continue;
 				}
@@ -474,7 +474,7 @@ jQuery(function init_admin() {
 		tbody.disableSelection();
 	}
 
-	// Shows a preview of the current Pop Up.
+	// Shows a preview of the current PopUp.
 	function init_preview() {
 		var doc = jQuery( document );
 			body = jQuery( '#wpcontent' );

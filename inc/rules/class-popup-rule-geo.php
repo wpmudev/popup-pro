@@ -29,7 +29,7 @@ class IncPopupRule_Country extends IncPopupRule {
 		$this->add_rule(
 			'country',
 			__( 'In a specific Country', PO_LANG ),
-			__( 'Shows the Pop Up if the user is in a certain country.', PO_LANG ),
+			__( 'Shows the PopUp if the user is in a certain country.', PO_LANG ),
 			'no_country',
 			25
 		);
@@ -38,7 +38,7 @@ class IncPopupRule_Country extends IncPopupRule {
 		$this->add_rule(
 			'no_country',
 			__( 'Not in a specific Country', PO_LANG ),
-			__( 'Shows the Pop Up if the user is not in a certain country.', PO_LANG ),
+			__( 'Shows the PopUp if the user is not in a certain country.', PO_LANG ),
 			'country',
 			25
 		);

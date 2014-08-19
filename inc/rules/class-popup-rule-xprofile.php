@@ -29,7 +29,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 		$this->add_rule(
 			'xprofile',
 			__( 'On XProfile match', PO_LANG ),
-			__( 'Shows the Pop Up if the users XProfile field matches the condition.', PO_LANG ),
+			__( 'Shows the PopUp if the users XProfile field matches the condition.', PO_LANG ),
 			'no_xprofile',
 			10
 		);
@@ -38,7 +38,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 		$this->add_rule(
 			'no_xprofile',
 			__( 'Not on XProfile match', PO_LANG ),
-			__( 'Shows the Pop Up if the users XProfile field does not match the condition.', PO_LANG ),
+			__( 'Shows the PopUp if the users XProfile field does not match the condition.', PO_LANG ),
 			'xprofile',
 			10
 		);
@@ -169,7 +169,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	}
 
 	/**
-	 * Renders the input form for Pop Up editor.
+	 * Renders the input form for PopUp editor.
 	 *
 	 * @since  4.6
 	 * @param  string $name

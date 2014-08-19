@@ -9,7 +9,7 @@
 ?>
 <div class="wpmui-grid-12">
 	<div class="col-12">
-		<strong><?php _e( 'When to show the Pop Up:', PO_LANG ); ?></strong>
+		<strong><?php _e( 'When to show the PopUp:', PO_LANG ); ?></strong>
 	</div>
 </div>
 <div class="wpmui-grid-12" style="overflow: visible">
@@ -134,7 +134,7 @@
 				value="<?php echo esc_attr( $popup->hide_expire ); ?>"
 				placeholder="365" />
 			<?php _e( 'days', PO_LANG ); ?>
-			<?php _e( '(upon expiry, user will see this Pop Up again)', PO_LANG ); ?>
+			<?php _e( '(upon expiry, user will see this PopUp again)', PO_LANG ); ?>
 		</label>
 	</div>
 </div>
@@ -153,7 +153,7 @@
 				name="po_overlay_close"
 				<?php checked( ! $popup->overlay_close ); ?>
 				/>
-			<?php _e( 'Click on the background does not close Pop Up.', PO_LANG ); ?>
+			<?php _e( 'Click on the background does not close PopUp.', PO_LANG ); ?>
 		</label>
 	</div>
 

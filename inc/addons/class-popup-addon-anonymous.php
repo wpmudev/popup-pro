@@ -11,19 +11,19 @@ Version:     1.0
 
 /**
  * Quick overview of how this works:
- * - The page initially does not contain Pop Up data.
+ * - The page initially does not contain PopUp data.
  * - This Add-On first enqueues the new <script> tag: The site home-URL with a
  *   random URL param.
  * - The Add-On also checks if the request contains the random URL param:
  *   a) When the param is not found: Output the page normally.
- *   b) When the param is found: Output javascript code with Pop Up details
+ *   b) When the param is found: Output javascript code with PopUp details
  *       instead of the page.
  *
  * The script that will be output contains the full public.js script with
- * settings to load the Pop Up via Ajax. So this is a 2-step loading process:
+ * settings to load the PopUp via Ajax. So this is a 2-step loading process:
  *
  *   1. Load anonymized "public.js" javascript
- *   2. Make ajax request to get Pop Up data
+ *   2. Make ajax request to get PopUp data
  *
  * Example of the anonymous script URL:
  *   http://local.dev/demo?lppuorrymprpprypmvrly=cfbidebjde
@@ -44,7 +44,7 @@ class IncPopupAddon_AnonyousLoading {
 		self::$_slug = self::_generate_slug();
 
 		if ( is_admin() ) {
-			// Called from the Pop Up Settings screen.
+			// Called from the PopUp Settings screen.
 			add_filter(
 				'popup-settings-loading-method',
 				array( __CLASS__, 'settings' )
@@ -79,7 +79,7 @@ class IncPopupAddon_AnonyousLoading {
 			'id'    => self::METHOD,
 			'label' => __( 'Anonymous Script', PO_LANG ),
 			'info'  => __(
-				'Load Pop Up like WordPress AJAX, but the URL to the ' .
+				'Load PopUp like WordPress AJAX, but the URL to the ' .
 				'JavaScript file will be masked.', PO_LANG
 				),
 		);
@@ -110,7 +110,7 @@ class IncPopupAddon_AnonyousLoading {
 		);
 
 		// This checks if the current URL contains the special URL-param.
-		// If the param is found then the Pop Up details are output instead of the page.
+		// If the param is found then the PopUp details are output instead of the page.
 		add_action(
 			'template_redirect',
 			array( __CLASS__, 'apply')
@@ -118,7 +118,7 @@ class IncPopupAddon_AnonyousLoading {
 	}
 
 	/**
-	 * Replaces selectors in the Pop Up HTML/CSS code
+	 * Replaces selectors in the PopUp HTML/CSS code
 	 *
 	 * @since  1.0.0
 	 * @param  array $data Data collection that is printed to javascript.
@@ -187,7 +187,7 @@ class IncPopupAddon_AnonyousLoading {
 	}
 
 	/**
-	 * Decide if we want to show the normal page or the Pop Up javascript - if
+	 * Decide if we want to show the normal page or the PopUp javascript - if
 	 * the URL param is set.
 	 *
 	 * @since  1.0.0

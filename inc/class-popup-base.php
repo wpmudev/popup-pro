@@ -54,13 +54,13 @@ abstract class IncPopupBase {
 			array( 'IncPopupBase', 'style_infos' )
 		);
 
-		// Ajax handlers to load Pop Up data (for logged in users).
+		// Ajax handlers to load PopUp data (for logged in users).
 		add_action(
 			'wp_ajax_inc_popup',
 			array( $this, 'ajax_load_popup' )
 		);
 
-		// Ajax handlers to load Pop Up data (for guests).
+		// Ajax handlers to load PopUp data (for guests).
 		add_action(
 			'wp_ajax_nopriv_inc_popup',
 			array( $this, 'ajax_load_popup' )
@@ -352,8 +352,8 @@ abstract class IncPopupBase {
 	}
 
 	/**
-	 * Returns an array of Pop Up objects that should be displayed for the
-	 * current page/user. The Pop Ups are in the order in which they are defined
+	 * Returns an array of PopUp objects that should be displayed for the
+	 * current page/user. The PopUps are in the order in which they are defined
 	 * in the admin list.
 	 *
 	 * @since  4.6
@@ -377,7 +377,7 @@ abstract class IncPopupBase {
 				// Forced popup ignores all conditions.
 				$show = true;
 			} else {
-				// Ignore empty Pop Ups.
+				// Ignore empty PopUps.
 				if ( empty( $popup->content ) ) { continue; }
 
 				// Apply the conditions to decide if the popup should be displayed.
@@ -402,7 +402,7 @@ abstract class IncPopupBase {
 	 * This flag is stored as a cookie on the users computer.
 	 *
 	 * @since  4.6
-	 * @param  int $id Pop Up ID
+	 * @param  int $id PopUp ID
 	 * @return bool
 	 */
 	protected function is_hidden( $id ) {

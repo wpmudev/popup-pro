@@ -1,6 +1,6 @@
 <?php
 /**
- * Metabox "Pop Up Content"
+ * Metabox "PopUp Content"
  *
  * Used in class-popup-admin.php
  * Available variables: $popup
@@ -39,7 +39,7 @@ $has_image = ! empty( $popup->image );
 
 	<div class="wpmui-grid-12">
 		<label for="po_content">
-			<h3 class="main-content"><?php _e( 'Main Pop Up Content', PO_LANG ); ?></h3>
+			<h3 class="main-content"><?php _e( 'Main PopUp Content', PO_LANG ); ?></h3>
 		</label>
 	</div>
 	<div>
@@ -81,14 +81,14 @@ $has_image = ! empty( $popup->image );
 <div class="content-image">
 	<div class="wpmui-grid-12">
 		<label>
-			<h3><?php _e( 'Pop Up Feature Image (optional)', PO_LANG ); ?></h3>
+			<h3><?php _e( 'PopUp Feature Image (optional)', PO_LANG ); ?></h3>
 		</label>
 	</div>
 	<div class="wpmui-grid-12">
 		<button class="button add_image"
 			type="button"
-			title="<?php _e( 'Add featured image to Pop Up.', PO_LANG ); ?>"
-			data-title="<?php _e( 'Pop Up Featured Image', PO_LANG ); ?>"
+			title="<?php _e( 'Add featured image to PopUp.', PO_LANG ); ?>"
+			data-title="<?php _e( 'PopUp Featured Image', PO_LANG ); ?>"
 			data-button="<?php _e( 'Select Image', PO_LANG ); ?>" >
 			<i class="add-image-icon dashicons dashicons-format-image"></i>
 			<?php _e( 'Add Image', PO_LANG ); ?>

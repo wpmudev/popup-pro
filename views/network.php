@@ -4,7 +4,7 @@
  * 1. PO_GLOBAL is true
  * 2. The site is a Multisite network
  * 3. User is in the Network-Dashboard
- * 4. Any "Pop Up" menuitem is opened (Edit Pop Up, Create Pop Up, ...)
+ * 4. Any "PopUp" menuitem is opened (Edit PopUp, Create PopUp, ...)
  */
 
 switch_to_blog( BLOG_ID_CURRENT_SITE );
@@ -26,12 +26,12 @@ blockquote p {
 </style>
 <div id="wpbody-content" tabindex="0">
 	<div class="wrap">
-		<h2><?php _e( 'Global Pop Ups', PO_LANG ); ?></h2>
+		<h2><?php _e( 'Global PopUps', PO_LANG ); ?></h2>
 
 		<blockquote>
 		<p><?php printf(
 			__(
-				'Please note:<br />We moved the global Pop Up menu items ' .
+				'Please note:<br />We moved the global PopUp menu items ' .
 				'to the <strong>Main Blog</strong> of your multisite ' .
 				'network!<br />The Main Blog of this network is "%1$s" - ' .
 				'<a href="%2$s">Go to the Main Blog now</a>!', PO_LANG
@@ -43,7 +43,7 @@ blockquote p {
 
 		<div>
 			<p><?php _e(
-				'Because the "Pop Up" menu items here on the ' .
+				'Because the "PopUp" menu items here on the ' .
 				'<strong>Network Admin</strong> are not used anymore ' .
 				'you can <strong>hide them</strong> at any time:', PO_LANG
 				); ?>

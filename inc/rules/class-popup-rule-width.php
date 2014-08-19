@@ -2,7 +2,7 @@
 /*
 Name:        Screen Size
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Adds a condition that can limit Pop Ups to certain screen sizes.
+Description: Adds a condition that can limit PopUps to certain screen sizes.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
@@ -30,7 +30,7 @@ class IncPopupRule_Width extends IncPopupRule {
 			'width',
 			__( 'Depending on screen size', PO_LANG ),
 			__(
-				'Shows the Pop Up if the window-width is within the defined ' .
+				'Shows the PopUp if the window-width is within the defined ' .
 				'limits. Note: The window size is checked upon page load! ' .
 				'when the user resizes the window after the page is loaded it ' .
 				'will not affect this rule.', PO_LANG

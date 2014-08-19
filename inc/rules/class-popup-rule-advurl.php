@@ -29,7 +29,7 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 		$this->add_rule(
 			'adv_url',
 			__( 'On approximate URL', PO_LANG ),
-			__( 'Shows the Pop Up if the user is on a certain URL.', PO_LANG ),
+			__( 'Shows the PopUp if the user is on a certain URL.', PO_LANG ),
 			'no_adv_url',
 			30
 		);
@@ -38,7 +38,7 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 		$this->add_rule(
 			'no_adv_url',
 			__( 'Not on approximate URL', PO_LANG ),
-			__( 'Shows the Pop Up if the user is not on a certain URL.', PO_LANG ),
+			__( 'Shows the PopUp if the user is not on a certain URL.', PO_LANG ),
 			'adv_url',
 			30
 		);

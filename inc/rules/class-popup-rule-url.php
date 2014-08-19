@@ -28,7 +28,7 @@ class IncPopupRule_Url extends IncPopupRule {
 		$this->add_rule(
 			'url',
 			__( 'On specific URL', PO_LANG ),
-			__( 'Shows the Pop Up if the user is on a certain URL.', PO_LANG ),
+			__( 'Shows the PopUp if the user is on a certain URL.', PO_LANG ),
 			'no_url',
 			20
 		);
@@ -37,7 +37,7 @@ class IncPopupRule_Url extends IncPopupRule {
 		$this->add_rule(
 			'no_url',
 			__( 'Not on specific URL', PO_LANG ),
-			__( 'Shows the Pop Up if the user is not on a certain URL.', PO_LANG ),
+			__( 'Shows the PopUp if the user is not on a certain URL.', PO_LANG ),
 			'url',
 			20
 		);

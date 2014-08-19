@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Pop Up Pro
+Plugin Name: PopUp Pro
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Allows you to display a fancy Pop Up to visitors sitewide or per blog. A *very* effective way of advertising a mailing list, special offer or running a plain old ad.
+Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of advertising a mailing list, special offer or running a plain old ad.
 Version:     4.6
 Author:      WPMU DEV
 Author URI:  http://premium.wpmudev.org
@@ -79,7 +79,7 @@ if ( is_admin() ) {
 		is_array( $wpmudev_notices ) || $wpmudev_notices = array();
 		$wpmudev_notices[] = array(
 			'id' => 123,
-			'name' => 'Pop Up Pro',
+			'name' => 'PopUp Pro',
 			'screens' => array(
 				'edit-inc_popup',
 				'inc_popup',

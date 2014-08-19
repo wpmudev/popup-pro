@@ -208,7 +208,7 @@ IncPopupRules::init();
 
 
 /**
- * Base class for Pop Up conditions
+ * Base class for PopUp conditions
  */
 abstract class IncPopupRule {
 

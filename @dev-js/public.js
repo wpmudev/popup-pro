@@ -19,7 +19,7 @@
 		this.ajax_data = {};
 
 		/**
-		 * Close Pop Up and set the "never see again" flag.
+		 * Close PopUp and set the "never see again" flag.
 		 */
 		this.close_forever = function close_forever() {
 			var expiry = me.data.expiry || 365;
@@ -32,7 +32,7 @@
 		};
 
 		/**
-		 * Close Pop Up.
+		 * Close PopUp.
 		 * Depending on the "multi_open" flag it can be opened again.
 		 */
 		this.close_popup = function close_popup() {
@@ -72,7 +72,7 @@
 		}
 
 		/**
-		 * Resize and move the Pop Up. Triggered when Pop Up is loaded and
+		 * Resize and move the PopUp. Triggered when PopUp is loaded and
 		 * window is resized.
 		 */
 		this.move_popup = function move_popup() {
@@ -147,7 +147,7 @@
 		};
 
 		/**
-		 * Reject the current Pop Up: Do not display it.
+		 * Reject the current PopUp: Do not display it.
 		 */
 		this.reject = function reject() {
 			me.have_popup = false;
@@ -155,14 +155,14 @@
 		};
 
 		/**
-		 * Check if the Pop Up is ready to be displayed.
+		 * Check if the PopUp is ready to be displayed.
 		 * If it is ready then it is displayed.
 		 */
 		this.maybe_show_popup = function maybe_show_popup() {
 			me.fetch_dom();
-			// Move the Pop Up out of the viewport but make it visible.
+			// Move the PopUp out of the viewport but make it visible.
 			// This way the browser will start to render the contents and there
-			// will be no delay when the Pop Up is made visible later.
+			// will be no delay when the PopUp is made visible later.
 			$po_div.css({
 				'opacity': 0,
 				'z-index': -1,
@@ -199,7 +199,7 @@
 						break;
 
 					default:
-						// A custom action will show the Pop Up (e.g. click/leave)
+						// A custom action will show the PopUp (e.g. click/leave)
 						setTimeout(function() {
 							if ( 'function' == typeof me.custom_handler ) {
 								me.custom_handler( me );
@@ -208,13 +208,13 @@
 				}
 
 			} else {
-				// Pop Up was rejected during popup-init event. Do not display.
+				// PopUp was rejected during popup-init event. Do not display.
 				me.next_popup();
 			}
 		};
 
 		/**
-		 * Observe the scroll-top to trigger the Pop Up.
+		 * Observe the scroll-top to trigger the PopUp.
 		 */
 		this.show_at_position = function show_at_position( ev ) {
 			var height, perc,
@@ -243,7 +243,7 @@
 		};
 
 		/**
-		 * Tests if a specific HTML element is visible to trigger the Pop Up.
+		 * Tests if a specific HTML element is visible to trigger the PopUp.
 		 * We intentionally calculate el_top every time this function is called
 		 * because the element may be hidden or not present at page load.
 		 */
@@ -254,7 +254,7 @@
 				el_top = anchor.offset().top,
 				offset = view_bottom - el_top;
 
-			// When 10px of the element are visible show the Pop Up.
+			// When 10px of the element are visible show the PopUp.
 			if ( offset > 10 ) {
 				$win.off( 'scroll', me.show_at_element );
 				me.show();
@@ -262,7 +262,7 @@
 		};
 
 		/**
-		 * Display the Pop Up!
+		 * Display the PopUp!
 		 */
 		this.show = function show() {
 			$po_back.on( 'click', me.background_clicked );
@@ -302,15 +302,15 @@
 		};
 
 
-		/*-----  Dynamically load Pop Ups  ------*/
+		/*-----  Dynamically load PopUps  ------*/
 
 
 		/**
-		 * Finds the Pop Up DOM elements and stores them in protected member
+		 * Finds the PopUp DOM elements and stores them in protected member
 		 * variables for easy access.
 		 */
 		this.fetch_dom = function fetch_dom() {
-			// The top container of the Pop Up.
+			// The top container of the PopUp.
 			$po_div = jQuery( '#' + me.data['html_id'] );
 
 			// The container that should be resized (custom size).
@@ -349,7 +349,7 @@
 		};
 
 		/**
-		 * Insert the Pop Up CSS and HTML as hidden elements into the DOM.
+		 * Insert the PopUp CSS and HTML as hidden elements into the DOM.
 		 */
 		this.prepare_dom = function prepare_dom() {
 			if ( me.data['html'] === '' ) { return false; }
@@ -427,7 +427,7 @@
 		};
 
 		/**
-		 * Try to load the next Pop Up from the server.
+		 * Try to load the next PopUp from the server.
 		 */
 		this.next_popup = function next_popup() {
 			console.log ('try to fetch next popup...');
@@ -450,7 +450,7 @@
 		};
 
 		/**
-		 * Used for certain rules (e.g. on-click rule) to show the Pop Up
+		 * Used for certain rules (e.g. on-click rule) to show the PopUp
 		 * again when the rule validates a second time.
 		 */
 		this.reinit = function reinit() {
@@ -530,7 +530,7 @@
 
 		/*-----  Finished  ------*/
 
-		// Only expose the "init" and "load" functions of the Pop Up.
+		// Only expose the "init" and "load" functions of the PopUp.
 		return {
 			init: me.init,
 			load: me.load_popup,
@@ -539,7 +539,7 @@
 	};
 
 
-	// Initialize the Pop Up one the page is loaded.
+	// Initialize the PopUp one the page is loaded.
 	jQuery(function() {
 		window.inc_popup = new Popup( _popup_data );
 		if ( _popup_data['noinit'] || _popup_data['preview'] ) { return; }

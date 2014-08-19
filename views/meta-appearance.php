@@ -56,9 +56,9 @@ $styles = apply_filters( 'popup-styles', array() );
 			<p style="margin-top:0"><em><?php _e(
 				'*) This style is outdated and does not support all options '.
 				'on this page. ' .
-				'Once you save your Pop Up with a new style you cannot ' .
+				'Once you save your PopUp with a new style you cannot ' .
 				'revert to this style!<br />' .
-				'Tipp: Use the Preview function to test this Pop Up with one ' .
+				'Tipp: Use the Preview function to test this PopUp with one ' .
 				'of the new styles before saving it.', PO_LANG
 			); ?></em></p>
 		</div>
@@ -105,7 +105,7 @@ endif; ?>
 				id="po-custom-size"
 				data-toggle=".chk-custom-size"
 				<?php checked( $popup->custom_size ); ?> />
-			<?php _e( 'Use custom size (if selected the Pop Up won\'t be responsive)', PO_LANG ); ?>
+			<?php _e( 'Use custom size (if selected the PopUp won\'t be responsive)', PO_LANG ); ?>
 		</label>
 	</div>
 </div>

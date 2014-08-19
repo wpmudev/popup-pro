@@ -113,7 +113,7 @@ class IncPopup extends IncPopupBase {
 			);
 
 
-			// -- POP UP LIST -----------------------
+			// -- PopUp LIST -----------------------
 
 			if ( 'edit' === @$hook->base ) {
 				// Customize the columns in the popup list.
@@ -141,7 +141,7 @@ class IncPopup extends IncPopupBase {
 					array( 'IncPopup', 'post_actions' )
 				);
 
-				// Add our own Pop Up update messages.
+				// Add our own PopUp update messages.
 				add_filter(
 					'bulk_post_updated_messages',
 					array( 'IncPopup', 'post_update_messages' ),
@@ -175,7 +175,7 @@ class IncPopup extends IncPopupBase {
 				);
 			}
 
-			// -- POP UP EDITOR -----------------
+			// -- PopUp EDITOR -----------------
 
 			if ( 'post' === @$hook->base ) {
 				WDev()->add_css( 'wp-color-picker' ); // WordPress core script
@@ -184,7 +184,7 @@ class IncPopup extends IncPopupBase {
 				// See if a custom action should be executed (e.g. duplicate)
 				self::form_check_actions();
 
-				// Display the "Pop Up Title" field in top of the form.
+				// Display the "PopUp Title" field in top of the form.
 				add_action(
 					'edit_form_after_title',
 					array( 'IncPopup', 'form_title' )
@@ -241,8 +241,8 @@ class IncPopup extends IncPopupBase {
 			}
 
 			add_menu_page(
-				__( 'Pop Up', PO_LANG ),
-				__( 'Pop Up', PO_LANG ),
+				__( 'PopUp', PO_LANG ),
+				__( 'PopUp', PO_LANG ),
 				IncPopupPosttype::$perms,
 				IncPopupItem::POST_TYPE . '-list',
 				array( 'IncPopup', 'network_menu_notice' ),
@@ -269,7 +269,7 @@ class IncPopup extends IncPopupBase {
 			);
 
 			global $submenu;
-			$submenu[IncPopupItem::POST_TYPE . '-list'][0][0] = _x( 'Global Pop Ups', 'Post Type General Name', PO_LANG );
+			$submenu[IncPopupItem::POST_TYPE . '-list'][0][0] = _x( 'Global PopUps', 'Post Type General Name', PO_LANG );
 		} else {
 			add_submenu_page(
 				'edit.php?post_type=' . IncPopupItem::POST_TYPE,
@@ -362,7 +362,7 @@ class IncPopup extends IncPopupBase {
 	/*=================================*\
 	=====================================
 	==                                 ==
-	==           POP UP LIST           ==
+	==           PopUp LIST           ==
 	==                                 ==
 	=====================================
 	\*=================================*/
@@ -385,7 +385,7 @@ class IncPopup extends IncPopupBase {
 		}
 
 		$new_columns['cb'] = $post_columns['cb'];
-		$new_columns['po_name'] = __( 'Pop Up Name', PO_LANG );
+		$new_columns['po_name'] = __( 'PopUp Name', PO_LANG );
 		$new_columns['po_cond'] = __( 'Conditions', PO_LANG );
 
 		if ( 'trash' != @$_REQUEST['post_status'] ) {
@@ -415,7 +415,7 @@ class IncPopup extends IncPopupBase {
 				if ( $can_edit ) {
 					$actions['edit'] = array(
 						'url' => get_edit_post_link( $post_id ),
-						'title' => __( 'Edit this Pop Up', PO_LANG ),
+						'title' => __( 'Edit this PopUp', PO_LANG ),
 						'label' => __( 'Edit', PO_LANG )
 					);
 				}
@@ -426,7 +426,7 @@ class IncPopup extends IncPopupBase {
 					$the_url = wp_nonce_url( $the_url, 'deactivate-post_' . $post_id );
 					$actions['deactivate'] = array(
 						'url' => $the_url,
-						'title' => __( 'Deactivate this Pop Up', PO_LANG ),
+						'title' => __( 'Deactivate this PopUp', PO_LANG ),
 						'label' => __( 'Deactivate', PO_LANG )
 					);
 				}
@@ -437,14 +437,14 @@ class IncPopup extends IncPopupBase {
 					$the_url = wp_nonce_url( $the_url, 'activate-post_' . $post_id );
 					$actions['activate'] = array(
 						'url' => $the_url,
-						'title' => __( 'Activate this Pop Up', PO_LANG ),
+						'title' => __( 'Activate this PopUp', PO_LANG ),
 						'label' => __( 'Activate', PO_LANG )
 					);
 				}
 
 				$actions['popup_preview'] = array(
 					'url' => '#',
-					'title' => __( 'Preview this Pop Up', PO_LANG ),
+					'title' => __( 'Preview this PopUp', PO_LANG ),
 					'attr' => 'class="po-preview" data-id="' . $post_id . '"',
 					'label' => __( 'Preview', PO_LANG )
 				);
@@ -456,13 +456,13 @@ class IncPopup extends IncPopupBase {
 						$the_url = wp_nonce_url( $the_url, 'untrash-post_' . $post_id );
 						$actions['untrash'] = array(
 							'url' => $the_url,
-							'title' => __( 'Restore this Pop Up from the Trash', PO_LANG ),
+							'title' => __( 'Restore this PopUp from the Trash', PO_LANG ),
 							'label' => __( 'Restore', PO_LANG )
 						);
 					} elseif ( EMPTY_TRASH_DAYS ) {
 						$actions['trash'] = array(
 							'url' => get_delete_post_link( $post_id ),
-							'title' => __( 'Move this Pop Up to the Trash', PO_LANG ),
+							'title' => __( 'Move this PopUp to the Trash', PO_LANG ),
 							'attr' => 'class="submitdelete"',
 							'label' => __( 'Trash', PO_LANG )
 						);
@@ -470,7 +470,7 @@ class IncPopup extends IncPopupBase {
 					if ( 'trash' === $popup->status || ! EMPTY_TRASH_DAYS ) {
 						$actions['delete'] = array(
 							'url' => get_delete_post_link( $post_id, '', true ),
-							'title' => __( 'Delete this Pop Up permanently', PO_LANG ),
+							'title' => __( 'Delete this PopUp permanently', PO_LANG ),
 							'attr' => 'class="submitdelete"',
 							'label' => __( 'Delete Permanently', PO_LANG )
 						);
@@ -479,7 +479,7 @@ class IncPopup extends IncPopupBase {
 
 				if ( $can_edit ) : ?>
 					<a href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>"
-						title="<?php _e( 'Edit this Pop Up', PO_LANG ); ?>">
+						title="<?php _e( 'Edit this PopUp', PO_LANG ); ?>">
 						<span class="the-title"><?php echo esc_html( $popup->name ); ?></span>
 					</a>
 				<?php else : ?>
@@ -517,7 +517,7 @@ class IncPopup extends IncPopupBase {
 					<span class="rule"><?php echo esc_html( $label ); ?></span>
 				<?php endforeach; ?>
 				<?php if ( ! $rule_count ) : ?>
-					<span class="rule-always"><?php _e( 'Always Show Pop Up', PO_LANG ); ?></span>
+					<span class="rule-always"><?php _e( 'Always Show PopUp', PO_LANG ); ?></span>
 				<?php endif; ?>
 				</div>
 				<?php
@@ -616,7 +616,7 @@ class IncPopup extends IncPopupBase {
 	}
 
 	/**
-	 * Define our Pop Up update messages.
+	 * Define our PopUp update messages.
 	 *
 	 * @since  4.6
 	 * @see    wp-admin/edit.php
@@ -626,11 +626,11 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function post_update_messages( $messages, $counts ) {
 		$messages[IncPopupItem::POST_TYPE] = array(
-			'updated'   => _n( 'One Pop Up updated.', '%s Pop Ups updated.', $counts['updated'] ),
-			'locked'    => _n( 'One Pop Up not updated, somebody is editing it.', '%s Pop Ups not updated, somebody is editing them.', $counts['locked'] ),
-			'deleted'   => _n( 'One Pop Up permanently deleted.', '%s Pop Ups permanently deleted.', $counts['deleted'] ),
-			'trashed'   => _n( 'One Pop Up moved to the Trash.', '%s Pop Ups moved to the Trash.', $counts['trashed'] ),
-			'untrashed' => _n( 'One Pop Up restored from the Trash.', '%s Pop Ups restored from the Trash.', $counts['untrashed'] ),
+			'updated'   => _n( 'One PopUp updated.', '%s PopUps updated.', $counts['updated'] ),
+			'locked'    => _n( 'One PopUp not updated, somebody is editing it.', '%s PopUps not updated, somebody is editing them.', $counts['locked'] ),
+			'deleted'   => _n( 'One PopUp permanently deleted.', '%s PopUps permanently deleted.', $counts['deleted'] ),
+			'trashed'   => _n( 'One PopUp moved to the Trash.', '%s PopUps moved to the Trash.', $counts['trashed'] ),
+			'untrashed' => _n( 'One PopUp restored from the Trash.', '%s PopUps restored from the Trash.', $counts['untrashed'] ),
 		);
 		return $messages;
 	}
@@ -685,20 +685,20 @@ class IncPopup extends IncPopupBase {
 				switch ( $action ) {
 					case 'activate':
 						1 === $count ?
-						$msg = __( 'One Pop Up activated', PO_LANG ) :
-						$msg = __( '%1$s Pop Ups activated', PO_LANG );
+						$msg = __( 'One PopUp activated', PO_LANG ) :
+						$msg = __( '%1$s PopUps activated', PO_LANG );
 						break;
 
 					case 'deactivate':
 						1 === $count ?
-						$msg = __( 'One Pop Up deactivated', PO_LANG ) :
-						$msg = __( '%1$s Pop Ups deactivated', PO_LANG );
+						$msg = __( 'One PopUp deactivated', PO_LANG ) :
+						$msg = __( '%1$s PopUps deactivated', PO_LANG );
 						break;
 
 					case 'toggle':
 						1 === $count ?
-						$msg = __( 'One Pop Up toggled', PO_LANG ) :
-						$msg = __( '%1$s Pop Ups toggled', PO_LANG );
+						$msg = __( 'One PopUp toggled', PO_LANG ) :
+						$msg = __( '%1$s PopUps toggled', PO_LANG );
 						break;
 				}
 
@@ -837,14 +837,14 @@ class IncPopup extends IncPopupBase {
 	/*===================================*\
 	=======================================
 	==                                   ==
-	==           POP UP EDITOR           ==
+	==           PopUp EDITOR           ==
 	==                                   ==
 	=======================================
 	\*===================================*/
 
 
 	/**
-	 * Executes custom form actions, such as "duplicate Pop Up"
+	 * Executes custom form actions, such as "duplicate PopUp"
 	 *
 	 * @since  4.6
 	 */
@@ -872,10 +872,10 @@ class IncPopup extends IncPopupBase {
 	}
 
 	/**
-	 * Register custom metaboxes for the Pop Up editor
+	 * Register custom metaboxes for the PopUp editor
 	 *
 	 * @since  4.6
-	 * @param  WP_Post $post The Pop Up being edited.
+	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function form_metabox( $post ) {
 		// Remove core meta boxes.
@@ -885,7 +885,7 @@ class IncPopup extends IncPopupBase {
 		// Add our own meta boxes.
 		add_meta_box(
 			'meta-content',
-			__( 'Pop Up Contents', PO_LANG ),
+			__( 'PopUp Contents', PO_LANG ),
 			array( 'IncPopup', 'meta_content' ),
 			IncPopupItem::POST_TYPE,
 			'advanced',
@@ -921,7 +921,7 @@ class IncPopup extends IncPopupBase {
 
 		add_meta_box(
 			'submitdiv',
-			__( 'Save Pop Up', PO_LANG ),
+			__( 'Save PopUp', PO_LANG ),
 			array( 'IncPopup', 'meta_submitdiv' ),
 			IncPopupItem::POST_TYPE,
 			'side',
@@ -931,10 +931,10 @@ class IncPopup extends IncPopupBase {
 
 	/**
 	 * Called before the post-edit form is rendered.
-	 * We add the field "Pop Up Title" above the form.
+	 * We add the field "PopUp Title" above the form.
 	 *
 	 * @since  4.6
-	 * @param  WP_Post $post The Pop Up being edited.
+	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function form_title( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
@@ -943,10 +943,10 @@ class IncPopup extends IncPopupBase {
 		?>
 		<div id="titlediv">
 			<div id="titlewrap">
-				<label for="po_name"><?php _e( 'Pop Up Name (not displayed on the Pop Up)', PO_LANG ); ?></label>
+				<label for="po_name"><?php _e( 'PopUp Name (not displayed on the PopUp)', PO_LANG ); ?></label>
 				<input type="text" id="po_name" name="po_name" required
 					value="<?php echo esc_attr( $popup->name ); ?>"
-					placeholder="<?php _e( 'Name this Pop Up', PO_LANG ); ?>" />
+					placeholder="<?php _e( 'Name this PopUp', PO_LANG ); ?>" />
 			</div>
 		</div>
 		<?php
@@ -956,7 +956,7 @@ class IncPopup extends IncPopupBase {
 	 * Renders the metabox: Content
 	 *
 	 * @since  4.6
-	 * @param  WP_Post $post The Pop Up being edited.
+	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function meta_content( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
@@ -967,7 +967,7 @@ class IncPopup extends IncPopupBase {
 	 * Renders the metabox: Appearance
 	 *
 	 * @since  4.6
-	 * @param  WP_Post $post The Pop Up being edited.
+	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function meta_appearance( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
@@ -978,7 +978,7 @@ class IncPopup extends IncPopupBase {
 	 * Renders the metabox: Behavior
 	 *
 	 * @since  4.6
-	 * @param  WP_Post $post The Pop Up being edited.
+	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function meta_behavior( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
@@ -989,7 +989,7 @@ class IncPopup extends IncPopupBase {
 	 * Renders the metabox: Conditions
 	 *
 	 * @since  4.6
-	 * @param  WP_Post $post The Pop Up being edited.
+	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function meta_rules( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
@@ -1000,7 +1000,7 @@ class IncPopup extends IncPopupBase {
 	 * Renders the metabox: SubmitDiv (Save, Preview)
 	 *
 	 * @since  4.6
-	 * @param  WP_Post $post The Pop Up being edited.
+	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function meta_submitdiv( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
@@ -1027,7 +1027,7 @@ class IncPopup extends IncPopupBase {
 		// This save event is for a different post type... ??
 		if ( IncPopupItem::POST_TYPE != @$_POST['post_type'] ) { return; }
 
-		// Global Pop Up modified in a Network-Blog that is not the Main-Blog.
+		// Global PopUp modified in a Network-Blog that is not the Main-Blog.
 		if ( ! IncPopup::correct_level() ) { return; }
 
 		// User does not have permissions for this.

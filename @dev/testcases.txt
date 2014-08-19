@@ -11,15 +11,15 @@ There should be NO PLUGIN ACTIVE at this point (not even WPMU DEV dashboard)
 
 1.1 Install and activate the plugin
   - There should be no warning and no error.
-  - A new main menu item will be displayed: "Pop Up"
+  - A new main menu item will be displayed: "PopUp"
   - The WPMU DEV Dashboard notice should be displayed
 
-1.2 Open Pop Up > Settings page
+1.2 Open PopUp > Settings page
   - Check JS console for errors
   - Change all settings and save
   - Do this multiple times, with different settings (see if stuff is saved)
 
-1.3 Open Pop Up > Add New page
+1.3 Open PopUp > Add New page
   - Check JS console for errors.
   - Check the form if all options are available, esp
     a) the rules that were activated in Settings screen
@@ -27,40 +27,40 @@ There should be NO PLUGIN ACTIVE at this point (not even WPMU DEV dashboard)
     c) Add image function works
     d) Color-pickers work (custom color)
   - Change some options and see if the input fields are correctly disabled/enabled
-  - Scroll down, the "Save Pop Up" box must stay visible
-  - Switch to 1-column view to see the behavior of the "Save Pop Up" box (it changes to toolbar)
+  - Scroll down, the "Save PopUp" box must stay visible
+  - Switch to 1-column view to see the behavior of the "Save PopUp" box (it changes to toolbar)
   - The meta boxes must be fixed - dragging boxes is not posible
 
-1.4 Save the Pop Up
-  Create new Pop Up
+1.4 Save the PopUp
+  Create new PopUp
   Don't enter anything and save
   - Check the details if everything is same as before
-  - Also check the Pop Up list
+  - Also check the PopUp list
     a) Status must be Inactive
     b) Conditions must say "Always"
 
-1.5 Create active Pop Up
-  Create new Pop Up
+1.5 Create active PopUp
+  Create new PopUp
   Enter Heading and Content text, select an image
   Save it with the "Activate" button
-  - Check in the List if the Pop Up is displayed as active
+  - Check in the List if the PopUp is displayed as active
 
-  Save Pop Up box
+  Save PopUp box
   - Test the "Save", "Activate" and "Deactivte" buttons in editor
-  - Test the "Move to trash" link (the list must be displayed after trashing a Pop Up)
+  - Test the "Move to trash" link (the list must be displayed after trashing a PopUp)
 
-1.6 Pop Up List
-  Create 3 Pop Ups
+1.6 PopUp List
+  Create 3 PopUps
   - Try to re-arrange them via drag-and-drop.
-  - Test all the bulk actions with 1 and 2 Pop Ups selected (different messages displayed)
-  Move Pop Up to trash
+  - Test all the bulk actions with 1 and 2 PopUps selected (different messages displayed)
+  Move PopUp to trash
   - In trash there is no edit function and no order/status
-  - Restore Pop Up from trash
-  Filter for active/inactive Pop Ups
+  - Restore PopUp from trash
+  Filter for active/inactive PopUps
   - When filter is active the drag-drop order function is not available
 
 1.7 Test the styles
-  Use a Pop Up with demo content
+  Use a PopUp with demo content
   Select a style and then click on the "Preview" button.
   - Make sure the Preview is displayed and looks as expected.
   - Change image alignment (left/right) and preview again
@@ -75,8 +75,8 @@ There should be NO PLUGIN ACTIVE at this point (not even WPMU DEV dashboard)
   -> Repeat with all available styles
 
 1.8 Test the behavior
-  Use a Pop Up with demo content
-  Open the front page that displays the Pop Up and test if it is displayed correctly
+  Use a PopUp with demo content
+  Open the front page that displays the PopUp and test if it is displayed correctly
   - Delay 0s
   - Delay 5s
   - Delay 1m
@@ -98,11 +98,11 @@ There should be NO PLUGIN ACTIVE at this point (not even WPMU DEV dashboard)
 1.11 Loading methods
   In settings screen there are 4 loading methods.
   Each method must work out-of-the box on the front end
-  - Confirm that a Pop Up that is displayed in the front end is displayed same using all 4 methods
+  - Confirm that a PopUp that is displayed in the front end is displayed same using all 4 methods
 
 1.10 Conditions
   Activate all conditions in the Settings screen
-  - Activate the first condition in an active Pop Up
+  - Activate the first condition in an active PopUp
   - Save and validate on front end that the condition works
   - Repeat this with all the other conditions (only have 1 condition active at a time)
 
@@ -114,13 +114,13 @@ There should be NO PLUGIN ACTIVE at this point (not even WPMU DEV dashboard)
 2. Upgrade from 4.5 to 4.6 version
 Install the old plugin via the normal WPMU Dev dashboard
 Activate all Add-Ons
-Create some Pop Ups
-At least one Pop Up should use ALL available conditions
+Create some PopUps
+At least one PopUp should use ALL available conditions
 Then replace the wp-contents/plugins/popover folder with the new version
 
-2.1 Directly after replacing the directory open the Pop Up list
-  - All your Pop Ups must be visible, same as before.
-  - Open the Pop Up editor and check the details.
+2.1 Directly after replacing the directory open the PopUp list
+  - All your PopUps must be visible, same as before.
+  - Open the PopUp editor and check the details.
     a) Especially check the conditions
 
 2.2 Check the Settings
@@ -138,17 +138,17 @@ Install the latest plugin and NETWORK ACTIVATE it
 
 3.1 Check on a single installation
   Switch to a Site dashboard
-  - Confirm the "Pop Up" menu item is displayed
+  - Confirm the "PopUp" menu item is displayed
 
-  Create 1-2 Pop Ups here
+  Create 1-2 PopUps here
   - Make sure data is saved correctly
 
   Switch to a different Site
-  - Pop Ups from first Site must not be displayed here
-  - Create some new Pop Ups
+  - PopUps from first Site must not be displayed here
+  - Create some new PopUps
   - Again check the List on the first Site. Data must be 100% separate!
 
 3.2 PO_GLOBAL Option
   In wp-config add `define( 'PO_GLOBAL', true );`
-  - The Pop Up menu items must be on the Site Admin dashboard
-  - On a Site dashboard there must be NO Pop Up menu item anymore
+  - The PopUp menu items must be on the Site Admin dashboard
+  - On a Site dashboard there must be NO PopUp menu item anymore

@@ -2,7 +2,7 @@
 /*
 Name:        Installation
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: WordPress Multisite: Condition based on the WordPress installation. Conditions are only available for global Pop Ups.
+Description: WordPress Multisite: Condition based on the WordPress installation. Conditions are only available for global PopUps.
 Author:      Philipp (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
@@ -30,7 +30,7 @@ class IncPopupRule_Installation extends IncPopupRule {
 			$this->add_rule(
 				'no_prosite',
 				__( 'Site is not a Pro-Site', PO_LANG ),
-				__( 'Shows the Pop Up if the site is not a Pro-Site.', PO_LANG ),
+				__( 'Shows the PopUp if the site is not a Pro-Site.', PO_LANG ),
 				'',
 				20
 			);

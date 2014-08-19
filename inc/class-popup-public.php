@@ -44,7 +44,7 @@ class IncPopup extends IncPopupBase {
 	protected function __construct() {
 		parent::__construct();
 
-		// Init loading-process of the pop up.
+		// Init loading-process of the PopUp.
 		add_action(
 			'wp',   // "wp", not "init"!
 			array( $this, 'init_public' )
@@ -111,7 +111,7 @@ class IncPopup extends IncPopupBase {
 	}
 
 	/**
-	 * Enqueues the Pop Up javascripts and data.
+	 * Enqueues the PopUp javascripts and data.
 	 *
 	 * @since  4.6
 	 */
@@ -148,7 +148,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Load-Method: External
 	 *
-	 * Pop Up data is loaded via a normal WordPress ajax request, directed at
+	 * PopUp data is loaded via a normal WordPress ajax request, directed at
 	 * the admin-ajax.php handler.
 	 *
 	 * @since  4.6
@@ -166,7 +166,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Load-Method: Front/Frontloading
 	 *
-	 * Pop Up data is loaded in an ajax request. The ajax request is directed
+	 * PopUp data is loaded in an ajax request. The ajax request is directed
 	 * at the same URL that is currently displayed, but a few URL-parameters are
 	 * added to instruct the plugin to return popup-data instead the the normal
 	 * webpage.
@@ -189,8 +189,8 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Load-Method: Footer
 	 *
-	 * The Pop Up styles and html is directly injected into the webpage header
-	 * and footer. The Pop Up is ready when the page is loaded. No ajax request
+	 * The PopUp styles and html is directly injected into the webpage header
+	 * and footer. The PopUp is ready when the page is loaded. No ajax request
 	 * is made.
 	 *
 	 * @since  4.6

@@ -2,7 +2,7 @@
 /*
 Name:        Javascript Events
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: New Behavior Options: Show Pop Up when the mouse leaves the browser window or when the user clicks somewhere.
+Description: New Behavior Options: Show PopUp when the mouse leaves the browser window or when the user clicks somewhere.
 Author:      Ve (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
@@ -51,7 +51,7 @@ class IncPopupRule_Events extends IncPopupRule {
 	 * Renders the new display options on the meta_behavior.php view
 	 *
 	 * @since  4.6
-	 * @param  IncPopupItem $popup The Pop Up that is displayed
+	 * @param  IncPopupItem $popup The PopUp that is displayed
 	 */
 	public function display_options( $popup ) {
 		$this->form_mouseleave( $popup );
@@ -150,7 +150,7 @@ class IncPopupRule_Events extends IncPopupRule {
 					placeholder="<?php _e( '.class or #id', PO_LANG ); ?>" />
 			</span>
 			<span class="opt-display-click">
-				<label data-tooltip="Repeated: The Pop Up will be displayed on every click. Otherwise it will be opened only once (on the first click)" data-pos="top" data-width="200">
+				<label data-tooltip="Repeated: The PopUp will be displayed on every click. Otherwise it will be opened only once (on the first click)" data-pos="top" data-width="200">
 					<input type="checkbox"
 						name="po_display_data[click_multi]"
 						<?php checked( ! empty( $popup->display_data['click_multi'] ) ); ?>/>

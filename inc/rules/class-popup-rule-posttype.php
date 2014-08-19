@@ -31,7 +31,7 @@ class IncPopupRule_Posttype extends IncPopupRule {
 		$this->add_rule(
 			'posttype',
 			__( 'For specific Post Types', PO_LANG ),
-			__( '*NOT WORKING YET* Shows the Pop Up on pages that match any of the specified Post Types.', PO_LANG ),
+			__( '*NOT WORKING YET* Shows the PopUp on pages that match any of the specified Post Types.', PO_LANG ),
 			'no_posttype',
 			30
 		);
@@ -40,7 +40,7 @@ class IncPopupRule_Posttype extends IncPopupRule {
 		$this->add_rule(
 			'no_posttype',
 			__( 'Not for specific Post Types', PO_LANG ),
-			__( '*NOT WORKING YET* Shows the Pop Up on pages that do not match any of the specified Post Type.', PO_LANG ),
+			__( '*NOT WORKING YET* Shows the PopUp on pages that do not match any of the specified Post Type.', PO_LANG ),
 			'posttype',
 			30
 		);

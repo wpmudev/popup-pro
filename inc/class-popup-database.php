@@ -249,11 +249,11 @@ class IncPopupDatabase {
 			WDev()->message(
 				sprintf(
 					__(
-					'<strong>Pop Up Pro</strong><br />' .
+					'<strong>PopUp Pro</strong><br />' .
 					'Your installation was successfully updated to use the ' .
 					'latest version of the plugin!<br />' .
-					'<em>Note: Some Pop Up options changed or were replaced. ' .
-					'You should have a look at your <a href="%s">Pop Ups</a> ' .
+					'<em>Note: Some PopUp options changed or were replaced. ' .
+					'You should have a look at your <a href="%s">PopUps</a> ' .
 					'to see if they still look as intended.', PO_LANG
 					),
 					admin_url( 'edit.php?post_type=' . IncPopupItem::POST_TYPE )
@@ -323,7 +323,7 @@ class IncPopupDatabase {
 	 * Returns a popup object.
 	 *
 	 * @since  4.6
-	 * @param  int $post_id ID of the Pop Up
+	 * @param  int $post_id ID of the PopUp
 	 * @return IncPopupItem
 	 */
 	public function get( $post_id ) {
@@ -456,11 +456,11 @@ class IncPopupDatabase {
 	}
 
 	/**
-	 * Count active Pop Ups
+	 * Count active PopUps
 	 *
 	 * @since  4.6
-	 * @param  int $id Optional. Don't count this Pop Up in the results.
-	 * @return int Number of active Pop Ups
+	 * @param  int $id Optional. Don't count this PopUp in the results.
+	 * @return int Number of active PopUps
 	 */
 	public function count_active( $id = '' ) {
 		global $wpdb;
@@ -478,7 +478,7 @@ class IncPopupDatabase {
 	}
 
 	/**
-	 * Deactivate all active Pop Ups
+	 * Deactivate all active PopUps
 	 *
 	 * @since  4.6
 	 */

@@ -28,7 +28,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		$this->add_rule(
 			'referrer',
 			__( 'From a specific referrer', PO_LANG ),
-			__( 'Shows the Pop Up if the user arrived via a specific referrer.', PO_LANG ),
+			__( 'Shows the PopUp if the user arrived via a specific referrer.', PO_LANG ),
 			'',
 			15
 		);
@@ -37,7 +37,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		$this->add_rule(
 			'no_internal',
 			__( 'Not from an internal link', PO_LANG ),
-			__( 'Shows the Pop Up if the user did not arrive on this page via another page on your site.', PO_LANG ),
+			__( 'Shows the PopUp if the user did not arrive on this page via another page on your site.', PO_LANG ),
 			'',
 			15
 		);
@@ -46,7 +46,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		$this->add_rule(
 			'searchengine',
 			__( 'From a search engine', PO_LANG ),
-			__( 'Shows the Pop Up if the user arrived via a search engine.', PO_LANG ),
+			__( 'Shows the PopUp if the user arrived via a search engine.', PO_LANG ),
 			'',
 			15
 		);

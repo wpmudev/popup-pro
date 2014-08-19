@@ -4,7 +4,7 @@
  *  All variables of the object are available in this template.
  */
 
-// Compatibility mode to keep formatting of old Pop Ups (not used in new styles)
+// Compatibility mode to keep formatting of old PopUps (not used in new styles)
 $content = stripslashes( $this->content );
 
 if ( defined( 'PO_ALLOW_CONTENT_FILTERING' ) && PO_ALLOW_CONTENT_FILTERING ) {

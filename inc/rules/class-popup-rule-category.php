@@ -31,7 +31,7 @@ class IncPopupRule_Category extends IncPopupRule {
 		$this->add_rule(
 			'category',
 			__( 'On post category', PO_LANG ),
-			__( '*NOT WORKING YET* Shows the Pop Up on pages that match any of the specified categories.', PO_LANG ),
+			__( '*NOT WORKING YET* Shows the PopUp on pages that match any of the specified categories.', PO_LANG ),
 			'no_category',
 			30
 		);
@@ -40,7 +40,7 @@ class IncPopupRule_Category extends IncPopupRule {
 		$this->add_rule(
 			'no_category',
 			__( 'Not on post category', PO_LANG ),
-			__( '*NOT WORKING YET* Shows the Pop Up on pages that do not match any of the specified categories.', PO_LANG ),
+			__( '*NOT WORKING YET* Shows the PopUp on pages that do not match any of the specified categories.', PO_LANG ),
 			'category',
 			30
 		);

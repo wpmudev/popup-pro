@@ -1,12 +1,12 @@
 <?php
 /*
-Name:        Pop Up Details
+Name:        PopUp Details
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Test for Pop Up specific values.
+Description: Test for PopUp specific values.
 Author:      Philipp (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
-Rules:       Pop Up shown less than
+Rules:       PopUp shown less than
 Version:     1.0
 
 NOTE: DON'T RENAME THIS FILE!!
@@ -27,8 +27,8 @@ class IncPopupRule_Count extends IncPopupRule {
 		// 'count' rule.
 		$this->add_rule(
 			'count',
-			__( 'Pop Up shown less than', PO_LANG ),
-			__( 'Shows the Pop Up if the user has only seen it less than a specific number of times.', PO_LANG ),
+			__( 'PopUp shown less than', PO_LANG ),
+			__( 'Shows the PopUp if the user has only seen it less than a specific number of times.', PO_LANG ),
 			'',
 			5
 		);
@@ -49,7 +49,7 @@ class IncPopupRule_Count extends IncPopupRule {
 	 *
 	 * @since  4.6
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
-	 * @param  IncPopupItem $popup The Pop Up that is displayed.
+	 * @param  IncPopupItem $popup The PopUp that is displayed.
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_count( $data, $popup ) {
@@ -69,7 +69,7 @@ class IncPopupRule_Count extends IncPopupRule {
 		if ( $count < 1 ) { $count = 1; }
 		?>
 		<label for="po-max-count">
-			<?php _e( 'Display Pop Up this often:', PO_LANG ); ?>
+			<?php _e( 'Display PopUp this often:', PO_LANG ); ?>
 		</label>
 		<input type="number"
 			id="po-max-count"

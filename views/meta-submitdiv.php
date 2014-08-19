@@ -36,7 +36,7 @@ $duplicate_url = add_query_arg( 'do', 'duplicate' );
 			<div class="preview-action">
 				<button type="button" class="preview button">
 				<i class="dashicons dashicons-visibility"></i>
-				<?php _e( 'Preview Pop Up', PO_LANG ); ?>
+				<?php _e( 'Preview PopUp', PO_LANG ); ?>
 				</button>
 			</div>
 
@@ -88,7 +88,7 @@ $duplicate_url = add_query_arg( 'do', 'duplicate' );
 		<div class="preview-action">
 			<button type="button" class="preview button">
 			<i class="dashicons dashicons-visibility"></i>
-			<?php _e( 'Preview Pop Up', PO_LANG ); ?>
+			<?php _e( 'Preview PopUp', PO_LANG ); ?>
 			</button>
 		</div>
 

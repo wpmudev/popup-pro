@@ -9,7 +9,7 @@ $loading_methods[] = (object) array(
 	'id'    => 'footer',
 	'label' => __( 'Page Footer', PO_LANG ),
 	'info'  => __(
-		'Include Pop Up as part of your site\'s HTML (no AJAX call).',
+		'Include PopUp as part of your site\'s HTML (no AJAX call).',
 		PO_LANG
 		),
 );
@@ -18,7 +18,7 @@ $loading_methods[] = (object) array(
 	'id'    => 'ajax',
 	'label' => __( 'WordPress AJAX', PO_LANG ),
 	'info'  => __(
-		'Load Pop Up separately from the page via a WordPress AJAX call. ' .
+		'Load PopUp separately from the page via a WordPress AJAX call. ' .
 		'This is the best option if you use caching.',
 		PO_LANG
 	),
@@ -28,9 +28,9 @@ $loading_methods[] = (object) array(
 	'id'    => 'front',
 	'label' => __( 'Custom AJAX', PO_LANG ),
 	'info'  => __(
-		'Load Pop Up separately from the page via a custom front-end AJAX call.',
+		'Load PopUp separately from the page via a custom front-end AJAX call.',
 		PO_LANG
-		),
+	),
 );
 
 /**
@@ -64,7 +64,7 @@ if ( IncPopupAddon_GeoDB::table_exists() ) {
 				'<strong>Note</strong>: This option is unavailable because a ' .
 				'geo-data table was not found in your database. For details, ' .
 				'read the "Using a Local Geo-Database" in the ' .
-				'<a href="%1$s" target="_blank">Pop Up usage guide</a>.',
+				'<a href="%1$s" target="_blank">PopUp usage guide</a>.',
 				PO_LANG
 			),
 			'http://premium.wpmudev.org/project/the-pop-over-plugin/#usage'
@@ -84,7 +84,7 @@ $ordered_rules = array();
 ?>
 <div class="wrap nosubsub">
 
-	<h2><?php _e( 'Pop Up Settings', PO_LANG ); ?></h2>
+	<h2><?php _e( 'PopUp Settings', PO_LANG ); ?></h2>
 
 	<div id="poststuff" class="metabox-holder m-settings">
 	<form method="post" action="<?php echo esc_url( $form_url ); ?>">
@@ -95,12 +95,12 @@ $ordered_rules = array();
 
 		<div class="postbox">
 			<h3 class="hndle" style="cursor:auto;">
-				<span><?php _e( 'Pop Up Loading Method', PO_LANG ); ?></span>
+				<span><?php _e( 'PopUp Loading Method', PO_LANG ); ?></span>
 			</h3>
 
 			<div class="inside">
 				<p><?php _e(
-					'Select how you would like to load Pop Up.', PO_LANG
+					'Select how you would like to load PopUp.', PO_LANG
 				); ?></p>
 
 				<table class="form-table">
@@ -109,7 +109,7 @@ $ordered_rules = array();
 					<?php /* === LOADING METHOD === */ ?>
 					<tr valign="top">
 						<th scope="row">
-							<?php _e( 'Load Pop Up using', PO_LANG ); ?>
+							<?php _e( 'Load PopUp using', PO_LANG ); ?>
 						</th>
 						<td>
 							<select name="po_option[loadingmethod]" id="loadingmethod">
@@ -229,7 +229,7 @@ $ordered_rules = array();
 				if ( PO_VERSION != 'pro' && in_array( 'pro', $data['limit'] ) ) {
 					$ordered_rules[ $name ]['disabled'] = __( 'Available in the PRO version', PO_LANG );
 				} else if ( IncPopup::use_global() && in_array( 'no global', $data['limit'] ) ) {
-					$ordered_rules[ $name ]['disabled'] = __( 'Not available for global Pop Ups', PO_LANG );
+					$ordered_rules[ $name ]['disabled'] = __( 'Not available for global PopUps', PO_LANG );
 				} else if ( ! IncPopup::use_global() && in_array( 'global', $data['limit'] ) ) {
 					$ordered_rules[ $name ]['disabled'] = true;
 				} else {
