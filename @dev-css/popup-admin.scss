@@ -123,14 +123,71 @@ div.msg-err {
 }
 
 
-/*=================================*\
-=====================================
-==                                 ==
-==           ADD ON LIST           ==
-==                                 ==
-=====================================
-\*=================================*/
+/*==============================*\
+==================================
+==                              ==
+==           SETTINGS           ==
+==                              ==
+==================================
+\*==============================*/
 
+.tbl-shortcodes {
+	margin-top: 20px;
+	max-width: 920px;
+
+	.flag {
+		width: 15%;
+		overflow: visible;
+
+		[data-tooltip] {
+			text-align: center;
+			cursor: default;
+		}
+
+		.wpmui-tip {
+			text-align: center;
+			min-width: 135px;
+		}
+	}
+
+	tbody {
+		.flag {
+			text-align: center;
+		}
+
+		td {
+			border-bottom: 1px solid #F0F0F0;
+		}
+
+		tr:hover td {
+			background: #FCFCFC;
+		}
+	}
+
+	.shortcode {
+		.icon:before {
+			content: "\f153";
+			color: #CCC;
+			font-size: 14px;
+			width: 24px;
+			display: inline-block;
+		}
+
+		&.sc-admin .sc-admin .icon:before,
+		&.sc-front .sc-front .icon:before {
+			content: "\f147";
+			color: #000;
+			font-size: 24px;
+		}
+	}
+
+	&.load-footer .load-footer,
+	&.load-ajax .load-ajax,
+	&.load-front .load-front,
+	&.load-anonymous .load-anonymous {
+		background: #f0f0f0;
+	}
+}
 
 .tbl-addons {
 	tbody td,

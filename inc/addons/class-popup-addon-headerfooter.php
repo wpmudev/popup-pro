@@ -6,7 +6,7 @@ Description: Tests for the existence and functionality of wp_head and wp_footer 
 Author:      Matt Martz
 Author URI:  http://sivel.net/
 Type:        Misc
-Version:     1.0
+Version:     1.1
 
 	Copyright (c) 2010 Matt Martz (http://sivel.net/)
 	Test Head Footer is released under the GNU General Public License (GPL)
@@ -47,6 +47,7 @@ class IncPopupAddon_HeaderFooter {
 	 * @since  1.0.0
 	 */
 	static public function test_head() {
+		self::test_shortcodes();
 		echo '<!--wp_head-->';
 	}
 
@@ -57,7 +58,21 @@ class IncPopupAddon_HeaderFooter {
 	 * @since  1.0.0
 	 */
 	static public function test_footer() {
+		self::test_shortcodes();
 		echo '<!--wp_footer-->';
+	}
+
+	/**
+	 * Echo a list of all available shortcodes.
+	 * This is used to check which shortcodes are available for loading method
+	 * 'Page Footer'
+	 *
+	 * @since  1.1
+	 */
+	static public function test_shortcodes() {
+		global $shortcode_tags;
+		$shortcodes = array_keys( $shortcode_tags );
+		echo '<!--shortcodes:[' . implode( ',', $shortcodes ) . ']-->';
 	}
 
 	/**
@@ -91,6 +106,7 @@ class IncPopupAddon_HeaderFooter {
 		$resp = (object) array(
 			'okay' => false,
 			'msg' => array(),
+			'shortcodes' => array(),
 		);
 
 		// Strip all tabs, line feeds, carriage returns and spaces
@@ -128,11 +144,18 @@ class IncPopupAddon_HeaderFooter {
 			);
 		}
 
+		$matches = array();
+		$has_shortcodes = preg_match( '/<!--shortcodes:\[([^\]]*)\]-->/', $html, $matches );
+		if ( $has_shortcodes ) {
+			$items = $matches[1];
+			$resp->shortcodes = explode( ',', $items );
+		}
+
 		// Display any errors that we found.
 		if ( empty( $resp->msg ) ) {
 			$resp->okay = true;
 			$resp->msg[] = __(
-				'Info: Your current theme uses <code>wp_head();</code> and ' .
+				'Okay: Your current theme uses <code>wp_head();</code> and ' .
 				'<code>wp_footer();</code> correctly!', PO_LANG
 			);
 		}

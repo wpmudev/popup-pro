@@ -3,6 +3,8 @@
  * Display the popup settings page.
  */
 
+global $shortcode_tags;
+
 $loading_methods = array();
 
 $loading_methods[] = (object) array(
@@ -48,6 +50,16 @@ $form_url = remove_query_arg( array( 'message', 'action', '_wpnonce' ) );
 // Theme compatibility.
 $theme_compat = IncPopupAddon_HeaderFooter::check();
 $theme_class = $theme_compat->okay ? 'msg-ok' : 'msg-err';
+$shortcodes = array();
+// Add Admin-Shortcodes to the list.
+foreach ( $shortcode_tags as $code => $handler ) {
+	@$shortcodes[ $code ] .= 'sc-admin ';
+}
+// Add Front-End Shortcodes to the list.
+foreach ( $theme_compat->shortcodes as $code ) {
+	@$shortcodes[ $code ] .= 'sc-front ';
+}
+
 
 // Add-Ons
 if ( IncPopupAddon_GeoDB::table_exists() ) {
@@ -93,8 +105,8 @@ $ordered_rules = array();
 
 		<?php wp_nonce_field( 'update-popup-settings' ); ?>
 
-		<div class="postbox">
-			<h3 class="hndle" style="cursor:auto;">
+		<div class="wpmui-box static">
+			<h3>
 				<span><?php _e( 'PopUp Loading Method', PO_LANG ); ?></span>
 			</h3>
 
@@ -125,7 +137,13 @@ $ordered_rules = array();
 							<ul>
 								<?php foreach ( $loading_methods as $item ) : ?>
 									<li>
-										<?php _e( $item->label, PO_LANG ); ?>:
+										<?php if ( $cur_method == $item->id ) : ?>
+											<strong><i class="dashicons dashicons-yes"
+											style="margin-left:-20px">
+											</i><?php _e( $item->label, PO_LANG ); ?></strong>:
+										<?php else : ?>
+											<?php _e( $item->label, PO_LANG ); ?>:
+										<?php endif; ?>
 										<em><?php echo '' . $item->info; ?>
 									</em></li>
 								<?php endforeach; ?>
@@ -162,8 +180,9 @@ $ordered_rules = array();
 		</div>
 
 		<?php if ( 'footer' == $cur_method ) : ?>
-		<div class="postbox">
-			<h3 class="hndle" style="cursor:auto;">
+		<div class="wpmui-box <?php echo esc_attr( $theme_compat->okay ? 'closed' : '' ); ?>">
+			<h3>
+				<a href="#" class="toggle" title="<?php _e( 'Click to toggle' ); ?>"><br></a>
 				<span><?php _e( 'Theme compatibility', PO_LANG ); ?></span>
 			</h3>
 
@@ -180,6 +199,65 @@ $ordered_rules = array();
 			</div>
 		</div>
 		<?php endif; ?>
+
+		<div class="wpmui-box closed">
+			<h3>
+				<a href="#" class="toggle" title="<?php _e( 'Click to toggle' ); ?>"><br></a>
+				<span><?php _e( 'Supported Shortcodes', PO_LANG ); ?></span>
+			</h3>
+
+			<div class="inside">
+				<?php _e(
+					'You can use all your shortcodes inside the PopUp contents, ' .
+					'however some Plugins or Themes might provide shortcodes that ' .
+					'only work with the loading method "Page Footer".<br /> ' .
+					'This list explains which shortcodes can be used with each ' .
+					'loading method:', PO_LANG
+				); ?>
+				<table class="widefat tbl-shortcodes load-<?php echo esc_attr( $cur_method ); ?>">
+					<thead>
+						<tr>
+							<th width="40%">
+								<div>
+								<?php _e( 'Shortcode', PO_LANG ); ?>
+								</div>
+							</th>
+							<th class="flag load-footer">
+								<div data-tooltip="<?php _e( 'Loading method \'Page Footer\'', PO_LANG ); ?>">
+								<?php _e( 'Page Footer', PO_LANG ); ?>
+								</div>
+							</th>
+							<th class="flag load-ajax load-front">
+								<div data-tooltip="<?php _e( 'Loading method \'WordPress AJAX\' and \'Custom AJAX\'', PO_LANG ); ?>">
+								<?php _e( 'AJAX', PO_LANG ); ?>
+								</div>
+							</th>
+							<th class="flag load-anonymous">
+								<div data-tooltip="<?php _e( 'Loading method \'Anonymous Script\'', PO_LANG ); ?>">
+								<?php _e( 'Script', PO_LANG ); ?>
+								</div>
+							</th>
+							<th class="flag">
+								<div data-tooltip="<?php _e( 'When opening a PopUp-Preview in the Editor', PO_LANG ); ?>">
+								<?php _e( 'Preview', PO_LANG ); ?>
+								</div>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ( $shortcodes as $code => $classes ) : ?>
+							<tr class="shortcode <?php echo esc_attr( $classes ); ?>">
+								<td><code>[<?php echo esc_html( $code ); ?>]</code></td>
+								<td class="flag sc-front load-footer"><i class="icon dashicons"></i></td>
+								<td class="flag sc-admin load-ajax load-front"><i class="icon dashicons"></i></td>
+								<td class="flag sc-admin load-anonymous"><i class="icon dashicons"></i></td>
+								<td class="flag sc-admin"><i class="icon dashicons"></i></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
 
 		<p class="submit">
 			<button class="button-primary">
