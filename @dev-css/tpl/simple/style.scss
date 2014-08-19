@@ -30,12 +30,23 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 	bottom: 0;
 	overflow: auto;
 	background: rgba(0, 0, 0, 0.5);
+	padding: 0 $padding_tablet+4px 0 $padding_tablet;
+
+	&.custom-size {
+		padding: 0;
+
+		.wdpu-msg {
+			position: absolute;
+			display: inline-block;
+			margin: 0 0 30px;
+		}
+	}
 
 	/* wrap is positioned inside the #messagebox layer. */
 	.wdpu-msg {
-		position: absolute;
-		display: inline-block;
-		margin: 0 0 30px;
+		position: relative;
+		display: block;
+		margin: 0 auto 30px;
 		text-align: left;
 		padding: 5px;
 		background-color: rgba(255, 255, 255, 0.5);
@@ -45,12 +56,6 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		/* Size / responsiveness */
 		max-width: 800px;
 		min-width: 100px;
-
-		&.small-width {
-			left: $padding_tablet !important;
-			right: $padding_tablet + 4px !important;
-			width: auto;
-		}
 
 		p {
 			font-size: $font_size;
@@ -254,13 +259,12 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		}
 	}
 
-	@media screen and (max-width: $break_point_tablet) and (min-width: $break_point_phone) {
-		.wdpu-msg,
-		.wdpu-msg.small-width {
-			left: $padding_tablet !important;
-			right: $padding_tablet + 4px !important;
-			width: auto;
-		}
+}
+
+@media screen and (max-width: $break_point_tablet) and (min-width: $break_point_phone) {
+	#messagebox {
+		padding: 0 $padding_tablet+4px 0 $padding_tablet;
+
 		&,
 		&.img-right,
 		&.img-left,
@@ -299,14 +303,12 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 			}
 		}
 	}
+}
 
-	@media screen and (max-width: $break_point_phone) {
-		.wdpu-msg,
-		.wdpu-msg.small-width {
-			left: $padding_phone !important;
-			right: $padding_phone + 4px !important;
-			width: auto;
-		}
+@media screen and (max-width: $break_point_phone) {
+	#messagebox {
+		padding: 0 $padding_phone+4px 0 $padding_phone;
+
 		&,
 		&.img-right,
 		&.img-left,

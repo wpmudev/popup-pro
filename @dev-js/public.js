@@ -101,30 +101,22 @@
 				}
 			}
 
-			// Short delay before positioning the popup to give the browser time
-			// to show/resize the popup (20ms ~ 1 screen refresh)
-			window.setTimeout(function() {
-				if ( ! $po_move.hasClass( 'no-move' ) ) {
+			// This function centers the PopUp and the featured image.
+			var update_position = function update_position() {
+				if ( ! $po_move.hasClass( 'no-move-x' ) ) {
 					var win_width = $win.width(),
-						win_height = $win.height(),
 						msg_width = $po_msg.outerWidth(),
-						msg_height = $po_msg.outerHeight(),
-						msg_left = (win_width - msg_width) / 2,
-						msg_top = (win_height - msg_height) / 2;
+						msg_left = (win_width - msg_width) / 2;
 
 					// Move window horizontally.
-					if ( msg_width+100 > win_width || msg_left < 0 ) {
-						if ( isNaN( me.data._switch_width ) ) {
-							me.data._switch_width = 800;
-							$po_move.addClass('small-width').css({ 'left': '' });
-						}
-					} else if ( me.data._switch_width < msg_width ) {
-						me.data._switch_width = undefined;
-						$po_move.removeClass('small-width');
-						$po_move.css({ 'left': msg_left });
-					} else {
-						$po_move.css({ 'left': msg_left });
-					}
+					if ( msg_left < 10 ) { msg_left = 10; }
+					$po_move.css({ 'left': msg_left });
+				}
+
+				if ( ! $po_move.hasClass( 'no-move-y' ) ) {
+					var win_height = $win.height(),
+						msg_height = $po_msg.outerHeight(),
+						msg_top = (win_height - msg_height) / 2;
 
 					// Move window vertically.
 					if ( msg_top < 10 ) { msg_top = 10; }
@@ -159,7 +151,11 @@
 						$po_img.css({ 'margin-top': 0 });
 					}
 				}
-			}, 20);
+			};
+
+			// Short delay before positioning the popup to give the browser time
+			// to show/resize the popup (20ms ~ 1 screen refresh)
+			window.setTimeout(update_position, 20);
 		};
 
 		/**

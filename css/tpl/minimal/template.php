@@ -30,7 +30,10 @@ if ( $has_buttons ) {
 	$msg_class .= 'buttons ';
 }
 if ( $this->round_corners ) { $msg_class .= 'rounded '; }
+if ( $this->custom_size ) { $msg_class .= 'custom-size '; }
 $msg_class .= 'wdpu-' . $this->id . ' ';
+
+$move_class = $this->custom_size ? '' : 'no-move-x';
 
 function show_img( $popup ) {
 	?>
@@ -45,7 +48,7 @@ function show_img( $popup ) {
 	class="style-minimal wdpu-container wdpu-background <?php echo esc_attr( $msg_class ); ?>"
 	style="display: none;">
 
-	<div class="wdpu-msg resize move">
+	<div class="wdpu-msg resize move <?php echo esc_attr( $move_class ); ?>">
 		<a href="#"
 			class="wdpu-close <?php echo esc_attr( $show_title ? '' : 'no-title' ); ?>"
 			title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
