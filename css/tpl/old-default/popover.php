@@ -4,8 +4,10 @@
  *  All variables of the object are available in this template.
  */
 
+$msg_class = '';
 // Compatibility mode to keep formatting of old PopUps (not used in new styles)
 $content = stripslashes( $this->content );
+$msg_class .= 'wdpu-' . $this->id . ' ';
 
 if ( defined( 'PO_ALLOW_CONTENT_FILTERING' ) && PO_ALLOW_CONTENT_FILTERING ) {
 	$content = defined( 'PO_USE_FULL_CONTENT_FILTERING' ) && PO_USE_FULL_CONTENT_FILTERING
@@ -16,6 +18,7 @@ if ( defined( 'PO_ALLOW_CONTENT_FILTERING' ) && PO_ALLOW_CONTENT_FILTERING ) {
 ?>
 
 <div id="<?php echo esc_attr( $this->code->id ); ?>"
+	class="<?php echo esc_attr( $msg_class ); ?>"
 	style="left: -1000px; top: 100px; display: none;">
 
 	<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>

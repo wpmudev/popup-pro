@@ -29,6 +29,7 @@ if ( $has_buttons ) {
 	$msg_class .= 'buttons ';
 }
 if ( $this->round_corners ) { $msg_class .= 'rounded '; }
+$msg_class .= 'wdpu-' . $this->id . ' ';
 
 function show_img( $popup ) {
 	?>
@@ -40,7 +41,7 @@ function show_img( $popup ) {
 
 ?>
 <div id="<?php echo esc_attr( $this->code->id ); ?>"
-	class="wdpu-container wdpu-background <?php echo esc_attr( $msg_class ); ?>"
+	class="style-cabriolet wdpu-container wdpu-background <?php echo esc_attr( $msg_class ); ?>"
 	style="display: none;">
 
 		<div class="wdpu-msg move">
