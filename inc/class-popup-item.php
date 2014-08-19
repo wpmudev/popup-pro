@@ -594,7 +594,7 @@ class IncPopupItem {
 			$details = $styles[$this->style];
 
 			$Html = '';
-			$tpl_file = $details->dir . 'popover.php';
+			$tpl_file = $details->dir . 'template.php';
 
 			if ( file_exists( $tpl_file ) ) {
 				ob_start();
