@@ -279,6 +279,18 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 			.wdpu-text {
 				margin: 0;
 				width: 100%;
+				padding-top: 15px;
+			}
+			.wdpu-head {
+				margin-bottom: .5em;
+				padding-bottom: .4em;
+			}
+			.wdpu-title,
+			.wdpu-subtitle {
+				margin-bottom: .2em;
+			}
+			p {
+				margin-bottom: 16px;
 			}
 		}
 		&.mobile-no-img {
@@ -313,6 +325,18 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 			.wdpu-text {
 				margin: 0;
 				width: 100%;
+				padding-top: 10px;
+			}
+			.wdpu-head {
+				margin-bottom: .3em;
+				padding-bottom: .2em;
+			}
+			.wdpu-title,
+			.wdpu-subtitle {
+				margin-bottom: .2em;
+			}
+			p {
+				margin-bottom: 8px;
 			}
 		}
 		&.mobile-no-img {
