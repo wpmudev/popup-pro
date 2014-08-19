@@ -7,6 +7,8 @@ $break_point_tablet: 770px;
 $break_point_phone:  480px;
 $img_height_tablet:  250px;
 $img_height_phone:   150px;
+$padding_tablet:      50px;
+$padding_phone:       10px;
 
 $col_primary: #000001;   // Color code is replaced by plugin.
 $col_secondary: #000002; // Color code is replaced by plugin.
@@ -45,8 +47,8 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		min-width: 100px;
 
 		&.small-width {
-			left: 50px !important;
-			right: 54px !important;
+			left: $padding_tablet !important;
+			right: $padding_tablet + 4px !important;
 			width: auto;
 		}
 
@@ -144,8 +146,6 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 			white-space: nowrap;
 		}
 	}
-
-
 
 	a {
 		color: $col_primary;
@@ -257,8 +257,8 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 	@media screen and (max-width: $break_point_tablet) and (min-width: $break_point_phone) {
 		.wdpu-msg,
 		.wdpu-msg.small-width {
-			left: 50px !important;
-			right: 54px !important;
+			left: $padding_tablet !important;
+			right: $padding_tablet + 4px !important;
 			width: auto;
 		}
 		&,
@@ -291,8 +291,8 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 	@media screen and (max-width: $break_point_phone) {
 		.wdpu-msg,
 		.wdpu-msg.small-width {
-			left: 10px !important;
-			right: 14px !important;
+			left: $padding_phone !important;
+			right: $padding_phone + 4px !important;
 			width: auto;
 		}
 		&,
