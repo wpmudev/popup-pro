@@ -112,12 +112,13 @@
 						msg_left = (win_width - msg_width) / 2,
 						msg_top = (win_height - msg_height) / 2;
 
-					if ( msg_width+30 > win_width || msg_left < 0 ) {
+					// Move window horizontally.
+					if ( msg_width+100 > win_width || msg_left < 0 ) {
 						if ( isNaN( me.data._switch_width ) ) {
-							me.data._switch_width = win_width;
+							me.data._switch_width = 800;
 							$po_move.addClass('small-width').css({ 'left': '' });
 						}
-					} else if ( me.data._switch_width < win_width ) {
+					} else if ( me.data._switch_width < msg_width ) {
 						me.data._switch_width = undefined;
 						$po_move.removeClass('small-width');
 						$po_move.css({ 'left': msg_left });
@@ -125,15 +126,20 @@
 						$po_move.css({ 'left': msg_left });
 					}
 
+					// Move window vertically.
 					if ( msg_top < 10 ) { msg_top = 10; }
 					$po_move.css({ 'top': msg_top });
 				}
 
 				// Move the image.
 				if ( $po_img.length ) {
-					var img_width = $po_img.width(),
-						box_width = $po_img.parent().width();
+					var offset_x, offset_y,
+						img_width = $po_img.width(),
+						img_height = $po_img.height(),
+						box_width = $po_img.parent().width(),
+						box_height = $po_img.parent().height();
 
+					// Center horizontally.
 					if ( img_width > box_width ) {
 						// Center image.
 						offset_x = (box_width - img_width) / 2;
@@ -141,6 +147,16 @@
 					} else {
 						// Align image according to layout.
 						$po_img.css({ 'margin-left': 0 });
+					}
+
+					// Center vertially.
+					if ( img_height > box_height ) {
+						// Center image.
+						offset_y = (box_height - img_height) / 2;
+						$po_img.css({ 'margin-top': offset_y });
+					} else {
+						// Align image according to layout.
+						$po_img.css({ 'margin-top': 0 });
 					}
 				}
 			}, 20);

@@ -2,8 +2,11 @@
  * Style: Simple
  */
 
-$font_size: 15px;
-$break_point: 750px;
+$font_size:          15px;
+$break_point_tablet: 770px;
+$break_point_phone:  480px;
+$img_height_tablet:  250px;
+$img_height_phone:   150px;
 
 $col_primary: #000001;   // Color code is replaced by plugin.
 $col_secondary: #000002; // Color code is replaced by plugin.
@@ -42,8 +45,8 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		min-width: 100px;
 
 		&.small-width {
-			left: 10px;
-			right: 14px;
+			left: 50px !important;
+			right: 54px !important;
 			width: auto;
 		}
 
@@ -251,7 +254,13 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		}
 	}
 
-	@media screen and (max-width: $break_point) {
+	@media screen and (max-width: $break_point_tablet) and (min-width: $break_point_phone) {
+		.wdpu-msg,
+		.wdpu-msg.small-width {
+			left: 50px !important;
+			right: 54px !important;
+			width: auto;
+		}
 		&,
 		&.img-right,
 		&.img-left,
@@ -260,16 +269,50 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 				width: 100%;
 				position: relative;
 				display: block;
-				max-height: 500px;
+				max-height: $img_height_tablet;
 
 				img {
 					height: auto;
 					width: 100%;
 				}
 			}
-
 			.wdpu-text {
 				margin: 0;
+				width: 100%;
+			}
+		}
+		&.mobile-no-img {
+			.wdpu-image {
+				display: none;
+			}
+		}
+	}
+
+	@media screen and (max-width: $break_point_phone) {
+		.wdpu-msg,
+		.wdpu-msg.small-width {
+			left: 10px !important;
+			right: 14px !important;
+			width: auto;
+		}
+		&,
+		&.img-right,
+		&.img-left,
+		&.no-img {
+			.wdpu-image {
+				width: 100%;
+				position: relative;
+				display: block;
+				max-height: $img_height_phone;
+
+				img {
+					height: auto;
+					width: 100%;
+				}
+			}
+			.wdpu-text {
+				margin: 0;
+				width: 100%;
 			}
 		}
 		&.mobile-no-img {
