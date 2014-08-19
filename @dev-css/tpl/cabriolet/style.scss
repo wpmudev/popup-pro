@@ -2,8 +2,13 @@
  * Style: Cabriolet
  */
 
-$font_size: 15px;
-$break_point: 750px;
+$font_size:          15px;
+$break_point_tablet: 770px;
+$break_point_phone:  480px;
+$img_height_tablet:  250px;
+$img_height_phone:   150px;
+$padding_tablet:      50px;
+$padding_phone:       10px;
 
 $col_primary: #000001;
 $col_secondary: #000002;
@@ -38,8 +43,8 @@ $col_secondary: #000002;
 		min-width: 100px;
 
 		&.small-width {
-			left: 10px;
-			right: 14px;
+			left: $padding_tablet !important;
+			right: $padding_tablet + 4px !important;
 			width: auto;
 		}
 
@@ -106,6 +111,7 @@ $col_secondary: #000002;
 		.wdpu-text {
 			padding: 20px;
 			box-sizing: border-box;
+			position: relative;
 		}
 
 		.wdpu-image {
@@ -257,7 +263,13 @@ $col_secondary: #000002;
 		}
 	}
 
-	@media screen and (max-width: $break_point) {
+	@media screen and (max-width: $break_point_tablet) and (min-width: $break_point_phone) {
+		.wdpu-msg,
+		.wdpu-msg.small-width {
+			left: $padding_tablet !important;
+			right: $padding_tablet !important;
+			width: auto;
+		}
 		&,
 		&.img-right,
 		&.img-left,
@@ -266,16 +278,64 @@ $col_secondary: #000002;
 				width: 100%;
 				position: relative;
 				display: block;
-				max-height: 500px;
-
+				max-height: $img_height_tablet;
+				margin: 0;
+				border-radius: 0 !important;
 				img {
 					height: auto;
 					width: 100%;
 				}
 			}
-
+			.wdpu-buttons {
+				left: 0;
+			}
 			.wdpu-text {
 				margin: 0;
+			}
+		}
+		&.mobile-no-img {
+			.wdpu-image {
+				display: none;
+			}
+		}
+	}
+
+	@media screen and (max-width: $break_point_phone) {
+		.wdpu-msg,
+		.wdpu-msg.small-width {
+			left: $padding_phone !important;
+			right: $padding_phone !important;
+			width: auto;
+		}
+		&,
+		&.img-right,
+		&.img-left,
+		&.no-img {
+			.wdpu-image {
+				width: 100%;
+				position: relative;
+				display: block;
+				max-height: $img_height_phone;
+				margin: 0;
+				border-radius: 0 !important;
+				img {
+					height: auto;
+					width: 100%;
+				}
+			}
+			.wdpu-buttons {
+				left: 0;
+			}
+			.wdpu-text {
+				margin: 0;
+			}
+			.wdpu-head {
+				margin-bottom: .3em;
+				padding-bottom: .2em;
+			}
+			.wdpu-title,
+			.wdpu-subtitle {
+				margin-bottom: .2em;
 			}
 		}
 		&.mobile-no-img {
