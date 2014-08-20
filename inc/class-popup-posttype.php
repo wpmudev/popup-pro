@@ -105,7 +105,7 @@ class IncPopupPosttype {
 			'show_in_nav_menus'   => false,
 			'show_in_admin_bar'   => $manage_popups,
 			'menu_position'       => self::$menu_pos,
-			'menu_icon'           => PO_IMG_URL . 'window.png',
+			'menu_icon'           => PO_IMG_URL . 'icon.png',
 			'can_export'          => true,
 			'has_archive'         => false,
 			'exclude_from_search' => true,

@@ -246,7 +246,7 @@ class IncPopup extends IncPopupBase {
 				IncPopupPosttype::$perms,
 				IncPopupItem::POST_TYPE . '-list',
 				array( 'IncPopup', 'network_menu_notice' ),
-				PO_IMG_URL . 'window.png',
+				PO_IMG_URL . 'icon.png',
 				IncPopupPosttype::$menu_pos
 			);
 
