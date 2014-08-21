@@ -527,8 +527,10 @@ class IncPopup extends IncPopupBase {
 				if ( 'trash' === $popup->status ) {
 					echo '-';
 				} else {
+					$order = $popup->order;
+					if ( ! is_numeric( $order ) || $order > 999999 ) { $order = ''; }
 					?>
-					<span class="the-pos"><?php echo esc_html( $popup->order ); ?></span>
+					<span class="the-pos"><?php echo esc_html( $order ); ?></span>
 					<?php
 				}
 				break;

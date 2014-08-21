@@ -166,6 +166,17 @@ class IncPopupDatabase {
 
 			// Migrate data from build 5 to build 6!
 			foreach ( $res as $item ) {
+				// Confirm the item was not migrated, just to be sure...
+				// This is one-time code, we don't care for performance here.
+				$sql = "
+					SELECT 1 status
+					FROM {$tbl_popover}
+					WHERE id=%s AND migrated=0
+				";
+				$sql = $wpdb->prepare( $sql, $item->id );
+				$status = $wpdb->get_var( $sql );
+				if ( $status != '1' ) { continue; }
+
 				$raw = maybe_unserialize( $item->popover_settings );
 				$checks = explode( ',', @$raw['popover_check']['order'] );
 				foreach ( $checks as $ind => $key ) {
@@ -260,6 +271,8 @@ class IncPopupDatabase {
 			}
 		}
 
+		self::refresh_order();
+
 		// Create or update the IP cache table.
 		$sql = "
 		CREATE TABLE {$tbl_ip_cache} (
@@ -281,7 +294,7 @@ class IncPopupDatabase {
 					'latest version of the plugin!<br />' .
 					'<em>Note: Some PopUp options changed or were replaced. ' .
 					'You should have a look at your <a href="%s">PopUps</a> ' .
-					'to see if they still look as intended.', PO_LANG
+					'to see if they still look as intended.</em>', PO_LANG
 					),
 					admin_url( 'edit.php?post_type=' . IncPopupItem::POST_TYPE )
 				)
