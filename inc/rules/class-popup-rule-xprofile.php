@@ -178,7 +178,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	protected function render_form( $name, $data ) {
 		if ( ! class_exists( 'BP_XProfile_Group' ) ) {
 			echo '<div class="error below-h2"><p>' .
-				__( 'You need BuddyPress XProfile fields component active.', PO_LANG ) .
+				__( 'This condition requires that the BuddyPress Extended Profile component is active.', PO_LANG ) .
 			'</p></div>';
 			return;
 		}

@@ -2,7 +2,7 @@
 /*
 Name:        Installation
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: WordPress Multisite: Condition based on the WordPress installation. Conditions are only available for global PopUps.
+Description: WordPress Multisite: Conditions based on the blogs ProSite details. <em>Conditions are only available for global PopUps.</em>. <a href="http://premium.wpmudev.org/project/pro-sites/" target="_blank">Learn more &raquo;</a>
 Author:      Philipp (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
@@ -35,6 +35,10 @@ class IncPopupRule_Installation extends IncPopupRule {
 				20
 			);
 		}
+
+		// -- Initialize rule.
+
+		$this->is_active = function_exists( 'is_pro_site' );
 	}
 
 
@@ -59,6 +63,46 @@ class IncPopupRule_Installation extends IncPopupRule {
 		return ! $prosite;
 	}
 
+	/**
+	 * Output the Admin-Form for the active rule.
+	 *
+	 * @since  4.6
+	 * @param  mixed $data Rule-data which was saved via the save_() handler.
+	 */
+	protected function form_no_prosite( $data ) {
+		if ( ! $this->is_active ) {
+			$this->render_plugin_inactive();
+		}
+	}
+
+
+	/*======================================*\
+	==========================================
+	==                                      ==
+	==           HELPER FUNCTIONS           ==
+	==                                      ==
+	==========================================
+	\*======================================*/
+
+
+	/**
+	 * Displays a warning message in case the Membership plugin is not active.
+	 *
+	 * @since  1.0.0
+	 */
+	protected function render_plugin_inactive() {
+		?>
+		<div class="error below-h2"><p>
+			<?php printf(
+				__(
+					'This condition requires the <a href="%s" target="_blank">' .
+					'Pro Sites Plugin</a> to be active.', PO_LANG
+				),
+				'http://premium.wpmudev.org/project/pro-sites/'
+			);?>
+		</p></div>
+		<?php
+	}
 
 };
 
