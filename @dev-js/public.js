@@ -55,6 +55,8 @@
 			if ( ! me.have_popup ) {
 				me.next_popup();
 			}
+
+			popup_status( me, 'closed' );
 			return false;
 		};
 
@@ -206,7 +208,7 @@
 						}
 
 						window.setTimeout( function() {
-							me.show();
+							me.show_if_closed();
 						}, delay );
 						break;
 
@@ -237,7 +239,7 @@
 				case 'px':
 					if ( top >= me.data.display_data.scroll ) {
 						$win.off( 'scroll', me.show_at_position );
-						me.show();
+						me.show_if_closed();
 					}
 					break;
 
@@ -248,7 +250,7 @@
 
 					if ( perc >= me.data.display_data.scroll ) {
 						$win.off( 'scroll', me.show_at_position );
-						me.show();
+						me.show_if_closed();
 					}
 					break;
 			}
@@ -269,12 +271,18 @@
 			// When 10px of the element are visible show the PopUp.
 			if ( offset > 10 ) {
 				$win.off( 'scroll', me.show_at_element );
-				me.show();
+				me.show_if_closed();
 			}
 		};
 
+		this.show_if_closed = function show_if_closed() {
+			// Try to show the Popup if no other popup is visible.
+			popup_status( me, 'open' );
+		}
+
 		/**
 		 * Display the PopUp!
+		 * This function is called by popup_status() below!!!
 		 */
 		this.show = function show() {
 			$po_back.on( 'click', me.background_clicked );
@@ -352,7 +360,7 @@
 				$po_back = $po_div.find( '.wdpu-background' );
 
 				if ( ! $po_back.length ) {
-					$po_back = jQuery( '.wdpu-background' );
+					$po_back = $po_div.parents( '.wdpu-background' );
 				}
 			}
 
@@ -361,88 +369,17 @@
 		};
 
 		/**
-		 * Insert the PopUp CSS and HTML as hidden elements into the DOM.
-		 */
-		this.prepare_dom = function prepare_dom() {
-			if ( me.data['html'] === '' ) { return false; }
-
-			jQuery( '<style type="text/css">' + me.data['styles'] + '</style>' )
-				.appendTo('head');
-
-			jQuery( me.data['html'] )
-				.appendTo('body');
-
-			me.fetch_dom();
-
-			$po_div.hide();
-			$po_back.hide();
-
-			me.maybe_show_popup();
-		};
-
-		/**
 		 * Load popup data via ajax.
 		 */
 		this.load_popup = function load_popup( id, data ) {
-			var ajax_args, ajax_data,
-				po_id = 0,
-				thefrom = window.location,
-				thereferrer = document.referrer;
-
-			me.have_popup = false;
-
-			var handle_done = function handle_done( data ) {
-				me.data = data;
-
-				if ( data ) {
-					me.have_popup = true;
-					me.exec_scripts();
-					me.prepare_dom();
-				}
-			};
-
-			// Legacy: force_popover = load a popup_id by ID.
-			if ( typeof force_popover != 'undefined' ) {
-				po_id = force_popover.toString();
-			}
-
-			// New way of specifying popup ID is via param: load(id)
-			if ( typeof id != 'undefined' ) {
-				po_id = id.toString();
-			}
-
-			_options['ajax_data'] = _options['ajax_data'] || {};
-			ajax_data = jQuery.extend( {}, _options['ajax_data'] );
-
-			ajax_data['action']      = 'inc_popup',
-			ajax_data['do']          = _options['do'],
-			ajax_data['thefrom']     = thefrom.toString(),
-			ajax_data['thereferrer'] = thereferrer.toString()
-
-			if ( po_id ) { ajax_data['po_id'] = po_id; }
-			if ( data ) { ajax_data['data'] = data; }
-			if ( _options['preview'] ) { ajax_data['preview'] = true; }
-
-			ajax_args = {
-				url:           _options['ajaxurl'],
-				dataType:      'jsonp',
-				jsonpCallback: 'po_data',
-				data:          ajax_data,
-				success: function( data ) {
-					handle_done( data );
-				},
-				complete: function() {
-					$doc.trigger( 'popup-load-done', [me.data, me] );
-				}
-			};
-			return jQuery.ajax(ajax_args);
+			if ( undefined === id && true == _options.preview ) { return };
+			load_popups( _options, id, data );
 		};
 
 		/**
 		 * Try to load the next PopUp from the server.
 		 */
 		this.next_popup = function next_popup() {
-			console.log ('try to fetch next popup...');
 		};
 
 
@@ -550,12 +487,130 @@
 		};
 	};
 
+	var status = 'closed',
+		queue = [];
+
+	function popup_status( popup, new_status ) {
+		if ( 'open' === new_status ) {
+			// PopUp wants to be displayed. Display or add to queue.
+			if ( 'closed' === status ) {
+				popup.show();
+			} else {
+				queue[queue.length] = popup;
+			}
+			status = new_status;
+		}
+
+		else if ( 'closed' === new_status ) {
+			status = new_status;
+
+			// PopUp was closed, check if there is another PopUp in open-queue.
+			if ( queue.length > 0 ) {
+				item = queue.shift();
+				popup_status( item, 'open' );
+			}
+		}
+
+	}
+
+	/**
+	 * Load popup data via ajax.
+	 * This function will create new Popup objects.
+	 */
+	function load_popups( options, id, data ) {
+		var ajax_args, ajax_data,
+			po_id = 0,
+			thefrom = window.location,
+			thereferrer = document.referrer,
+			the_data = null;
+
+		var handle_done = function handle_done( data ) {
+			the_data = jQuery.extend( {}, options );
+			the_data.popup = data;
+
+			// This will create new Popup objects.
+			initialize( the_data );
+		};
+
+		// Legacy: force_popover = load a popup_id by ID.
+		if ( typeof force_popover != 'undefined' ) {
+			po_id = force_popover.toString();
+		}
+
+		// New way of specifying popup ID is via param: load(id)
+		if ( typeof id != 'undefined' ) {
+			po_id = id.toString();
+		}
+
+		options['ajax_data'] = options['ajax_data'] || {};
+		ajax_data = jQuery.extend( {}, options['ajax_data'] );
+
+		ajax_data['action']      = 'inc_popup',
+		ajax_data['do']          = options['do'],
+		ajax_data['thefrom']     = thefrom.toString(),
+		ajax_data['thereferrer'] = thereferrer.toString()
+
+		if ( po_id ) { ajax_data['po_id'] = po_id; }
+		if ( data ) { ajax_data['data'] = data; }
+		if ( options['preview'] ) { ajax_data['preview'] = true; }
+
+		ajax_args = {
+			url:           options['ajaxurl'],
+			dataType:      'jsonp',
+			jsonpCallback: 'po_data',
+			data:          ajax_data,
+			success: function( data ) {
+				handle_done( data );
+			},
+			complete: function() {
+				jQuery( document ).trigger( 'popup-load-done', [the_data] );
+			}
+		};
+		return jQuery.ajax(ajax_args);
+	}
+
+	/**
+	 * Create and initialize new Popup objects
+	 */
+	function initialize( popup_data ) {
+		if ( undefined === popup_data ) { return; }
+
+		// Initlize a single PopUp.
+		var spawn_popup = function spawn_popup( data ) {
+			if ( undefined === data ) { return; }
+
+			// Insert the PopUp CSS and HTML as hidden elements into the DOM.
+			if ( undefined !== data.popup && undefined !== data.popup['html'] ) {
+				jQuery( '<style type="text/css">' + data.popup['styles'] + '</style>' )
+					.appendTo('head');
+
+				jQuery( data.popup['html'] )
+					.appendTo('body')
+					.hide();
+			}
+
+			window.inc_popup = new Popup( data );
+			jQuery( document ).trigger( 'popup-initialized', [window.inc_popup] );
+
+			if ( data['noinit'] || data['preview'] ) { return; }
+			inc_popup.init();
+		};
+
+		// Initialize a single or multiple PopUps, depending on provided data.
+		if ( popup_data.popup instanceof Array ) {
+			for ( var i = 0; i < popup_data.popup.length; i+= 1 ) {
+				var data = jQuery.extend( {}, popup_data );
+				data.popup = popup_data.popup[i];
+				spawn_popup( data );
+			}
+		} else if ( popup_data instanceof Object ) {
+			spawn_popup( popup_data );
+		}
+	}
 
 	// Initialize the PopUp one the page is loaded.
 	jQuery(function() {
-		window.inc_popup = new Popup( _popup_data );
-		if ( _popup_data['noinit'] || _popup_data['preview'] ) { return; }
-		inc_popup.init();
+		initialize( _popup_data );
 	});
 
 })();

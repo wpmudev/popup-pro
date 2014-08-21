@@ -505,13 +505,14 @@ jQuery(function init_admin() {
 			return false;
 		};
 
-		var remove_animation = function remove_animation() {
+		var show_popup = function show_popup( ev, popup ) {
 			body.removeClass( 'wpmui-loading' );
+			popup.init();
 		};
 
 		doc.on( 'click', '.posts .po-preview', handle_list_click );
 		doc.on( 'click', '#post .preview', handle_editor_click );
-		doc.on( 'popup-load-done', remove_animation );
+		doc.on( 'popup-initialized', show_popup );
 	};
 
 	if ( ! jQuery( 'body.post-type-inc_popup' ).length ) {

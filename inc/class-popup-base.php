@@ -22,6 +22,13 @@ abstract class IncPopupBase {
 	protected $db = null;
 
 	/**
+	 * List of PopUps fetched by select_popup()
+	 * @var array [IncPopupItem]
+	 */
+	protected $popups = array();
+
+
+	/**
 	 * Constructor
 	 */
 	protected function __construct() {
@@ -292,21 +299,40 @@ abstract class IncPopupBase {
 		switch ( $action ) {
 			case 'get-data':
 				if ( IncPopupItem::POST_TYPE == @$_REQUEST['data']['post_type'] ) {
-					$this->popup = new IncPopupItem();
+					$this->popups = array();
+					$this->popups[0] = new IncPopupItem();
 					$data = self::prepare_formdata( $_REQUEST['data'] );
-					$this->popup->populate( $data );
+					$this->popups[0]->populate( $data );
 				} else {
 					$this->select_popup();
 				}
 
-				if ( ! empty( $this->popup ) ) {
-					$is_preview = ! empty( $_REQUEST['preview'] );
-					$data = $this->popup->get_script_data( $is_preview );
-
+				if ( ! empty( $this->popups ) ) {
+					$data = $this->get_popup_data();
 					echo 'po_data(' . json_encode( $data ) . ')';
 				}
 				die();
 		}
+	}
+
+	/**
+	 * Processes the popups array and returns a serializeable object with all
+	 * popup details. The object can be JSON-encoded and interpreted by the
+	 * javascript library.
+	 *
+	 * @since  4.6
+	 * @return array
+	 */
+	public function get_popup_data() {
+		$data = array();
+		$is_preview = ! empty( $_REQUEST['preview'] );
+
+		foreach ( $this->popups as $item ) {
+			$item_data = $item->get_script_data( $is_preview );
+			$data[] = $item_data;
+		}
+
+		return $data;
 	}
 
 
@@ -328,26 +354,27 @@ abstract class IncPopupBase {
 	protected function select_popup() {
 		$data = array();
 		$items = $this->find_popups();
-		$this->popup = null;
+		$this->popups = array();
 
 		if ( empty( $items ) ) {
 			return;
 		}
 
-		// Use the first popup item from the list.
-		$this->popup = reset( $items );
+		$this->popups = $items;
 
 		// Increase the popup counter.
-		$count = absint( @$_COOKIE['po_c-' . $this->popup->id] );
-		$count += 1;
-		if ( ! headers_sent() ) {
-			setcookie(
-				'po_c-' . $this->popup->id,
-				$count ,
-				time() + 500000000,
-				COOKIEPATH,
-				COOKIE_DOMAIN
-			);
+		foreach ( $this->popups as $item ) {
+			$count = absint( @$_COOKIE['po_c-' . $item->id] );
+			$count += 1;
+			if ( ! headers_sent() ) {
+				setcookie(
+					'po_c-' . $item->id,
+					$count ,
+					time() + 500000000,
+					COOKIEPATH,
+					COOKIE_DOMAIN
+				);
+			}
 		}
 	}
 

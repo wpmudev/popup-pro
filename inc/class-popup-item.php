@@ -243,8 +243,8 @@ class IncPopupItem {
 
 		isset( $data['size']['width'] ) && $this->size['width'] = $data['size']['width'];
 		isset( $data['size']['height'] ) && $this->size['height'] = $data['size']['height'];
-		is_numeric( $this->size['width'] ) && $this->size['width'] .= 'px';
-		is_numeric( $this->size['height'] ) && $this->size['height'] .= 'px';
+		is_numeric( @$this->size['width'] ) && $this->size['width'] .= 'px';
+		is_numeric( @$this->size['height'] ) && $this->size['height'] .= 'px';
 
 		is_array( @$data['color'] ) && $this->color = $data['color'];
 		if ( isset( $data['custom_colors'] ) ) {
@@ -335,6 +335,9 @@ class IncPopupItem {
 		foreach ( $this->rule_data as $ind => $key ) {
 			if ( empty( $key ) ) { unset( $this->rule_data[$ind] ); }
 		}
+
+		// Generate unique ID.
+		$this->code->id = 'a' . md5( $this->id . date( 'dis' ) );
 
 		// Display data (legacy code for old styles).
 		if ( $this->custom_colors ) {
@@ -587,29 +590,29 @@ class IncPopupItem {
 	 * @return string HTML code.
 	 */
 	protected function load_html() {
-		static $Html = null;
+		static $Html = array();
 
-		if ( null === $Html ) {
+		if ( ! isset( $Html[ $this->id ] ) ) {
 			$styles = apply_filters( 'popup-styles', array() );
 			$details = $styles[$this->style];
 
-			$Html = '';
+			$Html[ $this->id ] = '';
 			$tpl_file = $details->dir . 'template.php';
 
 			if ( file_exists( $tpl_file ) ) {
 				ob_start();
 				include_once( $tpl_file );
-				$Html = ob_get_contents();
+				$Html[ $this->id ] = ob_get_contents();
 				ob_end_clean();
 
-				$Html = str_replace( array( "\t", "\r", "\n", '     ' ), ' ', $Html );
-				$Html = str_replace( array( '    ', '   ', '  ' ), ' ', $Html );
-				$Html = str_replace( '#000001', $this->code->color1, $Html );
-				$Html = str_replace( '#000002', $this->code->color2, $Html );
+				$Html[ $this->id ] = str_replace( array( "\t", "\r", "\n", '     ' ), ' ', $Html[ $this->id ] );
+				$Html[ $this->id ] = str_replace( array( '    ', '   ', '  ' ), ' ', $Html[ $this->id ] );
+				$Html[ $this->id ] = str_replace( '#000001', $this->code->color1, $Html[ $this->id ] );
+				$Html[ $this->id ] = str_replace( '#000002', $this->code->color2, $Html[ $this->id ] );
 			}
 		}
 
-		return $Html;
+		return $Html[ $this->id ];
 	}
 
 	/**
@@ -619,28 +622,28 @@ class IncPopupItem {
 	 * @return string CSS code.
 	 */
 	protected function load_styles() {
-		static $Code = null;
+		static $Code = array();
 
-		if ( null === $Code ) {
+		if ( ! isset( $Code[ $this->id ] ) ) {
 			$styles = apply_filters( 'popup-styles', array() );
 			$details = $styles[$this->style];
 
-			$Code = '';
+			$Code[ $this->id ] = '';
 			$tpl_file = $details->dir . 'style.css';
 
 			if ( file_exists( $tpl_file ) ) {
 				ob_start();
 				include_once( $tpl_file );
-				$Code = ob_get_contents();
+				$Code[ $this->id ] = ob_get_contents();
 				ob_end_clean();
 
-				$Code = str_replace( '#messagebox', '#' . $this->code->id, $Code );
-				$Code = str_replace( '%styleurl%', $details->url, $Code );
-				$Code = str_replace( '#000001', $this->code->color1, $Code );
-				$Code = str_replace( '#000002', $this->code->color2, $Code );
+				$Code[ $this->id ] = str_replace( '#messagebox', '#' . $this->code->id, $Code[ $this->id ] );
+				$Code[ $this->id ] = str_replace( '%styleurl%', $details->url, $Code[ $this->id ] );
+				$Code[ $this->id ] = str_replace( '#000001', $this->code->color1, $Code[ $this->id ] );
+				$Code[ $this->id ] = str_replace( '#000002', $this->code->color2, $Code[ $this->id ] );
 			}
 		}
-		return $Code;
+		return $Code[ $this->id ];
 	}
 
 	/**
@@ -652,22 +655,22 @@ class IncPopupItem {
 	 * @return array
 	 */
 	public function get_script_data( $is_preview = false ) {
-		static $Data = null;
+		static $Data = array();
 
-		if ( null === $Data ) {
+		if ( ! isset( $Data[ $this->id ] ) ) {
 			$this->is_preview = $is_preview;
-			$Data = $this->script_data;
-			$Data['html'] = $this->load_html();
-			$Data['styles'] = $this->load_styles();
+			$Data[ $this->id ] = $this->script_data;
+			$Data[ $this->id ]['html'] = $this->load_html();
+			$Data[ $this->id ]['styles'] = $this->load_styles();
 
-			$Data = apply_filters( 'popup-output-data', $Data, $this );
+			$Data[ $this->id ] = apply_filters( 'popup-output-data', $Data[ $this->id ], $this );
 
 			if ( $is_preview ) {
-				$Data = $this->preview_mode( $Data );
+				$Data[ $this->id ] = $this->preview_mode( $Data[ $this->id ] );
 			}
 		}
 
-		return $Data;
+		return $Data[ $this->id ];
 	}
 
 	/**

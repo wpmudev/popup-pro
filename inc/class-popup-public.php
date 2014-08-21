@@ -204,14 +204,16 @@ class IncPopup extends IncPopupBase {
 		$_REQUEST['thereferrer'] = @$_SERVER['HTTP_REFERER'];
 		$_REQUEST['thefrom'] = WDev()->current_url();
 
-		// Populates $this->popup
+		// Populates $this->popups
 		$this->select_popup();
 
-		if ( empty( $this->popup ) ) { return; }
+		if ( empty( $this->popups ) ) { return; }
 
-		$data = $this->popup->get_script_data();
-		unset( $data['html'] );
-		unset( $data['styles'] );
+		$data = $this->get_popup_data();
+		foreach ( $data as $ind => $item ) {
+			unset( $data[$ind]['html'] );
+			unset( $data[$ind]['styles'] );
+		}
 		$this->script_data['popup'] = $data;
 		$this->load_scripts();
 
@@ -232,10 +234,14 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6
 	 */
 	public function show_header() {
-		if ( empty( $this->popup ) ) { return; }
+		if ( empty( $this->popups ) ) { return; }
 
-		$data = $this->popup->get_script_data();
-		echo '<style type="text/css">' . $data['styles'] . '</style>';
+		$code = '';
+		$data = $this->get_popup_data();
+		foreach ( $data as $ind => $item ) {
+			$code .= $item['styles'];
+		}
+		echo '<style type="text/css">' . $code . '</style>';
 	}
 
 	/**
@@ -244,10 +250,14 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6
 	 */
 	public function show_footer() {
-		if ( empty( $this->popup ) ) { return; }
+		if ( empty( $this->popups ) ) { return; }
 
-		$data = $this->popup->get_script_data();
-		echo '' . $data['html'];
+		$code = '';
+		$data = $this->get_popup_data();
+		foreach ( $data as $ind => $item ) {
+			$code .= $item['html'];
+		}
+		echo '' . $code;
 	}
 
 };
