@@ -109,6 +109,20 @@ class IncPopupDatabase {
 		$count = 0;
 
 		if ( $wpdb->get_var( 'SHOW TABLES LIKE "' . $tbl_popover . '" ' ) == $tbl_popover ) {
+			// Create a column in old table to monitor migration status.
+			$sql = "CREATE TABLE {$tbl_popover} (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				popover_title varchar(250) DEFAULT NULL,
+				popover_content text,
+				popover_settings text,
+				popover_order bigint(20) DEFAULT '0',
+				popover_active int(11) DEFAULT '0',
+				migrated tinyint DEFAULT '0',
+				PRIMARY KEY  (id)
+			) {$charset_collate};";
+
+			dbDelta( $sql );
+
 			// Migrate to custom post type.
 			$sql = "
 			SELECT
@@ -119,6 +133,7 @@ class IncPopupDatabase {
 				popover_order,
 				popover_active
 			FROM {$tbl_popover}
+			WHERE migrated=0
 			";
 			$res = $wpdb->get_results( $sql );
 
@@ -226,9 +241,21 @@ class IncPopupDatabase {
 						),
 					)
 				);
+
 				// Save the popup as custom posttype.
 				$popup = new IncPopupItem( $data );
 				$popup->save( false );
+
+				// Mark Popup as migrated
+				$sql = "
+					UPDATE {$tbl_popover}
+					SET migrated=1
+					WHERE id=%s
+				";
+				$sql = $wpdb->prepare( $sql, $item->id );
+				$wpdb->query( $sql );
+
+				// Advance counter.
 				$count += 1;
 			}
 		}
