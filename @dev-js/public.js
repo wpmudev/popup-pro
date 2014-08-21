@@ -17,6 +17,7 @@
 		this.data = {};
 		this.have_popup = false;
 		this.ajax_data = {};
+		this.opened = 0;
 
 		/**
 		 * Close PopUp and set the "never see again" flag.
@@ -52,11 +53,7 @@
 			// Legacy trigger.
 			$doc.trigger( 'popover-closed' );
 
-			if ( ! me.have_popup ) {
-				me.next_popup();
-			}
-
-			popup_status( me, 'closed' );
+			popup_close( me );
 			return false;
 		};
 
@@ -172,8 +169,9 @@
 		 * Check if the PopUp is ready to be displayed.
 		 * If it is ready then it is displayed.
 		 */
-		this.maybe_show_popup = function maybe_show_popup() {
+		this.prepare = function prepare() {
 			me.fetch_dom();
+
 			// Move the PopUp out of the viewport but make it visible.
 			// This way the browser will start to render the contents and there
 			// will be no delay when the PopUp is made visible later.
@@ -208,7 +206,7 @@
 						}
 
 						window.setTimeout( function() {
-							me.show_if_closed();
+							popup_open( me );
 						}, delay );
 						break;
 
@@ -223,7 +221,6 @@
 
 			} else {
 				// PopUp was rejected during popup-init event. Do not display.
-				me.next_popup();
 			}
 		};
 
@@ -239,7 +236,7 @@
 				case 'px':
 					if ( top >= me.data.display_data.scroll ) {
 						$win.off( 'scroll', me.show_at_position );
-						me.show_if_closed();
+						popup_open( me );
 					}
 					break;
 
@@ -250,7 +247,7 @@
 
 					if ( perc >= me.data.display_data.scroll ) {
 						$win.off( 'scroll', me.show_at_position );
-						me.show_if_closed();
+						popup_open( me );
 					}
 					break;
 			}
@@ -271,22 +268,26 @@
 			// When 10px of the element are visible show the PopUp.
 			if ( offset > 10 ) {
 				$win.off( 'scroll', me.show_at_element );
-				me.show_if_closed();
+				popup_open( me );
 			}
 		};
 
-		this.show_if_closed = function show_if_closed() {
-			// Try to show the Popup if no other popup is visible.
-			popup_status( me, 'open' );
-		}
-
 		/**
 		 * Display the PopUp!
-		 * This function is called by popup_status() below!!!
+		 * This function is called by popup_open() below!!!
 		 */
 		this.show = function show() {
+			// If for some reason the popup container is missing then exit.
+			if ( ! $po_div.length ) {
+				return false;
+			}
+
+			count = parseInt( me.get_cookie('po_c') );
+			if ( isNaN( count ) ) { count = 0; }
+			me.set_cookie( 'po_c', count + 1 );
+
+			me.opened += 1;
 			$po_back.on( 'click', me.background_clicked );
-			$doc.on( 'popup-closed', me.reinit );
 
 			$win.off("resize.popup").on("resize.popup", function () {
 				me.move_popup(me.data);
@@ -319,6 +320,8 @@
 			$doc.trigger( 'popup-displayed', [me.data, me] );
 			// Legacy trigger.
 			$doc.trigger( 'popover-displayed', [me.data, me] );
+
+			return true;
 		};
 
 
@@ -332,6 +335,9 @@
 		this.fetch_dom = function fetch_dom() {
 			// The top container of the PopUp.
 			$po_div = jQuery( '#' + me.data['html_id'] );
+
+			// Reject this PopUp if the HTML element is missing.
+			if ( ! $po_div.length ) { me.reject(); }
 
 			// The container that should be resized (custom size).
 			$po_resize = $po_div.find( '.resize' );
@@ -373,13 +379,8 @@
 		 */
 		this.load_popup = function load_popup( id, data ) {
 			if ( undefined === id && true == _options.preview ) { return };
+			me.have_popup = false; // This object cannot display a PopUp...
 			load_popups( _options, id, data );
-		};
-
-		/**
-		 * Try to load the next PopUp from the server.
-		 */
-		this.next_popup = function next_popup() {
 		};
 
 
@@ -388,23 +389,12 @@
 
 		this.init = function init() {
 			if ( ! _options['popup'] ) {
-				me.have_popup = false;
 				me.load_popup();
 			} else {
 				me.have_popup = true;
 				me.data = _options['popup'];
 				me.exec_scripts();
-				me.maybe_show_popup();
-			}
-		};
-
-		/**
-		 * Used for certain rules (e.g. on-click rule) to show the PopUp
-		 * again when the rule validates a second time.
-		 */
-		this.reinit = function reinit() {
-			if ( me.data.display == 'click' && me.data.display_data['click_multi'] ) {
-				me.maybe_show_popup();
+				me.prepare();
 			}
 		};
 
@@ -487,30 +477,41 @@
 		};
 	};
 
-	var status = 'closed',
-		queue = [];
+	// Local variables used by popup_open() and popup_close()
+	var po_status = 'closed',
+		po_queue = [],
+		po_current = null;
 
-	function popup_status( popup, new_status ) {
-		if ( 'open' === new_status ) {
-			// PopUp wants to be displayed. Display or add to queue.
-			if ( 'closed' === status ) {
-				popup.show();
+	/**
+	 * Either opens the PopUp or enqueues it to be opened as soon as the current
+	 * PopUp is closed.
+	 */
+	function popup_open( popup ) {
+		if ( 'closed' === po_status ) {
+			if ( popup.show() ) {
+				po_current = popup;
+				po_status = 'open';
 			} else {
-				queue[queue.length] = popup;
+				// The PopUp could not be opened due to some error...
+				popup_close( popup );
 			}
-			status = new_status;
+		} else {
+			po_queue[po_queue.length] = popup;
 		}
+	}
 
-		else if ( 'closed' === new_status ) {
-			status = new_status;
+	/**
+	 * Marks the specified PopUp as closed and opens the next enqueued PopUp.
+	 */
+	function popup_close( popup ) {
+		po_status = 'closed';
+		po_current = null;
 
-			// PopUp was closed, check if there is another PopUp in open-queue.
-			if ( queue.length > 0 ) {
-				item = queue.shift();
-				popup_status( item, 'open' );
-			}
+		// PopUp was closed, check if there is another PopUp in open-queue.
+		if ( po_queue.length > 0 ) {
+			item = po_queue.shift();
+			popup_open( item );
 		}
-
 	}
 
 	/**
@@ -551,7 +552,7 @@
 		ajax_data['thereferrer'] = thereferrer.toString()
 
 		if ( po_id ) { ajax_data['po_id'] = po_id; }
-		if ( data ) { ajax_data['data'] = data; }
+		if ( data )  { ajax_data['data'] = data; }
 		if ( options['preview'] ) { ajax_data['preview'] = true; }
 
 		ajax_args = {
@@ -589,7 +590,12 @@
 					.hide();
 			}
 
+			// inc_popup .. the most recently created Popup object.
 			window.inc_popup = new Popup( data );
+
+			// inc_popups .. collection of all Popup objects on current page.
+			window.inc_popups[window.inc_popups.length] = window.inc_popup;
+
 			jQuery( document ).trigger( 'popup-initialized', [window.inc_popup] );
 
 			if ( data['noinit'] || data['preview'] ) { return; }
@@ -610,6 +616,7 @@
 
 	// Initialize the PopUp one the page is loaded.
 	jQuery(function() {
+		window.inc_popups = [];
 		initialize( _popup_data );
 	});
 

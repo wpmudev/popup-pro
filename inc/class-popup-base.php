@@ -361,21 +361,6 @@ abstract class IncPopupBase {
 		}
 
 		$this->popups = $items;
-
-		// Increase the popup counter.
-		foreach ( $this->popups as $item ) {
-			$count = absint( @$_COOKIE['po_c-' . $item->id] );
-			$count += 1;
-			if ( ! headers_sent() ) {
-				setcookie(
-					'po_c-' . $item->id,
-					$count ,
-					time() + 500000000,
-					COOKIEPATH,
-					COOKIE_DOMAIN
-				);
-			}
-		}
 	}
 
 	/**
