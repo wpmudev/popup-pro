@@ -32,7 +32,7 @@ class IncPopupRule_Membership extends IncPopupRule {
 			__( 'By Membership Level', PO_LANG ),
 			__( 'Shows the PopUp if the user has a certain Membership Level.', PO_LANG ),
 			'',
-			1
+			25
 		);
 
 		// 'membership_sub' rule.
@@ -41,7 +41,7 @@ class IncPopupRule_Membership extends IncPopupRule {
 			__( 'By Membership Subscription', PO_LANG ),
 			__( 'Shows the PopUp if the user does not have a certain Membership Level.', PO_LANG ),
 			'membership',
-			1
+			25
 		);
 
 		// -- Initialize rule.

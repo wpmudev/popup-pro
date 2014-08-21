@@ -327,7 +327,7 @@ class IncPopupDatabase {
 			'class-popup-rule-referrer.php',
 			'class-popup-rule-url.php',
 			'class-popup-rule-user.php',
-			'class-popup-rule-installation.php',
+			'class-popup-rule-prosite.php',
 		);
 
 		foreach ( $addons as $addon ) {
@@ -351,6 +351,10 @@ class IncPopupDatabase {
 					$rules[] = 'class-popup-rule-posttype.php'; break;
 				case 'rules-xprofile_value.php':
 					$rules[] = 'class-popup-rule-xprofile.php'; break;
+				case 'rules-membership.php':
+					$rules[] = 'class-popup-rule-membership.php'; break;
+				case 'rules-wp_roles.php':
+					$rules[] = 'class-popup-rule-role.php'; break;
 			}
 		}
 		$settings['rules'] = $rules;
@@ -553,7 +557,7 @@ class IncPopupDatabase {
 				'class-popup-rule-referrer.php',
 				'class-popup-rule-url.php',
 				'class-popup-rule-user.php',
-				'class-popup-rule-installation.php',
+				'class-popup-rule-prosite.php',
 			)
 		);
 
