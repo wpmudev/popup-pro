@@ -214,6 +214,17 @@ $ordered_rules = array();
 					'This list explains which shortcodes can be used with each ' .
 					'loading method:', PO_LANG
 				); ?>
+				<?php if ( IncPopup::use_global() ) : ?>
+					<p><em>
+					<?php _e(
+					'Important notice for shortcodes in <strong>Global ' .
+					'PopUps</strong>:<br />' .
+					'Shortcodes can be provided by a plugin or theme, so ' .
+					'each blog can have a different list of shortcodes. The ' .
+					'following list is valid for the current blog only!', PO_LANG
+					); ?>
+					</em></p>
+				<?php endif; ?>
 				<table class="widefat tbl-shortcodes load-<?php echo esc_attr( $cur_method ); ?>">
 					<thead>
 						<tr>
