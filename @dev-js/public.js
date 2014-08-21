@@ -155,6 +155,7 @@
 			// Short delay before positioning the popup to give the browser time
 			// to show/resize the popup (20ms ~ 1 screen refresh)
 			window.setTimeout(update_position, 20);
+			update_position();
 		};
 
 		/**
@@ -273,10 +274,17 @@
 		};
 
 		/**
+		 * Can be used from custom_handler() to make a Popup visible.
+		 */
+		this.show_popup = function show_popup() {
+			popup_open( me );
+		};
+
+		/**
 		 * Display the PopUp!
 		 * This function is called by popup_open() below!!!
 		 */
-		this.show = function show() {
+		this._show = function _show() {
 			// If for some reason the popup container is missing then exit.
 			if ( ! $po_div.length ) {
 				return false;
@@ -289,16 +297,14 @@
 			me.opened += 1;
 			$po_back.on( 'click', me.background_clicked );
 
-			$win.off("resize.popup").on("resize.popup", function () {
-				me.move_popup(me.data);
-			});
+			$win.off("resize.popup")
+				.on("resize.popup", function () { me.move_popup(me.data); });
 
 			$po_div.show().removeAttr( 'style' );
 			$po_back.show();
+			jQuery( 'html' ).addClass( 'has-popup' );
 
 			me.move_popup(me.data);
-
-			jQuery( 'html' ).addClass( 'has-popup' );
 
 			$po_hide.off( "click", me.close_forever )
 				.on( "click", me.close_forever );
@@ -488,7 +494,7 @@
 	 */
 	function popup_open( popup ) {
 		if ( 'closed' === po_status ) {
-			if ( popup.show() ) {
+			if ( popup._show() ) {
 				po_current = popup;
 				po_status = 'open';
 			} else {

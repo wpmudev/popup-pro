@@ -111,7 +111,7 @@ class IncPopupRule_Events extends IncPopupRule {
 		?>
 		function( me ) {
 			jQuery(document).one( 'mouseleave', function() {
-				me.show();
+				me.show_popup();
 				return false;
 			});
 		}
@@ -187,9 +187,9 @@ class IncPopupRule_Events extends IncPopupRule {
 		?>
 		function( me ) {
 			if ( me.data.display_data['click_multi'] ) {
-				jQuery(document).on( 'click', me.data.display_data['click'], me.show );
+				jQuery(document).on( 'click', me.data.display_data['click'], me.show_popup );
 			} else {
-				jQuery(document).one( 'click', me.data.display_data['click'], me.show );
+				jQuery(document).one( 'click', me.data.display_data['click'], me.show_popup );
 			}
 		}
 		<?php
