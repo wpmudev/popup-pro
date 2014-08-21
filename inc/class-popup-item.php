@@ -601,7 +601,7 @@ class IncPopupItem {
 
 			if ( file_exists( $tpl_file ) ) {
 				ob_start();
-				include_once( $tpl_file );
+				include( $tpl_file );
 				$Html[ $this->id ] = ob_get_contents();
 				ob_end_clean();
 
@@ -633,7 +633,7 @@ class IncPopupItem {
 
 			if ( file_exists( $tpl_file ) ) {
 				ob_start();
-				include_once( $tpl_file );
+				include( $tpl_file );
 				$Code[ $this->id ] = ob_get_contents();
 				ob_end_clean();
 
