@@ -7,7 +7,7 @@ Author:      JJ (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
 Rules:       By Membership Level, By Membership Subscription
-Limit:        pro
+Limit:       pro
 Version:     1.0
 
 NOTE: DON'T RENAME THIS FILE!!
