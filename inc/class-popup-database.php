@@ -153,6 +153,8 @@ class IncPopupDatabase {
 				'referrer' => 'referrer',
 				'count' => 'count',
 				'max_width' => 'width',
+				'wp_roles_rule' => 'role',
+				'membership_level' => 'membership',
 				//'on_exit' => 'on_exit',
 				//'on_click' => 'on_click',
 			);
