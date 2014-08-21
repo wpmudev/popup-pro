@@ -34,14 +34,6 @@ $msg_class .= 'wdpu-' . $this->id . ' ';
 
 $move_class = $this->custom_size ? '' : 'no-move-x';
 
-function show_img( $popup ) {
-	?>
-	<div class="wdpu-image">
-		<img src="<?php echo esc_url( $popup->image ); ?>" />
-	</div>
-	<?php
-}
-
 ?>
 <div id="<?php echo esc_attr( $this->code->id ); ?>"
 	class="style-simple wdpu-container wdpu-background <?php echo esc_attr( $msg_class ); ?>"
@@ -51,7 +43,11 @@ function show_img( $popup ) {
 		<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
 
 		<div class="wdpu-msg-inner resize">
-			<?php if ( $has_img && $img_left ) { show_img( $this ); } ?>
+			<?php if ( $has_img && $img_left ) : ?>
+			<div class="wdpu-image">
+				<img src="<?php echo esc_url( $this->image ); ?>" />
+			</div>
+			<?php endif; ?>
 
 			<div class="wdpu-text">
 				<div class="wdpu-inner <?php if ( ! $has_buttons ) { echo esc_attr( 'no-bm' ); } ?>">
@@ -91,7 +87,11 @@ function show_img( $popup ) {
 				<?php endif; ?>
 			</div>
 
-			<?php if ( $has_img && ! $img_left ) { show_img( $this ); } ?>
+			<?php if ( $has_img && ! $img_left ) : ?>
+			<div class="wdpu-image">
+				<img src="<?php echo esc_url( $this->image ); ?>" />
+			</div>
+			<?php endif; ?>
 		</div>
 	</div>
 </div>
