@@ -1,12 +1,12 @@
 <?php
 /*
-Name:        Installation
+Name:        Pro Sites
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: WordPress Multisite: Conditions based on the blogs ProSite details. <em>Conditions are only available for global PopUps.</em>. <a href="http://premium.wpmudev.org/project/pro-sites/" target="_blank">Learn more &raquo;</a>
+Description: Conditions based on the blogs Pro Sites details (only available for Global PopUps). <a href="http://premium.wpmudev.org/project/pro-sites/" target="_blank">Learn more &raquo;</a>
 Author:      Philipp (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
-Rules:       Site is not a Pro-Site
+Rules:       Site is not a Pro Site
 Limit:       global, pro
 Version:     1.0
 
@@ -25,16 +25,14 @@ class IncPopupRule_Installation extends IncPopupRule {
 	protected function init() {
 		$this->filename = basename( __FILE__ );
 
-		if ( function_exists( 'is_pro_site' ) ) {
-			// 'no_prosite' rule.
-			$this->add_rule(
-				'no_prosite',
-				__( 'Site is not a Pro-Site', PO_LANG ),
-				__( 'Shows the PopUp if the site is not a Pro-Site.', PO_LANG ),
-				'',
-				20
-			);
-		}
+		// 'no_prosite' rule.
+		$this->add_rule(
+			'no_prosite',
+			__( 'Site is not a Pro Site', PO_LANG ),
+			__( 'Shows the PopUp if the site is not a Pro Site.', PO_LANG ),
+			'',
+			20
+		);
 
 		// -- Initialize rule.
 
@@ -95,8 +93,8 @@ class IncPopupRule_Installation extends IncPopupRule {
 		<div class="error below-h2"><p>
 			<?php printf(
 				__(
-					'This condition requires the <a href="%s" target="_blank">' .
-					'Pro Sites Plugin</a> to be active.', PO_LANG
+					'This condition requires that the <a href="%s" target="_blank">' .
+					'Pro Sites Plugin</a> is installed and activated.', PO_LANG
 				),
 				'http://premium.wpmudev.org/project/pro-sites/'
 			);?>

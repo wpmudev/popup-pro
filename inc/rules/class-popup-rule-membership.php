@@ -246,8 +246,8 @@ class IncPopupRule_Membership extends IncPopupRule {
 		<div class="error below-h2"><p>
 			<?php printf(
 				__(
-					'This condition requires the <a href="%s" target="_blank">' .
-					'Membership Plugin</a> to be active.', PO_LANG
+					'This condition requires that the <a href="%s" target="_blank">' .
+					'Membership Plugin</a> is installed and activated.', PO_LANG
 				),
 				'http://premium.wpmudev.org/project/membership/'
 			);?>
