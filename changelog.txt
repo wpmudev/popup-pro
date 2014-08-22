@@ -4,7 +4,7 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
-4.6 - 2014-08-11
+4.6 - 2014-08-22
 ----------------------------------------------------------------------
 - Completely re-build the UI from ground up!
 - Migrated PopUps to a much more flexible data structure.
@@ -13,6 +13,7 @@ Change Log:
 - New feature: Preview PopUp inside the Editor!
 - Three new, modern PopUp styles added.
 - Featured Image support for new PopUp styles.
+- A single page can display multiple PopUps.
 
 4.5.3 - 2013-11-15
 ----------------------------------------------------------------------
