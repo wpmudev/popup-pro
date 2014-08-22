@@ -38,8 +38,11 @@ copy_files() {
 		for f in $FILES
 		do
 			if [[ $f != *.svn* ]]; then
-				t=${f/.\/plugin\/$EXPORT_FOLDER/$SVN_DIR}
-				cp "$f" "$t"
+				local sub="$(dirname $f)"
+				local target=${f/.\/plugin\/$EXPORT_FOLDER/$SVN_DIR}
+				sub=${sub/.\/plugin\/$EXPORT_FOLDER/$SVN_DIR}
+				mkdir -p "$sub"
+				cp "$f" "$target"
 				printf "."
 			fi
 		done
