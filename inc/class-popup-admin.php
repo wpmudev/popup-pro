@@ -17,6 +17,13 @@ class IncPopup extends IncPopupBase {
 	static public function instance() {
 		static $Inst = null;
 
+		// We can initialize the plugin once we know the current user:
+		// There is a preference for global popups that needs to know the user.
+		if ( ! did_action( 'set_current_user' ) ) {
+			add_action( 'set_current_user', array( __CLASS__, 'instance' ) );
+			return null;
+		}
+
 		if ( null === $Inst ) {
 			$Inst = new IncPopup();
 		}

@@ -29,6 +29,13 @@ class IncPopup extends IncPopupBase {
 	static public function instance() {
 		static $Inst = null;
 
+		// In theory the "public" class does not need this, but to avoid
+		// unexpected problems we initialize only after current user is known...
+		if ( ! did_action( 'set_current_user' ) ) {
+			add_action( 'set_current_user', array( __CLASS__, 'instance' ) );
+			return null;
+		}
+
 		if ( null === $Inst ) {
 			$Inst = new IncPopup();
 		}
