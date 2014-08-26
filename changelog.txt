@@ -7,6 +7,7 @@ Change Log:
 4.6.1
 ----------------------------------------------------------------------
 - Fix: For some users the plugin was not loading after update to 4.6
+- Fix: Old Popups will now replace shortcodes correctly.
 
 4.6 - 2014-08-22
 ----------------------------------------------------------------------

@@ -24,7 +24,7 @@ if ( defined( 'PO_ALLOW_CONTENT_FILTERING' ) && PO_ALLOW_CONTENT_FILTERING ) {
 	<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
 	<div id="message" class="wdpu-msg resize" style="<?php echo esc_attr( $this->code->colors ); ?>">
 
-		<?php echo '' . $content; ?>
+		<?php echo '' . do_shortcode( $content ); ?>
 
 		<div class="clear"></div>
 		<?php if ( $this->can_hide ) : ?>
