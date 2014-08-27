@@ -4,6 +4,10 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.6.1.1
+----------------------------------------------------------------------
+- Fix: Logic of rule "[Not] On specific URL" corrected.
+
 4.6.1
 ----------------------------------------------------------------------
 - Fix: For some users the plugin was not loading after update to 4.6
