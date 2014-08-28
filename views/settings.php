@@ -238,9 +238,14 @@ $ordered_rules = array();
 								<?php _e( 'Page Footer', PO_LANG ); ?>
 								</div>
 							</th>
-							<th class="flag load-ajax load-front">
-								<div data-tooltip="<?php _e( 'Loading method \'WordPress AJAX\' and \'Custom AJAX\'', PO_LANG ); ?>">
-								<?php _e( 'AJAX', PO_LANG ); ?>
+							<th class="flag load-ajax">
+								<div data-tooltip="<?php _e( 'Loading method \'WordPress AJAX\'', PO_LANG ); ?>">
+								<?php _e( 'WP AJAX', PO_LANG ); ?>
+								</div>
+							</th>
+							<th class="flag load-front">
+								<div data-tooltip="<?php _e( 'Loading method \'Custom AJAX\'', PO_LANG ); ?>">
+								<?php _e( 'Cust AJAX', PO_LANG ); ?>
 								</div>
 							</th>
 							<th class="flag load-anonymous">
@@ -260,7 +265,8 @@ $ordered_rules = array();
 							<tr class="shortcode <?php echo esc_attr( $classes ); ?>">
 								<td><code>[<?php echo esc_html( $code ); ?>]</code></td>
 								<td class="flag sc-front load-footer"><i class="icon dashicons"></i></td>
-								<td class="flag sc-admin load-ajax load-front"><i class="icon dashicons"></i></td>
+								<td class="flag sc-admin load-ajax"><i class="icon dashicons"></i></td>
+								<td class="flag sc-front load-front"><i class="icon dashicons"></i></td>
 								<td class="flag sc-admin load-anonymous"><i class="icon dashicons"></i></td>
 								<td class="flag sc-admin"><i class="icon dashicons"></i></td>
 							</tr>
