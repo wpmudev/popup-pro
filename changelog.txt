@@ -7,6 +7,7 @@ Change Log:
 4.6.1.1
 ----------------------------------------------------------------------
 - Fix: Logic of rule "[Not] On specific URL" corrected.
+- Fix: Close forever now works also via click on background layer.
 
 4.6.1
 ----------------------------------------------------------------------

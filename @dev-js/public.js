@@ -66,7 +66,11 @@
 			if ( el.hasClass( 'wdpu-background' ) ) {
 				if ( ! me.data.overlay_close ) { return; }
 
-				me.close_popup();
+				if ( me.data.close_hide ) {
+					me.close_forever();
+				} else {
+					me.close_popup();
+				}
 			}
 		}
 
