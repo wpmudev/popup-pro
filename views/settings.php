@@ -3,62 +3,18 @@
  * Display the popup settings page.
  */
 
-global $shortcode_tags;
+$loading_methods = IncPopupDatabase::get_loading_methods();
 
-$loading_methods = array();
-
-$loading_methods[] = (object) array(
-	'id'    => 'footer',
-	'label' => __( 'Page Footer', PO_LANG ),
-	'info'  => __(
-		'Include PopUp as part of your site\'s HTML (no AJAX call).',
-		PO_LANG
-		),
-);
-
-$loading_methods[] = (object) array(
-	'id'    => 'ajax',
-	'label' => __( 'WordPress AJAX', PO_LANG ),
-	'info'  => __(
-		'Load PopUp separately from the page via a WordPress AJAX call. ' .
-		'This is the best option if you use caching.',
-		PO_LANG
-	),
-);
-
-$loading_methods[] = (object) array(
-	'id'    => 'front',
-	'label' => __( 'Custom AJAX', PO_LANG ),
-	'info'  => __(
-		'Load PopUp separately from the page via a custom front-end AJAX call.',
-		PO_LANG
-	),
-);
-
-/**
- * Allow addons to register additional loading methods.
- *
- * @var array
- */
-$loading_methods = apply_filters( 'popup-settings-loading-method', $loading_methods );
 
 $settings = IncPopupDatabase::get_settings();
 $cur_method = @$settings['loadingmethod'];
-
 $form_url = remove_query_arg( array( 'message', 'action', '_wpnonce' ) );
+
 
 // Theme compatibility.
 $theme_compat = IncPopupAddon_HeaderFooter::check();
 $theme_class = $theme_compat->okay ? 'msg-ok' : 'msg-err';
-$shortcodes = array();
-// Add Admin-Shortcodes to the list.
-foreach ( $shortcode_tags as $code => $handler ) {
-	@$shortcodes[ $code ] .= 'sc-admin ';
-}
-// Add Front-End Shortcodes to the list.
-foreach ( $theme_compat->shortcodes as $code ) {
-	@$shortcodes[ $code ] .= 'sc-front ';
-}
+
 
 // START: Geo Lookup
 $geo_service = IncPopupDatabase::get_geo_services();
@@ -260,72 +216,7 @@ $ordered_rules = array();
 			</h3>
 
 			<div class="inside">
-				<?php _e(
-					'You can use all your shortcodes inside the PopUp contents, ' .
-					'however some Plugins or Themes might provide shortcodes that ' .
-					'only work with the loading method "Page Footer".<br /> ' .
-					'This list explains which shortcodes can be used with each ' .
-					'loading method:', PO_LANG
-				); ?>
-				<?php if ( IncPopup::use_global() ) : ?>
-					<p><em>
-					<?php _e(
-					'Important notice for shortcodes in <strong>Global ' .
-					'PopUps</strong>:<br />' .
-					'Shortcodes can be provided by a plugin or theme, so ' .
-					'each blog can have a different list of shortcodes. The ' .
-					'following list is valid for the current blog only!', PO_LANG
-					); ?>
-					</em></p>
-				<?php endif; ?>
-				<table class="widefat tbl-shortcodes load-<?php echo esc_attr( $cur_method ); ?>">
-					<thead>
-						<tr>
-							<th width="40%">
-								<div>
-								<?php _e( 'Shortcode', PO_LANG ); ?>
-								</div>
-							</th>
-							<th class="flag load-footer">
-								<div data-tooltip="<?php _e( 'Loading method \'Page Footer\'', PO_LANG ); ?>">
-								<?php _e( 'Page Footer', PO_LANG ); ?>
-								</div>
-							</th>
-							<th class="flag load-ajax">
-								<div data-tooltip="<?php _e( 'Loading method \'WordPress AJAX\'', PO_LANG ); ?>">
-								<?php _e( 'WP AJAX', PO_LANG ); ?>
-								</div>
-							</th>
-							<th class="flag load-front">
-								<div data-tooltip="<?php _e( 'Loading method \'Custom AJAX\'', PO_LANG ); ?>">
-								<?php _e( 'Cust AJAX', PO_LANG ); ?>
-								</div>
-							</th>
-							<th class="flag load-anonymous">
-								<div data-tooltip="<?php _e( 'Loading method \'Anonymous Script\'', PO_LANG ); ?>">
-								<?php _e( 'Script', PO_LANG ); ?>
-								</div>
-							</th>
-							<th class="flag">
-								<div data-tooltip="<?php _e( 'When opening a PopUp-Preview in the Editor', PO_LANG ); ?>">
-								<?php _e( 'Preview', PO_LANG ); ?>
-								</div>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ( $shortcodes as $code => $classes ) : ?>
-							<tr class="shortcode <?php echo esc_attr( $classes ); ?>">
-								<td><code>[<?php echo esc_html( $code ); ?>]</code></td>
-								<td class="flag sc-front load-footer"><i class="icon dashicons"></i></td>
-								<td class="flag sc-admin load-ajax"><i class="icon dashicons"></i></td>
-								<td class="flag sc-front load-front"><i class="icon dashicons"></i></td>
-								<td class="flag sc-admin load-anonymous"><i class="icon dashicons"></i></td>
-								<td class="flag sc-admin"><i class="icon dashicons"></i></td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
+				<?php include PO_VIEWS_DIR . 'info-shortcodes.php'; ?>
 			</div>
 		</div>
 

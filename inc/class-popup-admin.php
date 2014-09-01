@@ -1,6 +1,7 @@
 <?php
 // Load dependencies.
 require_once PO_INC_DIR . 'class-popup-base.php';
+require_once PO_INC_DIR . 'class-popup-help.php';
 
 /**
  * Defines the popup class for admin pages.

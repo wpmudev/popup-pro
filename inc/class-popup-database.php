@@ -540,6 +540,66 @@ class IncPopupDatabase {
 		$wpdb->query( $sql );
 	}
 
+
+	/*==============================*\
+	==================================
+	==                              ==
+	==           SETTINGS           ==
+	==                              ==
+	==================================
+	\*==============================*/
+
+	/**
+	 * Returns the list of available loading methods.
+	 *
+	 * @since  4.6.1.1
+	 * @return array Loading methods displayed in the Settings screen.
+	 */
+	static public function get_loading_methods() {
+		static $Loading_methods = null;
+
+		if ( null === $Loading_methods ) {
+			$Loading_methods = array();
+
+			$Loading_methods[] = (object) array(
+				'id'    => 'footer',
+				'label' => __( 'Page Footer', PO_LANG ),
+				'info'  => __(
+					'Include PopUp as part of your site\'s HTML (no AJAX call).',
+					PO_LANG
+					),
+			);
+
+			$Loading_methods[] = (object) array(
+				'id'    => 'ajax',
+				'label' => __( 'WordPress AJAX', PO_LANG ),
+				'info'  => __(
+					'Load PopUp separately from the page via a WordPress AJAX call. ' .
+					'This is the best option if you use caching.',
+					PO_LANG
+				),
+			);
+
+			$Loading_methods[] = (object) array(
+				'id'    => 'front',
+				'label' => __( 'Custom AJAX', PO_LANG ),
+				'info'  => __(
+					'Load PopUp separately from the page via a custom front-end AJAX call.',
+					PO_LANG
+				),
+			);
+
+			/**
+			 * Allow addons to register additional loading methods.
+			 *
+			 * @var array
+			 */
+			$Loading_methods = apply_filters( 'popup-settings-loading-method', $Loading_methods );
+		}
+
+		return $Loading_methods;
+	}
+
 	/**
 	 * Returns the plugin settings.
 	 *

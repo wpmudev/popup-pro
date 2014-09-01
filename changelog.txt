@@ -6,6 +6,8 @@ Change Log:
 
 4.6.1.1
 ----------------------------------------------------------------------
+- New: Alternative Country Lookup services added to Settings page.
+- New: Added Contextual Help to the PopUp editor to show supported shortcodes.
 - Fix: Logic of rule "[Not] On specific URL" corrected.
 - Fix: Close forever now works also via click on background layer.
 

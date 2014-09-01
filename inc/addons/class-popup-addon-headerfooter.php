@@ -86,81 +86,86 @@ class IncPopupAddon_HeaderFooter {
 	 * @since  1.0.0
 	 */
 	static public function check() {
-		// Build the url to call, NOTE: uses home_url and thus requires WordPress 3.0
-		$url = add_query_arg(
-			array( 'test-head' => '', 'test-footer' => '' ),
-			home_url()
-		);
+		static $Resp = null;
 
-		// Perform the HTTP GET ignoring SSL errors
-		$response = wp_remote_get(
-			$url,
-			array( 'sslverify' => false )
-		);
+		if ( null === $Resp ) {
 
-		// Grab the response code and make sure the request was sucessful
-		$code = (int) wp_remote_retrieve_response_code( $response );
-
-		if ( $code !== 200 ) { return; }
-
-		$resp = (object) array(
-			'okay' => false,
-			'msg' => array(),
-			'shortcodes' => array(),
-		);
-
-		// Strip all tabs, line feeds, carriage returns and spaces
-		$html = preg_replace(
-			'/[\t\r\n\s]/',
-			'',
-			wp_remote_retrieve_body( $response )
-		);
-
-		if ( ! strstr( $html, '<!--wp_head-->' ) ) {
-			// wp_head is missing
-			$resp->msg[] = __(
-				'Critical: Call to <code>wp_head();</code> is missing! It ' .
-				'should appear directly before <code>&lt;/head&gt;</code>', PO_LANG
+			// Build the url to call, NOTE: uses home_url and thus requires WordPress 3.0
+			$url = add_query_arg(
+				array( 'test-head' => '', 'test-footer' => '' ),
+				home_url()
 			);
-		} else if ( ! strstr( $html, '<!--wp_head--></head>' ) ) {
-			// wp_head is not in correct location.
-			$resp->msg[] = __(
-				'Notice: Call to <code>wp_head();</code> exists but it is ' .
-				'not called directly before <code>&lt;/head&gt;</code>', PO_LANG
+
+			// Perform the HTTP GET ignoring SSL errors
+			$response = wp_remote_get(
+				$url,
+				array( 'sslverify' => false )
 			);
+
+			// Grab the response code and make sure the request was sucessful
+			$code = (int) wp_remote_retrieve_response_code( $response );
+
+			if ( $code !== 200 ) { return; }
+
+			$Resp = (object) array(
+				'okay' => false,
+				'msg' => array(),
+				'shortcodes' => array(),
+			);
+
+			// Strip all tabs, line feeds, carriage returns and spaces
+			$html = preg_replace(
+				'/[\t\r\n\s]/',
+				'',
+				wp_remote_retrieve_body( $response )
+			);
+
+			if ( ! strstr( $html, '<!--wp_head-->' ) ) {
+				// wp_head is missing
+				$Resp->msg[] = __(
+					'Critical: Call to <code>wp_head();</code> is missing! It ' .
+					'should appear directly before <code>&lt;/head&gt;</code>', PO_LANG
+				);
+			} else if ( ! strstr( $html, '<!--wp_head--></head>' ) ) {
+				// wp_head is not in correct location.
+				$Resp->msg[] = __(
+					'Notice: Call to <code>wp_head();</code> exists but it is ' .
+					'not called directly before <code>&lt;/head&gt;</code>', PO_LANG
+				);
+			}
+
+			if ( ! strstr( $html, '<!--wp_footer-->' ) ) {
+				// wp_footer is missing.
+				$Resp->msg[] = __(
+					'Critical: Call to <code>wp_footer();</code> is missing! It ' .
+					'should appear directly before <code>&lt;/body&gt;</code>', PO_LANG
+				);
+			} else if ( ! strstr( $html, '<!--wp_footer--></body>' ) ) {
+				// wp_footer is not in correct location.
+				$Resp->msg[] = __(
+					'Notice: Call to <code>wp_footer();</code> exists but it is ' .
+					'not called directly before <code>&lt;/body&gt;</code>', PO_LANG
+				);
+			}
+
+			$matches = array();
+			$has_shortcodes = preg_match( '/<!--shortcodes:\[([^\]]*)\]-->/', $html, $matches );
+			if ( $has_shortcodes ) {
+				$items = $matches[1];
+				$Resp->shortcodes = explode( ',', $items );
+			}
+
+			// Display any errors that we found.
+			if ( empty( $Resp->msg ) ) {
+				$Resp->okay = true;
+				$Resp->msg[] = __(
+					'Okay: Your current theme uses <code>wp_head();</code> and ' .
+					'<code>wp_footer();</code> correctly!', PO_LANG
+				);
+			}
 		}
 
-		if ( ! strstr( $html, '<!--wp_footer-->' ) ) {
-			// wp_footer is missing.
-			$resp->msg[] = __(
-				'Critical: Call to <code>wp_footer();</code> is missing! It ' .
-				'should appear directly before <code>&lt;/body&gt;</code>', PO_LANG
-			);
-		} else if ( ! strstr( $html, '<!--wp_footer--></body>' ) ) {
-			// wp_footer is not in correct location.
-			$resp->msg[] = __(
-				'Notice: Call to <code>wp_footer();</code> exists but it is ' .
-				'not called directly before <code>&lt;/body&gt;</code>', PO_LANG
-			);
-		}
-
-		$matches = array();
-		$has_shortcodes = preg_match( '/<!--shortcodes:\[([^\]]*)\]-->/', $html, $matches );
-		if ( $has_shortcodes ) {
-			$items = $matches[1];
-			$resp->shortcodes = explode( ',', $items );
-		}
-
-		// Display any errors that we found.
-		if ( empty( $resp->msg ) ) {
-			$resp->okay = true;
-			$resp->msg[] = __(
-				'Okay: Your current theme uses <code>wp_head();</code> and ' .
-				'<code>wp_footer();</code> correctly!', PO_LANG
-			);
-		}
-
-		return $resp;
+		return $Resp;
 	}
 };
 
