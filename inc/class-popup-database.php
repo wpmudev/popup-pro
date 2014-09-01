@@ -549,6 +549,7 @@ class IncPopupDatabase {
 	public function get_settings() {
 		$defaults = array(
 			'loadingmethod' => 'ajax',
+			'geo_lookup' => 'hostip',
 			'geo_db' => false,
 			'rules' => array(
 				'class-popup-rule-browser.php',
@@ -737,6 +738,62 @@ class IncPopupDatabase {
 		";
 		$sql = $wpdb->prepare( $sql, $ip, $country, time() );
 		$wpdb->query( $sql );
+	}
+
+	/**
+	 * Clears the IP-Country cache
+	 *
+	 * @since  4.6.1.1
+	 */
+	static public function clear_ip_cache() {
+		global $wpdb;
+
+		$ip_table = self::db_prefix( self::IP_TABLE );
+
+		// Delete the cached data, if it already exists.
+		$sql = "TRUNCATE TABLE $ip_table";
+		$wpdb->query( $sql );
+	}
+
+	/**
+	 * Returns a list of available ip-resolution services.
+	 *
+	 * @since  4.6.1.1
+	 * @return array List of available webservices.
+	 */
+	static public function get_geo_services() {
+		static $Geo_service = null;
+
+		if ( null === $Geo_service ) {
+			$Geo_service = array();
+
+			$Geo_service['hostip'] = (object) array(
+				'label' => 'Host IP',
+				'url'   => 'http://api.hostip.info/country.php?ip=%ip%',
+				'type'  => 'text',
+			);
+
+			$Geo_service['telize'] = (object) array(
+				'label' => 'Telize',
+				'url'   => 'http://www.telize.com/geoip/%ip%',
+				'type'  => 'json',
+				'field' => 'country_code',
+			);
+
+			$Geo_service['freegeo'] = (object) array(
+				'label' => 'Free Geo IP',
+				'url'   => 'http://freegeoip.net/json/%ip%',
+				'type'  => 'json',
+				'field' => 'country_code',
+			);
+
+			/**
+			 * Allow other modules/plugins to register a geo service.
+			 */
+			$Geo_service = apply_filters( 'popup-geo-services', $Geo_service );
+		}
+
+		return $Geo_service;
 	}
 
 }

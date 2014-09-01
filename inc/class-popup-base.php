@@ -72,6 +72,9 @@ abstract class IncPopupBase {
 			'wp_ajax_nopriv_inc_popup',
 			array( $this, 'ajax_load_popup' )
 		);
+
+		// Tell Add-ons and extensions that we are set up.
+		do_action( 'popup-init' );
 	}
 
 	/**

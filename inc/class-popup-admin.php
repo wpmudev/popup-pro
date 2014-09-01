@@ -313,7 +313,17 @@ class IncPopup extends IncPopupBase {
 				self::post_order( $order );
 				break;
 
+			case 'test-geo':
+				require_once PO_INC_DIR . 'rules/class-popup-rule-geo.php';
+				// No break! We want to trigger the "popup-ajax-" action.
+
 			default:
+				/**
+				 * Allow other modules to handle their own ajax requests.
+				 *
+				 * @since  4.6.1.1
+				 */
+				do_action( 'popup-ajax-' . $action );
 				return;
 		}
 
@@ -348,15 +358,24 @@ class IncPopup extends IncPopupBase {
 		if ( @$_POST['action'] == 'updatesettings' ) {
 			check_admin_referer( 'update-popup-settings' );
 
+			$old_settings = IncPopupDatabase::get_settings();
+
 			$settings = array();
 			$settings['loadingmethod'] = @$_POST['po_option']['loadingmethod'];
-			$settings['geo_db'] = isset( $_POST['po_option']['geo_db'] );
+			$settings['geo_lookup'] = @$_POST['po_option']['geo_lookup'];
+			$settings['geo_db'] = ( 'geo_db' == $settings['geo_lookup'] );
 
 			$rules = @$_POST['po_option']['rules'];
 			if ( ! is_array( $rules ) ) { $rules = array(); }
 			$settings['rules'] = array_keys( $rules );
 
 			IncPopupDatabase::set_settings( $settings );
+
+			// When the Lookup-source was changed we want to clear the cache.
+			if ( $old_settings['geo_lookup'] != $settings['geo_lookup'] ) {
+				IncPopupDatabase::clear_ip_cache();
+				WDev()->message( __( 'Country Lookup changed: The lookup-cache was cleared.', PO_LANG ) );
+			}
 
 			WDev()->message( __( 'Your settings have been updated.', PO_LANG ) );
 			$redirect_url = remove_query_arg( array( 'message', 'count' ), wp_get_referer() );

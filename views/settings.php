@@ -60,21 +60,20 @@ foreach ( $theme_compat->shortcodes as $code ) {
 	@$shortcodes[ $code ] .= 'sc-front ';
 }
 
+// START: Geo Lookup
+$geo_service = IncPopupDatabase::get_geo_services();
 
-// Add-Ons
-if ( IncPopupAddon_GeoDB::table_exists() ) {
-	$geo_readonly = '';
-	$geo_msg = '';
-	$no_geo = false;
-} else {
-	$no_geo = true;
-	$geo_readonly = 'disabled="disabled"'; // Checkboxes cannot be "readonly"...
+$no_ip_cache = false;
+$custom_geo = false;
+$geo_msg = '';
+if ( ! IncPopupAddon_GeoDB::table_exists() ) {
+	$no_ip_cache = true;
 	$settings['geo_db'] = false;
-	$geo_msg = '<p class="locked-msg">' .
+	$geo_msg .= '<p class="locked-msg">' .
 		sprintf(
 			__(
-				'<strong>Note</strong>: This option is unavailable because a ' .
-				'geo-data table was not found in your database. For details, ' .
+				'<strong>Local IP Lookup Table</strong>: This is unavailable because ' .
+				'no geo-data table was found in your database. For details, ' .
 				'read the "Using a Local Geo-Database" in the ' .
 				'<a href="%1$s" target="_blank">PopUp usage guide</a>.',
 				PO_LANG
@@ -83,6 +82,21 @@ if ( IncPopupAddon_GeoDB::table_exists() ) {
 		).
 	'</p>';
 }
+if ( defined( 'PO_REMOTE_IP_URL' ) && strlen( PO_REMOTE_IP_URL ) > 5 ) {
+	$custom_geo = true;
+	$settings['geo_lookup'] = '';
+	$geo_msg .= '<p class="locked-msg">' .
+		__(
+			'<strong>Custom Webservice</strong>: You have configured a custom ' .
+			'lookup service in <tt>wp-config.php</tt> via the constant ' .
+			'"<tt>PO_REMOTE_IP_URL</tt>". To use one of the default services ' .
+			'you have to remove that constant from wp-config.php.',
+			PO_LANG
+		).
+	'</p>';
+}
+// ----- END: Geo Lookup
+
 
 $rules = IncPopup::get_rules();
 $rule_headers = array(
@@ -152,20 +166,59 @@ $ordered_rules = array();
 					</tr>
 
 					<?php /* === GEO DB SETTING === */ ?>
-					<tr class="<?php echo esc_attr( $no_geo ? 'locked' : '' ); ?>">
+					<tr>
 						<th><?php _e( 'Country Lookup', PO_LANG ); ?></th>
 						<td>
-							<label>
-								<input type="checkbox"
-									name="po_option[geo_db]"
-									<?php checked( $settings['geo_db'] ); ?>
-									<?php echo '' . $geo_readonly; ?> />
-								<?php _e(
-									'Use a local IP cache table instead of a web ' .
-									'service to resolve IP addresses to a ' .
-									'country code.', PO_LANG
-								); ?>
-							</label>
+							<select
+								name="po_option[geo_lookup]"
+								class="po-option-geo-lookup" >
+								<?php if ( $custom_geo ) : ?>
+								<optgroup label="<?php _e( 'Custom Webservice', PO_LANG ); ?>">
+									<option value="" selected="selected">
+										wp-config.php
+									</option>
+								</optgroup>
+								<?php endif; ?>
+								<optgroup label="<?php _e( 'Webservices', PO_LANG ); ?>">
+									<?php foreach ( $geo_service as $key => $service ) : ?>
+										<option value="<?php echo esc_attr( $key ); ?>"
+											<?php if ( $custom_geo ) : ?>disabled<?php endif; ?>
+											<?php selected( $key, @$settings['geo_lookup'] ); ?>>
+											<?php echo esc_html( $service->label ); ?>
+										</option>
+									<?php endforeach; ?>
+								</optgroup>
+								<optgroup label="<?php _e( 'Local Database', PO_LANG ); ?>">
+									<option value="geo_db"
+										<?php if ( $no_ip_cache ) : ?>disabled<?php endif; ?>
+										<?php selected( @$settings['geo_db'] ); ?>>
+										<?php _e( 'Local IP Lookup Table', PO_LANG ); ?>
+									</option>
+								</optgroup>
+							</select>
+							<button type="button" class="button test-location">
+								<?php _e( 'Test my location', PO_LANG ); ?>
+							</button>
+							<script>
+							jQuery(function() {
+								function show_result(res, okay) {
+									alert( res );
+								}
+
+								function test_geo() {
+									wpmUi.ajax( null, 'po-ajax' )
+										.data({
+											'do': 'test-geo',
+											'type': jQuery('.po-option-geo-lookup').val()
+										})
+										.ondone( show_result )
+										.load_text();
+								}
+
+								jQuery('.test-location').click( test_geo );
+							});
+							</script>
+
 							<p><em><?php _e(
 								'This option is relevant for the ' .
 								'"Visitor Location" condition.',

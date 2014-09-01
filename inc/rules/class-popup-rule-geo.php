@@ -42,6 +42,11 @@ class IncPopupRule_Country extends IncPopupRule {
 			'country',
 			25
 		);
+
+		add_action(
+			'popup-ajax-test-geo',
+			array( $this, 'ajax_test_geo' )
+		);
 	}
 
 
@@ -232,8 +237,10 @@ class IncPopupRule_Country extends IncPopupRule {
 		}
 
 		if ( empty( $country ) ) {
+			$service = $this->get_service();
+
 			// Finally use the external API to find the country.
-			$country = $this->country_from_api( $ip );
+			$country = $this->country_from_api( $ip, $service );
 
 			// Locally cache the API result.
 			if ( ! empty( $country ) ) {
@@ -249,21 +256,69 @@ class IncPopupRule_Country extends IncPopupRule {
 	}
 
 	/**
+	 * Returns the lookup-service details
+	 *
+	 * @since  4.6.1.1
+	 * @return object Service object for geo lookup
+	 */
+	static protected function get_service( $type = null ) {
+		$service = false;
+		if ( null === $type ) {
+			// Default service.
+			if ( defined( 'PO_REMOTE_IP_URL' ) && strlen( PO_REMOTE_IP_URL ) > 5 ) {
+				$type = '';
+			} else {
+				$settings = IncPopupDatabase::get_settings();
+				$type = @$settings['geo_lookup'];
+			}
+		}
+
+		if ( '' == $type ) {
+			$service = (object) array(
+				'url' => PO_REMOTE_IP_URL,
+				'label' => 'wp-config.php',
+				'type' => 'text',
+			);
+		} else if ( 'geo_db' === $type ) {
+			$service = (object) array(
+				'url' => 'db',
+				'label' => __( 'Local IP Lookup Table', PO_LANG ),
+				'type' => 'text',
+			);
+		} else {
+			$geo_service = IncPopupDatabase::get_geo_services();
+			$service = @$geo_service[ $type ];
+		}
+
+		return $service;
+	}
+
+	/**
 	 * Queries an external geo-API to find the country of the specified IP.
 	 *
 	 * @since  4.6
 	 * @param  string $ip The IP Address.
+	 * @param  object $service Lookup-Service details.
 	 * @return string The country code.
 	 */
-	static protected function country_from_api( $ip ) {
-		$url = str_replace( '%ip%', $ip, PO_REMOTE_IP_URL );
-		$response = wp_remote_get( $url );
+	static protected function country_from_api( $ip, $service ) {
 		$country = false;
 
-		if ( ! is_wp_error( $response ) && $response['response']['code'] == '200' && $response['body'] != 'XX' ) {
-			// cache the response for future use
-			$country = trim( $response['body'] );
-		} else {
+		if ( is_object( $service ) && ! empty( $service->url ) ) {
+			$url = str_replace( '%ip%', $ip, $service->url );
+			$response = wp_remote_get( $url );
+
+			if ( ! is_wp_error( $response ) && $response['response']['code'] == '200' && $response['body'] != 'XX' ) {
+				if ( 'text' == $service->type ) {
+					$country = trim( $response['body'] );
+				} else if ( 'json' == $service->type ) {
+					$data = (array) json_decode( $response['body'] );
+					$country = @$data[ @$service->field ];
+				}
+			}
+		}
+
+		if ( ! $country ) {
 			$country = PO_DEFAULT_COUNTRY;
 		}
 
@@ -287,6 +342,27 @@ class IncPopupRule_Country extends IncPopupRule {
 		}
 
 		return in_array( $country, $country_codes );
+	}
+
+	/**
+	 * Test the geo lookup function.
+	 *
+	 * @since  4.6.1.1
+	 */
+	public function ajax_test_geo() {
+		$type = @$_POST['type'];
+		$ip = $this->get_users_ip();
+		$service = $this->get_service( $type );
+
+		if ( 'db' == $service->url ) {
+			IncPopupAddon_GeoDB::init();
+			$country = apply_filters( 'popup-get-country', $country, $ip );
+		} else {
+			$country = $this->country_from_api( $ip, $service );
+		}
+
+		echo 'IP: ' . $ip . "\nService: " . $service->label . "\nCountry: " . $country;
+		die();
 	}
 
 

@@ -17,7 +17,11 @@ class IncPopupAddon_GeoDB {
 	 * @since  4.6
 	 */
 	static public function init() {
-		if ( self::table_exists() ) {
+		static $Done = false;
+
+		if ( ! $Done && self::table_exists() ) {
+			$Done = true;
+
 			add_filter(
 				'popup-get-country',
 				array( __CLASS__, 'get_country' ),
