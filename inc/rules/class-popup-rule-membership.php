@@ -60,7 +60,7 @@ class IncPopupRule_Membership extends IncPopupRule {
 			SELECT *
 			FROM {$table_lvl}
 		";
-        $this->levels = $this->db->get_results( $sql );
+        $this->levels = $wpdb->get_results( $sql );
 
 		// TODO: find a more fancy way to get the membership table name.
 		$table_sub = defined( 'MEMBERSHIP_TABLE_SUBSCRIPTIONS' ) ? MEMBERSHIP_TABLE_SUBSCRIPTIONS : $prefix . 'm_subscriptions';
@@ -68,7 +68,7 @@ class IncPopupRule_Membership extends IncPopupRule {
 			SELECT *
 			FROM {$table_sub}
 		";
-        $this->subscriptions = $this->db->get_results( $sql );
+        $this->subscriptions = $wpdb->get_results( $sql );
 	}
 
 

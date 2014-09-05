@@ -11,6 +11,7 @@ Change Log:
 - Fix: Logic of rule "[Not] On specific URL" corrected.
 - Fix: Close forever now works also via click on background layer.
 - Fix: Behaviour "mouse leaves the browser" is not triggered when using the scrollbar.
+- Fix: Bug in Membership rule was fixed that did cause an php error.
 
 4.6.1
 ----------------------------------------------------------------------
