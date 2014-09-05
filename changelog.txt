@@ -10,6 +10,7 @@ Change Log:
 - New: Added Contextual Help to the PopUp editor to show supported shortcodes.
 - Fix: Logic of rule "[Not] On specific URL" corrected.
 - Fix: Close forever now works also via click on background layer.
+- Fix: Behaviour "mouse leaves the browser" is not triggered when using the scrollbar.
 
 4.6.1
 ----------------------------------------------------------------------

@@ -110,10 +110,25 @@ class IncPopupRule_Events extends IncPopupRule {
 		ob_start();
 		?>
 		function( me ) {
-			jQuery(document).one( 'mouseleave', function() {
-				me.show_popup();
-				return false;
-			});
+			var tmr = null;
+
+			function set( ev ) {
+				if ( ! me ) return;
+				tmr = setTimeout( function trigger() {
+					me.show_popup();
+					me = false;
+
+					jQuery( 'html' ).off( 'mousemove', reset );
+					jQuery( document ).off( 'mouseleave', set );
+				}, 10 );
+			}
+
+			function reset( ev ) {
+				clearTimeout( tmr );
+			}
+
+			jQuery( 'html' ).on( 'mousemove', reset );
+			jQuery( document ).on( 'mouseleave', set );
 		}
 		<?php
 		$code = ob_get_clean();
