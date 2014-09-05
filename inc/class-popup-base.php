@@ -27,6 +27,12 @@ abstract class IncPopupBase {
 	 */
 	protected $popups = array();
 
+	/**
+	 * Data collection for compatibility with other plugins.
+	 * @var array
+	 */
+	protected $compat_data = array();
+
 
 	/**
 	 * Constructor
@@ -71,6 +77,13 @@ abstract class IncPopupBase {
 		add_action(
 			'wp_ajax_nopriv_inc_popup',
 			array( $this, 'ajax_load_popup' )
+		);
+
+		// Compatibility with plugins
+		add_filter(
+			'popup-output-data',
+			array( $this, 'compat_init' ),
+			999, 2
 		);
 
 		// Tell Add-ons and extensions that we are set up.
@@ -426,5 +439,81 @@ abstract class IncPopupBase {
 
 		return isset( $_COOKIE[$name] ) || isset( $_COOKIE[$name_old] );
 	}
+
+
+	/*===================================*\
+	=======================================
+	==                                   ==
+	==           COMPATIBILITY           ==
+	==                                   ==
+	=======================================
+	\*===================================*/
+
+
+	/**
+	 * Adds compatibility code for other plugins/shortcodes.
+	 * Currently these plugins are aupported:
+	 *   - Appointments+ (WPMU DEV)
+	 *
+	 * @since  4.6.1.1
+	 * @param  array $data Data collection that is printed to javascript.
+	 * @param  IncPopupItem $popup The original popup object.
+	 * @return array Modified data collection.
+	 */
+	public function compat_init( $script_data, $popup ) {
+		if ( class_exists( 'Appointments' ) ) {
+			$this->compat_appointments_trigger();
+			@$script_data['script'] .= @$this->compat_data['script'];
+		}
+
+		return $script_data;
+	}
+
+	/**
+	 * Triggers the WP_footer action.
+	 *
+	 * This is required so the Appointments+ plugin generates Javascript for the
+	 * shortcodes. We will then intercept the javascript via the
+	 * `compat_appointments_footer()` function below.
+	 *
+	 * @since  4.6.1.1
+	 */
+	public function compat_appointments_trigger() {
+		global $appointments;
+
+		add_filter(
+			'app_footer_scripts',
+			array( $this, 'compat_appointments_footer' ),
+			999
+		);
+
+		$appointments->load_scripts_styles();
+		$appointments->wp_footer();
+	}
+
+	/**
+	 * Integration of Appointments+
+	 * Inject the javascript used by Appointments plugin into the plugin.
+	 *
+	 * @since  4.6.1.1
+	 * @param  string $script
+	 * @return string
+	 */
+	public function compat_appointments_footer( $script ) {
+		global $wp_scripts;
+		if ( ! isset( $this->compat_data['script'] ) ) {
+			$this->compat_data['script'] = '';
+		}
+
+		// 1. get the localized script data.
+		$this->compat_data['script'] .= @$wp_scripts->registered['app-js-check']->extra['data'];
+
+		// 2. get the footer script.
+		$this->compat_data['script'] .= '(function($) {' . $script . '})(jQuery)';
+
+
+		return '';
+	}
+
 
 };

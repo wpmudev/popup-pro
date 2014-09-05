@@ -12,6 +12,7 @@ Change Log:
 - Fix: Close forever now works also via click on background layer.
 - Fix: Behaviour "mouse leaves the browser" is not triggered when using the scrollbar.
 - Fix: Bug in Membership rule was fixed that did cause an php error.
+- Fix: Appointments+ shortcodes now work inside PopUps.
 
 4.6.1
 ----------------------------------------------------------------------

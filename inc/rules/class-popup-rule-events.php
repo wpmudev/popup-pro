@@ -95,7 +95,7 @@ class IncPopupRule_Events extends IncPopupRule {
 	 */
 	public function append_data_on_exit( $script_data, $popup ) {
 		if ( 'leave' == $popup->display ) {
-			$script_data['script'] = 'me.custom_handler = ' . $this->script_on_exit();
+			@$script_data['script'] .= 'me.custom_handler = ' . $this->script_on_exit();
 		}
 
 		return $script_data;
@@ -186,7 +186,7 @@ class IncPopupRule_Events extends IncPopupRule {
 	 */
 	public function append_data_on_click( $script_data, $popup ) {
 		if ( 'click' == $popup->display ) {
-			$script_data['script'] = 'me.custom_handler = ' . $this->script_on_click();
+			@$script_data['script'] .= 'me.custom_handler = ' . $this->script_on_click();
 		}
 
 		return $script_data;

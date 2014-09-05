@@ -95,7 +95,7 @@ class IncPopupRule_Width extends IncPopupRule {
 
 			$script_data['width_min'] = $data['min'];
 			$script_data['width_max'] = $data['max'];
-			$script_data['script'] = $this->script_width();
+			@$script_data['script'] .= $this->script_width();
 		}
 
 		return $script_data;
