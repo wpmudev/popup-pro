@@ -892,7 +892,7 @@ class IncPopup extends IncPopupBase {
 
 				// Show the new item in the editor.
 				$new_url = remove_query_arg( array( 'post', 'do' ) );
-				$new_url = add_query_arg( array( 'post' => $item->id ), $new_url );
+				$new_url = add_query_arg( array( 'post' => $item->id, 'post_type' => IncPopupItem::POST_TYPE ), $new_url );
 				wp_safe_redirect( $new_url );
 				die();
 
