@@ -33,14 +33,59 @@ if ( $this->round_corners ) { $msg_class .= 'rounded '; }
 if ( $this->custom_size ) { $msg_class .= 'custom-size '; }
 $msg_class .= 'wdpu-' . $this->id . ' ';
 
-$move_class = $this->custom_size ? '' : 'no-move-x';
+$move_class = '';
+
+/**
+ * Allow users to manually position a Pop-up.
+ * Return value should be an array that defines either left/right/top/bottom.
+ * Important: Filter is only used when PopUp uses a custom size!
+ *
+ * Example:
+ * return array( 'left' => '20%', 'top' => '50px' );
+ *
+ * @var   false|array
+ * @since 4.6.1.2
+ */
+$pos = false;
+$pos_style = '';
+if ( $this->custom_size ) {
+	$pos = apply_filters( 'popup-template-position', $pos, $this->id, $this );
+
+	if ( is_array( $pos ) ) {
+		$pos_style .= 'position:absolute;';
+		$msg_class .= 'custom-pos ';
+
+		if ( isset( $pos['left'] ) || isset( $pos['right'] ) ) {
+			isset( $pos['left'] ) && $pos_style .= 'left:' . $pos['left'] . ';';
+			isset( $pos['right'] ) && $pos_style .= 'right:' . $pos['right'] . ';';
+			$move_class .= 'no-move-x ';
+			$pos_style .= 'margin-left:0;margin-right:0;';
+		}
+		if ( isset( $pos['top'] ) || isset( $pos['bottom'] ) ) {
+			isset( $pos['top'] ) && $pos_style .= 'top:' . $pos['top'] . ';';
+			isset( $pos['bottom'] ) && $pos_style .= 'bottom:' . $pos['bottom'] . ';';
+			$move_class .= 'no-move-y ';
+			$pos_style .= 'margin-top:0;margin-bottom:0;';
+		}
+	} else {
+		$move_class = 'no-move-x ';
+	}
+}
+
+/**
+ * Allow users to add a custom CSS class to the Pop-up.
+ *
+ * @var   string
+ * @since 4.6.1.2
+ */
+$msg_class .= apply_filters( 'popup-template-class', '', $this->id, $this );
 
 ?>
 <div id="<?php echo esc_attr( $this->code->id ); ?>"
 	class="style-minimal wdpu-container wdpu-background <?php echo esc_attr( $msg_class ); ?>"
 	style="display: none;">
 
-	<div class="wdpu-msg resize move <?php echo esc_attr( $move_class ); ?>">
+	<div class="wdpu-msg resize move <?php echo esc_attr( $move_class ); ?>" style="<?php echo esc_attr( $pos_style ); ?>">
 		<a href="#"
 			class="wdpu-close <?php echo esc_attr( $show_title ? '' : 'no-title' ); ?>"
 			title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>

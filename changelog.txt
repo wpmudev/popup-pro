@@ -6,6 +6,7 @@ Change Log:
 
 4.6.1.2
 ----------------------------------------------------------------------
+- New: Two new WordPress filters allow custom positioning and styling of PopUps.
 - Fix: Correctly display Meta-boxes of other plugins in the popup-editor.
 
 4.6.1.1
