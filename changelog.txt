@@ -13,6 +13,7 @@ Change Log:
 - Fix: Behaviour "mouse leaves the browser" is not triggered when using the scrollbar.
 - Fix: Bug in Membership rule was fixed that did cause an php error.
 - Fix: Appointments+ shortcodes now work inside PopUps.
+- Better: Improved info on supported shortcodes.
 
 4.6.1
 ----------------------------------------------------------------------

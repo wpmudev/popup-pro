@@ -8,6 +8,13 @@ $settings = IncPopupDatabase::get_settings();
 $cur_method = @$settings['loadingmethod'];
 
 
+// Shortcodes with restrictions.
+$limited = array(
+	'app_.*',
+	'contact-form-7',
+	'contact-form',
+);
+
 $shortcodes = array();
 // Add Admin-Shortcodes to the list.
 foreach ( $shortcode_tags as $code => $handler ) {
@@ -16,6 +23,14 @@ foreach ( $shortcode_tags as $code => $handler ) {
 // Add Front-End Shortcodes to the list.
 foreach ( $theme_compat->shortcodes as $code ) {
 	@$shortcodes[ $code ] .= 'sc-front ';
+}
+
+foreach ( $shortcodes as $code => $compat ) {
+	foreach ( $limited as $pattern ) {
+		if ( preg_match( '/^' . $pattern . '$/i', $code ) ) {
+			$shortcodes[ $code ] = $compat . 'sc-limited ';
+		}
+	}
 }
 
 
@@ -45,7 +60,8 @@ if ( IncPopup::use_global() ) :
 endif;
 
 ?>
-<table class="widefat tbl-shortcodes load-<?php echo esc_attr( $cur_method ); ?>">
+<div class="tbl-shortcodes">
+<table class="widefat load-<?php echo esc_attr( $cur_method ); ?>">
 	<thead>
 		<tr>
 			<th width="40%">
@@ -93,3 +109,16 @@ endif;
 		<?php endforeach; ?>
 	</tbody>
 </table>
+<div class="legend shortcode sc-admin">
+	<span class="sc-admin load-ajax"><i class="icon dashicons"></i></span>
+	<?php _e( 'Shortcode supported', PO_LANG ); ?>
+</div>
+<div class="legend shortcode sc-admin sc-limited">
+	<span class="sc-admin load-ajax"><i class="icon dashicons"></i></span>
+	<?php _e( 'Might have issues', PO_LANG ); ?>
+</div>
+<div class="legend shortcode sc-admin">
+	<span class="sc-front load-footer"><i class="icon dashicons"></i></span>
+	<?php _e( 'Shortcode does not work', PO_LANG ); ?>
+</div>
+</div>

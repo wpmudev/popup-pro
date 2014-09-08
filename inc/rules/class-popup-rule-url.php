@@ -211,6 +211,9 @@ class IncPopupRule_Url extends IncPopupRule {
 			$response = true;
 		} else {
 			foreach ( $list as $match ) {
+				if ( false === strpos( $match, '://' ) ) {
+					$match = 'https?://' . $match;
+				}
 				$res = preg_match( '#^' . $match . '$#i', $test_url );
 				if ( $res ) {
 					$response = true;

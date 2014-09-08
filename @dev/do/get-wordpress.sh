@@ -23,7 +23,7 @@ show_infos() {
 create_dir() {
 	if [ ! -d "$WP_INSTALL_DIR" ]; then
 		mkdir -p "$WP_INSTALL_DIR"
-		echo "- Created new WordPress directory"
+		echo "- Created temporary WordPress directory"
 	fi
 }
 

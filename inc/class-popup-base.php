@@ -40,6 +40,11 @@ abstract class IncPopupBase {
 	protected function __construct() {
 		$this->db = IncPopupDatabase::instance();
 
+		// Prepare the URL
+		$this->prepare_url();
+		add_action( 'init', array( $this, 'revert_url' ), 999 ); // prevent 404.
+		add_action( 'parse_query', array( $this, 'prepare_url' ) );
+
 		WDev()->translate_plugin( PO_LANG, PO_LANG_DIR );
 
 		// Register the popup post type.
@@ -513,6 +518,31 @@ abstract class IncPopupBase {
 
 
 		return '';
+	}
+
+	/**
+	 * Change the Request-URI, so other plugins use the correct form action, etc.
+	 *
+	 * @since  4.6.1.1
+	 */
+	public function prepare_url() {
+		$this->orig_url = $_SERVER['REQUEST_URI'];
+
+		// Remove internal commands from the query.
+		$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'do', 'action', 'callback', '_' ) );
+		if ( ! empty( $_REQUEST['thefrom'] ) ) {
+			$_SERVER['REQUEST_URI'] = $_REQUEST['thefrom'];
+		}
+	}
+
+	/**
+	 * Revert the Request-URI to the original value.
+	 *
+	 * @since  4.6.1.1
+	 */
+	public function revert_url() {
+		if ( empty( $this->orig_url ) ) { return; }
+		$_SERVER['REQUEST_URI'] = $this->orig_url;
 	}
 
 
