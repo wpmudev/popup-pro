@@ -529,7 +529,6 @@ abstract class IncPopupBase {
 		$this->orig_url = $_SERVER['REQUEST_URI'];
 
 		// Remove internal commands from the query.
-		$_SERVER['REQUEST_URI'] = remove_query_arg( array( 'do', 'action', 'callback', '_' ) );
 		if ( ! empty( $_REQUEST['thefrom'] ) ) {
 			$_SERVER['REQUEST_URI'] = $_REQUEST['thefrom'];
 		}
