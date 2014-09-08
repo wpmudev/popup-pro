@@ -511,10 +511,13 @@ abstract class IncPopupBase {
 		}
 
 		// 1. get the localized script data.
-		$this->compat_data['script'] .= @$wp_scripts->registered['app-js-check']->extra['data'];
+		if ( ! empty( $wp_scripts->registered['app-js-check']->extra['data'] ) ) {
+			$this->compat_data['script'] .= $wp_scripts->registered['app-js-check']->extra['data'];
+			$wp_scripts->registered['app-js-check']->extra['data'] = '';
+		}
 
 		// 2. get the footer script.
-		$this->compat_data['script'] .= '(function($) {' . $script . '})(jQuery)';
+		$this->compat_data['script'] .= '(function($) {' . $script . '})(jQuery);';
 
 
 		return '';
@@ -530,7 +533,7 @@ abstract class IncPopupBase {
 
 		// Remove internal commands from the query.
 		if ( ! empty( $_REQUEST['thefrom'] ) ) {
-			$_SERVER['REQUEST_URI'] = $_REQUEST['thefrom'];
+			$_SERVER['REQUEST_URI'] = strtok( $_REQUEST['thefrom'], '#' );
 		}
 	}
 

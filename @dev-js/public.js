@@ -414,8 +414,9 @@
 		 * as the window-width rule or on-click behavior.
 		 */
 		this.exec_scripts = function exec_scripts() {
+			var fn;
 			if ( undefined !== me.data.script ) {
-				var fn = new Function( 'me', me.data.script );
+				fn = new Function( 'me', me.data.script );
 				fn( me );
 			}
 		}
