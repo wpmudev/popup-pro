@@ -214,6 +214,11 @@ class IncPopupRule_Url extends IncPopupRule {
 				if ( false === strpos( $match, '://' ) ) {
 					$match = 'https?://' . $match;
 				}
+				if ( substr( $match, -1 ) != '/' ) {
+					$match .= '/?';
+				} else {
+					$match .= '?';
+				}
 				$res = preg_match( '#^' . $match . '$#i', $test_url );
 				if ( $res ) {
 					$response = true;
