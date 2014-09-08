@@ -4,6 +4,10 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.6.1.2
+----------------------------------------------------------------------
+- Fix: Correctly display Meta-boxes of other plugins in the popup-editor.
+
 4.6.1.1
 ----------------------------------------------------------------------
 - New: Alternative Country Lookup services added to Settings page.

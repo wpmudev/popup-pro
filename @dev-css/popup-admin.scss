@@ -658,6 +658,10 @@ div.msg-err {
 	}
 
 	.postbox-container {
+		.postbox {
+			clear: both;
+		}
+
 		#meta-appearance {
 			float: left;
 			width: 49%;
@@ -671,6 +675,7 @@ div.msg-err {
 		#meta-behavior {
 			float: right;
 			width: 49%;
+			clear: none;
 
 			@media screen and (max-width: $break_large) {
 				width: 100%;

@@ -917,7 +917,7 @@ class IncPopup extends IncPopupBase {
 			__( 'PopUp Contents', PO_LANG ),
 			array( 'IncPopup', 'meta_content' ),
 			IncPopupItem::POST_TYPE,
-			'advanced',
+			'normal',
 			'high'
 		);
 
@@ -926,7 +926,7 @@ class IncPopup extends IncPopupBase {
 			__( 'Appearance', PO_LANG ),
 			array( 'IncPopup', 'meta_appearance' ),
 			IncPopupItem::POST_TYPE,
-			'advanced',
+			'normal',
 			'high'
 		);
 
@@ -935,7 +935,7 @@ class IncPopup extends IncPopupBase {
 			__( 'Behavior', PO_LANG ),
 			array( 'IncPopup', 'meta_behavior' ),
 			IncPopupItem::POST_TYPE,
-			'advanced',
+			'normal',
 			'high'
 		);
 
@@ -944,7 +944,7 @@ class IncPopup extends IncPopupBase {
 			__( 'Displaying Conditions (optional)', PO_LANG ),
 			array( 'IncPopup', 'meta_rules' ),
 			IncPopupItem::POST_TYPE,
-			'advanced',
+			'normal',
 			'default'
 		);
 
