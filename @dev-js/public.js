@@ -194,6 +194,8 @@
 
 			$doc.trigger( 'popup-init', [me, me.data] );
 
+			$po_div.on( 'submit', 'form', me.form_submit );
+
 			if ( me.have_popup ) {
 				switch ( me.data.display ) {
 					case 'scroll':
@@ -391,6 +393,47 @@
 			if ( undefined === id && true == _options.preview ) { return };
 			me.have_popup = false; // This object cannot display a PopUp...
 			load_popups( _options, id, data );
+		};
+
+		/**
+		 * A form inside the PopUp is submitted.
+		 */
+		this.form_submit = function form_submit( ev ) {
+			var frame, form = jQuery( this ),
+				popup = form.parents( '.wdpu-container' ).first(),
+				msg = popup.find( '.wdpu-msg' ),
+				po_id = '.wdpu-' + me.data.popup_id;
+
+			if ( ! popup.length ) { return true; }
+
+			frame = jQuery( '<iframe id="wdpu-frame" name="wdpu-frame"></iframe>' )
+				.hide()
+				.appendTo( 'body' );
+
+			// Set form target to the hidden frame.
+			form.attr( 'target', 'wdpu-frame' );
+			msg.addClass( 'wdpu-loading' );
+
+			jQuery( frame ).load( function(){
+				// grab the HTML from the body, using the raw DOM node (frame[0])
+				// and more specifically, it's `contentDocument` property.
+				var html = jQuery( po_id, frame[0].contentDocument );
+				msg.removeClass( 'wdpu-loading' );
+
+				// Update the Popup contents.
+				popup.find( '.wdpu-msg-inner' ).replaceWith( html.find( '.wdpu-msg-inner' ) );
+
+				// Re-initialize the local DOM cache.
+				me.fetch_dom();
+				me.move_popup();
+				$doc.trigger( 'popup-init', [me, me.data] );
+				$po_div.on( 'submit', 'form', me.form_submit );
+
+				// remove the temporary iframe.
+				jQuery( "#wdpu-frame" ).remove();
+			})
+
+			return true;
 		};
 
 

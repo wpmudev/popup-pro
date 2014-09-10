@@ -21,6 +21,22 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 	}
 }
 
+.wdpu-loading {
+	position: relative;
+}
+
+.wdpu-loading:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(255,255,255,0.8) url(%styleurl%../../../inc/external/wpmu-lib/img/spinner.gif) center no-repeat;
+	z-index: 1000;
+	cursor: default;
+}
+
 #messagebox {
 	position: fixed;
 	z-index: 100000;

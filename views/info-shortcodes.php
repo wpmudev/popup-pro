@@ -11,8 +11,8 @@ $cur_method = @$settings['loadingmethod'];
 // Shortcodes with restrictions.
 $limited = array(
 	'app_.*',
-	'contact-form-7',
-	'contact-form',
+	'.*-form.*',
+	'.*_form.*',
 );
 
 $shortcodes = array();
