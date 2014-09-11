@@ -69,6 +69,8 @@ if ( $this->custom_size ) {
 	} else {
 		$move_class = 'no-move-x ';
 	}
+} else {
+	$move_class = 'no-move-x ';
 }
 
 /**
@@ -116,7 +118,6 @@ $msg_class .= apply_filters( 'popup-template-class', '', $this->id, $this );
 						<div class="wdpu-inner <?php if ( ! $has_buttons ) { echo esc_attr( 'no-bm' ); } ?>">
 							<div class="wdpu-content">
 								<?php echo '' . apply_filters( 'the_content', $this->content ); ?>
-								<?php echo json_encode( $pos ); ?>
 							</div>
 						</div>
 

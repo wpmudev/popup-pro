@@ -194,8 +194,6 @@
 
 			$doc.trigger( 'popup-init', [me, me.data] );
 
-			$po_div.on( 'submit', 'form', me.form_submit );
-
 			if ( me.have_popup ) {
 				switch ( me.data.display ) {
 					case 'scroll':
@@ -311,7 +309,15 @@
 			jQuery( 'html' ).addClass( 'has-popup' );
 
 			me.move_popup(me.data);
+			me.setup_popup();
 
+			return true;
+		};
+
+		/**
+		 * Add event handlers to the PopUp controls.
+		 */
+		this.setup_popup = function setup_popup() {
 			$po_hide.off( "click", me.close_forever )
 				.on( "click", me.close_forever );
 
@@ -333,8 +339,8 @@
 			// Legacy trigger.
 			$doc.trigger( 'popover-displayed', [me.data, me] );
 
-			return true;
-		};
+			$po_div.on( 'submit', 'form', me.form_submit );
+		}
 
 
 		/*-----  Dynamically load PopUps  ------*/
@@ -402,6 +408,7 @@
 			var frame, form = jQuery( this ),
 				popup = form.parents( '.wdpu-container' ).first(),
 				msg = popup.find( '.wdpu-msg' ),
+				inp_popup = jQuery( '<input type="hidden" name="_po_method_" />' ),
 				po_id = '.wdpu-' + me.data.popup_id;
 
 			if ( ! popup.length ) { return true; }
@@ -412,25 +419,41 @@
 
 			// Set form target to the hidden frame.
 			form.attr( 'target', 'wdpu-frame' );
+			inp_popup.appendTo( form ).val( 'raw' );
+
 			msg.addClass( 'wdpu-loading' );
 
 			jQuery( frame ).load( function(){
+				var inner_new, inner_old;
+
 				// grab the HTML from the body, using the raw DOM node (frame[0])
 				// and more specifically, it's `contentDocument` property.
 				var html = jQuery( po_id, frame[0].contentDocument );
 				msg.removeClass( 'wdpu-loading' );
 
-				// Update the Popup contents.
-				popup.find( '.wdpu-msg-inner' ).replaceWith( html.find( '.wdpu-msg-inner' ) );
-
-				// Re-initialize the local DOM cache.
-				me.fetch_dom();
-				me.move_popup();
-				$doc.trigger( 'popup-init', [me, me.data] );
-				$po_div.on( 'submit', 'form', me.form_submit );
+				// Get the new and old Popup Contents.
+				inner_new = html.find( '.wdpu-msg-inner' );
+				inner_old = popup.find( '.wdpu-msg-inner' );
 
 				// remove the temporary iframe.
 				jQuery( "#wdpu-frame" ).remove();
+
+				// In case the new popup content could not be found or is empty:
+				// Close the popup!
+				if ( ! inner_old.length || ! inner_new.length || ! inner_new.text().length ) {
+					me.close_popup();
+					return;
+				}
+
+				// Update the Popup contents.
+				inner_old.replaceWith( inner_new );
+
+				// Re-initialize the local DOM cache.
+				me.fetch_dom();
+				$doc.trigger( 'popup-init', [me, me.data] );
+
+				me.move_popup();
+				me.setup_popup();
 			})
 
 			return true;

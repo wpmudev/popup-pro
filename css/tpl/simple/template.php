@@ -69,6 +69,8 @@ if ( $this->custom_size ) {
 	} else {
 		$move_class = 'no-move-x ';
 	}
+} else {
+	$move_class = 'no-move-x ';
 }
 
 /**
