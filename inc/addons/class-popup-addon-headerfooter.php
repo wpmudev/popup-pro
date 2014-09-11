@@ -21,21 +21,17 @@ class IncPopupAddon_HeaderFooter {
 	 * @since  4.6
 	 */
 	static public function init() {
-		// If test-head query var exists hook into wp_head
-		if ( isset( $_GET['test-head'] ) ) {
+		if ( '1' == @$_GET['popup-headerfooter-check'] ) {
 			add_action(
 				'wp_head',
 				array( __CLASS__, 'test_head' ),
-				99999 // Some obscene priority, make sure we run last
+				999999 // Some obscene priority, make sure we run last
 			);
-		}
 
-		// If test-footer query var exists hook into wp_footer
-		if ( isset( $_GET['test-footer'] ) ) {
 			add_action(
 				'wp_footer',
 				array( __CLASS__, 'test_footer' ),
-				99999 // Some obscene priority, make sure we run last
+				999999 // Some obscene priority, make sure we run last
 			);
 		}
 	}
@@ -48,7 +44,7 @@ class IncPopupAddon_HeaderFooter {
 	 */
 	static public function test_head() {
 		self::test_shortcodes();
-		echo '<!--wp_head-->';
+		echo '<wp_head>exists</wp_head>';
 	}
 
 	/**
@@ -59,7 +55,7 @@ class IncPopupAddon_HeaderFooter {
 	 */
 	static public function test_footer() {
 		self::test_shortcodes();
-		echo '<!--wp_footer-->';
+		echo '<wp_footer>exists</wp_footer>';
 	}
 
 	/**
@@ -72,7 +68,7 @@ class IncPopupAddon_HeaderFooter {
 	static public function test_shortcodes() {
 		global $shortcode_tags;
 		$shortcodes = array_keys( $shortcode_tags );
-		echo '<!--shortcodes:[' . implode( ',', $shortcodes ) . ']-->';
+		echo '<wp_shortcodes>' . implode( ',', $shortcodes ) . '</wp_shortcodes>';
 	}
 
 	/**
@@ -92,7 +88,7 @@ class IncPopupAddon_HeaderFooter {
 
 			// Build the url to call, NOTE: uses home_url and thus requires WordPress 3.0
 			$url = add_query_arg(
-				array( 'test-head' => '', 'test-footer' => '' ),
+				array( 'popup-headerfooter-check' => '1' ),
 				home_url()
 			);
 
@@ -120,36 +116,24 @@ class IncPopupAddon_HeaderFooter {
 				wp_remote_retrieve_body( $response )
 			);
 
-			if ( ! strstr( $html, '<!--wp_head-->' ) ) {
+			if ( ! strstr( $html, '<wp_head>exists</wp_head>' ) ) {
 				// wp_head is missing
 				$Resp->msg[] = __(
 					'Critical: Call to <code>wp_head();</code> is missing! It ' .
 					'should appear directly before <code>&lt;/head&gt;</code>', PO_LANG
 				);
-			} else if ( ! strstr( $html, '<!--wp_head--></head>' ) ) {
-				// wp_head is not in correct location.
-				$Resp->msg[] = __(
-					'Notice: Call to <code>wp_head();</code> exists but it is ' .
-					'not called directly before <code>&lt;/head&gt;</code>', PO_LANG
-				);
 			}
 
-			if ( ! strstr( $html, '<!--wp_footer-->' ) ) {
+			if ( ! strstr( $html, '<wp_footer>exists</wp_footer>' ) ) {
 				// wp_footer is missing.
 				$Resp->msg[] = __(
 					'Critical: Call to <code>wp_footer();</code> is missing! It ' .
 					'should appear directly before <code>&lt;/body&gt;</code>', PO_LANG
 				);
-			} else if ( ! strstr( $html, '<!--wp_footer--></body>' ) ) {
-				// wp_footer is not in correct location.
-				$Resp->msg[] = __(
-					'Notice: Call to <code>wp_footer();</code> exists but it is ' .
-					'not called directly before <code>&lt;/body&gt;</code>', PO_LANG
-				);
 			}
 
 			$matches = array();
-			$has_shortcodes = preg_match( '/<!--shortcodes:\[([^\]]*)\]-->/', $html, $matches );
+			$has_shortcodes = preg_match( '#<wp_shortcodes>([^\<]*)</wp_shortcodes>#', $html, $matches );
 			if ( $has_shortcodes ) {
 				$items = $matches[1];
 				$Resp->shortcodes = explode( ',', $items );
