@@ -1,5 +1,4 @@
 .sass-cache
-*.js.map
 .smbdelete*
 local.*
 prepros.json

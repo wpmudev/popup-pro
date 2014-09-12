@@ -8,6 +8,7 @@ Change Log:
 ----------------------------------------------------------------------
 - New: Two new WordPress filters allow custom positioning and styling of PopUps.
 - Fix: Correctly display Meta-boxes of other plugins in the popup-editor.
+- Fix: Plugins that use custom URL rewriting are working now (e.g. NextGen Gallery)
 - Better: Forms inside PopUps will only refresh the PopUp and not reload the page.
 - Better: Detection of theme compatibility for loading method "Page Footer" improved.
 
