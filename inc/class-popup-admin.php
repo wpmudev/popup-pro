@@ -1110,6 +1110,9 @@ class IncPopup extends IncPopupBase {
 			array( 'IncPopup', 'form_redirect' ),
 			10, 2
 		);
+
+		// Update the PopUp object in WP-Cache.
+		IncPopupDatabase::get( $post_id, true );
 	}
 
 	/**

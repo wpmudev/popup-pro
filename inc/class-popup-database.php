@@ -370,11 +370,18 @@ class IncPopupDatabase {
 	 *
 	 * @since  4.6
 	 * @param  int $post_id ID of the PopUp
+	 * @param  bool $clear If TRUE then a new object will be fetched from DB and
+	 *                not from cache.
 	 * @return IncPopupItem
 	 */
-	public function get( $post_id ) {
+	public function get( $post_id, $clear = false ) {
 		$post_id = absint( $post_id );
-		$popup = wp_cache_get( $post_id, IncPopupItem::POST_TYPE );
+
+		if ( $clear ) {
+			$popup = false;
+		} else {
+			$popup = wp_cache_get( $post_id, IncPopupItem::POST_TYPE );
+		}
 
 		if ( false === $popup ) {
 			self::before_db();
