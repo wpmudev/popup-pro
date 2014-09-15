@@ -82,9 +82,16 @@ class IncPopupAddon_HeaderFooter {
 	 * @since  1.0.0
 	 */
 	static public function check() {
+		static $Init = false;
 		static $Resp = null;
 
-		if ( null === $Resp ) {
+		if ( false === $Init ) {
+			$Init = true;
+			$Resp = (object) array(
+				'okay' => false,
+				'msg' => array(),
+				'shortcodes' => array(),
+			);
 
 			// Build the url to call, NOTE: uses home_url and thus requires WordPress 3.0
 			$url = add_query_arg(
@@ -93,21 +100,24 @@ class IncPopupAddon_HeaderFooter {
 			);
 
 			// Perform the HTTP GET ignoring SSL errors
+			$cookies = $_COOKIE;
+			unset( $cookies['PHPSESSID'] );
 			$response = wp_remote_get(
 				$url,
-				array( 'sslverify' => false )
+				array(
+					'sslverify' => false,
+					'cookies' => $cookies,
+				)
 			);
 
 			// Grab the response code and make sure the request was sucessful
 			$code = (int) wp_remote_retrieve_response_code( $response );
+			if ( is_wp_error( $response ) ) {
+				WDev()->message( $response->get_error_message() );
+				return $Resp;
+			}
 
-			if ( $code !== 200 ) { return; }
-
-			$Resp = (object) array(
-				'okay' => false,
-				'msg' => array(),
-				'shortcodes' => array(),
-			);
+			if ( $code !== 200 ) { return $Resp; }
 
 			// Strip all tabs, line feeds, carriage returns and spaces
 			$html = preg_replace(
