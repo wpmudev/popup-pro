@@ -266,7 +266,10 @@ $ordered_rules = array();
 				$ordered_rules[ $name ]['desc'] = __( trim( $data['desc'] ), PO_LANG );
 
 				if ( PO_VERSION != 'pro' && in_array( 'pro', $data['limit'] ) ) {
-					$ordered_rules[ $name ]['disabled'] = __( 'Available in the PRO version', PO_LANG );
+					$ordered_rules[ $name ]['disabled'] = sprintf(
+						__( 'Available in the <a href="%s" target="_blank">PRO version</a>', PO_LANG ),
+						'http://premium.wpmudev.org/project/the-pop-over-plugin/'
+					);
 				} else if ( IncPopup::use_global() && in_array( 'no global', $data['limit'] ) ) {
 					$ordered_rules[ $name ]['disabled'] = __( 'Not available for global PopUps', PO_LANG );
 				} else if ( ! IncPopup::use_global() && in_array( 'global', $data['limit'] ) ) {
