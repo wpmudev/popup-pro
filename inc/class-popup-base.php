@@ -41,7 +41,7 @@ abstract class IncPopupBase {
 		$this->db = IncPopupDatabase::instance();
 
 		// Prepare the URL
-		if ( ! empty( $_REQUEST['thefrom'] ) ) {
+		if ( ! empty( $_REQUEST['orig_request_uri'] ) ) {
 			$this->prepare_url();
 			add_action( 'init', array( $this, 'revert_url' ), 999 ); // prevent 404.
 			add_action( 'parse_query', array( $this, 'prepare_url' ) );
@@ -537,14 +537,14 @@ abstract class IncPopupBase {
 	 * @since  4.6.1.1
 	 */
 	public function prepare_url() {
-		if ( empty( $_REQUEST['thefrom'] ) ) { return; }
+		if ( empty( $_REQUEST['orig_request_uri'] ) ) { return; }
 
 		if ( empty( $this->orig_url ) ) {
 			$this->orig_url = $_SERVER['REQUEST_URI'];
 		}
 
 		// Remove internal commands from the query.
-		$_SERVER['REQUEST_URI'] = strtok( $_REQUEST['thefrom'], '#' );
+		$_SERVER['REQUEST_URI'] = strtok( $_REQUEST['orig_request_uri'], '#' );
 	}
 
 	/**
@@ -553,7 +553,7 @@ abstract class IncPopupBase {
 	 * @since  4.6.1.1
 	 */
 	public function revert_url() {
-		if ( empty( $_REQUEST['thefrom'] ) ) { return; }
+		if ( empty( $_REQUEST['orig_request_uri'] ) ) { return; }
 		if ( empty( $this->orig_url ) ) { return; }
 
 		$_SERVER['REQUEST_URI'] = $this->orig_url;

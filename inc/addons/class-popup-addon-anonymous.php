@@ -223,6 +223,7 @@ class IncPopupAddon_AnonyousLoading {
 		$popup_data = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'do' => 'get-data',
+			'orig_request_uri' => $_SERVER['REQUEST_URI'],
 		);
 
 		$popup_data = apply_filters( 'popup-ajax-data', $popup_data );
