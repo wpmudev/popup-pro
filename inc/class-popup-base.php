@@ -216,7 +216,7 @@ abstract class IncPopupBase {
 	 * @since  4.6
 	 * @return array List of rule-files.
 	 */
-	public function get_rules() {
+	static public function get_rules() {
 		$List = null;
 
 		if ( null === $List ) {
@@ -239,7 +239,7 @@ abstract class IncPopupBase {
 	 *
 	 * @since  4.6
 	 */
-	public function load_optional_files() {
+	static public function load_optional_files() {
 		$settings = IncPopupDatabase::get_settings();
 
 		if ( $settings['geo_db'] ) {
