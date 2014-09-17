@@ -1,11 +1,6 @@
 @dev/*				export-ignore
-@dev-css/*			export-ignore
-@dev-js/*			export-ignore
-@tests/*			export-ignore
-@tests/*/*			export-ignore
-@tests/*/*/*		export-ignore
-config.rb			export-ignore
-prepros.json		export-ignore
+Gruntfile.js		export-ignore
+package.json		export-ignore
 .gitattributes		export-ignore
 .gitignore			export-ignore
 .gitmodules			export-ignore

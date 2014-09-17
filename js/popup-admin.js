@@ -1,3 +1,11 @@
+/*! PopUp Pro - v4.6.1
+ * http://premium.wpmudev.org/
+ * Copyright (c) 2014; * Licensed GPLv2+ */
+/*global window:false */
+/*global document:false */
+/*global wp:false */
+/*global wpmUi:false */
+
 /**
  * Admin Javascript functions for PopUp
  */
@@ -21,8 +29,8 @@ jQuery(function init_admin() {
 
 	// Keeps the submitdiv always visible, even when scrolling.
 	function scrolling_submitdiv() {
-		var top_offset,
-			padding = 20,
+		var scroll_top,
+			top_offset,
 			submitdiv = jQuery( '#submitdiv' ),
 			postbody = jQuery( '#post-body' ),
 			body = jQuery( 'body' ),
@@ -66,7 +74,7 @@ jQuery(function init_admin() {
 				// 1-column view:
 				// The div stays as sticky toolbar when scrolling down.
 
-				var scroll_top = jQuery( window ).scrollTop() - top_offset;
+				scroll_top = jQuery( window ).scrollTop() - top_offset;
 
 				if ( scroll_top > 0 ) {
 					small_make_sticky();
@@ -77,7 +85,7 @@ jQuery(function init_admin() {
 				// 2-column view:
 				// The div scrolls with the page to stay visible.
 
-				var scroll_top = jQuery( window ).scrollTop() - top_offset + padding;
+				scroll_top = jQuery( window ).scrollTop() - top_offset + padding;
 
 				if ( scroll_top > 0 ) {
 					submitdiv.css({ 'marginTop': scroll_top } );
@@ -87,7 +95,7 @@ jQuery(function init_admin() {
 			}
 		});
 
-		setTimeout( function() {
+		window.setTimeout( function() {
 			jQuery( window ).trigger( 'scroll' );
 		}, 100 );
 	}
@@ -96,7 +104,7 @@ jQuery(function init_admin() {
 	function init_colorpicker() {
 		var inp = jQuery( '.colorpicker' );
 
-		if ( ! inp.length || 'function' != typeof inp.wpColorPicker ) { return; }
+		if ( ! inp.length || 'function' !== typeof inp.wpColorPicker ) { return; }
 
 		var maybe_hide_picker = function maybe_hide_picker( ev ) {
 			var el = jQuery( ev.target ),
@@ -141,7 +149,8 @@ jQuery(function init_admin() {
 		if ( ! chk_colors.length ) { return; }
 
 		var toggle_section = function toggle_section() {
-			var me = jQuery( this ),
+			var group,
+				me = jQuery( this ),
 				sel = me.data( 'toggle' ),
 				sect = jQuery( sel ),
 				group_or = me.data( 'or' ),
@@ -149,11 +158,11 @@ jQuery(function init_admin() {
 				is_active = false;
 
 			if ( group_or ) {
-				var group = jQuery( group_or );
+				group = jQuery( group_or );
 				is_active = ( group.filter( ':checked' ).length > 0);
 			} else if ( group_and ) {
-				var group = jQuery( group_and );
-				is_active = ( group.length == group.filter( ':checked' ).length );
+				group = jQuery( group_and );
+				is_active = ( group.length === group.filter( ':checked' ).length );
 			} else {
 				is_active = me.prop( 'checked' );
 			}
@@ -181,7 +190,7 @@ jQuery(function init_admin() {
 			group.each(function() {
 				toggle_section.call( this );
 			});
-		}
+		};
 
 		var create_sliders = function create_sliders() {
 			jQuery( '.slider' ).each(function() {
@@ -206,14 +215,14 @@ jQuery(function init_admin() {
 					inp_min.val( val1 );
 					inp_max.val( val2 );
 
-					if ( val1 == min ) {
+					if ( val1 === min ) {
 						min_input.hide();
 						min_ignore.show();
 					} else {
 						min_input.show();
 						min_ignore.hide();
 					}
-					if ( val2 == max ) {
+					if ( val2 === max ) {
 						max_input.hide();
 						max_ignore.show();
 					} else {
@@ -234,7 +243,7 @@ jQuery(function init_admin() {
 
 				update_fields( inp_min.val(), inp_max.val() );
 			});
-		}
+		};
 
 		chk_colors.click( toggle_section );
 		chk_size.click( toggle_section );
@@ -249,7 +258,7 @@ jQuery(function init_admin() {
 
 		opt_display.each(function() {
 			toggle_section.call( jQuery( this ) );
-		})
+		});
 
 		create_sliders();
 	}
@@ -377,7 +386,7 @@ jQuery(function init_admin() {
 			file_frame = wp.media.frames.file_frame = wp.media({
 				title: btn.attr( 'data-title' ),
 				button: {
-					text: btn.attr( 'data-button' ),
+					text: btn.attr( 'data-button' )
 				},
 				multiple: false  // Set to true to allow multiple files to be selected
 			});
@@ -385,7 +394,7 @@ jQuery(function init_admin() {
 			// When an image is selected, run a callback.
 			file_frame.on( 'select', function() {
 				// We set multiple to false so only get one image from the uploader
-				attachment = file_frame.state().get('selection').first().toJSON();
+				var attachment = file_frame.state().get('selection').first().toJSON();
 
 				// Do something with attachment.id and/or attachment.url here
 				use_image( attachment.url );
@@ -400,7 +409,7 @@ jQuery(function init_admin() {
 
 			img_pos.find( '.option' ).removeClass( 'selected' );
 			me.addClass( 'selected' );
-		}
+		};
 
 		btn.on( 'click', select_clicked );
 		reset.on( 'click', reset_image );
@@ -415,12 +424,12 @@ jQuery(function init_admin() {
 			ba1 = jQuery( 'select[name="action"] '),
 			ba2 = jQuery( 'select[name="action2"] ');
 
-		if ( ! ba1.length || 'object' != typeof window.po_bulk ) { return; }
+		if ( ! ba1.length || 'object' !== typeof window.po_bulk ) { return; }
 
-		for ( key in po_bulk ) {
+		for ( key in window.po_bulk ) {
 			jQuery( '<option>' )
 				.val( key )
-				.text( po_bulk[key] )
+				.text( window.po_bulk[key] )
 				.appendTo( ba1 )
 				.clone()
 				.appendTo( ba2 );
@@ -429,7 +438,7 @@ jQuery(function init_admin() {
 
 	// Makes the post-list sortable (to change popup-order)
 	function sortable_list() {
-		var table = jQuery( 'table.posts' );
+		var table = jQuery( 'table.posts' ),
 			tbody = table.find( '#the-list' );
 
 		if ( ! tbody.length ) { return; }
@@ -468,7 +477,7 @@ jQuery(function init_admin() {
 			axis: 'y',
 			handle: '.column-po_order',
 			helper: 'clone',
-			opacity: .75,
+			opacity: 0.75,
 			update: save_order
 		});
 		tbody.disableSelection();
@@ -476,7 +485,7 @@ jQuery(function init_admin() {
 
 	// Shows a preview of the current PopUp.
 	function init_preview() {
-		var doc = jQuery( document );
+		var doc = jQuery( document ),
 			body = jQuery( '#wpcontent' );
 
 		var handle_list_click = function handle_list_click( ev ) {
@@ -487,12 +496,13 @@ jQuery(function init_admin() {
 			if ( undefined === window.inc_popup ) { return false; }
 
 			body.addClass( 'wpmui-loading' );
-			inc_popup.load( po_id );
+			window.inc_popup.load( po_id );
 			return false;
 		};
 
 		var handle_editor_click = function handle_editor_click( ev ) {
-			var me = jQuery( this ),
+			var data,
+				me = jQuery( this ),
 				form = jQuery( '#post' ),
 				ajax = wpmUi.ajax();
 
@@ -501,7 +511,7 @@ jQuery(function init_admin() {
 
 			data = ajax.extract_data( form );
 			body.addClass( 'wpmui-loading' );
-			inc_popup.load( 0, data );
+			window.inc_popup.load( 0, data );
 			return false;
 		};
 
@@ -513,7 +523,7 @@ jQuery(function init_admin() {
 		doc.on( 'click', '.posts .po-preview', handle_list_click );
 		doc.on( 'click', '#post .preview', handle_editor_click );
 		doc.on( 'popup-initialized', show_popup );
-	};
+	}
 
 	if ( ! jQuery( 'body.post-type-inc_popup' ).length ) {
 		return;

@@ -1,3 +1,9 @@
+/*global jQuery:false */
+/*global window:false */
+/*global document:false */
+/*global _popup_data:false */
+/*jslint evil: true */   // Allows us to keep the `fn = new Function()` line
+
 ;(function () {
 	var Popup = function( _options ) {
 
@@ -72,7 +78,7 @@
 					me.close_popup();
 				}
 			}
-		}
+		};
 
 		/**
 		 * Resize and move the PopUp. Triggered when PopUp is loaded and
@@ -206,7 +212,7 @@
 
 					case 'delay':
 						var delay = me.data.display_data.delay * 1000;
-						if ( 'm' == me.data.display_data.delay_type ) {
+						if ( 'm' === me.data.display_data.delay_type ) {
 							delay *= 60;
 						}
 
@@ -217,8 +223,8 @@
 
 					default:
 						// A custom action will show the PopUp (e.g. click/leave)
-						setTimeout(function() {
-							if ( 'function' == typeof me.custom_handler ) {
+						window.setTimeout(function() {
+							if ( 'function' === typeof me.custom_handler ) {
 								me.custom_handler( me );
 							}
 						}, 20);
@@ -237,24 +243,19 @@
 				el = jQuery( this ),
 				top = el.scrollTop();
 
-			switch ( me.data.display_data.scroll_type ) {
-				case 'px':
-					if ( top >= me.data.display_data.scroll ) {
-						$win.off( 'scroll', me.show_at_position );
-						popup_open( me );
-					}
-					break;
+			if ( 'px' === me.data.display_data.scroll_type ) {
+				if ( top >= me.data.display_data.scroll ) {
+					$win.off( 'scroll', me.show_at_position );
+					popup_open( me );
+				}
+			} else { // this handles '%'
+				height = $doc.height() - $win.height();
+				perc = 100 * top / height;
 
-				case '%':
-				default:
-					height = $doc.height() - $win.height();
-					perc = 100 * top / height;
-
-					if ( perc >= me.data.display_data.scroll ) {
-						$win.off( 'scroll', me.show_at_position );
-						popup_open( me );
-					}
-					break;
+				if ( perc >= me.data.display_data.scroll ) {
+					$win.off( 'scroll', me.show_at_position );
+					popup_open( me );
+				}
 			}
 		};
 
@@ -289,12 +290,14 @@
 		 * This function is called by popup_open() below!!!
 		 */
 		this._show = function _show() {
+			var count;
+
 			// If for some reason the popup container is missing then exit.
 			if ( ! $po_div.length ) {
 				return false;
 			}
 
-			count = parseInt( me.get_cookie('po_c') );
+			count = parseInt( me.get_cookie('po_c'), 10 );
 			if ( isNaN( count ) ) { count = 0; }
 			me.set_cookie( 'po_c', count + 1 );
 
@@ -340,7 +343,7 @@
 			$doc.trigger( 'popover-displayed', [me.data, me] );
 
 			$po_div.on( 'submit', 'form', me.form_submit );
-		}
+		};
 
 
 		/*-----  Dynamically load PopUps  ------*/
@@ -396,7 +399,7 @@
 		 * Load popup data via ajax.
 		 */
 		this.load_popup = function load_popup( id, data ) {
-			if ( undefined === id && true == _options.preview ) { return };
+			if ( undefined === id && _options.preview ) { return; }
 			me.have_popup = false; // This object cannot display a PopUp...
 			load_popups( _options, id, data );
 		};
@@ -454,7 +457,7 @@
 
 				me.move_popup();
 				me.setup_popup();
-			})
+			});
 
 			return true;
 		};
@@ -485,7 +488,7 @@
 				fn = new Function( 'me', me.data.script );
 				fn( me );
 			}
-		}
+		};
 
 
 		/*======================================*\
@@ -586,7 +589,7 @@
 
 		// PopUp was closed, check if there is another PopUp in open-queue.
 		if ( po_queue.length > 0 ) {
-			item = po_queue.shift();
+			var item = po_queue.shift();
 			popup_open( item );
 		}
 	}
@@ -611,22 +614,22 @@
 		};
 
 		// Legacy: force_popover = load a popup_id by ID.
-		if ( typeof force_popover != 'undefined' ) {
-			po_id = force_popover.toString();
+		if ( window.force_popover !== undefined ) {
+			po_id = window.force_popover.toString();
 		}
 
 		// New way of specifying popup ID is via param: load(id)
-		if ( typeof id != 'undefined' ) {
+		if ( id !== undefined ) {
 			po_id = id.toString();
 		}
 
 		options['ajax_data'] = options['ajax_data'] || {};
 		ajax_data = jQuery.extend( {}, options['ajax_data'] );
 
-		ajax_data['action']      = 'inc_popup',
-		ajax_data['do']          = options['do'],
-		ajax_data['thefrom']     = thefrom.toString(),
-		ajax_data['thereferrer'] = thereferrer.toString()
+		ajax_data['action']      = 'inc_popup';
+		ajax_data['do']          = options['do'];
+		ajax_data['thefrom']     = thefrom.toString();
+		ajax_data['thereferrer'] = thereferrer.toString();
 
 		if ( po_id ) { ajax_data['po_id'] = po_id; }
 		if ( data )  { ajax_data['data'] = data; }
@@ -676,7 +679,7 @@
 			jQuery( document ).trigger( 'popup-initialized', [window.inc_popup] );
 
 			if ( data['noinit'] || data['preview'] ) { return; }
-			inc_popup.init();
+			window.inc_popup.init();
 		};
 
 		// Initialize a single or multiple PopUps, depending on provided data.

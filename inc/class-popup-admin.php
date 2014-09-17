@@ -93,7 +93,7 @@ class IncPopup extends IncPopupBase {
 			WDev()->add_ui( 'core' );
 			WDev()->add_ui( 'select' );
 
-			WDev()->add_ui( PO_CSS_URL . 'popup-admin.css' );
+			WDev()->add_ui( PO_CSS_URL . 'popup-admin.min.css' );
 			WDev()->add_ui( PO_JS_URL . 'popup-admin.min.js' );
 			WDev()->add_ui( PO_JS_URL . 'public.min.js' ); // For Preview.
 

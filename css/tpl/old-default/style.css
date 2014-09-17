@@ -1,1 +1,65 @@
-#messagebox{position:absolute;background:transparent url(%styleurl%img/opaque.png) repeat;padding:10px;visibility:visible;z-index:999999}#messagebox .claimbutton{position:absolute;bottom:0;right:0;width:100%;background:transparent url(%styleurl%img/opaque.png) repeat;text-align:right;padding-top:5px;padding-bottom:5px;display:none}#messagebox .claimbutton a:visited,#messagebox .claimbutton a{font-family:"Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;color:#FFF;text-shadow:#000 1px 1px 0px;font-weight:bold;padding-right:5px}#messagebox .wdpu-close{position:absolute;width:30px;height:29px;background:transparent url(%styleurl%img/closemessagebland.png) no-repeat;top:-5px;left:-5px;z-index:5}#messagebox .wdpu-msg{position:relative;background:#fff;font:0.9em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;line-height:normal;height:100%;overflow:hidden}#messagebox .wdpu-msg.waiting{background:#fff url(%styleurl%img/loading.gif) no-repeat center center}#messagebox .wdpu-msg p{position:relative;clear:both}#messagebox .wdpu-msg h2{color:#000;font:bold 1.3em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;margin-top:0px}#messagebox .wdpu-msg h2 a{text-decoration:none;color:#000}#messagebox .wdpu-msg blockquote{padding:0px;font-weight:bold;border-left:5px solid #ccc}#messagebox .wdpu-msg blockquote p{padding:2px 5px}#messagebox .clear{clear:both}#messagebox .hide{display:none}#messagebox:hover .claimbutton{display:block}.wp-admin #messagebox{font-size:16px}
+#messagebox {
+  position: absolute;
+  background: transparent url(%styleurl%img/opaque.png) repeat;
+  padding: 10px;
+  visibility: visible;
+  z-index: 999999; }
+  #messagebox .claimbutton {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    background: transparent url(%styleurl%img/opaque.png) repeat;
+    text-align: right;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: none; }
+    #messagebox .claimbutton a:visited,
+    #messagebox .claimbutton a {
+      font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+      color: #FFF;
+      text-shadow: #000 1px 1px 0px;
+      font-weight: bold;
+      padding-right: 5px; }
+  #messagebox .wdpu-close {
+    position: absolute;
+    width: 30px;
+    height: 29px;
+    background: transparent url(%styleurl%img/closemessagebland.png) no-repeat;
+    top: -5px;
+    left: -5px;
+    z-index: 5; }
+  #messagebox .wdpu-msg {
+    position: relative;
+    background: #fff;
+    font: 0.9em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    line-height: normal;
+    height: 100%;
+    overflow: hidden; }
+    #messagebox .wdpu-msg.waiting {
+      background: white url(%styleurl%img/loading.gif) no-repeat center center; }
+    #messagebox .wdpu-msg p {
+      position: relative;
+      clear: both; }
+    #messagebox .wdpu-msg h2 {
+      color: #000;
+      font: bold 1.3em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+      margin-top: 0px; }
+      #messagebox .wdpu-msg h2 a {
+        text-decoration: none;
+        color: #000; }
+    #messagebox .wdpu-msg blockquote {
+      padding: 0px;
+      font-weight: bold;
+      border-left: 5px solid #ccc; }
+      #messagebox .wdpu-msg blockquote p {
+        padding: 2px 5px; }
+  #messagebox .clear {
+    clear: both; }
+  #messagebox .hide {
+    display: none; }
+  #messagebox:hover .claimbutton {
+    display: block; }
+
+.wp-admin #messagebox {
+  font-size: 16px; }
