@@ -127,12 +127,15 @@ module.exports = function( grunt ) {
 					'!.git/**',
 					'!.sass-cache/**',
 					'!css/src/**',
+					'!css/sass/**',
+					'!css/less/**',
 					'!js/src/**',
+					'!js/vendor/**',
 					'!img/src/**',
 					'!Gruntfile.js',
 					'!package.json',
-					'!.gitignore',
-					'!.gitmodules'
+					'!.git*',
+					'!dev/**'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
@@ -141,12 +144,12 @@ module.exports = function( grunt ) {
 			main: {
 				options: {
 					mode: 'zip',
-					archive: './release/popup-pro.<%= pkg.version %>.zip'
+					archive: './release/<%= pkg.name %>.<%= pkg.version %>.zip'
 				},
 				expand: true,
 				cwd: 'release/<%= pkg.version %>/',
-				src: ['**/*'],
-				dest: 'popup-pro/'
+				src: [ '**/*' ],
+				dest: 'popover/'
 			}
 		}
 	} );
