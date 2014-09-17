@@ -1,4 +1,4 @@
-@dev/*				export-ignore
+dev/*				export-ignore
 Gruntfile.js		export-ignore
 package.json		export-ignore
 .gitattributes		export-ignore
