@@ -93,6 +93,21 @@ abstract class IncPopupBase {
 			999, 2
 		);
 
+		if ( function_exists( 'get_rocket_option' ) && get_rocket_option( 'minify_js' ) ) {
+			foreach ( array( 'edit-inc_popup', 'inc_popup', 'inc_popup_page_settings' ) as $screen ) {
+				WDev()->message(
+					__(
+						'You are using WP Rocket with JS Minification, which has ' .
+						'caused some issues in the past. We recommend to disable ' .
+						'the JS Minification setting in WP Rocket to avoid problems.',
+						PO_LANG
+					),
+					'err',
+					$screen
+				);
+			}
+		}
+
 		// Tell Add-ons and extensions that we are set up.
 		do_action( 'popup-init' );
 	}
