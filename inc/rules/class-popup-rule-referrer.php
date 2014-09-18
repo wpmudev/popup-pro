@@ -85,7 +85,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		else { $referrer = ''; }
 		?>
 		<label for="po-rule-data-referrer">
-			<?php _e( 'Referrers (one per line):', PO_LANG ); ?>
+			<?php _e( 'Referrers. Can be full URL or a pattern like ".example.com" (one per line):', PO_LANG ); ?>
 		</label>
 		<textarea name="po_rule_data[referrer]" id="po-rule-data-referrer" class="block"><?php
 			echo esc_attr( $referrer );
@@ -123,7 +123,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 	protected function apply_no_internal( $data ) {
 		$internal = preg_replace( '#^https?://#', '', get_option( 'home' ) );
 
-		return $this->test_not_referrer( $internal );
+		return ! $this->test_referrer( $internal );
 	}
 
 
@@ -173,7 +173,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		$referrer = $this->get_referrer();
 
 		if ( empty( $referrer ) ) {
-			$response = true;
+			$response = false;
 		} else {
 			foreach ( $list as $item ) {
 				$item = trim( $item );
@@ -185,27 +185,6 @@ class IncPopupRule_Referrer extends IncPopupRule {
 			}
 		}
 		return $response;
-	}
-
-	/**
-	 * Tests if the current referrer is NOT one of the referers of the list.
-	 * Current referrer has to be specified in the URL param "thereferer".
-	 *
-	 * @since  4.6.1.2
-	 * @param  array $list List of referers to check.
-	 * @return bool
-	 */
-	protected function test_not_referrer( $list ) {
-		$res = false;
-
-		$referrer = $this->get_referrer();
-		if ( empty( $referrer ) ) {
-			$res = true;
-		}
-		if ( ! $this->test_referrer( $list ) ) {
-			$res = true;
-		}
-		return $res;
 	}
 
 	/**

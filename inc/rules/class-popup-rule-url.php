@@ -78,7 +78,7 @@ class IncPopupRule_Url extends IncPopupRule {
 		$urls = implode( "\n", $data );
 		?>
 		<label for="po-rule-data-url">
-			<?php _e( 'URLs (one per line):', PO_LANG ); ?>
+			<?php _e( 'Full URLs (one per line):', PO_LANG ); ?>
 		</label>
 		<textarea name="po_rule_data[url]" id="po-rule-data-url" class="block"><?php
 			echo esc_html( $urls );
@@ -131,7 +131,7 @@ class IncPopupRule_Url extends IncPopupRule {
 		$urls = implode( "\n", $data );
 		?>
 		<label for="po-rule-data-no-url">
-			<?php _e( 'URLs (one per line):', PO_LANG ); ?>
+			<?php _e( 'Full URLs (one per line):', PO_LANG ); ?>
 		</label>
 		<textarea name="po_rule_data[no_url]" id="po-rule-data-no-url" class="block"><?php
 			echo esc_html( $urls );

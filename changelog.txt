@@ -12,6 +12,7 @@ Change Log:
 - Fix: PopUps can be edited even on servers with memcache/similar caching extensions.
 - Fix: Resolve "Strict Standards" notes in PHP 5.4
 - Fix: Rule "Not internal link" now works correctly when opening page directly.
+- Fix: Rule "Specific Referrer" handles empty referrers correctly.
 - Better: Forms inside PopUps will only refresh the PopUp and not reload the page.
 - Better: Detection of theme compatibility for loading method "Page Footer" improved.
 
