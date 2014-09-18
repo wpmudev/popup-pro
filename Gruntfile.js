@@ -86,6 +86,19 @@ module.exports = function( grunt ) {
 		},
 
 
+		phpunit: {
+			main: {
+				dir: 'tests/php/test-demo'
+			},
+			options: {
+				bin: 'phpunit',
+				bootstrap: 'tests/php/bootstrap.php',
+				colors: true,
+				tap: true
+			}
+		},
+
+
 		sass:   {
 			all: {
 				files: paths.css_files_compile
@@ -196,12 +209,15 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-compress');
+	grunt.loadNpmTasks('grunt-phpunit');
 
 	// Default task.
 
 	grunt.registerTask( 'default', ['clean:temp', 'jshint', 'concat', 'uglify', 'sass', 'cssmin'] );
 
-	grunt.registerTask( 'build', ['default', 'clean', 'copy', 'compress'] );
+	grunt.registerTask( 'build', ['phpunit', 'default', 'clean', 'copy', 'compress'] );
+
+	grunt.registerTask( 'test', ['phpunit', 'jshint'] );
 
 	grunt.util.linefeed = '\n';
 };
