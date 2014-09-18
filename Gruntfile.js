@@ -87,14 +87,18 @@ module.exports = function( grunt ) {
 
 
 		phpunit: {
-			main: {
-				dir: 'tests/php/test-demo'
+			classes: {
+				dir: ''
 			},
 			options: {
 				bin: 'phpunit',
 				bootstrap: 'tests/php/bootstrap.php',
+				testsuite: 'default',
+				configuration: 'tests/php/phpunit.xml',
 				colors: true,
-				tap: true
+				tap: true,
+				staticBackup: false,
+				noGlobalsBackup: false
 			}
 		},
 
