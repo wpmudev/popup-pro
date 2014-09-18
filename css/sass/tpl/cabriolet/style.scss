@@ -50,7 +50,9 @@ $col_secondary: #000002;
 
 	&.custom-size {
 		padding: 0;
+	}
 
+	&.custom-pos {
 		.wdpu-msg {
 			position: absolute;
 			display: inline-block;

@@ -33,10 +33,10 @@
   /* Default: Image on right side */ }
   #messagebox.custom-size {
     padding: 0; }
-    #messagebox.custom-size .wdpu-msg {
-      position: absolute;
-      display: inline-block;
-      margin: 0 0 30px; }
+  #messagebox.custom-pos .wdpu-msg {
+    position: absolute;
+    display: inline-block;
+    margin: 0 0 30px; }
   #messagebox .wdpu-msg {
     position: relative;
     display: block;
