@@ -1,11 +1,15 @@
 
 module.exports = function( grunt ) {
 	var paths = {
-		js_files: {
+		js_files_concat: {
 			'js/popup-admin.js': ['js/src/popup-admin.js'],
 			'js/public.js':      ['js/src/public.js']
 		},
-		css_files: {
+		js_files_min: {
+			'js/popup-admin.min.js': ['js/popup-admin.js'],
+			'js/public.min.js':      ['js/public.js']
+		},
+		css_files_compile: {
 			'css/popup-admin.css':                  'css/sass/popup-admin.scss',
 			'css/tpl/cabriolet/style.css':          'css/sass/tpl/cabriolet/style.scss',
 			'css/tpl/minimal/style.css':            'css/sass/tpl/minimal/style.scss',
@@ -30,7 +34,7 @@ module.exports = function( grunt ) {
 					' */\n'
 			},
 			scripts: {
-				files: paths.js_files
+				files: paths.js_files_concat
 			}
 		},
 
@@ -62,7 +66,7 @@ module.exports = function( grunt ) {
 
 		uglify: {
 			all: {
-				files: paths.js_files,
+				files: paths.js_files_min,
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +
 						' * <%= pkg.homepage %>\n' +
@@ -84,7 +88,7 @@ module.exports = function( grunt ) {
 
 		sass:   {
 			all: {
-				files: paths.css_files
+				files: paths.css_files_compile
 			}
 		},
 
