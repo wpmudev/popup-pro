@@ -1,8 +1,25 @@
+
 module.exports = function( grunt ) {
+	var paths = {
+		js_files: {
+			'js/popup-admin.js': ['js/src/popup-admin.js'],
+			'js/public.js':      ['js/src/public.js']
+		},
+		css_files: {
+			'css/popup-admin.css':                  'css/sass/popup-admin.scss',
+			'css/tpl/cabriolet/style.css':          'css/sass/tpl/cabriolet/style.scss',
+			'css/tpl/minimal/style.css':            'css/sass/tpl/minimal/style.scss',
+			'css/tpl/simple/style.css':             'css/sass/tpl/simple/style.scss',
+			'css/tpl/old-default/style.css':        'css/sass/tpl/old-default/style.scss',
+			'css/tpl/old-fixed/style.css':          'css/sass/tpl/old-fixed/style.scss',
+			'css/tpl/old-fullbackground/style.css': 'css/sass/tpl/old-fullbackground/style.scss'
+		}
+	};
 
 	// Project configuration
 	grunt.initConfig( {
 		pkg:    grunt.file.readJSON( 'package.json' ),
+
 		concat: {
 			options: {
 				stripBanners: true,
@@ -13,12 +30,11 @@ module.exports = function( grunt ) {
 					' */\n'
 			},
 			scripts: {
-				files: {
-					'js/popup-admin.js': ['js/src/popup-admin.js'],
-					'js/public.js': ['js/src/public.js']
-				}
+				files: paths.js_files
 			}
 		},
+
+
 		jshint: {
 			all: [
 				'Gruntfile.js',
@@ -42,12 +58,11 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
+
 		uglify: {
 			all: {
-				files: {
-					'js/popup-admin.min.js': ['js/popup-admin.js'],
-					'js/public.min.js': ['js/public.js']
-				},
+				files: paths.js_files,
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +
 						' * <%= pkg.homepage %>\n' +
@@ -60,23 +75,19 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
+
 		test:   {
 			files: ['js/test/**/*.js']
 		},
 
+
 		sass:   {
 			all: {
-				files: {
-					'css/popup-admin.css': 'css/sass/popup-admin.scss',
-					'css/tpl/cabriolet/style.css': 'css/sass/tpl/cabriolet/style.scss',
-					'css/tpl/minimal/style.css': 'css/sass/tpl/minimal/style.scss',
-					'css/tpl/simple/style.css': 'css/sass/tpl/simple/style.scss',
-					'css/tpl/old-default/style.css': 'css/sass/tpl/old-default/style.scss',
-					'css/tpl/old-fixed/style.css': 'css/sass/tpl/old-fixed/style.scss',
-					'css/tpl/old-fullbackground/style.css': 'css/sass/tpl/old-fullbackground/style.scss'
-				}
+				files: paths.css_files
 			}
 		},
+
 
 		cssmin: {
 			options: {
@@ -96,10 +107,11 @@ module.exports = function( grunt ) {
 				ext: '.min.css'
 			}
 		},
-		watch:  {
 
+
+		watch:  {
 			sass: {
-				files: ['css/sass/*.scss'],
+				files: ['css/sass/**/*.scss'],
 				tasks: ['sass', 'cssmin'],
 				options: {
 					debounceDelay: 500
@@ -114,9 +126,13 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+
+
 		clean: {
 			main: ['release/<%= pkg.version %>']
 		},
+
+
 		copy: {
 			// Copy the plugin to a versioned release directory
 			main: {
@@ -140,6 +156,8 @@ module.exports = function( grunt ) {
 				dest: 'release/<%= pkg.version %>/'
 			}
 		},
+
+
 		compress: {
 			main: {
 				options: {
@@ -152,6 +170,7 @@ module.exports = function( grunt ) {
 				dest: 'popover/'
 			}
 		}
+
 	} );
 
 	// Load other tasks
@@ -163,9 +182,9 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-sass');
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks( 'grunt-contrib-clean' );
-	grunt.loadNpmTasks( 'grunt-contrib-copy' );
-	grunt.loadNpmTasks( 'grunt-contrib-compress' );
+	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-compress');
 
 	// Default task.
 
