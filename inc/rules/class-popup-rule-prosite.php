@@ -15,7 +15,7 @@ This filename is saved as metadata with each popup that uses these rules.
 Renaming the file will DISABLE the rules, which is very bad!
 */
 
-class IncPopupRule_Installation extends IncPopupRule {
+class IncPopupRule_Prosite extends IncPopupRule {
 
 	/**
 	 * Initialize the rule object.
@@ -104,4 +104,4 @@ class IncPopupRule_Installation extends IncPopupRule {
 
 };
 
-IncPopupRules::register( 'IncPopupRule_Installation' );
+IncPopupRules::register( 'IncPopupRule_Prosite' );

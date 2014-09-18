@@ -97,6 +97,7 @@ module.exports = function( grunt ) {
 				configuration: 'tests/php/phpunit.xml',
 				colors: true,
 				tap: true,
+				//testdox: true,
 				staticBackup: false,
 				noGlobalsBackup: false
 			}
@@ -176,6 +177,7 @@ module.exports = function( grunt ) {
 					'!js/src/**',
 					'!js/vendor/**',
 					'!img/src/**',
+					'!tests/**',
 					'!Gruntfile.js',
 					'!package.json',
 					'!.git*',

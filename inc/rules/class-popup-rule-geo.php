@@ -15,7 +15,7 @@ This filename is saved as metadata with each popup that uses these rules.
 Renaming the file will DISABLE the rules, which is very bad!
 */
 
-class IncPopupRule_Country extends IncPopupRule {
+class IncPopupRule_Geo extends IncPopupRule {
 
 	/**
 	 * Initialize the rule object.
@@ -639,4 +639,4 @@ class IncPopupRule_Country extends IncPopupRule {
 
 };
 
-IncPopupRules::register( 'IncPopupRule_Country' );
+IncPopupRules::register( 'IncPopupRule_Geo' );

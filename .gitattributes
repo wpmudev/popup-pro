@@ -1,6 +1,15 @@
+css/sass/*			export-ignore
+css/less/*			export-ignore
+css/src/*			export-ignore
+js/src/*			export-ignore
+img/src/*			export-ignore
+
 dev/*				export-ignore
+tests/*				export-ignore
+
 Gruntfile.js		export-ignore
 package.json		export-ignore
+
 .gitattributes		export-ignore
 .gitignore			export-ignore
 .gitmodules			export-ignore

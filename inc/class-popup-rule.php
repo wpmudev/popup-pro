@@ -17,7 +17,7 @@ class IncPopupRules {
 	 * @param  string $classname Class-name (not object!)
 	 */
 	static public function register( $classname ) {
-		self::$classes[] = new $classname();
+		self::$classes[$classname] = new $classname();
 	}
 
 
