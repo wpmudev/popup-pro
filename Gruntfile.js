@@ -133,7 +133,14 @@ module.exports = function( grunt ) {
 
 
 		clean: {
-			main: ['release/<%= pkg.version %>']
+			main: {
+				src: ['release/<%= pkg.version %>']
+			},
+			temp: {
+				src: ['**/*.tmp', '**/.afpDeleted*', '**/.DS_Store'],
+				dot: true,
+				filter: 'isFile'
+			}
 		},
 
 
@@ -192,8 +199,7 @@ module.exports = function( grunt ) {
 
 	// Default task.
 
-	grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'sass', 'cssmin'] );
-
+	grunt.registerTask( 'default', ['clean:temp', 'jshint', 'concat', 'uglify', 'sass', 'cssmin'] );
 
 	grunt.registerTask( 'build', ['default', 'clean', 'copy', 'compress'] );
 
