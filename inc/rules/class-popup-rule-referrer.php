@@ -123,7 +123,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 	protected function apply_no_internal( $data ) {
 		$internal = preg_replace( '#^https?://#', '', get_option( 'home' ) );
 
-		return ! $this->test_referrer( $internal );
+		return $this->test_not_referrer( $internal );
 	}
 
 
@@ -185,6 +185,27 @@ class IncPopupRule_Referrer extends IncPopupRule {
 			}
 		}
 		return $response;
+	}
+
+	/**
+	 * Tests if the current referrer is NOT one of the referers of the list.
+	 * Current referrer has to be specified in the URL param "thereferer".
+	 *
+	 * @since  4.6.1.2
+	 * @param  array $list List of referers to check.
+	 * @return bool
+	 */
+	protected function test_not_referrer( $list ) {
+		$res = false;
+
+		$referrer = $this->get_referrer();
+		if ( empty( $referrer ) ) {
+			$res = true;
+		}
+		if ( ! $this->test_referrer( $list ) ) {
+			$res = true;
+		}
+		return $res;
 	}
 
 	/**
