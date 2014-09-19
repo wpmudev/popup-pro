@@ -192,7 +192,7 @@ module.exports = function( grunt ) {
 			main: {
 				options: {
 					mode: 'zip',
-					archive: './release/<%= pkg.name %>.<%= pkg.version %>.zip'
+					archive: './release/<%= pkg.name %>-<%= pkg.version %>.zip'
 				},
 				expand: true,
 				cwd: 'release/<%= pkg.version %>/',
