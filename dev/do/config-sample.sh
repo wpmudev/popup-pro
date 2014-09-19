@@ -10,9 +10,6 @@
 
 # ----- Used to create plugin zip-archive -----
 
-# Current plugin version.
-VER=1.0
-
 # Name of the plugin folder.
 # This allows us to use a different folder name for development, for example
 # internal plugin dir is "custom-sidebars-pro" and "custom-sidebars-free" but
@@ -75,7 +72,7 @@ SVN_DIR=/dir/to/svn
 # ----- No need to change these settings -----
 
 # Defines the default path and name of the exported zip archive.
-EXPORT_ARCHIVE=~/Desktop/$EXPORT_FOLDER-pro-$VER.zip
+EXPORT_ARCHIVE=~/Desktop/$EXPORT_FOLDER-pro.zip
 
 # Generate the filename to the local WordPress installation archive.
 WP_INSTALL_FILE="$WP_INSTALL_DIR"/wordpress-$WP_VERSION.tar.gz

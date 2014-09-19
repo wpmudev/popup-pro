@@ -16,7 +16,6 @@ show_config() {
 	echo ""
 	echo "------------------------------------------"
 	echo "Current Plugin"
-	echo "  Plugin version:     $VER"
 	echo "  Install Dir:        wp-content/plugins/$EXPORT_FOLDER"
 	echo "  Script Dir:         $CUR_DIR"
 	echo "WordPress zip archive"
