@@ -106,6 +106,11 @@ module.exports = function( grunt ) {
 
 		sass:   {
 			all: {
+				options: {
+					'sourcemap=none': true, // 'sourcemap': 'none' does not work...
+					unixNewlines: true,
+					style: 'expanded'
+				},
 				files: paths.css_files_compile
 			}
 		},
