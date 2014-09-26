@@ -34,13 +34,13 @@ class IncPopupRule_Events extends IncPopupRule {
 			10, 1
 		);
 
-		add_action(
+		add_filter(
 			'popup-output-data',
 			array( $this, 'append_data_on_exit' ),
 			10, 2
 		);
 
-		add_action(
+		add_filter(
 			'popup-output-data',
 			array( $this, 'append_data_on_click' ),
 			10, 2
