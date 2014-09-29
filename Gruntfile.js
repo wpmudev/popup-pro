@@ -172,21 +172,18 @@ module.exports = function( grunt ) {
 			main: {
 				src:  [
 					'**',
+					'!.git/**',
+					'!.git*',
 					'!node_modules/**',
 					'!release/**',
-					'!.git/**',
 					'!.sass-cache/**',
-					'!css/src/**',
-					'!css/sass/**',
-					'!css/less/**',
-					'!js/src/**',
-					'!js/vendor/**',
-					'!img/src/**',
-					'!tests/**',
-					'!Gruntfile.js',
-					'!package.json',
-					'!.git*',
-					'!dev/**'
+					'!**/package.json',
+					'!**/css/sass/**',
+					'!**/js/src/**',
+					'!**/js/vendor/**',
+					'!**/img/src/**',
+					'!**/tests/**',
+					'!**/Gruntfile.js'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
