@@ -4,6 +4,10 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.6.1.3
+----------------------------------------------------------------------
+- Fix: Prevent PopUps from staying open after submitting a form to external URL.
+
 4.6.1.2
 ----------------------------------------------------------------------
 - New: Two new WordPress filters allow custom positioning and styling of PopUps.
