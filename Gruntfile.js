@@ -5,10 +5,6 @@ module.exports = function( grunt ) {
 			'js/popup-admin.js': ['js/src/popup-admin.js'],
 			'js/public.js':      ['js/src/public.js']
 		},
-		js_files_min: {
-			'js/popup-admin.min.js': ['js/popup-admin.js'],
-			'js/public.min.js':      ['js/public.js']
-		},
 		css_files_compile: {
 			'css/popup-admin.css':                  'css/sass/popup-admin.scss',
 			'css/tpl/cabriolet/style.css':          'css/sass/tpl/cabriolet/style.scss',
@@ -17,7 +13,8 @@ module.exports = function( grunt ) {
 			'css/tpl/old-default/style.css':        'css/sass/tpl/old-default/style.scss',
 			'css/tpl/old-fixed/style.css':          'css/sass/tpl/old-fixed/style.scss',
 			'css/tpl/old-fullbackground/style.css': 'css/sass/tpl/old-fullbackground/style.scss'
-		}
+		},
+		plugin_dir: 'popover/'
 	};
 
 	// Project configuration
@@ -66,7 +63,14 @@ module.exports = function( grunt ) {
 
 		uglify: {
 			all: {
-				files: paths.js_files_min,
+				files: [{
+					expand: true,
+					src: ['*.js', '!*.min.js'],
+					cwd: 'js/',
+					dest: 'js/',
+					ext: '.min.js',
+					extDot: 'last'
+				}],
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +
 						' * <%= pkg.homepage %>\n' +
@@ -126,12 +130,11 @@ module.exports = function( grunt ) {
 			},
 			minify: {
 				expand: true,
-
+				src: ['*.css', '!*.min.css'],
 				cwd: 'css/',
-				src: ['popup-admin.css'],
-
 				dest: 'css/',
-				ext: '.min.css'
+				ext: '.min.css',
+				extDot: 'last'
 			}
 		},
 
@@ -199,7 +202,7 @@ module.exports = function( grunt ) {
 				expand: true,
 				cwd: 'release/<%= pkg.version %>/',
 				src: [ '**/*' ],
-				dest: 'popover/'
+				dest: paths.plugin_dir
 			}
 		}
 
