@@ -429,11 +429,18 @@
 			msg.addClass( 'wdpu-loading' );
 
 			jQuery( frame ).load( function(){
-				var inner_new, inner_old;
+				var inner_new, inner_old, html;
 
-				// grab the HTML from the body, using the raw DOM node (frame[0])
-				// and more specifically, it's `contentDocument` property.
-				var html = jQuery( po_id, frame[0].contentDocument );
+				try {
+					// grab the HTML from the body, using the raw DOM node (frame[0])
+					// and more specifically, it's `contentDocument` property.
+					html = jQuery( po_id, frame[0].contentDocument );
+				} catch ( err ) {
+					// In case the iframe link was an external website the above
+					// line will most likely cause a security issue.
+					html = jQuery( '<html></html>' );
+				}
+
 				msg.removeClass( 'wdpu-loading' );
 
 				// Get the new and old Popup Contents.
@@ -446,6 +453,7 @@
 				// In case the new popup content could not be found or is empty:
 				// Close the popup!
 				if ( ! inner_old.length || ! inner_new.length || ! inner_new.text().length ) {
+					$doc.trigger( 'popup-submit-done', [me, me.data] );
 					me.close_popup();
 					return;
 				}
@@ -459,6 +467,8 @@
 
 				me.move_popup();
 				me.setup_popup();
+
+				$doc.trigger( 'popup-submit-done', [me, me.data] );
 			});
 
 			return true;
