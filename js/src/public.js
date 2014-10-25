@@ -189,7 +189,7 @@
 			$po_div.css({
 				'opacity': 0,
 				'z-index': -1,
-				'position': 'absolute',
+				'position': 'fixed',
 				'left': -1000,
 				'width': 100,
 				'right': 'auto',
@@ -307,9 +307,18 @@
 			$win.off("resize.popup")
 				.on("resize.popup", function () { me.move_popup(me.data); });
 
-			$po_div.show().removeAttr( 'style' );
+			$po_div.removeAttr( 'style' ).show();
 			$po_back.show();
 			jQuery( 'html' ).addClass( 'has-popup' );
+
+			// Fix issue where Buttons are not available in Chrome
+			// https://app.asana.com/0/11388810124414/18688920614102
+			$po_msg.hide();
+			window.setTimeout(function() {
+				// The timer is so short that the element will *not* be hidden
+				// but webkit will still redraw the element.
+				$po_msg.show();
+			}, 2);
 
 			me.move_popup(me.data);
 			me.setup_popup();
