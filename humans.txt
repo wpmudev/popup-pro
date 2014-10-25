@@ -13,3 +13,8 @@
 	Contact: ve [at] incsub [dot] com
 	Twitter: @vebailovity
 	Location: Zrenjanin, Serbia
+
+	Developer: Philipp Stracker
+	Contact: philipp [at] incsub [dot] com
+	Twitter:
+	Location: Götzis, Austria
