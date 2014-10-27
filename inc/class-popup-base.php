@@ -427,9 +427,6 @@ abstract class IncPopupBase {
 				// Forced popup ignores all conditions.
 				$show = true;
 			} else {
-				// Ignore empty PopUps.
-				if ( empty( $popup->content ) ) { continue; }
-
 				// Apply the conditions to decide if the popup should be displayed.
 				$show = apply_filters( 'popup-apply-rules', true, $popup );
 			}
