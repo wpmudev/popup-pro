@@ -6,7 +6,9 @@ Change Log:
 
 4.6.1.3
 ----------------------------------------------------------------------
+- New: Allow page to be scrolled while PopUp is open.
 - Fix: Prevent PopUps from staying open after submitting a form to external URL.
+- Fix: PopUps without content can be displayed now.
 
 4.6.1.2
 ----------------------------------------------------------------------
