@@ -1,10 +1,10 @@
 /**
  * Style: Minimal
  */
-.has-popup {
+.has-popup.no-scroll {
   overflow: hidden;
 }
-.has-popup body {
+.has-popup.no-scroll body {
   overflow: hidden;
 }
 

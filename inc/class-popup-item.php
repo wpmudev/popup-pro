@@ -86,6 +86,9 @@ class IncPopupItem {
 	// CSS option "no rounded corners".
 	public $round_corners = true;
 
+	// Allow page to be scrolled while PopUp is open.
+	public $scroll_body = true;
+
 	// -- "Never show again" options
 
 	// Add button "Never show popup again".
@@ -187,6 +190,7 @@ class IncPopupItem {
 		$this->style = 'minimal';
 		$this->deprecated_style = false;
 		$this->round_corners = true;
+		$this->scroll_body = false;
 		$this->can_hide = false;
 		$this->close_hides = false;
 		$this->hide_expire = 365;
@@ -253,6 +257,7 @@ class IncPopupItem {
 
 		in_array( @$data['style'], $style_keys ) && $this->style = $data['style'];
 		isset( $data['round_corners'] ) && $this->round_corners = (true == $data['round_corners']);
+		isset( $data['scroll_body'] ) && $this->scroll_body = (true == $data['scroll_body']);
 		isset( $data['can_hide'] ) && $this->can_hide = (true == $data['can_hide']);
 		isset( $data['close_hides'] ) && $this->close_hides = (true == $data['close_hides']);
 		absint( @$data['hide_expire'] ) > 0 && $this->hide_expire = absint( $data['hide_expire'] );
@@ -302,6 +307,7 @@ class IncPopupItem {
 		$this->custom_colors = (true == @$this->custom_colors);
 		$this->deprecated_style = (true == @$this->deprecated_style);
 		$this->round_corners = (true == @$this->round_corners);
+		$this->scroll_body = (true == @$this->scroll_body);
 		$this->can_hide = (true == @$this->can_hide);
 		$this->close_hides = (true == @$this->close_hides);
 		$this->overlay_close = (true == @$this->overlay_close);
@@ -368,6 +374,7 @@ class IncPopupItem {
 		$this->script_data['overlay_close'] = $this->overlay_close;
 		$this->script_data['display'] = $this->display;
 		$this->script_data['display_data'] = $this->display_data;
+		$this->script_data['scroll_body'] = $this->scroll_body;
 
 		// Validation only done when editing popups.
 		if ( is_admin() ) {
@@ -449,6 +456,7 @@ class IncPopupItem {
 		$this->custom_colors = get_post_meta( $this->id, 'po_custom_colors', true );
 		$this->style = get_post_meta( $this->id, 'po_style', true );
 		$this->round_corners = get_post_meta( $this->id, 'po_round_corners', true );
+		$this->scroll_body = get_post_meta( $this->id, 'po_scroll_body', true );
 		$this->can_hide = get_post_meta( $this->id, 'po_can_hide', true );
 		$this->close_hides = get_post_meta( $this->id, 'po_close_hides', true );
 		$this->hide_expire = get_post_meta( $this->id, 'po_hide_expire', true );
@@ -520,6 +528,7 @@ class IncPopupItem {
 			update_post_meta( $this->id, 'po_custom_colors', $this->custom_colors );
 			update_post_meta( $this->id, 'po_style', $this->style );
 			update_post_meta( $this->id, 'po_round_corners', $this->round_corners );
+			update_post_meta( $this->id, 'po_scroll_body', $this->scroll_body );
 			update_post_meta( $this->id, 'po_can_hide', $this->can_hide );
 			update_post_meta( $this->id, 'po_close_hides', $this->close_hides );
 			update_post_meta( $this->id, 'po_hide_expire', $this->hide_expire );

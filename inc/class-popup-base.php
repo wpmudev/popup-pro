@@ -300,6 +300,7 @@ abstract class IncPopupBase {
 			// Meta: Appearance
 			'style' => @$form['po_style'],
 			'round_corners' => ! isset( $form['po_no_round_corners'] ),
+			'scroll_body' => isset( $form['po_scroll_body'] ),
 			'custom_colors' => isset( $form['po_custom_colors'] ),
 			'color' => @$form['po_color'],
 			'custom_size' => isset( $form['po_custom_size'] ),

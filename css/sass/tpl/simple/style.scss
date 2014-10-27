@@ -13,7 +13,7 @@ $padding_phone:       10px;
 $col_primary: #000001;   // Color code is replaced by plugin.
 $col_secondary: #000002; // Color code is replaced by plugin.
 
-.has-popup {
+.has-popup.no-scroll {
 	overflow: hidden;
 
 	body {

@@ -311,7 +311,12 @@
 
 			$po_div.removeAttr( 'style' ).show();
 			$po_back.show();
-			jQuery( 'html' ).addClass( 'has-popup' );
+
+			if ( me.data.scroll_body ) {
+				jQuery( 'html' ).addClass( 'has-popup can-scroll' );
+			} else {
+				jQuery( 'html' ).addClass( 'has-popup no-scroll' );
+			}
 
 			// Fix issue where Buttons are not available in Chrome
 			// https://app.asana.com/0/11388810124414/18688920614102
@@ -332,8 +337,8 @@
 		 * Add event handlers to the PopUp controls.
 		 */
 		this.setup_popup = function setup_popup() {
-			$po_hide.off( "click", me.close_forever )
-				.on( "click", me.close_forever );
+			$po_hide.off( 'click', me.close_forever )
+				.on( 'click', me.close_forever );
 
 			if ( me.data && me.data.close_hide ) {
 				$po_close.off( 'click', me.close_forever )

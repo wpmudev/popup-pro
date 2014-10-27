@@ -129,3 +129,16 @@ endif; ?>
 			placeholder="300px" />
 	</div>
 </div>
+
+<div class="wpmui-grid-12">
+	<div class="col-12 inp-row">
+		<label>
+			<input type="checkbox"
+				name="po_scroll_body"
+				id="po-scroll-body"
+				data-toggle=".chk-scroll-body"
+				<?php checked( $popup->scroll_body ); ?> />
+			<?php _e( 'Allow page to be scrolled while PopUp is visible', PO_LANG ); ?>
+		</label>
+	</div>
+</div>
