@@ -66,25 +66,38 @@ class IncPopupDatabase {
 		global $wpdb;
 		static $Prefixed = array();
 
-		if ( ! isset( $Prefixed[$table] ) ) {
+		// Handle issues where the blog is switched in code (switch_to_blog)
+		if ( is_multisite() ) {
+			global $blog_id;
+		} else {
+			$blog_id = 0;
+		}
+
+		if ( ! isset( $Prefixed[ $blog_id ] ) ) {
+			$Prefixed[ $blog_id ] = array();
+		}
+
+		if ( ! isset( $Prefixed[ $blog_id ][ $table ] ) ) {
 			$Prefixed[$table] = $table;
 
 			if ( defined( 'PO_GLOBAL' ) && true == PO_GLOBAL ) {
 				if ( ! empty( $wpdb->base_prefix ) ) {
-					$Prefixed[$table] = $wpdb->base_prefix . $table;
+					$Prefixed[ $blog_id ][ $table ] = $wpdb->base_prefix . $table;
 				} else {
-					$Prefixed[$table] = $wpdb->prefix . $table;
+					$Prefixed[ $blog_id ][ $table ] = $wpdb->prefix . $table;
 				}
 			} else {
-				$Prefixed[$table] = $wpdb->prefix . $table;
+				$Prefixed[ $blog_id ][ $table ] = $wpdb->prefix . $table;
 			}
 		}
 
-		return $Prefixed[$table];
+		return $Prefixed[ $blog_id ][ $table ];
 	}
 
 	/**
 	 * Setup or migrate the database to current plugin version.
+	 *
+	 * This function uses error suppression on purpose.
 	 *
 	 * @since  4.6
 	 */
@@ -693,11 +706,13 @@ class IncPopupDatabase {
 	static protected function _get_option( $key, $default ) {
 		$value = $default;
 		self::before_db();
+
 		if ( IncPopup::use_global() ) {
 			$value = get_site_option( $key, $default );
 		} else {
 			$value = get_option( $key, $default );
 		}
+
 		self::after_db();
 		return $value;
 	}
@@ -710,11 +725,13 @@ class IncPopupDatabase {
 	 */
 	static protected function _set_option( $key, $value ) {
 		self::before_db();
+
 		if ( IncPopup::use_global() ) {
 			update_site_option( $key, $value );
 		} else {
 			update_option( $key, $value );
 		}
+
 		self::after_db();
 	}
 
