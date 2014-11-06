@@ -422,7 +422,7 @@
 		 * A form inside the PopUp is submitted.
 		 */
 		this.form_submit = function form_submit( ev ) {
-			var frame, form = jQuery( this ),
+			var tmr_check, duration, frame, form = jQuery( this ),
 				popup = form.parents( '.wdpu-container' ).first(),
 				msg = popup.find( '.wdpu-msg' ),
 				inp_popup = jQuery( '<input type="hidden" name="_po_method_" />' ),
@@ -440,17 +440,44 @@
 
 			msg.addClass( 'wdpu-loading' );
 
-			jQuery( frame ).load( function(){
-				var inner_new, inner_old, html;
+			// Frequently checks the loading state of the hidden iframe.
+			function check_state() {
+				var is_done = false;
+
+				if ( 'complete' === frame[0].contentDocument.readyState ) {
+					is_done = true;
+				} else {
+					iteration += 1; // 20 iterations is equal to 1 second.
+
+					// 200 iterations are 10 seconds.
+					if ( iteration > 200 ) { is_done = true; }
+				}
+
+				if ( is_done ) {
+					window.clearInterval( tmr_check );
+					process_document();
+				}
+			}
+
+			// Executed once the iframe is fully loaded.
+			// This will remove the loading animation and update the popup
+			// contents if required.
+			function process_document(){
+				var inner_new, inner_old, html, external;
+
+				// Allow other javascript functions to pre-process the event.
+				$doc.trigger( 'popup-submit-process', [frame, me, me.data] );
 
 				try {
 					// grab the HTML from the body, using the raw DOM node (frame[0])
 					// and more specifically, it's `contentDocument` property.
 					html = jQuery( po_id, frame[0].contentDocument );
+					external = false;
 				} catch ( err ) {
 					// In case the iframe link was an external website the above
 					// line will most likely cause a security issue.
 					html = jQuery( '<html></html>' );
+					external = true;
 				}
 
 				msg.removeClass( 'wdpu-loading' );
@@ -462,8 +489,23 @@
 				// remove the temporary iframe.
 				jQuery( "#wdpu-frame" ).remove();
 
-				// In case the new popup content could not be found or is empty:
+				// For external pages we have no access to the response:
 				// Close the popup!
+				if ( external ) {
+					$doc.trigger( 'popup-submit-done', [me, me.data] );
+					me.close_popup();
+					return;
+				}
+
+				// The PopUp is completely empty, possibly another ajax-handler
+				// did process the form. Keep the popup open.
+				if ( ! html.html().length ) {
+					$doc.trigger( 'popup-submit-done', [me, me.data] );
+					return;
+				}
+
+				// A new page was loaded that does not contain new content for
+				// the current PopUp. Close the popup!
 				if ( ! inner_old.length || ! inner_new.length || ! inner_new.text().length ) {
 					$doc.trigger( 'popup-submit-done', [me, me.data] );
 					me.close_popup();
@@ -481,7 +523,10 @@
 				me.setup_popup();
 
 				$doc.trigger( 'popup-submit-done', [me, me.data] );
-			});
+			}
+
+			iteration = 0;
+			tmr_check = window.setInterval( check_state, 50 );
 
 			return true;
 		};
