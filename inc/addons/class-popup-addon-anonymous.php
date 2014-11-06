@@ -127,7 +127,7 @@ class IncPopupAddon_AnonyousLoading {
 	 */
 	static public function filter_script_data( $script_data, $popup ) {
 		$settings = IncPopupDatabase::get_settings();
-		if ( self::METHOD != @$settings['loadingmethod'] ) {
+		if ( self::METHOD != $settings['loadingmethod'] ) {
 			return $script_data;
 		}
 

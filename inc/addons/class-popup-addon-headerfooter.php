@@ -21,7 +21,9 @@ class IncPopupAddon_HeaderFooter {
 	 * @since  4.6
 	 */
 	static public function init() {
-		if ( '1' == @$_GET['popup-headerfooter-check'] ) {
+		if ( isset( $_GET['popup-headerfooter-check'] )
+			&& '1' == $_GET['popup-headerfooter-check']
+		) {
 			add_action(
 				'wp_head',
 				array( __CLASS__, 'test_head' ),

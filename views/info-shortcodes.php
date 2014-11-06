@@ -5,7 +5,7 @@ global $shortcode_tags;
 // Theme compatibility.
 $theme_compat = IncPopupAddon_HeaderFooter::check();
 $settings = IncPopupDatabase::get_settings();
-$cur_method = @$settings['loadingmethod'];
+$cur_method = $settings['loadingmethod'];
 
 
 // Shortcodes with restrictions.
@@ -18,11 +18,20 @@ $limited = array(
 $shortcodes = array();
 // Add Admin-Shortcodes to the list.
 foreach ( $shortcode_tags as $code => $handler ) {
-	@$shortcodes[ $code ] .= 'sc-admin ';
+	if ( ! isset( $shortcodes[ $code ] ) ) {
+		$shortcodes[ $code ] = '';
+	}
+
+	$shortcodes[ $code ] .= 'sc-admin ';
 }
+
 // Add Front-End Shortcodes to the list.
 foreach ( $theme_compat->shortcodes as $code ) {
-	@$shortcodes[ $code ] .= 'sc-front ';
+	if ( ! isset( $shortcodes[ $code ] ) ) {
+		$shortcodes[ $code ] = '';
+	}
+
+	$shortcodes[ $code ] .= 'sc-front ';
 }
 
 foreach ( $shortcodes as $code => $compat ) {

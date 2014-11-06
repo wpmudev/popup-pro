@@ -7,7 +7,7 @@ $loading_methods = IncPopupDatabase::get_loading_methods();
 
 
 $settings = IncPopupDatabase::get_settings();
-$cur_method = @$settings['loadingmethod'];
+$cur_method = $settings['loadingmethod'];
 $form_url = remove_query_arg( array( 'message', 'action', '_wpnonce' ) );
 
 
@@ -139,7 +139,7 @@ $ordered_rules = array();
 									<?php foreach ( $geo_service as $key => $service ) : ?>
 										<option value="<?php echo esc_attr( $key ); ?>"
 											<?php if ( $custom_geo ) : ?>disabled<?php endif; ?>
-											<?php selected( $key, @$settings['geo_lookup'] ); ?>>
+											<?php selected( $key, $settings['geo_lookup'] ); ?>>
 											<?php echo esc_html( $service->label ); ?>
 										</option>
 									<?php endforeach; ?>
@@ -147,7 +147,7 @@ $ordered_rules = array();
 								<optgroup label="<?php _e( 'Local Database', PO_LANG ); ?>">
 									<option value="geo_db"
 										<?php if ( $no_ip_cache ) : ?>disabled<?php endif; ?>
-										<?php selected( @$settings['geo_db'] ); ?>>
+										<?php selected( $settings['geo_db'] ); ?>>
 										<?php _e( 'Local IP Lookup Table', PO_LANG ); ?>
 									</option>
 								</optgroup>
@@ -254,7 +254,7 @@ $ordered_rules = array();
 				);
 				$is_active = ( in_array( $rule, $settings['rules'] ) );
 				if ( empty( $data['name'] ) ) { continue; }
-				$data['limit'] = explode( ',', @$data['limit'] );
+				$data['limit'] = explode( ',', $data['limit'] );
 				$data['limit'] = array_map( 'trim', $data['limit'] );
 
 				$name = __( trim( $data['name'] ), PO_LANG );

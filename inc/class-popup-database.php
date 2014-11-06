@@ -664,7 +664,7 @@ class IncPopupDatabase {
 		if ( is_object( $data ) ) { $data = (array) $data; }
 		if ( ! is_array( $data ) ) { $data = array(); }
 
-		return @$data[$key];
+		return isset( $data[$key] ) ? $data[$key] : '';
 	}
 
 	/**

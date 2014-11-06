@@ -1,5 +1,5 @@
 <?php
-/*
+/**
 Plugin Name: PopUp Pro
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of advertising a mailing list, special offer or running a plain old ad.
@@ -25,6 +25,7 @@ Contributors - Marko Miljus (Incsub), Ve Bailovity (Incsub)
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 
 if ( ! defined( 'PO_LANG' ) ) {
 	// Used for more readable i18n functions: __( 'text', PO_LANG );

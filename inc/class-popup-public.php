@@ -81,9 +81,10 @@ class IncPopup extends IncPopupBase {
 		// Initialize javascript-data.
 		$this->script_data['ajaxurl'] = '';
 		$this->script_data['do'] = 'get-data';
+		$this->script_data['ajax_data'] = array();
 
 		// Find the current loading method.
-		$cur_method = @$settings['loadingmethod'];
+		$cur_method = isset( $settings['loadingmethod'] ) ? $settings['loadingmethod'] : 'ajax';
 		if ( empty( $cur_method ) ) { $cur_method = 'ajax'; }
 
 		if ( isset( $_POST['_po_method_'] ) ) { $cur_method = $_POST['_po_method_']; }
@@ -101,7 +102,9 @@ class IncPopup extends IncPopupBase {
 			case 'front': // former 'frontloading'
 				$this->load_method_front();
 
-				if ( @$_GET['action'] == 'inc_popup' ) {
+				if ( isset( $_GET['action'] )
+					&& $_GET['action'] == 'inc_popup'
+				) {
 					$this->ajax_load_popup();
 				}
 				break;
@@ -172,7 +175,7 @@ class IncPopup extends IncPopupBase {
 		if ( ! in_array( $pagenow, array( 'wp-login.php', 'wp-register.php' ) ) ) {
 			// Data is loaded via a normal WordPress ajax request.
 			$this->script_data['ajaxurl'] = admin_url( 'admin-ajax.php' );
-			@$this->script_data['ajax_data']['orig_request_uri'] = $_SERVER['REQUEST_URI'];
+			$this->script_data['ajax_data']['orig_request_uri'] = $_SERVER['REQUEST_URI'];
 			$this->load_scripts();
 		}
 	}
@@ -196,7 +199,7 @@ class IncPopup extends IncPopupBase {
 			 * some URL parameters.
 			 */
 			$this->script_data['ajaxurl'] = '';
-			@$this->script_data['ajax_data']['request_uri'] = $_SERVER['REQUEST_URI'];
+			$this->script_data['ajax_data']['request_uri'] = $_SERVER['REQUEST_URI'];
 			$this->load_scripts();
 		}
 	}
@@ -216,7 +219,7 @@ class IncPopup extends IncPopupBase {
 		 * These values are used by some rules and need to be set manually here
 		 * In an ajax request they would already be defined by the ajax url.
 		 */
-		$_REQUEST['thereferrer'] = @$_SERVER['HTTP_REFERER'];
+		$_REQUEST['thereferrer'] = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
 		$_REQUEST['thefrom'] = WDev()->current_url();
 
 		// Populates $this->popups
@@ -258,7 +261,7 @@ class IncPopup extends IncPopupBase {
 		 * These values are used by some rules and need to be set manually here
 		 * In an ajax request they would already be defined by the ajax url.
 		 */
-		$_REQUEST['thereferrer'] = @$_SERVER['HTTP_REFERER'];
+		$_REQUEST['thereferrer'] = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
 		$_REQUEST['thefrom'] = WDev()->current_url();
 
 		// Populates $this->popups

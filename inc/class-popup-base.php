@@ -200,12 +200,14 @@ abstract class IncPopupBase {
 
 		// Add core styles to the response.
 		foreach ( $core_styles as $key => $data ) {
+			WDev()->load_fields( $data, 'pro', 'deprecated' );
+
 			$list[ $key ] = (object) array(
 				'url' => trailingslashit( PO_TPL_URL . $key ),
 				'dir' => trailingslashit( PO_TPL_DIR . $key ),
 				'name' => $data->name,
-				'pro' => (true == @$data->pro),
-				'deprecated' => (true == @$data->deprecated),
+				'pro' => $data->pro,
+				'deprecated' => $data->deprecated,
 			);
 			if ( isset( $urls[$data->name] ) ) { unset( $urls[$data->name] ); }
 			if ( isset( $paths[$data->name] ) ) { unset( $paths[$data->name] ); }
@@ -213,9 +215,11 @@ abstract class IncPopupBase {
 
 		// Add custom styles to the response.
 		foreach ( $urls as $key => $url ) {
+			if ( ! isset( $paths[ $key ] ) ) { continue; }
+
 			$list[ $key ] = (object) array(
 				'url' => $url,
-				'dir' => @$paths[$key],
+				'dir' => $paths[$key],
 				'name' => $key,
 				'pro' => false,
 				'deprecated' => false,
@@ -283,42 +287,61 @@ abstract class IncPopupBase {
 	static protected function prepare_formdata( $form ) {
 		if ( ! is_array( $form ) ) { $form = array(); }
 
+		WDev()->load_fields(
+			$form,
+			'po_name',
+			'po_content',
+			'po_heading',
+			'po_subheading',
+			'po_cta',
+			'po_cta_link',
+			'po_image',
+			'po_image_pos',
+			'po_style',
+			'po_color',
+			'po_size_width',
+			'po_size_height',
+			'po_display',
+			'po_display_data',
+			'po_hide_expire',
+			'po_rule'
+		);
 
 		$data = array(
 			// Meta: Content
-			'name' => @$form['po_name'],
-			'content' => stripslashes( @$form['po_content'] ),
-			'title' => @$form['po_heading'],
-			'subtitle' => @$form['po_subheading'],
-			'cta_label' => @$form['po_cta'],
-			'cta_link' => @$form['po_cta_link'],
-			'image' => @$form['po_image'],
-			'image_pos' => @$form['po_image_pos'],
+			'name' => $form['po_name'],
+			'content' => stripslashes( $form['po_content'] ),
+			'title' => $form['po_heading'],
+			'subtitle' => $form['po_subheading'],
+			'cta_label' => $form['po_cta'],
+			'cta_link' => $form['po_cta_link'],
+			'image' => $form['po_image'],
+			'image_pos' => $form['po_image_pos'],
 			'image_mobile' => ! isset( $form['po_image_no_mobile'] ),
 			'active' => isset( $form['po_active'] ),
 
 			// Meta: Appearance
-			'style' => @$form['po_style'],
+			'style' => $form['po_style'],
 			'round_corners' => ! isset( $form['po_no_round_corners'] ),
 			'scroll_body' => isset( $form['po_scroll_body'] ),
 			'custom_colors' => isset( $form['po_custom_colors'] ),
-			'color' => @$form['po_color'],
+			'color' => $form['po_color'],
 			'custom_size' => isset( $form['po_custom_size'] ),
 			'size' => array(
-				'width' => @$form['po_size_width'],
-				'height' => @$form['po_size_height'],
+				'width' => $form['po_size_width'],
+				'height' => $form['po_size_height'],
 			),
 
 			// Meta: Behavior
-			'display' => @$form['po_display'],
-			'display_data' => @$form['po_display_data'],
+			'display' => $form['po_display'],
+			'display_data' => $form['po_display_data'],
 			'can_hide' => isset( $form['po_can_hide'] ),
 			'close_hides' => isset( $form['po_close_hides'] ),
-			'hide_expire' => @$form['po_hide_expire'],
+			'hide_expire' => $form['po_hide_expire'],
 			'overlay_close' => ! isset( $form['po_overlay_close'] ),
 
 			// Meta: Rules:
-			'rule' => @$form['po_rule'],
+			'rule' => $form['po_rule'],
 			'rule_data' => apply_filters( 'popup-save-rules', array() ),
 		);
 
@@ -333,11 +356,14 @@ abstract class IncPopupBase {
 	 * @since  4.6
 	 */
 	public function ajax_load_popup() {
-		$action = @$_REQUEST['do'];
+		WDev()->load_request_fields( 'do', 'data' );
+		$action = $_REQUEST['do'];
 
 		switch ( $action ) {
 			case 'get-data':
-				if ( IncPopupItem::POST_TYPE == @$_REQUEST['data']['post_type'] ) {
+				if ( isset( $_REQUEST['data']['post_type'] )
+					&& IncPopupItem::POST_TYPE == $_REQUEST['data']['post_type']
+				) {
 					$this->popups = array();
 					$this->popups[0] = new IncPopupItem();
 					$data = self::prepare_formdata( $_REQUEST['data'] );
@@ -412,8 +438,9 @@ abstract class IncPopupBase {
 	 */
 	protected function find_popups() {
 		$popups = array();
+		WDev()->load_request_fields( 'po_id', 'preview' );
 
-		$popup_id = absint( @$_REQUEST['po_id'] );
+		$popup_id = absint( $_REQUEST['po_id'] );
 		if ( $popup_id ) {
 			// Check for forced popup.
 			$active_ids = array( $popup_id );
@@ -436,7 +463,7 @@ abstract class IncPopupBase {
 			if ( ! $show ) { continue; }
 
 			// Stop here if the user did choose to hide the popup.
-			if ( ! @$_REQUEST['preview'] && $this->is_hidden( $id ) ) { continue; }
+			if ( ! $_REQUEST['preview'] && $this->is_hidden( $id ) ) { continue; }
 
 			$popups[] = $popup;
 		}
@@ -483,7 +510,12 @@ abstract class IncPopupBase {
 	public function compat_init( $script_data, $popup ) {
 		if ( class_exists( 'Appointments' ) ) {
 			$this->compat_appointments_trigger();
-			@$script_data['script'] .= @$this->compat_data['script'];
+
+			if ( ! isset( $script_data['script'] ) ) {
+				$script_data['script'] = '';
+			}
+
+			$script_data['script'] .= $this->compat_data['script'];
 		}
 
 		return $script_data;

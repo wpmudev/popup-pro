@@ -333,7 +333,13 @@ abstract class IncPopupRule {
 
 		$method = 'apply_' . $key;
 		if ( method_exists( $this, $method ) ) {
-			if ( ! $this->$method( @$popup->rule_data[$key], $popup ) ) {
+			if ( isset( $popup->rule_data[$key] ) ) {
+				$data = $popup->rule_data[$key];
+			} else {
+				$data = '';
+			}
+
+			if ( ! $this->$method( $data, $popup ) ) {
 				$show = false;
 			}
 		}
@@ -351,8 +357,14 @@ abstract class IncPopupRule {
 	public function _form( $popup, $key ) {
 		$method = 'form_' . $key;
 		if ( method_exists( $this, $method ) ) {
+			if ( isset( $popup->rule_data[$key] ) ) {
+				$data = $popup->rule_data[$key];
+			} else {
+				$data = '';
+			}
+
 			echo '<div class="rule-form">';
-			$this->$method( @$popup->rule_data[$key] );
+			$this->$method( $data );
 			echo '</div>';
 		}
 	}
@@ -409,6 +421,7 @@ abstract class IncPopupRule {
 	public function _admin_rule_list( $key, $data, $popup ) {
 		$active = $popup->uses_rule( $key );
 		$class = $active ? 'on' : 'off';
+		$exclude = isset( $data->exclude ) ? $data->exclude : '';
 		?>
 		<li class="rule rule-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $class ); ?>">
 			<div class="wpmui-toggle">
@@ -416,7 +429,7 @@ abstract class IncPopupRule {
 					class="wpmui-toggle-checkbox"
 					id="rule-<?php echo esc_attr( $key ); ?>"
 					data-form="#po-rule-<?php echo esc_attr( $key ); ?>"
-					data-exclude="<?php echo esc_attr( @$data->exclude ); ?>"
+					data-exclude="<?php echo esc_attr( $exclude ); ?>"
 					name="po_rule[]"
 					value="<?php echo esc_attr( $key ); ?>"
 					<?php checked( $active ); ?> />

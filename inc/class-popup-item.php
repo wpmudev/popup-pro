@@ -207,9 +207,12 @@ class IncPopupItem {
 		$this->rule_files = array();
 		$this->rule_data = array();
 
-		$this->code = (object) array();
-		$this->code->id     = 'a' . md5( date( 'dis' ) );
-		$this->code->colors = '';
+		$this->code = (object) array(
+			'id' => 'a' . md5( date( 'dis' ) ),
+			'colors' => '',
+			'color1' => '',
+			'color2' => '',
+		);
 	}
 
 	/**
