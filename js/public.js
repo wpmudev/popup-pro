@@ -635,7 +635,6 @@
 			document.cookie = cookie_name + "=" + value + expires + "; path=/";
 		};
 
-
 		/*-----  Finished  ------*/
 
 		// Only expose the "init" and "load" functions of the PopUp.
@@ -736,6 +735,7 @@
 				jQuery( document ).trigger( 'popup-load-done', [the_data] );
 			}
 		};
+
 		return jQuery.ajax(ajax_args);
 	}
 

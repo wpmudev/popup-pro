@@ -1063,8 +1063,6 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Save the popup data to database
 	 *
-	 * TODO: Add security checks
-	 *
 	 * @since  4.6
 	 * @param  int $post_id Post ID that was saved/created
 	 * @param  WP_Post $post Post object that was saved/created
