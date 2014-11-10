@@ -4,6 +4,11 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.6.1.4
+----------------------------------------------------------------------
+- Better: Improved handling of forms inside PopUps
+- Better: Ajax calls improved to prevent security errors by iThemes, etc.
+
 4.6.1.3
 ----------------------------------------------------------------------
 - New: Allow page to be scrolled while PopUp is open.
