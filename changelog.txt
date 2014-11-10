@@ -6,6 +6,7 @@ Change Log:
 
 4.6.1.4
 ----------------------------------------------------------------------
+- New: Not-From-Referrer rule
 - Better: Improved handling of forms inside PopUps
 - Better: Ajax calls improved to prevent security errors by iThemes, etc.
 
