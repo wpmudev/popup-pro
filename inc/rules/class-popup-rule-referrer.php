@@ -6,7 +6,7 @@ Description: Examine how the visitor arrived on the current page.
 Author:      Philipp (Incsub)
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
-Rules:       From a specific referrer, Not from an internal link, From a search engine
+Rules:       From a specific referrer, Not from a specific referrer, Not from an internal link, From a search engine
 Version:     1.0
 
 NOTE: DON'T RENAME THIS FILE!!
