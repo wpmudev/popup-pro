@@ -7,6 +7,9 @@
 /*jslint evil: true */   // Allows us to keep the `fn = new Function()` line
 
 ;(function () {
+	var recent_ajax_calls = [],
+		doing_ajax = false;
+
 	var Popup = function( _options ) {
 
 		var me = this,
@@ -447,7 +450,9 @@
 			function check_state() {
 				var is_done = false;
 
-				if ( 'complete' === frame[0].contentDocument.readyState ) {
+				if ( 'complete' === frame[0].contentDocument.readyState &&
+					! doing_ajax
+				) {
 					is_done = true;
 				} else {
 					iteration += 1; // 20 iterations is equal to 1 second.
@@ -465,7 +470,7 @@
 			// Executed once the iframe is fully loaded.
 			// This will remove the loading animation and update the popup
 			// contents if required.
-			function process_document(){
+			function process_document() {
 				var inner_new, inner_old, html, external;
 
 				// Allow other javascript functions to pre-process the event.
@@ -475,7 +480,7 @@
 					// grab the HTML from the body, using the raw DOM node (frame[0])
 					// and more specifically, it's `contentDocument` property.
 					html = jQuery( po_id, frame[0].contentDocument );
-					external = false;
+					external = ( 0 === html.length );
 				} catch ( err ) {
 					// In case the iframe link was an external website the above
 					// line will most likely cause a security issue.
@@ -495,8 +500,20 @@
 				// For external pages we have no access to the response:
 				// Close the popup!
 				if ( external ) {
+					me.data.close_popup = true;
+
+					me.data.ajax_history = recent_ajax_calls;
+					if ( recent_ajax_calls.length ) {
+						me.data.last_ajax = recent_ajax_calls[0];
+					} else {
+						me.data.last_ajax = false;
+					}
+
 					$doc.trigger( 'popup-submit-done', [me, me.data] );
-					me.close_popup();
+
+					if ( me.data.close_popup ) {
+						me.close_popup();
+					}
 					return;
 				}
 
@@ -673,8 +690,8 @@
 	function load_popups( options, id, data ) {
 		var ajax_args, ajax_data,
 			po_id = 0,
-			thefrom = str_reverse( window.location ),
-			thereferrer = str_reverse( document.referrer ),
+			thefrom = str_reverse( window.location.toString() ),
+			thereferrer = str_reverse( document.referrer.toString() ),
 			the_data = null;
 
 		var handle_done = function handle_done( data ) {
@@ -700,8 +717,8 @@
 
 		ajax_data['action']      = 'inc_popup';
 		ajax_data['do']          = options['do'];
-		ajax_data['thefrom']     = thefrom.toString();
-		ajax_data['thereferrer'] = thereferrer.toString();
+		ajax_data['thefrom']     = thefrom;
+		ajax_data['thereferrer'] = thereferrer;
 
 		if ( po_id ) { ajax_data['po_id'] = po_id; }
 		if ( data )  { ajax_data['data'] = data; }
@@ -790,6 +807,17 @@
 
 		return charArray.join( '' );
 	}
+
+	// Store flag whether ajax request is processed
+	jQuery( document ).ajaxStart(function(ev) {
+		doing_ajax = true;
+	});
+
+	// Store all Ajax responses
+	jQuery( document ).ajaxComplete(function(ev, jqXHR, settings) {
+		doing_ajax = false;
+		recent_ajax_calls.unshift( jqXHR );
+	});
 
 	// Initialize the PopUp one the page is loaded.
 	jQuery(function() {
