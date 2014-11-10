@@ -323,7 +323,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 	public function get_referrer() {
 		$referrer = '';
 		if ( isset( $_REQUEST['thereferrer'] ) ) {
-			$referrer = strrev( $_REQUEST['thereferrer'] );
+			$referrer = $_REQUEST['thereferrer'];
 		} else if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
 			$referrer = $_SERVER['HTTP_REFERER'];
 		}
