@@ -627,8 +627,8 @@
 	function load_popups( options, id, data ) {
 		var ajax_args, ajax_data,
 			po_id = 0,
-			thefrom = window.location,
-			thereferrer = document.referrer,
+			thefrom = str_reverse( window.location ),
+			thereferrer = str_reverse( document.referrer ),
 			the_data = null;
 
 		var handle_done = function handle_done( data ) {
@@ -718,6 +718,31 @@
 		} else if ( popup_data instanceof Object ) {
 			spawn_popup( popup_data );
 		}
+	}
+
+	// Reverse a string preserving utf characters
+	function str_reverse( str ) {
+		var charArray = [];
+
+		for (var i = 0; i < str.length; i++) {
+			if ( i + 1 < str.length ) {
+				var value = str.charCodeAt( i );
+				var nextValue = str.charCodeAt(i+1);
+				if ( ( value >= 0xD800 && value <= 0xDBFF &&
+					(nextValue & 0xFC00) === 0xDC00) || // Surrogate pair
+					(nextValue >= 0x0300 && nextValue <= 0x036F) // Combining marks
+				) {
+					charArray.unshift( str.substring(i, i+2) );
+					i++; // Skip the other half
+					continue;
+				}
+			}
+
+			// Otherwise we just have a rogue surrogate marker or a plain old character.
+			charArray.unshift( str[i] );
+		}
+
+		return charArray.join( '' );
 	}
 
 	// Initialize the PopUp one the page is loaded.
