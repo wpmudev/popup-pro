@@ -263,6 +263,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 			'web.info.com',
 			'search.',
 			'del.icio.us/search',
+			'delicious.com/search',
 			'soso.com',
 			'/search/',
 			'.yahoo.',
