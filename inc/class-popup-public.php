@@ -80,7 +80,7 @@ class IncPopup extends IncPopupBase {
 
 		// Initialize javascript-data.
 		$this->script_data['ajaxurl'] = '';
-		$this->script_data['do'] = 'get-data';
+		$this->script_data['do'] = 'get_data';
 		$this->script_data['ajax_data'] = array();
 
 		// Find the current loading method.

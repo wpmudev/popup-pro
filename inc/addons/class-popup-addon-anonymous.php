@@ -222,7 +222,7 @@ class IncPopupAddon_AnonyousLoading {
 		$file = PO_JS_DIR . 'public.min.js';
 		$popup_data = array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'do' => 'get-data',
+			'do' => 'get_data',
 			'orig_request_uri' => $_SERVER['REQUEST_URI'],
 		);
 

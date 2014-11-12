@@ -116,7 +116,7 @@ class IncPopup extends IncPopupBase {
 				'_popup_data',
 				array(
 					'ajaxurl' => admin_url( 'admin-ajax.php' ),
-					'do'      => 'get-data',
+					'do'      => 'get_data',
 					'popup'   => '',
 					'noinit'  => true,
 					'preview' => true,

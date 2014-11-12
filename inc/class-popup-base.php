@@ -360,7 +360,7 @@ abstract class IncPopupBase {
 		$action = $_REQUEST['do'];
 
 		switch ( $action ) {
-			case 'get-data':
+			case 'get_data':
 				if ( isset( $_REQUEST['data']['post_type'] )
 					&& IncPopupItem::POST_TYPE == $_REQUEST['data']['post_type']
 				) {
