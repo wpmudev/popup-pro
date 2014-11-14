@@ -47,6 +47,16 @@ abstract class IncPopupBase {
 			add_action( 'parse_query', array( $this, 'prepare_url' ) );
 		}
 
+		/*
+		 * URLs for the "from" and "referer" fields are transmitted in reversed
+		 * format (moc.elpmaxe//:ptth)
+		 * Reason for this is that plugins like iThemes security might block
+		 * incoming requests that contain the value "http://". This is how
+		 * we bypass that security check.
+		 */
+		if ( ! empty( $_REQUEST['thefrom'] ) ) { $_REQUEST['thefrom'] = strrev( $_REQUEST['thefrom'] ); }
+		if ( ! empty( $_REQUEST['thereferrer'] ) ) { $_REQUEST['thereferrer'] = strrev( $_REQUEST['thereferrer'] ); }
+
 		WDev()->translate_plugin( PO_LANG, PO_LANG_DIR );
 
 		// Register the popup post type.

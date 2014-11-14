@@ -89,9 +89,6 @@ class IncPopup extends IncPopupBase {
 
 		if ( isset( $_POST['_po_method_'] ) ) { $cur_method = $_POST['_po_method_']; }
 
-		if ( ! empty( $_REQUEST['thefrom'] ) ) { $_REQUEST['thefrom'] = strrev( $_REQUEST['thefrom'] ); }
-		if ( ! empty( $_REQUEST['thereferrer'] ) ) { $_REQUEST['thereferrer'] = strrev( $_REQUEST['thereferrer'] ); }
-
 		/*
 		 * Apply the specific loading method to include the popup on the page.
 		 * Details to the loading methods are documented in the header comment
