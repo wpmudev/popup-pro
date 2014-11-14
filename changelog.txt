@@ -7,6 +7,7 @@ Change Log:
 4.6.1.6
 ----------------------------------------------------------------------
 - Fix an issue where the PopUp closes when Gravity Forms is submitted
+- Fix the on-URL rules in Ajax loading methods
 
 4.6.1.5
 ----------------------------------------------------------------------
