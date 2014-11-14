@@ -4,6 +4,10 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.6.1.6
+----------------------------------------------------------------------
+- Fix an issue where the PopUp closes when Gravity Forms is submitted
+
 4.6.1.5
 ----------------------------------------------------------------------
 - Fix error on servers that run older php version than 5.3

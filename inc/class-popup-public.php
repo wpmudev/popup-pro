@@ -145,23 +145,11 @@ class IncPopup extends IncPopupBase {
 			return;
 		}
 
-		wp_register_script(
-			'popup-public',
-			PO_JS_URL . 'public.min.js',
-			array( 'jquery' ),
-			false,
-			true
-		);
 
 		$popup_data = apply_filters( 'popup-ajax-data', $this->script_data );
 
-		wp_localize_script(
-			'popup-public',
-			'_popup_data',
-			$popup_data
-		);
-
-		wp_enqueue_script( 'popup-public' );
+		WDev()->add_data( '_popup_data', $popup_data, 'front' );
+		WDev()->add_ui( PO_JS_URL . 'public.min.js', 'front' );
 	}
 
 	/**
