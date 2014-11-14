@@ -384,6 +384,7 @@ abstract class IncPopupBase {
 
 				if ( ! empty( $this->popups ) ) {
 					$data = $this->get_popup_data();
+					header( 'Content-Type: application/javascript' );
 					echo 'po_data(' . json_encode( $data ) . ')';
 				}
 				die();

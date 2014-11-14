@@ -8,6 +8,7 @@ Change Log:
 ----------------------------------------------------------------------
 - Fix an issue where the PopUp closes when Gravity Forms is submitted
 - Fix the on-URL rules in Ajax loading methods
+- Fix the Ajax loading methods when Strict-Mime-Check is enabled
 
 4.6.1.5
 ----------------------------------------------------------------------
