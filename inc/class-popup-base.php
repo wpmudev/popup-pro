@@ -316,6 +316,8 @@ abstract class IncPopupBase {
 			'po_hide_expire',
 			'po_rule',
 			'po_custom_css',
+			'po_animation_in',
+			'po_animation_out',
 			'po_form_submit'
 		);
 
@@ -344,6 +346,8 @@ abstract class IncPopupBase {
 				'height' => $form['po_size_height'],
 			),
 			'custom_css' => $form['po_custom_css'],
+			'animation_in' => $form['po_animation_in'],
+			'animation_out' => $form['po_animation_out'],
 
 			// Meta: Behavior
 			'display' => $form['po_display'],

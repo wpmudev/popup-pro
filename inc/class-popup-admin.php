@@ -98,8 +98,9 @@ class IncPopup extends IncPopupBase {
 
 			WDev()->add_ui( PO_CSS_URL . 'popup-admin.min.css' );
 			WDev()->add_ui( PO_JS_URL . 'popup-admin.min.js' );
-			WDev()->add_ui( PO_JS_URL . 'public.min.js' ); // For Preview.
 			WDev()->add_ui( PO_JS_URL . 'ace.min.js' ); // CSS editor.
+			WDev()->add_ui( PO_JS_URL . 'public.min.js' ); // For Preview.
+			WDev()->add_ui( PO_CSS_URL . 'animate.min.css' ); // For Preview.
 
 			if ( $_REQUEST['post_status'] !== 'trash' ) {
 				WDev()->add_data(

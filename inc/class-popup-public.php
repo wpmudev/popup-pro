@@ -147,6 +147,7 @@ class IncPopup extends IncPopupBase {
 
 		WDev()->add_data( '_popup_data', $popup_data, 'front' );
 		WDev()->add_ui( PO_JS_URL . 'public.min.js', 'front' );
+		WDev()->add_ui( PO_CSS_URL . 'animate.min.css', 'front' );
 	}
 
 	/**

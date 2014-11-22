@@ -19,7 +19,8 @@ module.exports = function( grunt ) {
 			'css/tpl/simple/style.css':             'css/sass/tpl/simple/style.scss',
 			'css/tpl/old-default/style.css':        'css/sass/tpl/old-default/style.scss',
 			'css/tpl/old-fixed/style.css':          'css/sass/tpl/old-fixed/style.scss',
-			'css/tpl/old-fullbackground/style.css': 'css/sass/tpl/old-fullbackground/style.scss'
+			'css/tpl/old-fullbackground/style.css': 'css/sass/tpl/old-fullbackground/style.scss',
+			'css/animate.css':                      'css/vendor/animate.scss'
 		},
 		plugin_dir: 'popover/'
 	};
@@ -148,7 +149,7 @@ module.exports = function( grunt ) {
 
 		watch:  {
 			sass: {
-				files: ['css/sass/**/*.scss'],
+				files: ['css/**/*.scss'],
 				tasks: ['sass', 'cssmin'],
 				options: {
 					debounceDelay: 500
@@ -189,6 +190,7 @@ module.exports = function( grunt ) {
 					'!.sass-cache/**',
 					'!**/package.json',
 					'!**/css/sass/**',
+					'!**/css/vendor/**',
 					'!**/js/src/**',
 					'!**/js/vendor/**',
 					'!**/img/src/**',
