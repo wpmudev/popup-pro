@@ -176,7 +176,7 @@
 <div class="wpmui-grid-12">
 	<div class="col-12 inp-row">
 		<label for="po-form-submit">
-			<?php _e( 'In case your PopUp contains a form (e.g. a contact form) than you can change the form-submit behavior here.', PO_LANG ); ?>
+			<?php _e( 'In case your PopUp contains a form (e.g. a contact form) then you can change the form-submit behavior here.', PO_LANG ); ?>
 		</label>
 	</div>
 	<div class="col-12 inp-row">
