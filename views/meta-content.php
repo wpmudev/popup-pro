@@ -45,7 +45,7 @@ $has_image = ! empty( $popup->image );
 	<div>
 		<?php
 		$args = array(
-			'textarea_rows' => 4,
+			'textarea_rows' => 10,
 			'drag_drop_upload' => true,
 		);
 		wp_editor( $popup->content, 'po_content', $args );

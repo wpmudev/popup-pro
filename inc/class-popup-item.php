@@ -531,9 +531,14 @@ class IncPopupItem {
 		}
 
 		// When the content changed make sure to only allow valid code!
-		if ( $this->content != $this->orig_content && ! current_user_can( 'unfiltered_html' ) ) {
+		if ( $this->content != $this->orig_content
+			&& ! current_user_can( 'unfiltered_html' )
+		) {
 			$this->content = wp_kses( $this->content, $allowedposttags );
 		}
+
+		// Check if the content contains (potentially) incompatible shortcodes.
+		self::validate_shortcodes( $this->content );
 
 		$post = array(
 			'ID' => (0 == $this->id ? '' : $this->id),
@@ -610,6 +615,52 @@ class IncPopupItem {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Parses the specified content and looks for shortcodes that are not
+	 * compatible with the current PopUp loading method.
+	 *
+	 * The function does not return a value, but if incompatible shortcodes are
+	 * detected a new Admin Notification will be generated which is displayed to
+	 * the user after the page has finished loading.
+	 *
+	 * @since  4.7.0
+	 * @param  string $content
+	 */
+	public static function validate_shortcodes( $content ) {
+		$settings = IncPopupDatabase::get_settings();
+		$method = isset( $settings['loadingmethod'] ) ? $settings['loadingmethod'] : 'ajax';
+
+		switch ( $method ) {
+			case 'ajax':
+			case 'anonymous':
+				// Check if the content contains any of the Front-Shortcodes:
+				$check = IncPopupAddon_HeaderFooter::check();
+				$content = do_shortcode( $content );
+				foreach ( $check->shortcodes as $code ) {
+					$match = array();
+					if ( preg_match( '#\[' . $code . '(\s.*?\]|\])#', $content, $match ) ) {
+						WDev()->message(
+							sprintf(
+								__( 'Shortcode <code>%s</code> requires a different <a href="%s">loading method</a> to work.<br />Try "Page Footer", though sometimes the method "Custom AJAX" also works (please test the result)', PO_LANG ),
+								$match[0],
+								'edit.php?post_type=' . IncPopupItem::POST_TYPE . '&page=settings'
+							),
+							'err'
+						);
+					}
+				}
+				break;
+
+			case 'footer':
+			case 'front':
+				// Nothing needs to be validated here...
+				break;
+
+			default:
+				//WDev()->message( 'Shortcode-Check not defined for: ' . $method );
+		}
 	}
 
 	/**

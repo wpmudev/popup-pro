@@ -142,7 +142,6 @@ class IncPopup extends IncPopupBase {
 			return;
 		}
 
-
 		$popup_data = apply_filters( 'popup-ajax-data', $this->script_data );
 
 		WDev()->add_data( '_popup_data', $popup_data, 'front' );
@@ -152,6 +151,9 @@ class IncPopup extends IncPopupBase {
 
 	/**
 	 * Load-Method: External
+	 *
+	 * IS AJAX
+	 * IS ADMIN
 	 *
 	 * PopUp data is loaded via a normal WordPress ajax request, directed at
 	 * the admin-ajax.php handler.
@@ -171,6 +173,9 @@ class IncPopup extends IncPopupBase {
 
 	/**
 	 * Load-Method: Front/Frontloading
+	 *
+	 * NOT AJAX
+	 * NOT ADMIN
 	 *
 	 * PopUp data is loaded in an ajax request. The ajax request is directed
 	 * at the same URL that is currently displayed, but a few URL-parameters are
@@ -195,6 +200,9 @@ class IncPopup extends IncPopupBase {
 
 	/**
 	 * Load-Method: Footer
+	 *
+	 * NOT AJAX
+	 * NOT ADMIN
 	 *
 	 * The PopUp styles and html is directly injected into the webpage header
 	 * and footer. The PopUp is ready when the page is loaded. No ajax request
