@@ -2,6 +2,13 @@
 module.exports = function( grunt ) {
 	var paths = {
 		js_files_concat: {
+			'js/ace.js':         [
+				'js/vendor/ace.js',
+				'js/vendor/ext-beautify.js',
+				'js/vendor/mode-css.js'
+			],
+			'js/worker-css.js':         ['js/vendor/worker-css.js'],
+			'js/theme-chrome.js':       ['js/vendor/theme-chrome.js'],
 			'js/popup-admin.js': ['js/src/popup-admin.js'],
 			'js/public.js':      ['js/src/public.js']
 		},

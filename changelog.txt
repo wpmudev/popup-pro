@@ -4,8 +4,10 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
-4.6.1.6
+4.7.0
 ----------------------------------------------------------------------
+- Add Behavior option: Form submit behavior
+- Add new meta box: Custom CSS for individual PopUps
 - Fix an issue where the PopUp closes when Gravity Forms is submitted
 - Fix the on-URL rules in Ajax loading methods
 - Fix the Ajax loading methods when Strict-Mime-Check is enabled

@@ -6,14 +6,14 @@ require_once PO_INC_DIR . 'class-popup-help.php';
 /**
  * Defines the popup class for admin pages.
  *
- * @since  4.6
+ * @since  4.6.0
  */
 class IncPopup extends IncPopupBase {
 
 	/**
 	 * Returns the singleton instance of the popup (admin) class.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static public function instance() {
 		static $Inst = null;
@@ -35,7 +35,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Private constructor (singleton)
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	protected function __construct() {
 		parent::__construct();
@@ -82,7 +82,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Initializes stuff that is only needed on the plugin screen
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static public function setup_module_specific( $hook ) {
 		WDev()->load_fields( $hook, 'post_type', 'base' );
@@ -99,6 +99,7 @@ class IncPopup extends IncPopupBase {
 			WDev()->add_ui( PO_CSS_URL . 'popup-admin.min.css' );
 			WDev()->add_ui( PO_JS_URL . 'popup-admin.min.js' );
 			WDev()->add_ui( PO_JS_URL . 'public.min.js' ); // For Preview.
+			WDev()->add_ui( PO_JS_URL . 'ace.min.js' ); // CSS editor.
 
 			if ( $_REQUEST['post_status'] !== 'trash' ) {
 				WDev()->add_data(
@@ -230,7 +231,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Register additional menu items in the dashboard.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static public function admin_menus() {
 		global $submenu;
@@ -299,7 +300,7 @@ class IncPopup extends IncPopupBase {
 	 * The Post-Editor does not work on Multisite Network dashboard.
 	 * So display a notice and tell the user to go to the Main Site.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static public function network_menu_notice() {
 		include PO_VIEWS_DIR . 'network.php';
@@ -308,7 +309,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Handles all admin ajax calls.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static public function handle_ajax() {
 		WDev()->load_post_fields( 'do', 'order' );
@@ -351,7 +352,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Displays the settings page
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static public function handle_settings_page() {
 		include PO_VIEWS_DIR . 'settings.php';
@@ -360,7 +361,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Called every time the settings page is loaded. Saves changes.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static public function handle_settings_update() {
 		WDev()->load_post_fields( 'action', 'po_option' );
@@ -407,7 +408,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Filter. Returns the columns for the item list of the popup post-type.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  array $post_columns
 	 * @return array
 	 */
@@ -436,7 +437,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Outputs the contents of a specific column.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  string $column The column-key (defined in post_columns above).
 	 * @param  int $post_id The ID of the popup.
 	 */
@@ -590,7 +591,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Filter. Defines the quick-filters above the popup-table.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  array $views Default filters.
 	 * @return array Modified filters.
 	 */
@@ -646,7 +647,7 @@ class IncPopup extends IncPopupBase {
 	 * Defines the Bulk Actions available for popups.
 	 * Note: This filter can only be used to *remove* bulk actions.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  array $actions Default list of bulk actions.
 	 * @return array Modified action list.
 	 */
@@ -661,7 +662,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Define our PopUp update messages.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @see    wp-admin/edit.php
 	 * @param  array $messages Array of messages, by post-type.
 	 * @param  array $counts
@@ -681,7 +682,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Called when the file edit.php is loaded
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static public function post_list_edit() {
 		$wp_list_table = _get_list_table( 'WP_Posts_List_Table' );
@@ -785,7 +786,7 @@ class IncPopup extends IncPopupBase {
 	 * Modify the main WP query to avoid pagination on the popup list and sort
 	 * the popup list by the popup-order.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static public function post_query( $query ) {
 		if ( ! $query->is_main_query() ) { return; }
@@ -799,7 +800,7 @@ class IncPopup extends IncPopupBase {
 	 * Returns the custom value of "items-per-page".
 	 * This value is used by WordPress to generate the pagination links.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  int $value Default value set in Database
 	 * @param  string $post_type
 	 * @return int Customized value
@@ -815,7 +816,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Remove the posts-per-page filter from screen options.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static public function post_screenoptions() {
 		$screen = get_current_screen();
@@ -826,7 +827,7 @@ class IncPopup extends IncPopupBase {
 	 * Takes an array as input and updates the order of all popups according to
 	 * the definition in the array.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  array $order List of popup-IDs
 	 */
 	static public function post_order( $order ) {
@@ -864,7 +865,7 @@ class IncPopup extends IncPopupBase {
 	 * every time a popup is modified, regardless from where the change was
 	 * initiated.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  int $post_id Post ID that was saved/created
 	 * @param  WP_Post $post Post object that was saved/created
 	 * @param  bool $update True means the post was updated (not created)
@@ -897,7 +898,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Executes custom form actions, such as "duplicate PopUp"
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 */
 	static protected function form_check_actions() {
 		WDev()->load_request_fields( 'post', 'do' );
@@ -927,10 +928,17 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Register custom metaboxes for the PopUp editor
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function form_metabox( $post ) {
+		$meta_order = get_user_option( 'meta-box-order_' . IncPopupItem::POST_TYPE );
+		$po_meta = array( 'submitdiv', 'meta-content', 'meta-appearance', 'meta_behavior', 'meta-rules', 'meta-customcss' );
+		$meta_order['side'] = str_replace( $po_meta, '', $meta_order['side'] );
+		$meta_order['normal'] = str_replace( $po_meta, '', $meta_order['normal'] );
+		$meta_order['advanced'] = str_replace( $po_meta, '', $meta_order['advanced'] );
+		update_user_option( get_current_user_id(), 'meta-box-order_' . IncPopupItem::POST_TYPE, $meta_order );
+
 		// Remove core meta boxes.
 		remove_meta_box( 'submitdiv', IncPopupItem::POST_TYPE, 'side' );
 		remove_meta_box( 'slugdiv', IncPopupItem::POST_TYPE, 'normal' );
@@ -968,7 +976,16 @@ class IncPopup extends IncPopupBase {
 			__( 'Displaying Conditions (optional)', PO_LANG ),
 			array( 'IncPopup', 'meta_rules' ),
 			IncPopupItem::POST_TYPE,
-			'normal',
+			'advanced',
+			'default'
+		);
+
+		add_meta_box(
+			'meta-customcss',
+			__( 'Custom CSS (optional)', PO_LANG ),
+			array( 'IncPopup', 'meta_customcss' ),
+			IncPopupItem::POST_TYPE,
+			'advanced',
 			'default'
 		);
 
@@ -986,7 +1003,7 @@ class IncPopup extends IncPopupBase {
 	 * Called before the post-edit form is rendered.
 	 * We add the field "PopUp Title" above the form.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function form_title( $post ) {
@@ -1008,7 +1025,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Renders the metabox: Content
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function meta_content( $post ) {
@@ -1019,7 +1036,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Renders the metabox: Appearance
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function meta_appearance( $post ) {
@@ -1030,7 +1047,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Renders the metabox: Behavior
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function meta_behavior( $post ) {
@@ -1041,7 +1058,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Renders the metabox: Conditions
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function meta_rules( $post ) {
@@ -1050,9 +1067,20 @@ class IncPopup extends IncPopupBase {
 	}
 
 	/**
+	 * Renders the metabox: Custom CSS
+	 *
+	 * @since  4.7.0
+	 * @param  WP_Post $post The PopUp being edited.
+	 */
+	static public function meta_customcss( $post ) {
+		$popup = IncPopupDatabase::get( $post->ID );
+		include PO_VIEWS_DIR . 'meta-customcss.php';
+	}
+
+	/**
 	 * Renders the metabox: SubmitDiv (Save, Preview)
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  WP_Post $post The PopUp being edited.
 	 */
 	static public function meta_submitdiv( $post ) {
@@ -1063,7 +1091,7 @@ class IncPopup extends IncPopupBase {
 	/**
 	 * Save the popup data to database
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  int $post_id Post ID that was saved/created
 	 * @param  WP_Post $post Post object that was saved/created
 	 * @param  bool $update True means the post was updated (not created)
@@ -1146,7 +1174,7 @@ class IncPopup extends IncPopupBase {
 	 * Removes the 'message' param from redirect URL.
 	 * This prevents the default WordPress update-notice to be displayed.
 	 *
-	 * @since  4.6
+	 * @since  4.6.0
 	 * @param  string $url The redirect URL.
 	 * @param  int $post_id Which post was updated.
 	 * @return string The modified redirect URL.

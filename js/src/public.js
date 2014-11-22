@@ -435,13 +435,17 @@
 
 			if ( ! popup.length ) { return true; }
 
-			frame = jQuery( '<iframe id="wdpu-frame" name="wdpu-frame"></iframe>' )
-				.hide()
-				.appendTo( 'body' );
 
-			// Set form target to the hidden frame.
-			form.attr( 'target', 'wdpu-frame' );
-			inp_popup.appendTo( form ).val( 'raw' );
+			if ( 'redirect' !== me.data.form_submit ) {
+				// Only change the form target when NOT redirecting
+				frame = jQuery( '<iframe id="wdpu-frame" name="wdpu-frame"></iframe>' )
+					.hide()
+					.appendTo( 'body' );
+
+				// Set form target to the hidden frame.
+				form.attr( 'target', 'wdpu-frame' );
+				inp_popup.appendTo( form ).val( 'raw' );
+			}
 
 			msg.addClass( 'wdpu-loading' );
 
@@ -470,11 +474,13 @@
 			// This will remove the loading animation and update the popup
 			// contents if required.
 			function process_document() {
-				var inner_new, inner_old, html, external, handled;
+				var inner_new, inner_old, html, external, handled, close_on_fail;
 
 				// Allow other javascript functions to pre-process the event.
 				$doc.trigger( 'popup-submit-process', [frame, me, me.data] );
 				handled = false;
+				close_on_fail = true;
+				if ( 'ignore' === me.data.form_submit ) { close_on_fail = false; }
 
 				try {
 					// grab the HTML from the body, using the raw DOM node (frame[0])
@@ -497,18 +503,17 @@
 
 				// remove the temporary iframe.
 				jQuery( "#wdpu-frame" ).remove();
+				me.data.last_ajax = undefined;
 
 				// For external pages we have no access to the response:
 				// Close the popup!
 				if ( external ) {
 					// E.g. Contact Form 7
-					me.data.close_popup = true;
+					me.data.close_popup = close_on_fail;
 
 					me.data.ajax_history = recent_ajax_calls;
 					if ( recent_ajax_calls.length ) {
 						me.data.last_ajax = recent_ajax_calls[0];
-					} else {
-						me.data.last_ajax = false;
 					}
 
 					$doc.trigger( 'popup-submit-done', [me, me.data] );
@@ -536,7 +541,7 @@
 				// A new page was loaded that does not contain new content for
 				// the current PopUp. Close the popup!
 				else if ( ! inner_old.length || ! inner_new.length || ! inner_new.text().length ) {
-					me.data.close_popup = true;
+					me.data.close_popup = close_on_fail;
 
 					$doc.trigger( 'popup-submit-done', [me, me.data] );
 					handled = true;
@@ -562,10 +567,10 @@
 
 					me.fetch_dom();
 					me.setup_popup();
-				}
 
-				// Re-initialize the local DOM cache.
-				$doc.trigger( 'popup-init', [me, me.data] );
+					// Re-initialize the local DOM cache.
+					$doc.trigger( 'popup-init', [me, me.data] );
+				}
 			}
 
 			if ( doing_ajax ) {

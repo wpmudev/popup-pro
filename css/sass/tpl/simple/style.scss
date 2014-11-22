@@ -85,27 +85,27 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 				margin-bottom: 0;
 			}
 		}
+	}
 
-		.wdpu-close {
-			position: absolute;
-			top: -12px;
-			right: -12px;
-			width: 30px;
-			height: 30px;
-			text-decoration: none;
-			opacity: .9;
-			z-index: 10;
+	.wdpu-close {
+		position: absolute;
+		top: -12px;
+		right: -12px;
+		width: 30px;
+		height: 30px;
+		text-decoration: none;
+		opacity: .9;
+		z-index: 10;
 
-			background: transparent url(%styleurl%img/close.png) no-repeat;
+		background: transparent url(%styleurl%img/close.png) no-repeat;
 
-			@media only screen and (-webkit-min-device-pixel-ratio: 2) {
-				background: transparent url(%styleurl%img/close@2x.png) no-repeat;
-				background-size: 30px 30px;
-			}
+		@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+			background: transparent url(%styleurl%img/close@2x.png) no-repeat;
+			background-size: 30px 30px;
+		}
 
-			&:hover {
-				opacity: 1;
-			}
+		&:hover {
+			opacity: 1;
 		}
 	}
 
@@ -121,53 +121,53 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 			max-width: none;
 			min-width: 0;
 		}
+	}
 
-		.wdpu-text,
-		.wdpu-image {
-			vertical-align: middle;
-			display: inline-block;
-			box-sizing: border-box;
-		}
+	.wdpu-text,
+	.wdpu-image {
+		vertical-align: middle;
+		display: inline-block;
+		box-sizing: border-box;
+	}
 
-		.wdpu-text {
-			padding: 20px 20px 64px;
-			background: #F2F2F2;
+	.wdpu-text {
+		padding: 20px 20px 64px;
+		background: #F2F2F2;
+		position: relative;
+		z-index: 10;
+		height: 100%;
+	}
+
+	.wdpu-image {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		overflow: hidden;
+		z-index: -1;
+
+		img {
+			height: 100%;
+			width: auto;
 			position: relative;
-			z-index: 10;
-			height: 100%;
 		}
+	}
 
-		.wdpu-image {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			overflow: hidden;
-			z-index: -1;
+	.wdpu-inner {
+		overflow: auto;
+		height: 100%;
 
-			img {
-				height: 100%;
-				width: auto;
-				position: relative;
-			}
+		&.no-bm {
+			margin: 0;
 		}
+	}
 
-		.wdpu-inner {
-			overflow: auto;
-			height: 100%;
+	.wdpu-buttons {
+		position: absolute;
+		padding: 20px;
+		height: 24px;
+		margin: 0 -20px -20px;
 
-			&.no-bm {
-				margin: 0;
-			}
-		}
-
-		.wdpu-buttons {
-			position: absolute;
-			padding: 20px;
-			height: 24px;
-			margin: 0 -20px -20px;
-
-			white-space: nowrap;
-		}
+		white-space: nowrap;
 	}
 
 	a {

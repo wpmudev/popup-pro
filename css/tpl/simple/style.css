@@ -67,7 +67,7 @@
 #messagebox .wdpu-msg p:last-child {
   margin-bottom: 0;
 }
-#messagebox .wdpu-msg .wdpu-close {
+#messagebox .wdpu-close {
   position: absolute;
   top: -12px;
   right: -12px;
@@ -79,12 +79,12 @@
   background: transparent url(%styleurl%img/close.png) no-repeat;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-  #messagebox .wdpu-msg .wdpu-close {
+  #messagebox .wdpu-close {
     background: transparent url(%styleurl%img/close@2x.png) no-repeat;
     background-size: 30px 30px;
   }
 }
-#messagebox .wdpu-msg .wdpu-close:hover {
+#messagebox .wdpu-close:hover {
   opacity: 1;
 }
 #messagebox .wdpu-msg-inner {
@@ -99,39 +99,39 @@
   max-width: none;
   min-width: 0;
 }
-#messagebox .wdpu-msg-inner .wdpu-text,
-#messagebox .wdpu-msg-inner .wdpu-image {
+#messagebox .wdpu-text,
+#messagebox .wdpu-image {
   vertical-align: middle;
   display: inline-block;
   box-sizing: border-box;
 }
-#messagebox .wdpu-msg-inner .wdpu-text {
+#messagebox .wdpu-text {
   padding: 20px 20px 64px;
   background: #F2F2F2;
   position: relative;
   z-index: 10;
   height: 100%;
 }
-#messagebox .wdpu-msg-inner .wdpu-image {
+#messagebox .wdpu-image {
   position: absolute;
   top: 0;
   bottom: 0;
   overflow: hidden;
   z-index: -1;
 }
-#messagebox .wdpu-msg-inner .wdpu-image img {
+#messagebox .wdpu-image img {
   height: 100%;
   width: auto;
   position: relative;
 }
-#messagebox .wdpu-msg-inner .wdpu-inner {
+#messagebox .wdpu-inner {
   overflow: auto;
   height: 100%;
 }
-#messagebox .wdpu-msg-inner .wdpu-inner.no-bm {
+#messagebox .wdpu-inner.no-bm {
   margin: 0;
 }
-#messagebox .wdpu-msg-inner .wdpu-buttons {
+#messagebox .wdpu-buttons {
   position: absolute;
   padding: 20px;
   height: 24px;

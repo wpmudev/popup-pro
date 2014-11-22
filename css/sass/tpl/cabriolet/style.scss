@@ -87,27 +87,27 @@ $col_secondary: #000002;
 				margin-bottom: 0;
 			}
 		}
+	}
 
-		.wdpu-close {
-			position: absolute;
-			top: -12px;
-			right: -12px;
-			width: 30px;
-			height: 30px;
-			text-decoration: none;
-			opacity: .9;
-			z-index: 10;
+	.wdpu-close {
+		position: absolute;
+		top: -12px;
+		right: -12px;
+		width: 30px;
+		height: 30px;
+		text-decoration: none;
+		opacity: .9;
+		z-index: 10;
 
-			background: transparent url(%styleurl%img/close.png) no-repeat;
+		background: transparent url(%styleurl%img/close.png) no-repeat;
 
-			@media only screen and (-webkit-min-device-pixel-ratio: 2) {
-				background: transparent url(%styleurl%img/close@2x.png) no-repeat;
-				background-size: 30px 30px;
-			}
+		@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+			background: transparent url(%styleurl%img/close@2x.png) no-repeat;
+			background-size: 30px 30px;
+		}
 
-			&:hover {
-				opacity: 1;
-			}
+		&:hover {
+			opacity: 1;
 		}
 	}
 
@@ -121,62 +121,60 @@ $col_secondary: #000002;
 			max-width: none;
 			min-width: 0;
 		}
+	}
 
-		.wdpu-message-wrap {
-			padding: 4px;
-			background: rgba(0,0,0,0.3);
-			box-shadow: 0 0px 1px 1px rgba(255, 255, 255, 0.08);
+	.wdpu-message-wrap {
+		padding: 4px;
+		background: rgba(0,0,0,0.3);
+		box-shadow: 0 0px 1px 1px rgba(255, 255, 255, 0.08);
+		position: relative;
+	}
+
+	.wdpu-message {
+		background: #F2F2F2;
+		position: relative;
+		box-sizing: border-box;
+		overflow: hidden;
+		max-height: 100%;
+	}
+
+	.wdpu-text {
+		padding: 20px;
+		box-sizing: border-box;
+		position: relative;
+	}
+
+	.wdpu-image {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		overflow: hidden;
+
+		img {
+			height: 100%;
+			width: auto;
 			position: relative;
-		}
-
-		.wdpu-message {
-			background: #F2F2F2;
-			position: relative;
-			box-sizing: border-box;
-			overflow: hidden;
-			max-height: 100%;
-		}
-
-		.wdpu-text {
-			padding: 20px;
-			box-sizing: border-box;
-			position: relative;
-		}
-
-		.wdpu-image {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			overflow: hidden;
-
-			img {
-				height: 100%;
-				width: auto;
-				position: relative;
-			}
-		}
-
-		.wdpu-inner {
-			margin-bottom: 60px;
-			overflow: auto;
-
-			&.no-bm {
-				margin: 0;
-			}
-		}
-
-		.wdpu-buttons {
-			position: absolute;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			padding: 0 0 29px 22px;
-			height: 24px;
-			line-height: 24px;
 		}
 	}
 
+	.wdpu-inner {
+		margin-bottom: 60px;
+		overflow: auto;
 
+		&.no-bm {
+			margin: 0;
+		}
+	}
+
+	.wdpu-buttons {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		padding: 0 0 29px 22px;
+		height: 24px;
+		line-height: 24px;
+	}
 
 	a {
 		color: $col_primary;

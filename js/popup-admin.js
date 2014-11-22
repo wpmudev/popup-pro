@@ -1,10 +1,11 @@
-/*! PopUp Pro - v4.6.15
+/*! PopUp Pro - v4.7.0
  * http://premium.wpmudev.org/project/the-pop-over-plugin/
  * Copyright (c) 2014; * Licensed GPLv2+ */
 /*global window:false */
 /*global document:false */
 /*global wp:false */
 /*global wpmUi:false */
+/*global ace:false */
 
 /**
  * Admin Javascript functions for PopUp
@@ -525,6 +526,28 @@ jQuery(function init_admin() {
 		doc.on( 'popup-initialized', show_popup );
 	}
 
+	// Initialize the CSS editor
+	function init_css_editor() {
+		jQuery('.po_css_editor').each(function(){
+			var editor = ace.edit(this.id);
+
+			jQuery(this).data('editor', editor);
+			editor.setTheme('ace/theme/chrome');
+			editor.getSession().setMode('ace/mode/css');
+			editor.getSession().setUseWrapMode(true);
+			editor.getSession().setUseWrapMode(false);
+		});
+
+		jQuery('.po_css_editor').each(function(){
+			var self = this,
+				input = jQuery( jQuery(this).data('input') );
+
+			jQuery(this).data('editor').getSession().on('change', function () {
+				input.val( jQuery(self).data('editor').getSession().getValue() );
+			});
+		});
+	}
+
 	if ( ! jQuery( 'body.post-type-inc_popup' ).length ) {
 		return;
 	}
@@ -538,6 +561,7 @@ jQuery(function init_admin() {
 		init_rules();
 		init_preview();
 		init_image();
+		init_css_editor();
 
 		wpmUi.upgrade_multiselect();
 	}

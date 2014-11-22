@@ -89,6 +89,9 @@ class IncPopupItem {
 	// Allow page to be scrolled while PopUp is open.
 	public $scroll_body = true;
 
+	// CSS code to customize this PopUp
+	public $custom_css = '';
+
 	// -- "Never show again" options
 
 	// Add button "Never show popup again".
@@ -100,8 +103,13 @@ class IncPopupItem {
 	// Expiration of "Never show popup again" (in days).
 	public $hide_expire = 365;
 
+	// -- Behavior options
+
 	// Close popup when user clicks on the background overlay?
 	public $overlay_close = true;
+
+	// What do do when form is submitted inside PopUp
+	public $form_submit = 'default';
 
 	// -- Display options
 
@@ -188,6 +196,7 @@ class IncPopupItem {
 			'col2' => '',
 		);
 		$this->style = 'minimal';
+		$this->custom_css = '';
 		$this->deprecated_style = false;
 		$this->round_corners = true;
 		$this->scroll_body = false;
@@ -195,6 +204,7 @@ class IncPopupItem {
 		$this->close_hides = false;
 		$this->hide_expire = 365;
 		$this->overlay_close = true;
+		$this->form_submit = 'default';
 		$this->display = 'delay';
 		$this->display_data = array(
 			'delay' => 0,
@@ -247,6 +257,7 @@ class IncPopupItem {
 		isset( $data['cta_label'] ) && $this->cta_label = $data['cta_label'];
 		isset( $data['cta_link'] ) && $this->cta_link = $data['cta_link'];
 		isset( $data['custom_size'] ) && $this->custom_size = $data['custom_size'];
+		isset( $data['custom_css'] ) && $this->custom_css = $data['custom_css'];
 
 		isset( $data['size']['width'] ) && $this->size['width'] = $data['size']['width'];
 		isset( $data['size']['height'] ) && $this->size['height'] = $data['size']['height'];
@@ -265,6 +276,7 @@ class IncPopupItem {
 		isset( $data['close_hides'] ) && $this->close_hides = (true == $data['close_hides']);
 		absint( @$data['hide_expire'] ) > 0 && $this->hide_expire = absint( $data['hide_expire'] );
 		isset( $data['overlay_close'] ) && $this->overlay_close = ( true == $data['overlay_close'] );
+		isset( $data['form_submit'] ) && $this->form_submit = $data['form_submit'];
 
 		in_array( @$data['display'], self::$display_opts ) && $this->display = $data['display'];
 
@@ -367,6 +379,10 @@ class IncPopupItem {
 			$this->code->color2 = $this->color['col2'];
 		}
 
+		// Very rough validation that makes sure that the field does not close
+		// the <style> tag manually.
+		$this->custom_css = str_replace( '</s', 's', $this->custom_css );
+
 		$this->script_data['html_id'] = $this->code->id;
 		$this->script_data['popup_id'] = $this->id;
 		$this->script_data['close_hide'] = $this->close_hides;
@@ -378,6 +394,7 @@ class IncPopupItem {
 		$this->script_data['display'] = $this->display;
 		$this->script_data['display_data'] = $this->display_data;
 		$this->script_data['scroll_body'] = $this->scroll_body;
+		$this->script_data['form_submit'] = $this->form_submit;
 
 		// Validation only done when editing popups.
 		if ( is_admin() ) {
@@ -458,12 +475,14 @@ class IncPopupItem {
 		$this->color = get_post_meta( $this->id, 'po_color', true );
 		$this->custom_colors = get_post_meta( $this->id, 'po_custom_colors', true );
 		$this->style = get_post_meta( $this->id, 'po_style', true );
+		$this->custom_css = get_post_meta( $this->id, 'po_custom_css', true );
 		$this->round_corners = get_post_meta( $this->id, 'po_round_corners', true );
 		$this->scroll_body = get_post_meta( $this->id, 'po_scroll_body', true );
 		$this->can_hide = get_post_meta( $this->id, 'po_can_hide', true );
 		$this->close_hides = get_post_meta( $this->id, 'po_close_hides', true );
 		$this->hide_expire = get_post_meta( $this->id, 'po_hide_expire', true );
 		$this->overlay_close = get_post_meta( $this->id, 'po_overlay_close', true );
+		$this->form_submit = get_post_meta( $this->id, 'po_form_submit', true );
 		$this->display = get_post_meta( $this->id, 'po_display', true );
 		$this->display_data = get_post_meta( $this->id, 'po_display_data', true );
 		$this->rule = get_post_meta( $this->id, 'po_rule', true );
@@ -530,12 +549,14 @@ class IncPopupItem {
 			update_post_meta( $this->id, 'po_color', $this->color );
 			update_post_meta( $this->id, 'po_custom_colors', $this->custom_colors );
 			update_post_meta( $this->id, 'po_style', $this->style );
+			update_post_meta( $this->id, 'po_custom_css', $this->custom_css );
 			update_post_meta( $this->id, 'po_round_corners', $this->round_corners );
 			update_post_meta( $this->id, 'po_scroll_body', $this->scroll_body );
 			update_post_meta( $this->id, 'po_can_hide', $this->can_hide );
 			update_post_meta( $this->id, 'po_close_hides', $this->close_hides );
 			update_post_meta( $this->id, 'po_hide_expire', $this->hide_expire );
 			update_post_meta( $this->id, 'po_overlay_close', $this->overlay_close );
+			update_post_meta( $this->id, 'po_form_submit', $this->form_submit );
 			update_post_meta( $this->id, 'po_display', $this->display );
 			update_post_meta( $this->id, 'po_display_data', $this->display_data );
 			update_post_meta( $this->id, 'po_rule', $this->rule );
@@ -654,6 +675,11 @@ class IncPopupItem {
 				$Code[ $this->id ] = str_replace( '#000001', $this->code->color1, $Code[ $this->id ] );
 				$Code[ $this->id ] = str_replace( '#000002', $this->code->color2, $Code[ $this->id ] );
 			}
+			$custom_css = $this->custom_css;
+			$custom_css = str_replace( '#popup', '#' . $this->code->id, $custom_css );
+			$custom_css = str_replace( '#messagebox', '#' . $this->code->id, $custom_css );
+			$custom_css = str_replace( '%styleurl%', $details->url, $custom_css );
+			$Code[ $this->id ] .= $custom_css;
 		}
 		return $Code[ $this->id ];
 	}

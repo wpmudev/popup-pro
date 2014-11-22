@@ -217,7 +217,7 @@ abstract class IncPopupBase {
 				'dir' => trailingslashit( PO_TPL_DIR . $key ),
 				'name' => $data->name,
 				'pro' => $data->pro,
-				'deprecated' => $data->deprecated,
+				'deprecated' => (bool) $data->deprecated,
 			);
 			if ( isset( $urls[$data->name] ) ) { unset( $urls[$data->name] ); }
 			if ( isset( $paths[$data->name] ) ) { unset( $paths[$data->name] ); }
@@ -314,7 +314,9 @@ abstract class IncPopupBase {
 			'po_display',
 			'po_display_data',
 			'po_hide_expire',
-			'po_rule'
+			'po_rule',
+			'po_custom_css',
+			'po_form_submit'
 		);
 
 		$data = array(
@@ -341,6 +343,7 @@ abstract class IncPopupBase {
 				'width' => $form['po_size_width'],
 				'height' => $form['po_size_height'],
 			),
+			'custom_css' => $form['po_custom_css'],
 
 			// Meta: Behavior
 			'display' => $form['po_display'],
@@ -349,6 +352,7 @@ abstract class IncPopupBase {
 			'close_hides' => isset( $form['po_close_hides'] ),
 			'hide_expire' => $form['po_hide_expire'],
 			'overlay_close' => ! isset( $form['po_overlay_close'] ),
+			'form_submit' => $form['po_form_submit'],
 
 			// Meta: Rules:
 			'rule' => $form['po_rule'],

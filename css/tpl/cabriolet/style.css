@@ -68,7 +68,7 @@
 #messagebox .wdpu-msg p:last-child {
   margin-bottom: 0;
 }
-#messagebox .wdpu-msg .wdpu-close {
+#messagebox .wdpu-close {
   position: absolute;
   top: -12px;
   right: -12px;
@@ -80,12 +80,12 @@
   background: transparent url(%styleurl%img/close.png) no-repeat;
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-  #messagebox .wdpu-msg .wdpu-close {
+  #messagebox .wdpu-close {
     background: transparent url(%styleurl%img/close@2x.png) no-repeat;
     background-size: 30px 30px;
   }
 }
-#messagebox .wdpu-msg .wdpu-close:hover {
+#messagebox .wdpu-close:hover {
   opacity: 1;
 }
 #messagebox .wdpu-msg-inner {
@@ -98,43 +98,43 @@
   max-width: none;
   min-width: 0;
 }
-#messagebox .wdpu-msg-inner .wdpu-message-wrap {
+#messagebox .wdpu-message-wrap {
   padding: 4px;
   background: rgba(0, 0, 0, 0.3);
   box-shadow: 0 0px 1px 1px rgba(255, 255, 255, 0.08);
   position: relative;
 }
-#messagebox .wdpu-msg-inner .wdpu-message {
+#messagebox .wdpu-message {
   background: #F2F2F2;
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
   max-height: 100%;
 }
-#messagebox .wdpu-msg-inner .wdpu-text {
+#messagebox .wdpu-text {
   padding: 20px;
   box-sizing: border-box;
   position: relative;
 }
-#messagebox .wdpu-msg-inner .wdpu-image {
+#messagebox .wdpu-image {
   position: absolute;
   top: 0;
   bottom: 0;
   overflow: hidden;
 }
-#messagebox .wdpu-msg-inner .wdpu-image img {
+#messagebox .wdpu-image img {
   height: 100%;
   width: auto;
   position: relative;
 }
-#messagebox .wdpu-msg-inner .wdpu-inner {
+#messagebox .wdpu-inner {
   margin-bottom: 60px;
   overflow: auto;
 }
-#messagebox .wdpu-msg-inner .wdpu-inner.no-bm {
+#messagebox .wdpu-inner.no-bm {
   margin: 0;
 }
-#messagebox .wdpu-msg-inner .wdpu-buttons {
+#messagebox .wdpu-buttons {
   position: absolute;
   bottom: 0;
   left: 0;
