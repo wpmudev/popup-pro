@@ -182,10 +182,10 @@
 	<div class="col-12 inp-row">
 		<select name="po_form_submit" id="po-form-submit">
 			<option value="default" <?php selected( $popup->form_submit, 'default' ); ?>>
-				<?php _e( 'Refresh PopUp or close', PO_LANG ); ?>
+				<?php _e( 'Refresh PopUp or close (default)', PO_LANG ); ?>
 			</option>
 			<option value="ignore" <?php selected( $popup->form_submit, 'ignore' ); ?>>
-				<?php _e( 'Refresh PopUp or do nothing', PO_LANG ); ?>
+				<?php _e( 'Refresh PopUp or do nothing (use for Ajax Forms)', PO_LANG ); ?>
 			</option>
 			<option value="redirect" <?php selected( $popup->form_submit, 'redirect' ); ?>>
 				<?php _e( 'Redirect to form target URL', PO_LANG ); ?>
