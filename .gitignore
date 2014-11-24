@@ -6,3 +6,4 @@ prepros.json
 *.log
 node_modules
 release
+.svn
