@@ -4,6 +4,10 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.7.0.2
+----------------------------------------------------------------------
+- Fix incompatibility with Custom Sidebars plugin
+
 4.7.0.1
 ----------------------------------------------------------------------
 - Fix small JavaScript error
