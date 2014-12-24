@@ -78,11 +78,16 @@ class IncPopupRule_Url extends IncPopupRule {
 		$urls = implode( "\n", $data );
 		?>
 		<label for="po-rule-data-url">
-			<?php _e( 'Full URLs (one per line):', PO_LANG ); ?>
+			<?php _e( 'Show on these URLs (one per line):', PO_LANG ); ?>
 		</label>
 		<textarea name="po_rule_data[url]" id="po-rule-data-url" class="block"><?php
 			echo esc_html( $urls );
 		?></textarea>
+		<div><em>
+		<?php
+		_e( 'URLs should not include "http://" or "https://"' );
+		?>
+		</em></div>
 		<?php
 	}
 
@@ -93,7 +98,7 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_url() {
-		return $this->sanitize_values( @$_POST['po_rule_data']['url'] );
+		return $this->sanitize_values( $_POST['po_rule_data']['url'] );
 	}
 
 
@@ -131,11 +136,16 @@ class IncPopupRule_Url extends IncPopupRule {
 		$urls = implode( "\n", $data );
 		?>
 		<label for="po-rule-data-no-url">
-			<?php _e( 'Full URLs (one per line):', PO_LANG ); ?>
+			<?php _e( 'Not on these URLs (one per line):', PO_LANG ); ?>
 		</label>
 		<textarea name="po_rule_data[no_url]" id="po-rule-data-no-url" class="block"><?php
 			echo esc_html( $urls );
 		?></textarea>
+		<div><em>
+		<?php
+		_e( 'URLs should not include "http://" or "https://"' );
+		?>
+		</em></div>
 		<?php
 	}
 
@@ -146,7 +156,7 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_url() {
-		return $this->sanitize_values( @$_POST['po_rule_data']['no_url'] );
+		return $this->sanitize_values( $_POST['po_rule_data']['no_url'] );
 	}
 
 
@@ -168,6 +178,12 @@ class IncPopupRule_Url extends IncPopupRule {
 	 */
 	protected function sanitize_values( $data ) {
 		if ( is_string( $data ) ) {
+			$data = str_replace(
+				array( 'http://', 'https://', ':80/', ':443/' ),
+				'',
+				$data
+			);
+
 			$data = explode( "\n", $data );
 		} else if ( ! is_array( $data ) ) {
 			$data = array();
@@ -187,7 +203,7 @@ class IncPopupRule_Url extends IncPopupRule {
 		$current_url = '';
 
 		if ( empty( $_REQUEST['thefrom'] ) ) {
-			$current_url = home_url( $wp->request );
+			$current_url = WDev()->current_url();
 		} else {
 			$current_url = strtok( $_REQUEST['thefrom'], '#' );
 		}
@@ -215,7 +231,7 @@ class IncPopupRule_Url extends IncPopupRule {
 				$match = preg_quote( strtok( $match, '#' ) );
 
 				if ( false === strpos( $match, '://' ) ) {
-					$match = 'https?://' . $match;
+					$match = '\w+://' . $match;
 				}
 				if ( substr( $match, -1 ) != '/' ) {
 					$match .= '/?';
@@ -224,6 +240,7 @@ class IncPopupRule_Url extends IncPopupRule {
 				}
 				$exp = '#^' . $match . '$#i';
 				$res = preg_match( $exp, $test_url );
+
 				if ( $res ) {
 					$response = true;
 					break;
