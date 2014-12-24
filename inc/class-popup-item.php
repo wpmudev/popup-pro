@@ -632,6 +632,22 @@ class IncPopupItem {
 		$settings = IncPopupDatabase::get_settings();
 		$method = isset( $settings['loadingmethod'] ) ? $settings['loadingmethod'] : 'ajax';
 
+		// Check for specific/frequently used shortcodes.
+
+		if ( $method !== 'footer'
+			&& preg_match( '#\[gravityforms?(\s.*?\]|\])#', $content )
+		) {
+			WDev()->message(
+				sprintf(
+					__( 'You are using Gravity Forms inside this PopUp. It is best to switch to the <a href="%s">loading method</a> "Page Footer" to ensure the form works as expected.', PO_LANG ),
+					'edit.php?post_type=' . IncPopupItem::POST_TYPE . '&page=settings'
+				),
+				'err'
+			);
+		}
+
+		// General check for shortcode incompatibility
+
 		switch ( $method ) {
 			case 'ajax':
 			case 'anonymous':
