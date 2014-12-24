@@ -175,7 +175,7 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 		$current_url = '';
 
 		if ( empty( $_REQUEST['thefrom'] ) ) {
-			$current_url = home_url( $wp->request );
+			$current_url = WDev()->current_url();
 		} else {
 			$current_url = strtok( $_REQUEST['thefrom'], '#' );
 		}
