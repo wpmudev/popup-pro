@@ -621,15 +621,24 @@
 				}
 			}
 
-			if ( doing_ajax ) {
-				// E.g. Contact Form 7
-				me.data.did_ajax = true;
-				iteration = 0;
-				tmr_check = window.setInterval( check_state, 50 );
+			if ( 'redirect' === me.data.form_submit ) {
+				/**
+				 * When redirecting always close the popup
+				 */
+				window.setTimeout(function() {
+					me.close_popup();
+				}, 10);
 			} else {
-				// E.g. Gravity Forms
-				me.data.did_ajax = false;
-				frame.load( process_document );
+				if ( doing_ajax ) {
+					// E.g. Contact Form 7
+					me.data.did_ajax = true;
+					iteration = 0;
+					tmr_check = window.setInterval( check_state, 50 );
+				} else {
+					// E.g. Gravity Forms
+					me.data.did_ajax = false;
+					frame.load( process_document );
+				}
 			}
 
 			return true;
