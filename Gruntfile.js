@@ -231,13 +231,24 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-phpunit');
 
+	grunt.registerTask( 'notes', 'Show release notes', function() {
+		grunt.log.subhead( 'Release notes' );
+		grunt.log.writeln( '  1. Check BITBUCKET for pull-requests' );
+		grunt.log.writeln( '  2. Check ASANA for high-priority bugs' );
+		grunt.log.writeln( '  3. Check EMAILS for high-priority bugs' );
+		grunt.log.writeln( '  4. Check FORUM for open threads' );
+		grunt.log.writeln( '  5. REPLY to forum threads + unsubscribe' );
+		grunt.log.writeln( '  6. Update the TRANSLATION files' );
+		grunt.log.writeln( '  7. Generate ARCHIVE' );
+		grunt.log.writeln( '  8. INSTALL on a clean WordPress installation' );
+		grunt.log.writeln( '  9. RELEASE the plugin!' );
+	});
+
 	// Default task.
 
-	grunt.registerTask( 'default', ['clean:temp', 'jshint', 'concat', 'uglify', 'sass', 'cssmin'] );
-
-	grunt.registerTask( 'build', ['phpunit', 'default', 'clean', 'copy', 'compress'] );
-
-	grunt.registerTask( 'test', ['phpunit', 'jshint'] );
+	grunt.registerTask( 'default', ['clean:temp', 'jshint', 'concat', 'uglify', 'sass', 'cssmin', 'notes'] );
+	grunt.registerTask( 'build', ['phpunit', 'default', 'clean', 'copy', 'compress', 'notes'] );
+	grunt.registerTask( 'test', ['phpunit', 'jshint', 'notes'] );
 
 	grunt.util.linefeed = '\n';
 };
