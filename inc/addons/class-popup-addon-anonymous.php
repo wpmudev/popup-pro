@@ -109,6 +109,9 @@ class IncPopupAddon_AnonyousLoading {
 			array( 'jquery' )
 		);
 
+		// Enable animations in 'Anonymous Script'
+		WDev()->add_ui( PO_CSS_URL . 'animate.min.css', 'front' );
+
 		// This checks if the current URL contains the special URL-param.
 		// If the param is found then the PopUp details are output instead of the page.
 		add_action(
