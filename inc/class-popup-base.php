@@ -57,6 +57,12 @@ abstract class IncPopupBase {
 		if ( ! empty( $_REQUEST['thefrom'] ) ) { $_REQUEST['thefrom'] = strrev( $_REQUEST['thefrom'] ); }
 		if ( ! empty( $_REQUEST['thereferrer'] ) ) { $_REQUEST['thereferrer'] = strrev( $_REQUEST['thereferrer'] ); }
 
+		// http://premium.wpmudev.org/forums/topic/ive-debugged-a-problem-in-the-latest-version-of-the-popup-pro-plugin
+		if ( ! empty( $_GET['thefrom'] ) ) { $_GET['thefrom'] = strrev( $_GET['thefrom'] ); }
+		if ( ! empty( $_GET['thereferrer'] ) ) { $_GET['thereferrer'] = strrev( $_GET['thereferrer'] ); }
+		if ( ! empty( $_POST['thefrom'] ) ) { $_POST['thefrom'] = strrev( $_POST['thefrom'] ); }
+		if ( ! empty( $_POST['thereferrer'] ) ) { $_POST['thereferrer'] = strrev( $_POST['thereferrer'] ); }
+
 		WDev()->translate_plugin( PO_LANG, PO_LANG_DIR );
 
 		// Register the popup post type.
