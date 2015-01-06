@@ -39,21 +39,21 @@ if ( ! defined( 'PO_LANG' ) ) {
 	 */
 	define( 'PO_BUILD', 6 );
 
-	$plugin_dir = trailingslashit( dirname( __FILE__ ) );
+	$po_plugin_dir = trailingslashit( dirname( __FILE__ ) );
 	$plugin_dir_rel = trailingslashit( dirname( plugin_basename( __FILE__ ) ) );
-	$plugin_url = plugin_dir_url( __FILE__ );
+	$po_plugin_url = plugin_dir_url( __FILE__ );
 
 	define( 'PO_LANG_DIR', $plugin_dir_rel . 'lang/' );
-	define( 'PO_TPL_DIR', $plugin_dir . 'css/tpl/' );
-	define( 'PO_INC_DIR', $plugin_dir . 'inc/' );
-	define( 'PO_JS_DIR', $plugin_dir . 'js/' );
-	define( 'PO_CSS_DIR', $plugin_dir . 'css/' );
-	define( 'PO_VIEWS_DIR', $plugin_dir . 'views/' );
+	define( 'PO_TPL_DIR', $po_plugin_dir . 'css/tpl/' );
+	define( 'PO_INC_DIR', $po_plugin_dir . 'inc/' );
+	define( 'PO_JS_DIR', $po_plugin_dir . 'js/' );
+	define( 'PO_CSS_DIR', $po_plugin_dir . 'css/' );
+	define( 'PO_VIEWS_DIR', $po_plugin_dir . 'views/' );
 
-	define( 'PO_TPL_URL', $plugin_url . 'css/tpl/' );
-	define( 'PO_JS_URL', $plugin_url . 'js/' );
-	define( 'PO_CSS_URL', $plugin_url . 'css/' );
-	define( 'PO_IMG_URL', $plugin_url . 'img/' );
+	define( 'PO_TPL_URL', $po_plugin_url . 'css/tpl/' );
+	define( 'PO_JS_URL', $po_plugin_url . 'js/' );
+	define( 'PO_CSS_URL', $po_plugin_url . 'css/' );
+	define( 'PO_IMG_URL', $po_plugin_url . 'img/' );
 
 	// Include function library.
 	if ( file_exists( PO_INC_DIR . 'external/wpmu-lib/core.php' ) ) {
