@@ -26,52 +26,55 @@ Contributors - Marko Miljus (Incsub), Ve Bailovity (Incsub)
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+function inc_popup_pro_init() {
+	if ( ! defined( 'PO_LANG' ) ) {
+		// Used for more readable i18n functions: __( 'text', PO_LANG );
+		define( 'PO_LANG', 'popover' );
+		define( 'PO_VERSION', 'pro' );
 
-if ( ! defined( 'PO_LANG' ) ) {
-	// Used for more readable i18n functions: __( 'text', PO_LANG );
-	define( 'PO_LANG', 'popover' );
-	define( 'PO_VERSION', 'pro' );
+		/**
+		 * The current DB/build version. NOT THE SAME AS THE PLUGIN VERSION!
+		 * Increase this when DB structure changes, migration code is required, etc.
+		 * See IncPopupDatabase: db_is_current() and db_update()
+		 */
+		define( 'PO_BUILD', 6 );
 
-	/**
-	 * The current DB/build version. NOT THE SAME AS THE PLUGIN VERSION!
-	 * Increase this when DB structure changes, migration code is required, etc.
-	 * See IncPopupDatabase: db_is_current() and db_update()
-	 */
-	define( 'PO_BUILD', 6 );
+		$plugin_dir = trailingslashit( dirname( __FILE__ ) );
+		$plugin_dir_rel = trailingslashit( dirname( plugin_basename( __FILE__ ) ) );
+		$plugin_url = plugin_dir_url( __FILE__ );
 
-	$plugin_dir = trailingslashit( dirname( __FILE__ ) );
-	$plugin_dir_rel = trailingslashit( dirname( plugin_basename( __FILE__ ) ) );
-	$plugin_url = plugin_dir_url( __FILE__ );
+		define( 'PO_LANG_DIR', $plugin_dir_rel . 'lang/' );
+		define( 'PO_TPL_DIR', $plugin_dir . 'css/tpl/' );
+		define( 'PO_INC_DIR', $plugin_dir . 'inc/' );
+		define( 'PO_JS_DIR', $plugin_dir . 'js/' );
+		define( 'PO_CSS_DIR', $plugin_dir . 'css/' );
+		define( 'PO_VIEWS_DIR', $plugin_dir . 'views/' );
 
-	define( 'PO_LANG_DIR', $plugin_dir_rel . 'lang/' );
-	define( 'PO_TPL_DIR', $plugin_dir . 'css/tpl/' );
-	define( 'PO_INC_DIR', $plugin_dir . 'inc/' );
-	define( 'PO_JS_DIR', $plugin_dir . 'js/' );
-	define( 'PO_CSS_DIR', $plugin_dir . 'css/' );
-	define( 'PO_VIEWS_DIR', $plugin_dir . 'views/' );
+		define( 'PO_TPL_URL', $plugin_url . 'css/tpl/' );
+		define( 'PO_JS_URL', $plugin_url . 'js/' );
+		define( 'PO_CSS_URL', $plugin_url . 'css/' );
+		define( 'PO_IMG_URL', $plugin_url . 'img/' );
 
-	define( 'PO_TPL_URL', $plugin_url . 'css/tpl/' );
-	define( 'PO_JS_URL', $plugin_url . 'js/' );
-	define( 'PO_CSS_URL', $plugin_url . 'css/' );
-	define( 'PO_IMG_URL', $plugin_url . 'img/' );
+		// Include function library.
+		if ( file_exists( PO_INC_DIR . 'external/wpmu-lib/core.php' ) ) {
+			require_once PO_INC_DIR . 'external/wpmu-lib/core.php';
+		}
 
-	// Include function library.
-	if ( file_exists( PO_INC_DIR . 'external/wpmu-lib/core.php' ) ) {
-		require_once PO_INC_DIR . 'external/wpmu-lib/core.php';
+		require_once( PO_INC_DIR . 'config-defaults.php');
+		if ( is_admin() ) {
+			// Defines class 'IncPopup'.
+			require_once( PO_INC_DIR . 'class-popup-admin.php');
+		} else {
+			// Defines class 'IncPopup'.
+			require_once( PO_INC_DIR . 'class-popup-public.php');
+		}
+
+		// Initialize the plugin as soon as we have identified the current user.
+		IncPopup::instance();
 	}
-
-	require_once( PO_INC_DIR . 'config-defaults.php');
-	if ( is_admin() ) {
-		// Defines class 'IncPopup'.
-		require_once( PO_INC_DIR . 'class-popup-admin.php');
-	} else {
-		// Defines class 'IncPopup'.
-		require_once( PO_INC_DIR . 'class-popup-public.php');
-	}
-
-	// Initialize the plugin as soon as we have identified the current user.
-	IncPopup::instance();
 }
+
+inc_popup_pro_init();
 
 // Pro: Integrate WPMU Dev Dashboard
 if ( is_admin() ) {
