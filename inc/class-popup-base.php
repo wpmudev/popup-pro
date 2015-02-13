@@ -177,24 +177,47 @@ abstract class IncPopupBase {
 	 * @return array Core Popup styles.
 	 */
 	static protected function _get_styles( ) {
-		$Styles = null;
+		$folders = array( 
+			'cabriolet',
+			'minimal',
+			'old-fixed',
+			'old-fullbackground',
+			'simple',
+			'old-default'
+		);
 
-		if ( null === $Styles ) {
-			$Styles = array();
-			if ( $handle = opendir( PO_TPL_DIR ) ) {
-				while ( false !== ( $entry = readdir( $handle ) ) ) {
-					if ( $entry === '.' || $entry === '..' ) { continue; }
-					$style_file = PO_TPL_DIR . $entry . '/style.php';
-					if ( ! file_exists( $style_file ) ) { continue; }
-
-					$info = (object) array();
-					include $style_file;
-
-					$Styles[ $entry ] = $info;
-				}
-				closedir( $handle );
+		foreach ( $folders as $folder ) {
+			$style_file = trailingslashit( PO_TPL_DIR ) . $folder . '/style.php';
+			if ( file_exists( $style_file ) ) {
+				$info = new stdClass();
+				include $style_file;
 			}
 		}
+
+		$Styles = array();
+
+		$Styles['cabriolet'] = new stdClass();
+		$Styles['cabriolet']->name = 'Cabriolet';
+		$Styles['cabriolet']->pro = true;
+
+		$Styles['minimal'] = new stdClass();
+		$Styles['minimal']->name = 'Minimal';
+		$Styles['minimal']->pro = true;
+
+		$Styles['old-fixed'] = new stdClass();
+		$Styles['old-fixed']->name = 'Default Fixed';
+		$Styles['old-fixed']->pro = true;
+
+		$Styles['old-fullbackground'] = new stdClass();
+		$Styles['old-fullbackground']->name = 'Dark Background Fixed';
+		$Styles['old-fullbackground']->pro = true;
+
+		$Styles['simple'] = new stdClass();
+		$Styles['simple']->name = 'Simple';
+
+		$Styles['old-default'] = new stdClass();
+		$Styles['old-default']->name = 'Default';
+		$Styles['old-default']->deprecated = true;
 
 		return $Styles;
 	}

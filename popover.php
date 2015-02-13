@@ -75,21 +75,3 @@ function inc_popup_pro_init() {
 }
 
 inc_popup_pro_init();
-
-// Pro: Integrate WPMU Dev Dashboard
-if ( is_admin() ) {
-	if ( file_exists( PO_INC_DIR . 'external/wpmudev-dashboard/wpmudev-dash-notification.php' ) ) {
-		global $wpmudev_notices;
-		is_array( $wpmudev_notices ) || $wpmudev_notices = array();
-		$wpmudev_notices[] = array(
-			'id' => 123,
-			'name' => 'PopUp Pro',
-			'screens' => array(
-				'edit-inc_popup',
-				'inc_popup',
-				'inc_popup_page_settings',
-			),
-		);
-		require_once PO_INC_DIR . 'external/wpmudev-dashboard/wpmudev-dash-notification.php';
-	}
-}
