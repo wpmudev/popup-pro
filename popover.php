@@ -71,6 +71,9 @@ function inc_popup_pro_init() {
 
 		// Initialize the plugin as soon as we have identified the current user.
 		IncPopup::instance();
+
+		// Initialize the Upfront integration
+		require_once( PO_INC_DIR . 'upfront/loader.php');
 	}
 }
 
