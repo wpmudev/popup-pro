@@ -27,18 +27,18 @@ class Popup_Test_General extends WP_UnitTestCase {
 	}
 
 	/**
-	 * See if the WDev() function is available.
+	 * See if the lib2() function is available.
 	 *
 	 * @depends test_constants
 	 */
 	function test_wpmulib() {
-		$this->assertTrue( function_exists( 'WDev' ), 'Missing: WDev()' );
-		$this->assertTrue( class_exists( 'TheLibWrap' ), 'Missing: TheLibWrap' );
+		$this->assertTrue( function_exists( 'lib2' ), 'Missing: lib2()' );
+		$this->assertTrue( class_exists( 'TheLib2Wrap' ), 'Missing: TheLib2Wrap' );
 
-		$this->assertNotEquals( TheLibWrap::$version, '0.0.0', 'Lib Version not set' );
-		$this->assertNotNull( TheLibWrap::$object, 'Lib Object not set' );
+		$this->assertNotEquals( TheLib2Wrap::$version, '0.0.0', 'Lib Version not set' );
+		$this->assertNotNull( TheLib2Wrap::$object, 'Lib Object not set' );
 
 		// Check for minimum required version.
-		$this->assertTrue( version_compare( TheLibWrap::$version, '1.0.12', '>=' ), 'Lib Version too low' );
+		$this->assertTrue( version_compare( TheLib2Wrap::$version, '2.0.0', '>=' ), 'Lib Version too low' );
 	}
 }

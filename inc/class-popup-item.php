@@ -608,9 +608,9 @@ class IncPopupItem {
 							break;
 					}
 				}
-				WDev()->message( sprintf( $msg, $this->name ) );
+				lib2()->ui->admin_message( sprintf( $msg, $this->name ) );
 			} else {
-				WDev()->message( __( 'Could not save PopUp.', PO_LANG ), 'err' );
+				lib2()->ui->admin_message( __( 'Could not save PopUp.', PO_LANG ), 'err' );
 			}
 		}
 
@@ -637,7 +637,7 @@ class IncPopupItem {
 		if ( $method !== 'footer'
 			&& preg_match( '#\[gravityforms?(\s.*?\]|\])#', $content )
 		) {
-			WDev()->message(
+			lib2()->ui->admin_message(
 				sprintf(
 					__( 'You are using Gravity Forms inside this PopUp. It is best to switch to the <a href="%s">loading method</a> "Page Footer" to ensure the form works as expected.', PO_LANG ),
 					'edit.php?post_type=' . IncPopupItem::POST_TYPE . '&page=settings'
@@ -657,7 +657,7 @@ class IncPopupItem {
 				foreach ( $check->shortcodes as $code ) {
 					$match = array();
 					if ( preg_match( '#\[' . $code . '(\s.*?\]|\])#', $content, $match ) ) {
-						WDev()->message(
+						lib2()->ui->admin_message(
 							sprintf(
 								__( 'Shortcode <code>%s</code> requires a different <a href="%s">loading method</a> to work.<br />Try "Page Footer", though sometimes the method "Custom AJAX" also works (please test the result)', PO_LANG ),
 								$match[0],
@@ -675,7 +675,7 @@ class IncPopupItem {
 				break;
 
 			default:
-				//WDev()->message( 'Shortcode-Check not defined for: ' . $method );
+				//lib2()->ui->admin_message( 'Shortcode-Check not defined for: ' . $method );
 		}
 	}
 

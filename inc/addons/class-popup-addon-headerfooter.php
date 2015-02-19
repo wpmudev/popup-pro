@@ -115,7 +115,7 @@ class IncPopupAddon_HeaderFooter {
 			// Grab the response code and make sure the request was sucessful
 			$code = (int) wp_remote_retrieve_response_code( $response );
 			if ( is_wp_error( $response ) ) {
-				WDev()->message( $response->get_error_message() );
+				lib2()->ui->admin_message( $response->get_error_message() );
 				return $Resp;
 			}
 

@@ -100,7 +100,7 @@ class IncPopupAddon_AnonyousLoading {
 		// Generate a random Script URL.
 		$slug = self::$_slug;
 		$val = self::_rot( time(), rand( 1, 22 ) );
-		$script_url = add_query_arg( array( $slug => $val ), WDev()->current_url() );
+		$script_url = add_query_arg( array( $slug => $val ), lib2()->net->current_url() );
 
 		// The script is the home URL with a special URL-param.
 		wp_enqueue_script(
@@ -110,7 +110,7 @@ class IncPopupAddon_AnonyousLoading {
 		);
 
 		// Enable animations in 'Anonymous Script'
-		WDev()->add_ui( PO_CSS_URL . 'animate.min.css', 'front' );
+		lib2()->ui->add( PO_CSS_URL . 'animate.min.css', 'front' );
 
 		// This checks if the current URL contains the special URL-param.
 		// If the param is found then the PopUp details are output instead of the page.

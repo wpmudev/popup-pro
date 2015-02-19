@@ -301,7 +301,7 @@ class IncPopupDatabase {
 		dbDelta( $sql );
 
 		if ( $count > 0 ) {
-			WDev()->message(
+			lib2()->ui->admin_message(
 				sprintf(
 					__(
 					'<strong>PopUp Pro</strong><br />' .

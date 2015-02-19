@@ -203,7 +203,7 @@ class IncPopupRule_Url extends IncPopupRule {
 		$current_url = '';
 
 		if ( empty( $_REQUEST['thefrom'] ) ) {
-			$current_url = WDev()->current_url();
+			$current_url = lib2()->net->current_url();
 		} else {
 			$current_url = strtok( $_REQUEST['thefrom'], '#' );
 		}

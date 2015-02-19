@@ -89,7 +89,7 @@ class IncPopupRule_Width extends IncPopupRule {
 	 */
 	public function append_data_width( $script_data, $popup ) {
 		if ( $popup->uses_rule( 'width' ) ) {
-			WDev()->load_fields( $popup->rule_data, 'width' );
+			lib2()->array->equip( $popup->rule_data, 'width' );
 			$data = $this->sanitize_values( $popup->rule_data['width'] );
 
 			if ( $data['max'] >= $this->max_width ) { $data['max'] = 0; }

@@ -63,7 +63,7 @@ abstract class IncPopupBase {
 		if ( ! empty( $_POST['thefrom'] ) ) { $_POST['thefrom'] = strrev( $_POST['thefrom'] ); }
 		if ( ! empty( $_POST['thereferrer'] ) ) { $_POST['thereferrer'] = strrev( $_POST['thereferrer'] ); }
 
-		WDev()->translate_plugin( PO_LANG, PO_LANG_DIR );
+		lib2()->translate_plugin( PO_LANG, PO_LANG_DIR );
 
 		// Register the popup post type.
 		add_action(
@@ -111,7 +111,7 @@ abstract class IncPopupBase {
 
 		if ( function_exists( 'get_rocket_option' ) && get_rocket_option( 'minify_js' ) ) {
 			foreach ( array( 'edit-inc_popup', 'inc_popup', 'inc_popup_page_settings' ) as $screen ) {
-				WDev()->message(
+				lib2()->ui->admin_message(
 					__(
 						'You are using WP Rocket with JS Minification, which has ' .
 						'caused some issues in the past. We recommend to disable ' .
@@ -216,7 +216,7 @@ abstract class IncPopupBase {
 
 		// Add core styles to the response.
 		foreach ( $core_styles as $key => $data ) {
-			WDev()->load_fields( $data, 'pro', 'deprecated' );
+			lib2()->array->equip( $data, 'pro', 'deprecated' );
 
 			$list[ $key ] = (object) array(
 				'url' => trailingslashit( PO_TPL_URL . $key ),
@@ -303,7 +303,7 @@ abstract class IncPopupBase {
 	static protected function prepare_formdata( $form ) {
 		if ( ! is_array( $form ) ) { $form = array(); }
 
-		WDev()->load_fields(
+		lib2()->array->equip(
 			$form,
 			'po_name',
 			'po_content',
@@ -380,7 +380,7 @@ abstract class IncPopupBase {
 	 * @since  4.6
 	 */
 	public function ajax_load_popup() {
-		WDev()->load_request_fields( 'do', 'data' );
+		lib2()->array->equip_request( 'do', 'data' );
 		$action = $_REQUEST['do'];
 
 		switch ( $action ) {
@@ -463,7 +463,7 @@ abstract class IncPopupBase {
 	 */
 	protected function find_popups() {
 		$popups = array();
-		WDev()->load_request_fields( 'po_id', 'preview' );
+		lib2()->array->equip_request( 'po_id', 'preview' );
 
 		$popup_id = absint( $_REQUEST['po_id'] );
 		if ( $popup_id ) {
