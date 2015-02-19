@@ -4,6 +4,10 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.8.0.0
+----------------------------------------------------------------------
+- Add integration to Upfront
+
 4.7.0.4
 ----------------------------------------------------------------------
 - Fix variable-name collission with CoursePress
