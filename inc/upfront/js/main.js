@@ -4,6 +4,5 @@
             Upfront.popup_config.baseUrl + 'js/upfront-element.js'
         ];
         require(dependencies, function(element){});
-        require(dependencies, function(element){});
     });
 })(jQuery);
