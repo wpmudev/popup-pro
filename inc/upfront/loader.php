@@ -35,22 +35,41 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * @since 4.8.0.0
  * @internal
  */
-function upfront_popup_initialize() {
+class Upfront_Module_Popup{
+
+	/**
+	 * Constructs the module
+	 */
+	function __construct(){
 	// Include the backend support stuff
-	require_once dirname( __FILE__ ) . '/lib/class-upfront-popup-view.php';
-	require_once dirname( __FILE__ ) . '/lib/class-upfront-popup-ajax.php';
+		require_once dirname( __FILE__ ) . '/lib/class-upfront-popup-view.php';
+		require_once dirname( __FILE__ ) . '/lib/class-upfront-popup-ajax.php';
+		add_filter('upfront_l10n', array( 'Upfront_Popup_View', 'add_l10n_strings' ) );
+		add_action('wp_footer', array($this, "load_scripts"), 100);
+	}
 
-	add_filter(
-		'upfront_l10n',
-		array( 'Upfront_Popup_View', 'add_l10n_strings' )
-	);
+	/**
+	 * Init module and load scripts
+	 */
+	function initialize(){
+		new self;
+	}
 
-	// Expose our JavaScript definitions to the Upfront API
-	upfront_add_layout_editor_entity(
-		'upfront_popup',
-		upfront_relative_element_url( 'js/upfront-element', __FILE__ )
-	);
+	/**
+	 * Loads scripts
+	 */
+	function load_scripts(){
+		?>
+		<script type="text/javascript">
+			Upfront.popup_config = {
+				baseUrl: '<?php echo PO_UF_URL ?>'
+			};
+		</script>
+		<script src="<?php echo upfront_relative_element_url( 'upfront/js/main.js', PO_UF_URL ); ?>" ></script>
+		<?php
+	}
+
 }
 
 // Initialize the entity when Upfront is good and ready
-add_action( 'upfront-core-initialized', 'upfront_popup_initialize' );
+add_action( 'upfront-core-initialized', array("Upfront_Module_Popup", "initialize") );

@@ -1,11 +1,11 @@
-(function() {
+(function($) {
 /*
  * @todo: What is the first param of define() doing?
  */
-define(
+    require(
 [
-	'text!elements/upfront-popup/css/edit.css',
-	'text!elements/upfront-popup/css/public.css'
+    //"upfront/upfront-application"
+    //"scripts/upfront/upfront-views-editor"
 ],
 /**
  * Contains the logic for the Upfront Editor.
@@ -15,7 +15,8 @@ define(
  * @param  string editor_style
  * @param  string public_style
  */
-function( editor_style, public_style ) {
+function() {
+
 
 	/**
 	 * Define the translations
@@ -27,7 +28,7 @@ function( editor_style, public_style ) {
 	 */
 	var PopupModel = Upfront.Models.ObjectModel.extend({
 		init: function () {
-			var properties = _.clone( Upfront.data.upfront_popup.defaults );
+			//var properties = _.clone( Upfront.data.upfront_popup.defaults );
 			properties.element_id = Upfront.Util.get_unique_id( properties.id_slug + '-object' );
 			this.init_properties( properties );
 		}
@@ -420,7 +421,7 @@ function( editor_style, public_style ) {
 		},
 
 		add_element: function () {
-			var object = new Model(),
+			var object = new PopupModel(),
 				module = new Upfront.Models.Module({
 					name: '',
 					properties: [
@@ -443,23 +444,23 @@ function( editor_style, public_style ) {
 	Upfront.Application.LayoutEditor.add_object(
 		'PopUp',
 		{
-			'Model': Model,
-			'View': View,
+			'Model': PopupModel,
+			'View': PopupView,
 			'Element': PopupElement,
-			'Settings': Settings,
+			'Settings': PopupSettings,
 			cssSelectors: {
 				'.upfront_popup-form p': {label: l10n.css.containers, info: l10n.css.containers_info},
 				'.upfront_popup-form form label': {label: l10n.css.labels, info: l10n.css.labels_info}
 			},
-			cssSelectorsId: Upfront.data.upfront_popup.defaults.type
+			//cssSelectorsId: Upfront.data.upfront_popup.defaults.type
 		}
 	);
 
 	/*
 	 * @todo: Why add the Model + View twice? here and in add_object()...
 	 */
-	Upfront.Models.PopupModel = Model;
-	Upfront.Views.PopupView = View;
+	Upfront.Models.PopupModel = PopupModel;
+	Upfront.Views.PopupView = PopupView;
 
 });
-})();
+})(jQuery);
