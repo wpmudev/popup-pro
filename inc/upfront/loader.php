@@ -35,41 +35,62 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * @since 4.8.0.0
  * @internal
  */
-class Upfront_Module_Popup{
-
-	/**
-	 * Constructs the module
-	 */
-	function __construct(){
-	// Include the backend support stuff
-		require_once dirname( __FILE__ ) . '/lib/class-upfront-popup-view.php';
-		require_once dirname( __FILE__ ) . '/lib/class-upfront-popup-ajax.php';
-		add_filter('upfront_l10n', array( 'Upfront_Popup_View', 'add_l10n_strings' ) );
-		add_action('wp_footer', array($this, "load_scripts"), 100);
-	}
+class Upfront_Module_Popup {
 
 	/**
 	 * Init module and load scripts
 	 */
-	function initialize(){
-		new self;
+	static public function initialize() {
+		static $Inst = null;
+
+		if ( null === $Inst ) {
+			$Inst = new Upfront_Module_Popup();
+		}
+
+		return $Inst;
 	}
+
+	/**
+	 * Private constructor: Singleton pattern.
+	 */
+	private function __construct() {
+		// Include the backend support stuff
+		require_once dirname( __FILE__ ) . '/lib/class-upfront-popup-view.php';
+		require_once dirname( __FILE__ ) . '/lib/class-upfront-popup-ajax.php';
+
+		add_filter(
+			'upfront_l10n',
+			array( 'Upfront_Popup_View', 'add_l10n_strings' )
+		);
+
+		add_action(
+			'wp_footer',
+			array( $this, 'load_scripts' ),
+			100
+		);
+	}
+
 
 	/**
 	 * Loads scripts
 	 */
-	function load_scripts(){
+	public function load_scripts() {
+		$module_js_url = upfront_relative_element_url( 'upfront/js/main.js', PO_UF_URL );
+
 		?>
 		<script type="text/javascript">
 			Upfront.popup_config = {
-				baseUrl: '<?php echo PO_UF_URL ?>'
+				base_url: '<?php echo esc_js( PO_UF_URL ); ?>'
 			};
 		</script>
-		<script src="<?php echo upfront_relative_element_url( 'upfront/js/main.js', PO_UF_URL ); ?>" ></script>
+		<script src="<?php echo esc_url( $module_js_url ); ?>"></script>
 		<?php
 	}
 
 }
 
 // Initialize the entity when Upfront is good and ready
-add_action( 'upfront-core-initialized', array("Upfront_Module_Popup", "initialize") );
+add_action(
+	'upfront-core-initialized',
+	array( 'Upfront_Module_Popup', 'initialize' )
+);
