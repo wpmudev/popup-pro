@@ -8,6 +8,7 @@ Change Log:
 ----------------------------------------------------------------------
 - Add new "Protected Content" rule
 - Fix bug with XProfile rule that did not save field-value correctly
+- Fix behavior "Show on Click" when event is attached to a link/button
 
 4.7.0.4
 ----------------------------------------------------------------------
