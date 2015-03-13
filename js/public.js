@@ -301,6 +301,9 @@
 		 */
 		this.show_popup = function show_popup() {
 			popup_open( me );
+
+			// Prevent default action when user attached this to a click event.
+			return false;
 		};
 
 		/**
