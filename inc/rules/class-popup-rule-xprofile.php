@@ -90,7 +90,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_xprofile() {
-		return $this->sanitize_values( @$_POST['po_rule_data']['xprofile'] );
+			return $this->sanitize_values( $_POST['po_rule_data']['xprofile'] );
 	}
 
 
@@ -139,7 +139,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_xprofile() {
-		return $this->sanitize_values( @$_POST['po_rule_data']['no_xprofile'] );
+		return $this->sanitize_values( $_POST['po_rule_data']['no_xprofile'] );
 	}
 
 
@@ -160,7 +160,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @return array
 	 */
 	protected function sanitize_values( $data ) {
-		if ( ! is_array( $data ) ) { $data = array(); }
+		$data = lib2()->array->get( $data );
 		if ( ! isset( $data['field'] ) ) { $data['field'] = ''; }
 		if ( ! isset( $data['correlation'] ) ) { $data['correlation'] = ''; }
 		if ( ! isset( $data['value'] ) ) { $data['value'] = ''; }
@@ -233,7 +233,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 
 		<input type="text"
 			name="po_rule_data[<?php echo esc_attr( $name ); ?>][value]"
-			value="<?php esc_attr( $data['value'] ); ?>" />
+			value="<?php echo esc_attr( $data['value'] ); ?>" />
 		<?php
 	}
 
