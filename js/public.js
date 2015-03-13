@@ -1,4 +1,4 @@
-/*! PopUp Pro - v4.7.04
+/*! PopUp Pro - v4.7.05
  * http://premium.wpmudev.org/project/the-pop-over-plugin/
  * Copyright (c) 2015; * Licensed GPLv2+ */
 /*global window:false */
@@ -301,9 +301,6 @@
 		 */
 		this.show_popup = function show_popup() {
 			popup_open( me );
-
-			// Prevent default action when user attached this to a click event.
-			return false;
 		};
 
 		/**
