@@ -90,6 +90,43 @@ function() {
 			}
 		},
 
+		// ========== Get_content_markup
+		get_content_markup: function () {
+			var data, rendered,
+				content = this.model.get_content(),
+				$content
+			;
+
+			// Fix tagless content causes WSOD
+			try {
+				$content = jQuery( content );
+			} catch ( error ) {
+				$content = jQuery( '<p>' + content + '</p>' );
+			}
+
+			if ( $content.hasClass( 'plaintxt_padding' ) ) {
+				content = $content.html();
+			}
+
+			data = {
+				'content' : content,
+			};
+
+			rendered = _.template( template, data );
+
+			if ( ! this.is_edited() || jQuery.trim( content ) == '' ) {
+				rendered += '<div class="upfront-quick-swap"><p>' + l10n.dbl_click + '</p></div>';
+			}
+
+			return rendered;
+		},
+
+		// ========== Is_edited
+		is_edited: function () {
+			var is_edited = this.model.get_property_value_by_name( 'is_edited' );
+			return is_edited ? true : false;
+		},
+
 		// ========== On_render
 		on_render: function() {
 			var me = this,
@@ -109,7 +146,7 @@ function() {
 				Upfront.Events.trigger('upfront:element:edit:start', 'text');
 			}
 
-			function ueditor_stop(){
+			function ueditor_stop() {
 				var ed = me.$el.find('.upfront-object-content').data('ueditor'),
 					text = ''
 				;
@@ -129,7 +166,8 @@ function() {
 				me.render();
 			}
 
-			function ueditor_sync(){
+			function ueditor_sync() {
+				//return;
 				var text = jQuery.trim( jQuery(this).html() );
 
 				if ( text ) {

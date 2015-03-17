@@ -22,8 +22,11 @@ class Upfront_Popup_View extends Upfront_Object {
 	 * @return array Modified Upfront.data array.
 	 */
 	public function upfront_data( $data ) {
+		$style_infos = IncPopup::style_infos();
+
 		$data['upfront_popup'] = array(
 			'defaults' => self::default_properties(),
+			'styles' => $style_infos,
 		);
 
 		return $data;
@@ -42,11 +45,19 @@ class Upfront_Popup_View extends Upfront_Object {
 	 */
 	public static function default_properties() {
 		$defaults = array(
+			// Upfront-specific defaults:
 			'type' => 'PopupModel',
 			'view_class' => 'PopupView',
 			'class' => 'c24 upfront-popup_element-object',
 			'has_settings' => 1,
 			'id_slug' => 'upfront-popup_element',
+
+			// Popup-specific defaults:
+			'title' => '',
+			'subtitle' => '',
+			'style' => 'simple',
+			'content' => __( 'See this new PopUp here?', PO_LANG ),
+			// ...
 		);
 
 		return apply_filters( 'po_upfront_defaults', $defaults );
@@ -67,13 +78,22 @@ class Upfront_Popup_View extends Upfront_Object {
 	 * @api
 	 *
 	 * @param  array $properties Element properties.
+	 *                           These are the default_properties defined above.
 	 * @return string HTML Code to output on the page.
 	 */
 	public static function get_element_markup( $properties ) {
+		$defaults = self::default_properties();
+		lib2()->debug->dump( $properties, $defaults );
+
+		$properties = shortcode_atts(
+			$defaults,
+			$properties
+		);
+
 		// Prepare the response code.
 		$code = sprintf(
-			'<div class="upfront_popup">%1$s</div>',
-			'Hi there, I\'m supposed to be a PopUp sometime in the future! Yay :-)'
+			'<div class="upfront_popup">..%1$s</div>',
+			$properties['content']
 		);
 
 		return apply_filters( 'po_upfront_element', $code, $properties );
@@ -145,6 +165,7 @@ class Upfront_Popup_View extends Upfront_Object {
 			'appearance' => __( 'Display Appearance', PO_LANG ),
 			'trigger' => __( 'Trigger', PO_LANG ),
 			'edit_text' => __( 'Edit Contents', PO_LANG ),
+			'dbl_click' => __( 'Double click to edit PopUp contents', PO_LANG ),
 		);
 
 		// Return the requested value.
@@ -167,13 +188,14 @@ class Upfront_Popup_View extends Upfront_Object {
 	 * and `upfront_add_element_script` (don't use other methods!)
 	 * This way the scripts are concatenated and cached. Yay!
 	 *
-	 * @todo: Is this function also called in the editor mode?
+	 * This function is used by public frontend and also for edit mode.
 	 *
 	 * @since  4.8.0
 	 * @return string Full HTML Code to represent the element.
 	 */
 	public function get_markup() {
-		/* // Demo code
+		// Demo code to illustrate how css/js files should be loaded.
+		/*
 		upfront_add_element_style(
 			'upfront_popup',
 			array( 'css/public.css', dirname( __FILE__ ) )
@@ -184,9 +206,22 @@ class Upfront_Popup_View extends Upfront_Object {
 		);
 		*/
 
+		if ( $this->_get_property( 'is_edited' ) ) {
+			$data = array(
+				'content' => $this->_get_property( 'content' ),
+			);
+		} else {
+			$data = array();
+		}
+
 		$properties = lib2()->array->get( $this->_data['properties'] );
 
+		$properties = shortcode_atts(
+			$data,
+			$properties
+		);
+
 		// The juicy stuff is in another function:
-		return $this->get_element_markup( $properties );
+		return self::get_element_markup( $properties );
 	}
 }
