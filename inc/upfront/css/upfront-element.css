@@ -1,0 +1,10 @@
+/**
+ * CSS rules that are used by the Upfront editor to render the Element button,
+ * preview and configuration options.
+ */
+
+/* Icon for the Element button */
+.upfront-ui .upfront-icon-element-popup:before {
+	background-image: url([BASE_URL]img/element-sprite.svg);
+	background-position: 0 0;
+}

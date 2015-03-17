@@ -45,6 +45,8 @@ class Upfront_Popup_Ajax extends Upfront_Server {
 	 * @internal
 	 */
 	protected function __construct() {
+		parent::__construct();
+
 		$this->_add_hooks();
 	}
 

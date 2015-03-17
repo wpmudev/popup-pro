@@ -1,11 +1,7 @@
-(function($) {
-/*
- * @todo: What is the first param of define() doing?
- */
-    require(
+(function() {
+require(
 [
-    //"upfront/upfront-application"
-    //"scripts/upfront/upfront-views-editor"
+    // No other modules required
 ],
 /**
  * Contains the logic for the Upfront Editor.
@@ -17,7 +13,6 @@
  */
 function() {
 
-
 	/**
 	 * Define the translations
 	 */
@@ -27,11 +22,18 @@ function() {
 	 * Define the Popup Model.
 	 */
 	var PopupModel = Upfront.Models.ObjectModel.extend({
+
+		// ========== Init
 		init: function () {
-			//var properties = _.clone( Upfront.data.upfront_popup.defaults );
-			properties.element_id = Upfront.Util.get_unique_id( properties.id_slug + '-object' );
+			var properties = _.clone( Upfront.data.upfront_popup.defaults );
+
+			properties.element_id = Upfront.Util.get_unique_id(
+				properties.id_slug + '-object'
+			);
+
 			this.init_properties( properties );
 		}
+
 	});
 
 	/**
@@ -40,160 +42,185 @@ function() {
 	var PopupView = Upfront.Views.ObjectView.extend({
 		markup: false,
 
+		// ========== Initialize
 		initialize: function() {
-			if ( ! ( this.model instanceof PopupModel ) ) {
-				this.model = new PopupModel(
-					{
-						properties: this.model.get( 'properties' )
-					}
-				);
-			}
-
-			Upfront.Views.ObjectView.prototype.initialize.call( this );
 			var me = this;
 
-			this.model.get( 'properties' ).on( 'change', function ( model ) {
+			function property_changed( model ) {
 				if ( ! model || ! model.get) { return true; }
-				if ( 'row' !== model.get('name') ) {
+				if ( 'row' !== model.get( 'name' ) ) {
 					me.markup = false;
 					me.render();
 				}
-			});
+			}
+
+			if ( ! ( this.model instanceof PopupModel ) ) {
+				this.model = new PopupModel({
+					properties: this.model.get( 'properties' )
+				});
+			}
+
+			Upfront.Views.ObjectView.prototype.initialize.call( this );
+
+			this.model.get( 'properties' ).on( 'change', property_changed );
 		},
 
+		// ========== Render
 		render: function() {
 			if ( ! this.markup ) {
 				var me = this,
-					options = Upfront.Util.model_to_json( this.model )
+					options = Upfront.Util.model_to_json( this.model ),
+					data = {}
 				;
 
-				// Communicate with the server to get the markup.
-				Upfront.Util.post({
-					'action': 'upfront-popup_element-get_markup',
-					properties: options.properties
-				}).done(function( response ) {
+				function markup_loaded( response ) {
 					me.markup = response.data;
 					Upfront.Views.ObjectView.prototype.render.call( me );
-				});
+				}
+
+				data['action'] = 'upfront-popup_element-get_markup';
+				data['properties'] = options.properties;
+
+				// Communicate with the server to get the markup.
+				Upfront.Util
+					.post( data )
+					.done( markup_loaded );
+			} else {
+				Upfront.Views.ObjectView.prototype.render.call( this );
 			}
-			Upfront.Views.ObjectView.prototype.render.call( this );
 		},
+
+		// ========== On_render
+		on_render: function() {
+			var ueditor_config = {
+					linebreaks: false,
+					inserts: {},
+					autostart: false
+				};
+
+			function ueditor_start() {
+				var $swap = jQuery(this).find('.upfront-quick-swap');
+				if ( $swap.length ) {
+					$swap.remove();
+				}
+				me.model.set_property('is_edited', true, true);
+				Upfront.Events.trigger('upfront:element:edit:start', 'text');
+			}
+
+			function ueditor_stop(){
+				var ed = me.$el.find('.upfront-object-content').data('ueditor'),
+					text = ''
+				;
+
+				try {
+					text = ed.getValue(true);
+				} catch (e) {
+					text = '';
+				}
+
+				if ( text ) {
+					me.model.set_content( text, {silent: true} );
+				}
+
+				Upfront.Events.trigger( 'upfront:element:edit:stop' );
+				ed.redactor.events.trigger( 'cleanUpListeners' );
+				me.render();
+			}
+
+			function ueditor_sync(){
+				var text = jQuery.trim( jQuery(this).html() );
+
+				if ( text ) {
+					text = jQuery( text ).html();
+					me.model.set_content( text, {silent: true} );
+				}
+			}
+
+			this.$el.find( '.upfront-object-content' )
+				.addClass( 'upfront-plain_txt' )
+				.ueditor( ueditor_config )
+				.on( 'start', ueditor_start )
+				.on( 'stop', ueditor_stop )
+				.on( 'syncAfter', ueditor_sync )
+			;
+		},
+
+		// ========== Get_content_markup
 		get_content_markup: function () {
 			return !! this.markup ? this.markup : l10n.hold_on;
 		}
 	});
 
 	/**
-	 * (???)
-	 * Unreviewed code...
-	 */
-	var Popup_Fields_FieldAppearance_Icon_Image = Upfront.Views.Editor.Field.Text.extend({
-		className: 'upfront-field-wrap upfront-field-wrap-appearance-icon-image',
-		get_field_html: function () {
-			return '<div class="upfront_popup-icon">' +
-					'<img src="' + Upfront.data.upfront_popup.root_url + 'img/icon.png" />' +
-					Upfront.Views.Editor.Field.Text.prototype.get_field_html.call(this) +
-				'</div>'
-			;
-		},
-		get_saved_value: function () {
-			var prop = this.property ? this.property.get('value') : (this.model ? this.model.get(this.name) : '');
-			return 'icon' === prop ? '' : prop;
-		},
-		get_value: function () {
-			return this.$el.find("input").val() || 'icon';
-		}
-	});
-
-	/**
-	 * (???)
-	 * Unreviewed code...
+	 * Simply a collection of fields.
+	 * This is the base-class of other objects (see below)
 	 */
 	var Popup_SettingsItem_ComplexItem = Upfront.Views.Editor.Settings.Item.extend({
+		// ========== Save_fields
 		save_fields: function () {
 			var model = this.model;
-			this.fields.each(function (field) {
-				var data = field.get_value();
-				if (!_.isObject(data)) return;
-				_(data).each(function (val, idx) {
-					if ('appearance' == idx && !val) return true;
-					model.set_property(idx, val);
-				});
-			});
-		}
-	});
 
-	/**
-	 * (???)
-	 * Unreviewed code...
-	 */
-	var Popup_Fields_Complex_BooleanField = Backbone.View.extend({
-		className: "upfront_popup-fields-complex_boolean clearfix",
-		initialize: function (opts) {
-			this.options = opts;
-			var model = opts.model,
-				boolean_values = opts.boolean_field.values || []
-			;
-			if (!boolean_values.length) {
-				boolean_values.push({label: "", value: "1"});
+			function save_field( field ) {
+				var data = field.get_value();
+				if ( !_.isObject( data ) ) { return; }
+
+				_( data ).each( save_field_val );
 			}
 
-			this.options.field = new Upfront.Views.Editor.Field.Radios(_.extend(
-				opts.boolean_field, {
-					model: model,
-					mutiple: false,
-					values: boolean_values
-			}));
-		},
-		render: function () {
-			this.$el.empty();
+			function save_field_val( val, idx ) {
+				if ( 'appearance' == idx && ! val ) { return true; }
+				model.set_property( idx, val );
+			}
 
-			this.options.subfield.render();
-			this.options.field.render();
-
-			this.$el.append(this.options.field.$el);
-			this.$el.append(this.options.subfield.$el);
-
-			if (this.options.additional_class) this.$el.addClass(this.options.additional_class);
-		},
-		get_value: function () {
-			var data = {};
-			data[this.options.field.get_name()] = this.options.field.get_value();
-			data[this.options.subfield.get_name()] = this.options.subfield.get_value();
-			return data;
+			this.fields.each( save_field );
 		}
 	});
 
 	/**
-	 * (???)
-	 * Unreviewed code...
+	 * This is the Settings master thingy.
+	 * It contains both, the settings data (options) and the settings toolbox
+	 * definitions (panel).
 	 */
 	var PopupSettings = Upfront.Views.Editor.Settings.Settings.extend({
+		// ========== Initialize
 		initialize: function (opts) {
+			var panel;
+
+			panel = new PopupSettings_Panel({model: this.model});
+
 			this.has_tabs = false;
 			this.options = opts;
-			var panel = new PopupSettings_Panel({model: this.model});
 			this.panels = _([
 				panel
 			]);
 		},
+
+		// ========== Get_title
 		get_title: function () {
 			return l10n.settings;
 		}
 	});
 
 	/**
-	 * (Settings Panel)
-	 * Unreviewed code
+	 * The Settings_Panel defines all settings that that can be modified via the
+	 * Upfront settings panel.
+	 *
+	 * It defines the input fields/types, panel-title, and other UI elements.
 	 */
 	var PopupSettings_Panel = Upfront.Views.Editor.Settings.Panel.extend({
+		// ========== Initialize
 		initialize: function (opts) {
-			this.options = opts;
-			var appearance = new PopupSettings_Field_DisplayAppearance({model: this.model}),
-				behavior = new PopupSettings_Field_DisplayBehavior({model: this.model}),
-				trigger = new PopupSettings_Field_DisplayTrigger({model: this.model}),
-				me = this
+			var me = this,
+				attr, appearance, behavior, trigger
 			;
+
+			this.options = opts;
+			attr = {model: this.model};
+
+			appearance = new PopupSettings_Field_DisplayAppearance( attr );
+			behavior = new PopupSettings_Field_DisplayBehavior( attr );
+			trigger = new PopupSettings_Field_DisplayTrigger( attr );
+
 			this.settings = _([
 				appearance,
 				behavior,
@@ -236,27 +263,36 @@ function() {
 								this.property.set({'value': this.get_value()}, {'silent': false});
 							}
 						}),
-
 					]
-
 				})
 			]);
-			appearance.on("popup:appearance:changed", behavior.update, behavior);
-			appearance.on("popup:appearance:changed", trigger.update, trigger);
-			appearance.on("popup:appearance:changed", function () {
-				me.trigger("upfront:settings:panel:refresh", me);
+			appearance.on( 'popup:appearance:changed', behavior.update, behavior );
+			appearance.on( 'popup:appearance:changed', trigger.update, trigger );
+			appearance.on( 'popup:appearance:changed', function () {
+				me.trigger( 'upfront:settings:panel:refresh', me );
 			})
 		},
+
+		// ========== Render
 		render: function () {
-			Upfront.Views.Editor.Settings.Panel.prototype.render.call(this);
-			this.$el.addClass("upfront_popup-settings-panel");
-			this.settings.each(function (setting) {
-				if (setting.update) setting.update();
-			});
+			function update_setting( setting ) {
+				if ( setting.update ) {
+					setting.update();
+				}
+			}
+
+			Upfront.Views.Editor.Settings.Panel.prototype.render.call( this );
+
+			this.$el.addClass( 'upfront_popup-settings-panel' );
+			this.settings.each( update_setting );
 		},
+
+		// ========== Get_label
 		get_label: function () {
 			return l10n.display;
 		},
+
+		// ========== Get_title
 		get_title: function () {
 			return l10n.display;
 		}
@@ -271,7 +307,7 @@ function() {
 		events: function () {
 			return _.extend({},
 				Upfront.Views.Editor.Settings.Item.prototype.events,
-				{"click": "register_change"}
+				{'click': 'register_change'}
 			);
 		},
 		initialize: function () {
@@ -415,11 +451,13 @@ function() {
 	var PopupElement = Upfront.Views.Editor.Sidebar.Element.extend({
 		priority: 130,
 
+		// ========== Render
 		render: function () {
 			this.$el.addClass( 'upfront-icon-element upfront-icon-element-popup' );
 			this.$el.html( l10n.element_name );
 		},
 
+		// ========== Add_element
 		add_element: function () {
 			var object = new PopupModel(),
 				module = new Upfront.Models.Module({
@@ -433,13 +471,16 @@ function() {
 					objects: [object]
 				})
 			;
+
 			this.add_module( module );
 		}
 	});
 
 	/**
 	 * Register the new upfront element.
-	 * @todo: What exactly does this do?
+	 *
+	 * This function ties everything together and delivers the whole package to
+	 * Upfront. After this function call Upfront knows about out new module! :)
 	 */
 	Upfront.Application.LayoutEditor.add_object(
 		'PopUp',
@@ -452,15 +493,17 @@ function() {
 				'.upfront_popup-form p': {label: l10n.css.containers, info: l10n.css.containers_info},
 				'.upfront_popup-form form label': {label: l10n.css.labels, info: l10n.css.labels_info}
 			},
-			//cssSelectorsId: Upfront.data.upfront_popup.defaults.type
 		}
 	);
 
-	/*
-	 * @todo: Why add the Model + View twice? here and in add_object()...
+	/**
+	 * We also need to manually register an official Alias for our model/view
+	 * in the Upfront Collections.
+	 *
+	 * I.e. We tell Upfront that "PopupModel" is handled by our module.
 	 */
 	Upfront.Models.PopupModel = PopupModel;
 	Upfront.Views.PopupView = PopupView;
 
 });
-})(jQuery);
+})();

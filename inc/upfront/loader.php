@@ -63,6 +63,12 @@ class Upfront_Module_Popup {
 			array( 'Upfront_Popup_View', 'add_l10n_strings' )
 		);
 
+		add_filter(
+			'upfront_data',
+			array( 'Upfront_Popup_View', 'upfront_data' ),
+			100
+		);
+
 		add_action(
 			'wp_footer',
 			array( $this, 'load_scripts' ),
@@ -70,13 +76,23 @@ class Upfront_Module_Popup {
 		);
 	}
 
-
 	/**
-	 * Loads scripts
+	 * Load the upfront integration javascript.
+	 *
+	 * @since 4.8.0.0
 	 */
 	public function load_scripts() {
-		$module_js_url = upfront_relative_element_url( 'upfront/js/main.js', PO_UF_URL );
-
+		/*
+		 * main.js will initialize the Upfront element when Upfront switches to
+		 * edit-mode. So that script is quite small.
+		 *
+		 * We need to pass it the URL to the actual Upfront editor integration
+		 * via Upfront.popup_config, so that this file can be loaded on demand.
+		 */
+		$module_js_url = upfront_relative_element_url(
+			'upfront/js/main.js',
+			PO_UF_URL
+		);
 		?>
 		<script type="text/javascript">
 			Upfront.popup_config = {
@@ -86,11 +102,10 @@ class Upfront_Module_Popup {
 		<script src="<?php echo esc_url( $module_js_url ); ?>"></script>
 		<?php
 	}
-
 }
 
 // Initialize the entity when Upfront is good and ready
 add_action(
-	'upfront-core-initialized',
+	'after_setup_theme',
 	array( 'Upfront_Module_Popup', 'initialize' )
 );

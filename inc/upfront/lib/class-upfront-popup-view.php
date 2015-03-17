@@ -14,19 +14,42 @@ class Upfront_Popup_View extends Upfront_Object {
 	// -------------------------------------------------------- STATIC FUNCTIONS
 
 	/**
-	 * Set the default properties when a new element is added to the layout.
+	 * Append plugin specific data to Upfront. We'll use this data later in
+	 * the javascript module.
 	 *
-	 * @since  4.8.0
+	 * @since  4.8.0.0
+	 * @param  array $data The Upfront.data array.
+	 * @return array Modified Upfront.data array.
+	 */
+	public function upfront_data( $data ) {
+		$data['upfront_popup'] = array(
+			'defaults' => self::default_properties(),
+		);
+
+		return $data;
+	}
+
+	/**
+	 * Returns an array of properties that are passed to the Upfront editor
+	 * and define defaults for each new element that is inserted to the page.
+	 *
+	 * These properties are stored in `Upfront.data.upfront_popup.defaults`
+	 *
+	 * @since  4.8.0.0
 	 * @api
 	 *
 	 * @return array Collection of the default attributes
 	 */
 	public static function default_properties() {
 		$defaults = array(
-			// Nothing there yet
+			'type' => 'PopupModel',
+			'view_class' => 'PopupView',
+			'class' => 'c24 upfront-popup_element-object',
+			'has_settings' => 1,
+			'id_slug' => 'upfront-popup_element',
 		);
 
-		return apply_filers( 'po_upfront_defaults', $defaults );
+		return apply_filters( 'po_upfront_defaults', $defaults );
 	}
 
 	/**
@@ -53,7 +76,7 @@ class Upfront_Popup_View extends Upfront_Object {
 			'Hi there, I\'m supposed to be a PopUp sometime in the future! Yay :-)'
 		);
 
-		return apply_filers( 'po_upfront_element', $code, $properties );
+		return apply_filters( 'po_upfront_element', $code, $properties );
 	}
 
 	/**

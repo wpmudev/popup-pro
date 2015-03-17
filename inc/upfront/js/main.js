@@ -25,13 +25,26 @@ jQuery(function() {
 		 * events we need to register our event handler using Upfront.Events.on
 		 */
 		Upfront.Events.on( 'Upfront:loaded', function() {
+			/*
+			 * Dependencies:
+			 * - A normal URL will be loaded and interpreted as javascript
+			 * - URL starting with 'text!' will be loaded and passed as param to
+			 *   the callback function.
+			 */
 			var dependencies = [
-				Upfront.popup_config.base_url + 'js/upfront-element.js'
+				Upfront.popup_config.base_url + 'js/upfront-element.js',
+				'text!' + Upfront.popup_config.base_url + 'css/upfront-element.css'
 			];
+
 			require(
 				dependencies,
-				function() {
-					window.console.log( '[Plugin PopUp] loaded' );
+				function( script, styles ) {
+					styles = styles.replace(
+						'[BASE_URL]',
+						Upfront.popup_config.base_url
+					);
+					jQuery( 'head' ).append( '<style>' + styles + '</style>' );
+					Upfront.Util.log( '[Plugin PopUp] loaded' );
 				}
 			);
 		});
