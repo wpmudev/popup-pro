@@ -4,6 +4,10 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.7.0.6
+----------------------------------------------------------------------
+- Fix typo in the XProfile condition
+
 4.7.0.5
 ----------------------------------------------------------------------
 - Add new "Protected Content" rule
