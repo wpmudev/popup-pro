@@ -247,7 +247,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @param  string $value
 	 * @return bool
 	 */
-	protected function check_xprofile( $type, $field, $cond, $value ) {
+	protected function check_xprofile( $type, $field, $cond, $po_value ) {
 		if ( ! function_exists( 'xprofile_get_field_data' ) ) {
 			return true;
 		}
@@ -256,7 +256,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 			return true;
 		}
 
-		$value = xprofile_get_field_data(
+		$user_value = xprofile_get_field_data(
 			$field,
 			get_current_user_id(),
 			'comma'
@@ -265,19 +265,19 @@ class IncPopupRule_XProfile extends IncPopupRule {
 
 		switch ( $cond ) {
 			case 'regex_is':
-				$match = preg_match( "#{$value}#i", $value );
+				$match = preg_match( "#{$po_value}#i", $user_value );
 				break;
 
 			case 'regex_not':
-				$match = ! preg_match( "#{$value}#i", $value );
+				$match = ! preg_match( "#{$po_value}#i", $user_value );
 				break;
 
 			case 'reverse':
-				$match = $value != $value;
+				$match = $po_value != $user_value;
 				break;
 
 			default:
-				$match = $value == $value;
+				$match = $po_value == $user_value;
 				break;
 		}
 
