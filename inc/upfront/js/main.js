@@ -39,12 +39,13 @@ jQuery(function() {
 			require(
 				dependencies,
 				function( script, styles ) {
+					// Replace placeholders inside the CSS content.
 					styles = styles.replace(
 						'[BASE_URL]',
 						Upfront.popup_config.base_url
 					);
+
 					jQuery( 'head' ).append( '<style>' + styles + '</style>' );
-					Upfront.Util.log( '[Plugin PopUp] loaded' );
 				}
 			);
 		});

@@ -144,6 +144,7 @@ class Upfront_Popup_View extends Upfront_Object {
 			'in_lightbox' => __( 'Form in lightbox', PO_LANG ),
 			'appearance' => __( 'Display Appearance', PO_LANG ),
 			'trigger' => __( 'Trigger', PO_LANG ),
+			'edit_text' => __( 'Edit Contents', PO_LANG ),
 		);
 
 		// Return the requested value.
