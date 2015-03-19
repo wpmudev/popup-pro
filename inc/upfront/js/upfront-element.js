@@ -250,64 +250,22 @@ function() {
 	var PopupSettings_Panel = Upfront.Views.Editor.Settings.Panel.extend({
 		// ========== Initialize
 		initialize: function (opts) {
-			var me = this,
-				attr, appearance, behavior, trigger
+			var attr, appearance, cta,
+				me = this
 			;
 
 			this.options = opts;
 			attr = {model: this.model};
 
-			appearance = new PopupSettings_Field_DisplayAppearance( attr );
-			behavior = new PopupSettings_Field_DisplayBehavior( attr );
-			trigger = new PopupSettings_Field_DisplayTrigger( attr );
+			appearance = new PopupSettings_Field_PanelAppearance( attr );
+			cta = new PopupSettings_Field_PanelCta( attr );
 
 			this.settings = _([
 				appearance,
-				behavior,
-				trigger,
-				new Upfront.Views.Editor.Settings.Item({
-					model: this.model,
-					title: 'Demo Panel',
-					fields: [
-						new Upfront.Views.Editor.Field.Checkboxes({
-							//className: "upfront_popup-logout_style upfront-field-wrap upfront-field-wrap-multiple upfront-field-wrap-radios",
-							model: this.model,
-							property: 'logged_in_preview',
-							label: "",
-							values: [
-								{ label: "Preview", value: 'yes' }
-							],
-							change: function() {
-								this.property.set({'value': this.get_value()}, {'silent': false});
-							}
-						}),
-						new Upfront.Views.Editor.Field.Radios({
-							className: "upfront_popup-logout_style upfront-field-wrap upfront-field-wrap-multiple upfront-field-wrap-radios",
-							model: this.model,
-							property: "logout_style",
-
-							values: [
-								{label: 'Nothing', value: "nothing"},
-								{label: 'Log Out Link', value: "link"}
-							],
-							change: function() {
-								this.property.set({'value': this.get_value()}, {'silent': false});
-							}
-						}),
-						new Upfront.Views.Editor.Field.Text({
-							className: "upfront_popup-logout_text upfront-field-wrap upfront-field-wrap-text",
-							model: this.model,
-							property: 'logout_link',
-							label: 'Log Out Link:',
-							change: function() {
-								this.property.set({'value': this.get_value()}, {'silent': false});
-							}
-						}),
-					]
-				})
+				cta
 			]);
-			appearance.on( 'popup:appearance:changed', behavior.update, behavior );
-			appearance.on( 'popup:appearance:changed', trigger.update, trigger );
+
+			appearance.on( 'popup:appearance:changed', cta.update, cta );
 			appearance.on( 'popup:appearance:changed', function () {
 				me.trigger( 'upfront:settings:panel:refresh', me );
 			})
@@ -329,159 +287,128 @@ function() {
 
 		// ========== Get_label
 		get_label: function () {
-			return l10n.display;
+			return l10n.settings;
 		},
 
 		// ========== Get_title
 		get_title: function () {
-			return l10n.display;
+			return l10n.settings;
 		}
 	});
 
 	/**
-	 * (???)
-	 * Unreviewed code...
+	 * Appearance options of the PopUp.
 	 */
-	var PopupSettings_Field_DisplayBehavior = Upfront.Views.Editor.Settings.Item.extend({
-		className: 'display_behavior',
-		events: function () {
-			return _.extend({},
-				Upfront.Views.Editor.Settings.Item.prototype.events,
-				{'click': 'register_change'}
-			);
-		},
+	var PopupSettings_Field_PanelAppearance = Popup_SettingsItem_ComplexItem.extend({
+		className: 'upfront_popup-item-appearance',
+
+		// ========== Initialize
 		initialize: function () {
-			var style = this.model.get_property_value_by_name("style");
-			var hover_disabled = !style || "popup" == style;
-			var behaviors = [
-				{label: l10n.show_on_hover, value: "hover", disabled: hover_disabled},
-				{label: l10n.show_on_click, value: "click"},
-			];
-			this.fields = _([
-				new Upfront.Views.Editor.Field.Radios({
-					model: this.model,
-					property: "behavior",
-					values: behaviors
-				}),
-			]);
-		},
-		render: function () {
-			Upfront.Views.Editor.Settings.Item.prototype.render.call(this);
-			this.$el
-				.addClass("upfront_popup-item-display_behavior")
-				.find(".upfront-settings-item-content").addClass("clearfix").end()
-				.hide()
+			var key, style,
+				me = this,
+				styles = []
 			;
 
-		},
-		get_title: function () {
-			return "Show Drop-Down Form on:";
-		},
-		register_change: function () {
-			this.fields.each(function (field) {
-				field.property.set({'value': field.get_value()}, {'silent': false});
-			});
-			this.trigger("popup:behavior:changed");
-		},
-		update: function () {
-			var style = this.model.get_property_value_by_name("style");
-			this.initialize();
-			this.$el.empty();
-			this.render();
-			if ("form" != style) this.$el.show();
-		}
-	});
+			// Prepare the styles-select-values.
+			for ( key in Upfront.data.upfront_popup.styles ) {
+				if ( ! Upfront.data.upfront_popup.styles.hasOwnProperty( key ) ) {
+					continue;
+				}
+				style = Upfront.data.upfront_popup.styles[key];
+				if ( style.deprecated ) { continue; }
+				styles.push( {label: style.name, value: key} );
+			}
 
-	/**
-	 * (???)
-	 * Unreviewed code...
-	 */
-	var PopupSettings_Field_DisplayAppearance = Popup_SettingsItem_ComplexItem.extend({
-		/*events: function () {
-			return _.extend({},
-				Upfront.Views.Editor.Settings.Item.prototype.events,
-				{"change": "register_change"}
-			);
-		}*/
-		initialize: function () {
-			var me = this;
-			var styles = [
-				{label: l10n.on_page, value: "form"},
-				{label: l10n.dropdown, value: "dropdown"},
-				/*{label: l10n.in_lightbox, value: "popup"},*/
-			];
+			function did_change() {
+				me.register_change(me);
+			}
+
+			// Collect all Display setting fields.
 			this.fields = _([
-				new Upfront.Views.Editor.Field.Radios({
+				new Upfront.Views.Editor.Field.Select({
 					model: this.model,
-					property: "style",
-
+					property: 'style',
 					values: styles,
-					change: function() { me.register_change(me) }
+					change: did_change
 				}),
-				new Upfront.Views.Editor.Field.Text({
+				new Upfront.Views.Editor.Field.Checkboxes({
 					model: this.model,
-					property: 'label_text',
-					label: 'Log In Button:',
-					change: function() { me.register_change(me) }
+					property: 'round_corners',
+					values: [
+						{ label: l10n.round_corners, value: 'yes' }
+					],
+					change: did_change
 				}),
 			]);
 		},
+
+		// ========== Render
 		render: function () {
 			Upfront.Views.Editor.Settings.Item.prototype.render.call(this);
-			this.$el.find(".upfront-settings-item-content").addClass("clearfix");
+			this.$el.find('.upfront-settings-item-content').addClass('clearfix');
 		},
-		get_title: function () {
-			return l10n.appearance;
-		},
-		register_change: function () {
 
+		// ========== Get_title
+		get_title: function () {
+			return l10n.panel_appearance;
+		},
+
+		// ========== Register_change
+		register_change: function () {
 			this.fields.each(function (field) {
 				field.property.set({'value': field.get_value()}, {'silent': false});
 			});
-			this.trigger("popup:appearance:changed");
+			this.trigger('popup:appearance:changed');
 		}
 	});
 
 	/**
-	 * (???)
-	 * Unreviewed code...
+	 * Call To Action settings.
 	 */
-	var PopupSettings_Field_DisplayTrigger = Popup_SettingsItem_ComplexItem.extend({
-		className: 'upfront_popup-item-display_trigger',
+	var PopupSettings_Field_PanelCta = Popup_SettingsItem_ComplexItem.extend({
+		className: 'upfront_popup-item-cta',
+
+		// ========== Initialize
 		initialize: function () {
 			var me = this;
+
+			function did_change() {
+				me.register_change(me);
+			}
+
 			this.fields = _([
 				new Upfront.Views.Editor.Field.Text({
 					model: this.model,
-					property: 'trigger_text',
-					label: 'Log In Trigger:',
-					change: function() { me.register_change(me) }
+					property: 'cta_label',
+					label: l10n.cta_label,
+					change: did_change
+				}),
+				new Upfront.Views.Editor.Field.Text({
+					model: this.model,
+					property: 'cta_link',
+					label: l10n.cta_link,
+					change: did_change
 				}),
 			]);
 		},
+
+		// ========== Render
+		render: function () {
+			Upfront.Views.Editor.Settings.Item.prototype.render.call(this);
+			this.$el.find('.upfront-settings-item-content').addClass('clearfix');
+		},
+
+		// ========== Get_title
+		get_title: function () {
+			return l10n.panel_cta;
+		},
+
+		// ========== Register_change
 		register_change: function () {
 			this.fields.each(function (field) {
 				field.property.set({'value': field.get_value()}, {'silent': false});
 			});
-			//this.trigger("popup:behavior:changed");
-		},
-		update: function () {
-			var style = this.model.get_property_value_by_name("style");
-			this.initialize();
-			this.$el.empty();
-			this.render();
-			if ("form" != style) this.$el.show();
-		},
-		render: function () {
-			Upfront.Views.Editor.Settings.Item.prototype.render.call(this);
-			this.$el
-				.find(".upfront-settings-item-content").addClass("clearfix").end()
-				.hide()
-			;
-			this.$el.find('.upfront-settings-item-title').remove();
-		},
-		get_title: function () {
-			return "";
+			this.trigger('popup:cta:changed');
 		}
 	});
 
@@ -589,10 +516,7 @@ function() {
 			'Element': PopupElement,
 			'Settings': PopupSettings,
 			'ContextMenu': PopupMenu,
-			cssSelectors: {
-				'.upfront_popup-form p': {label: l10n.css.containers, info: l10n.css.containers_info},
-				'.upfront_popup-form form label': {label: l10n.css.labels, info: l10n.css.labels_info}
-			},
+			cssSelectors: {},
 		}
 	);
 

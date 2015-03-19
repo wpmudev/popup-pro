@@ -57,7 +57,9 @@ class Upfront_PopupView extends Upfront_Object {
 			'subtitle' => '',
 			'style' => 'simple',
 			'content' => __( 'See this new PopUp here?', PO_LANG ),
-			// ...
+			'round_corners' => true,
+			'cta_label' => '',
+			'cta_link' => '',
 		);
 
 		return apply_filters( 'po_upfront_defaults', $defaults );
@@ -95,6 +97,9 @@ class Upfront_PopupView extends Upfront_Object {
 			$properties['show_on_load'] = true;
 			$properties['custom_class'][] = 'inline';
 		}
+
+		// Translate checkbox-values to usable data.
+		$properties['round_corners'] = is_array( $properties['round_corners'] );
 
 		// Create a populated PopUp item.
 		$popup = new IncPopupItem( $properties );
@@ -140,43 +145,19 @@ class Upfront_PopupView extends Upfront_Object {
 	 * @return string|array
 	 */
 	private static function _get_l10n( $key = null ) {
-		/*
-		 * @todo: Replace this with real translations...
-		 */
 		$l10n = array(
 			'element_name' => __( 'PopUp', PO_LANG ),
-			'click_here' => __( 'Click here to reset it', PO_LANG ),
-			'css' => array(
-				'containers' => __( 'Field containers', PO_LANG ),
-				'containers_info' => __( 'Wrapper layer for every field', PO_LANG ),
-				'labels' => __( 'Field labels', PO_LANG ),
-				'labels_info' => __( 'Labels for the input fields', PO_LANG ),
-				'inputs' => __( 'Input fields', PO_LANG ),
-				'inputs_info' => __( 'Username and password fields', PO_LANG ),
-				'button' => __( 'Login button', PO_LANG ),
-				'button_info' => __( 'Login button', PO_LANG ),
-				'remember' => __( 'Remember me checkbox', PO_LANG ),
-				'remember_info' => __( 'Remember me checkbox input.', PO_LANG ),
-				'pwd_wrap' => __( 'Lost password wrapper', PO_LANG ),
-				'pwd_wrap_info' => __( 'Container wrapper for the lost pasword function.', PO_LANG ),
-				'pwd_link' => __( 'Lost password link', PO_LANG ),
-				'pwd_link_info' => __( 'Link for lost passwords', PO_LANG ),
-				'close' => __( 'Closed login link', PO_LANG ),
-				'close_info' => __( 'The link that allows to open the login when the dropdown or lightbox option is selected.', PO_LANG ),
-			),
 			'hold_on' => __( 'Please, hold on', PO_LANG ),
-			'settings' => __( 'Login settings', PO_LANG ),
-			'display' => __( 'Display', PO_LANG ),
-			'show_on_hover' => __( 'Show on hover', PO_LANG ),
-			'show_on_click' => __( 'Show on click', PO_LANG ),
-			'behavior' => __( 'Display behavior', PO_LANG ),
-			'on_page' => __( 'Form on page', PO_LANG ),
-			'dropdown' => __( 'Drop down form', PO_LANG ),
-			'in_lightbox' => __( 'Form in lightbox', PO_LANG ),
-			'appearance' => __( 'Display Appearance', PO_LANG ),
-			'trigger' => __( 'Trigger', PO_LANG ),
 			'edit_text' => __( 'Edit Contents', PO_LANG ),
 			'dbl_click' => __( 'Double click to edit PopUp contents', PO_LANG ),
+			'settings' => __( 'Settings', PO_LANG ),
+
+			'panel_appearance' => __( 'Appearance', PO_LANG ),
+			'round_corners' => __( 'Round corners', PO_LANG ),
+
+			'panel_cta' => __( 'Call To Action', PO_LANG ),
+			'cta_label' => __( 'Label', PO_LANG ),
+			'cta_link' => __( 'Link', PO_LANG ),
 		);
 
 		// Return the requested value.

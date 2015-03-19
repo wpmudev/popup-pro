@@ -8,3 +8,12 @@
 	background-image: url([BASE_URL]img/element-sprite.svg);
 	background-position: 0 0;
 }
+
+/* Add some hover function to the Upfront editor */
+.upfront-popup_element-module .upfront-editable_entity .upfront-object-content {
+	-webkit-transition: margin 0.5s;
+    transition: margin 0.5s;
+}
+.upfront-popup_element-module:hover .upfront-editable_entity .upfront-object-content {
+	margin-right: 20px;
+}
