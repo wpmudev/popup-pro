@@ -82,18 +82,29 @@ class Upfront_PopupView extends Upfront_Object {
 	 * @return string HTML Code to output on the page.
 	 */
 	public static function get_element_markup( $properties ) {
-		$defaults = self::default_properties();
-		lib2()->debug->dump( $properties, $defaults );
+		$properties = upfront_properties_to_array( $properties );
 
-		$properties = shortcode_atts(
-			$defaults,
-			$properties
-		);
+		lib2()->array->equip( $properties, '_is_editor' );
+
+		// Flag "_is_editor" is set in Upfront_PopupAjax::json_get_markup()
+		if ( $properties['_is_editor'] ) {
+			/*
+			 * This PopUp is a preview in the Upfront editor. We're going to
+			 * make small adjustments that will not be made to the real PopUp.
+			 */
+			$properties['show_on_load'] = true;
+			$properties['custom_class'][] = 'inline';
+		}
+
+		// Create a populated PopUp item.
+		$popup = new IncPopupItem( $properties );
+		$data = $popup->get_script_data();
 
 		// Prepare the response code.
 		$code = sprintf(
-			'<div class="upfront_popup">..%1$s</div>',
-			$properties['content']
+			'<div class="upfront_popup">%1$s</div><style>%2$s</style>',
+			$data['html'],
+			$data['styles']
 		);
 
 		return apply_filters( 'po_upfront_element', $code, $properties );
@@ -206,20 +217,7 @@ class Upfront_PopupView extends Upfront_Object {
 		);
 		*/
 
-		if ( $this->_get_property( 'is_edited' ) ) {
-			$data = array(
-				'content' => $this->_get_property( 'content' ),
-			);
-		} else {
-			$data = array();
-		}
-
 		$properties = lib2()->array->get( $this->_data['properties'] );
-
-		$properties = shortcode_atts(
-			$data,
-			$properties
-		);
 
 		// The juicy stuff is in another function:
 		return self::get_element_markup( $properties );

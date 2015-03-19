@@ -67,8 +67,9 @@ class Upfront_PopupAjax extends Upfront_Server {
 
 	/**
 	 * Ajax handler that returns the element contents in JSON format.
-	 * This function is called during the edit mode when a new element is added
-	 * to the layout.
+	 *
+	 * This function is ONLY called during the edit mode when a new element is
+	 * added to the layout.
 	 *
 	 * Output the response via `$this->_out( ... )`
 	 * No need to `exit` or `die` in the end.
@@ -79,6 +80,9 @@ class Upfront_PopupAjax extends Upfront_Server {
 	public function json_get_markup() {
 		// Make sure $_POST['properties'] exists.
 		lib2()->array->equip_post( 'properties' );
+
+		// Flag properties to know we are in editor-mode.
+		$_POST = upfront_set_property_value( '_is_editor', true, $_POST );
 
 		// Make sure that $properties is an array.
 		$properties = lib2()->array->get( $_POST['properties'] );
