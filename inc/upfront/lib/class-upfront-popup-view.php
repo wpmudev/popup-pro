@@ -8,7 +8,7 @@
  *
  * @since 4.8.0.0
  */
-class Upfront_Popup_View extends Upfront_Object {
+class Upfront_PopupView extends Upfront_Object {
 
 	// -------------------------------------------------------------------------
 	// -------------------------------------------------------- STATIC FUNCTIONS
@@ -46,8 +46,8 @@ class Upfront_Popup_View extends Upfront_Object {
 	public static function default_properties() {
 		$defaults = array(
 			// Upfront-specific defaults:
-			'type' => 'PopupModel',
-			'view_class' => 'PopupView',
+			'type' => 'PopupModel', // Has to match the JS class!
+			'view_class' => 'PopupView', // Has to match the JS class + the PHP class!
 			'class' => 'c24 upfront-popup_element-object',
 			'has_settings' => 1,
 			'id_slug' => 'upfront-popup_element',
@@ -68,7 +68,7 @@ class Upfront_Popup_View extends Upfront_Object {
 	 * the PopUp!
 	 *
 	 * Keep in mind: This function is also invoked via Ajax.
-	 * {@see Upfront_Popup_Ajax::json_get_markup()}
+	 * {@see Upfront_PopupAjax::json_get_markup()}
 	 *
 	 * CSS and JS files should be enqueued using `upfront_add_element_style`
 	 * and `upfront_add_element_script` (don't use other methods!)

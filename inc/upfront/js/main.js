@@ -13,7 +13,7 @@ jQuery(function() {
 		 * If the Upfront framework was not fully initialized then try again
 		 * after a short delay. This gives Upfront time to finish setup.
 		 */
-		if ( undefined === Upfront.Events || undefined === Upfront.Events.on ) {
+		if ( undefined === window.Upfront || undefined === Upfront.Events || undefined === Upfront.Events.on ) {
 			loading_attempts += 1;
 			window.setTimeout( init_module, 20 );
 			return;
@@ -32,8 +32,8 @@ jQuery(function() {
 			 *   the callback function.
 			 */
 			var dependencies = [
-				Upfront.popup_config.base_url + 'js/upfront-element.js',
-				'text!' + Upfront.popup_config.base_url + 'css/upfront-element.css'
+				_popup_uf_data.base_url + 'js/upfront-element.js',
+				'text!' + _popup_uf_data.base_url + 'css/upfront-element.css'
 			];
 
 			require(
@@ -42,7 +42,7 @@ jQuery(function() {
 					// Replace placeholders inside the CSS content.
 					styles = styles.replace(
 						'[BASE_URL]',
-						Upfront.popup_config.base_url
+						_popup_uf_data.base_url
 					);
 
 					jQuery( 'head' ).append( '<style>' + styles + '</style>' );

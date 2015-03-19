@@ -30,12 +30,29 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * This integration uses the text-domain PO_LANG (const defined in popover.php)
  *
+ * *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+ *
+ * Important - naming convention!
+ *
+ * - PHP classes should stick to these names:
+ *     Upfront_<module>Main
+ *     Upfront_<module>View extends Upfront_Object
+ *     Upfront_<module>Ajax extends Upfront_Server
+ *
+ * - JS classes should be registered as
+ *     Upfront.Models.<module>Model
+ *     Upfront.Views.<module>View
+ *
+ * Using other names might cause problems at some points.
+ *
+ * *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+ *
  * Called by hook: 'upfront-core-initialized'
  *
  * @since 4.8.0.0
  * @internal
  */
-class Upfront_Module_Popup {
+class Upfront_PopupMain {
 
 	/**
 	 * Init module and load scripts
@@ -44,7 +61,7 @@ class Upfront_Module_Popup {
 		static $Inst = null;
 
 		if ( null === $Inst ) {
-			$Inst = new Upfront_Module_Popup();
+			$Inst = new Upfront_PopupMain();
 		}
 
 		return $Inst;
@@ -60,12 +77,12 @@ class Upfront_Module_Popup {
 
 		add_filter(
 			'upfront_l10n',
-			array( 'Upfront_Popup_View', 'add_l10n_strings' )
+			array( 'Upfront_PopupView', 'add_l10n_strings' )
 		);
 
 		add_filter(
 			'upfront_data',
-			array( 'Upfront_Popup_View', 'upfront_data' ),
+			array( 'Upfront_PopupView', 'upfront_data' ),
 			100
 		);
 
@@ -95,9 +112,8 @@ class Upfront_Module_Popup {
 		);
 		?>
 		<script type="text/javascript">
-			Upfront.popup_config = {
-				base_url: '<?php echo esc_js( PO_UF_URL ); ?>'
-			};
+			if ( undefined === window._popup_uf_data ) { _popup_uf_data = {}; }
+			_popup_uf_data.base_url = '<?php echo esc_js( PO_UF_URL ); ?>';
 		</script>
 		<script src="<?php echo esc_url( $module_js_url ); ?>"></script>
 		<?php
@@ -106,6 +122,6 @@ class Upfront_Module_Popup {
 
 // Initialize the entity when Upfront is good and ready
 add_action(
-	'after_setup_theme',
-	array( 'Upfront_Module_Popup', 'initialize' )
+	'upfront-core-initialized',
+	array( 'Upfront_PopupMain', 'initialize' )
 );

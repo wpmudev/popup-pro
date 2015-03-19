@@ -12,24 +12,24 @@
  *
  * @since 4.8.0.0
  */
-class Upfront_Popup_Ajax extends Upfront_Server {
+class Upfront_PopupAjax extends Upfront_Server {
 
 	// -------------------------------------------------------------------------
 	// -------------------------------------------------------- STATIC FUNCTIONS
 
 	/**
-	 * Returns the singleton object of the Upfront_Popup_Ajax server object.
+	 * Returns the singleton object of the Upfront_PopupAjax server object.
 	 *
 	 * @since  4.8.0.0
 	 * @api
 	 *
-	 * @return Upfront_Popup_Ajax
+	 * @return Upfront_PopupAjax
 	 */
 	public static function serve() {
 		static $Instance = null;
 
 		if ( null === $Instance ) {
-			$Instance = new Upfront_Popup_Ajax();
+			$Instance = new Upfront_PopupAjax();
 		}
 
 		return $Instance;
@@ -84,7 +84,7 @@ class Upfront_Popup_Ajax extends Upfront_Server {
 		$properties = lib2()->array->get( $_POST['properties'] );
 
 		// Fetch the HTML markup from the view.
-		$markup = Upfront_Popup_View::get_element_markup( $properties );
+		$markup = Upfront_PopupView::get_element_markup( $properties );
 
 		// Convert markup to a JSON string.
 		$json_response = new Upfront_JsonResponse_Success( $markup );
@@ -95,4 +95,4 @@ class Upfront_Popup_Ajax extends Upfront_Server {
 }
 
 // Initialize the Ajax Server instantly!
-Upfront_Popup_Ajax::serve();
+Upfront_PopupAjax::serve();
