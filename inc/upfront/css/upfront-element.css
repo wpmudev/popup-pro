@@ -11,9 +11,54 @@
 
 /* Add some hover function to the Upfront editor */
 .upfront-popup_element-module .upfront-editable_entity .upfront-object-content {
-	-webkit-transition: margin 0.5s;
-    transition: margin 0.5s;
+	-webkit-transition: all 0.5s;
+    transition: all 0.5s;
 }
 .upfront-popup_element-module:hover .upfront-editable_entity .upfront-object-content {
 	margin-right: 20px;
+}
+
+/* Styling the inline editor fields */
+.upfront-popup_element-module .upfront_popup .uf-inline-edit {
+	display: none;
+	border: 1px solid #CEDDEA;
+	margin: 0 1px 1px 0;
+	background: #FAFAFA;
+}
+.upfront-popup_element-module .upfront_popup .uf-inline-edit input {
+	background: transparent;
+	width: 100%;
+	padding: 2px 10px;
+	color: #333;
+	border: 2px solid transparent;
+	box-sizing: border-box;
+}
+.upfront-popup_element-module .upfront_popup .uf-inline-edit input:focus {
+	border-color: #CEDDEA;
+}
+.upfront-popup_element-module .upfront_popup .uf-inline-edit input::-webkit-input-placeholder {
+    color:    #CCC;
+}
+.upfront-popup_element-module .upfront_popup .uf-inline-edit input:-moz-placeholder {
+   color:    #CCC;
+   opacity:  1;
+}
+.upfront-popup_element-module .upfront_popup .uf-inline-edit input::-moz-placeholder {
+   color:    #CCC;
+   opacity:  1;
+}
+.upfront-popup_element-module .upfront_popup .uf-inline-edit input:-ms-input-placeholder {
+   color:    #CCC;
+}
+
+.upfront-popup_element-module:hover .upfront_popup .uf-inline-value {
+	display: none !important;
+}
+.upfront-popup_element-module:hover .upfront_popup .uf-inline-edit {
+	display: block !important;
+}
+.upfront-popup_element-module:hover .upfront_popup .wdpu-head,
+.upfront-popup_element-module:hover .upfront_popup .wdpu-title,
+.upfront-popup_element-module:hover .upfront_popup .wdpu-subtitle {
+	display: inherit !important;
 }

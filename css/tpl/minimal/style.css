@@ -54,6 +54,15 @@
   display: inline-block;
   margin: 0 0 30px;
 }
+#messagebox.no-title.no-subtitle .wdpu-head {
+  display: none;
+}
+#messagebox.no-title .wdpu-title {
+  display: none;
+}
+#messagebox.no-subtitle .wdpu-subtitle {
+  display: none;
+}
 #messagebox .wdpu-msg {
   position: relative;
   display: block;

@@ -80,9 +80,15 @@ if ( $this->custom_size ) {
  * @var   string
  * @since 4.6.1.2
  */
+$classes = $this->custom_class;
+if ( $has_title ) { $classes[] = 'with-title'; }
+else { $classes[] = 'no-title'; }
+if ( $has_subtitle ) { $classes[] = 'with-subtitle'; }
+else { $classes[] = 'no-subtitle'; }
+
 $msg_class .= implode(
 	' ',
-	apply_filters( 'popup-template-class', $this->custom_class, $this->id, $this )
+	apply_filters( 'popup-template-class', $classes, $this->id, $this )
 );
 
 /**
@@ -108,20 +114,14 @@ $layer_style = apply_filters( 'popup-layer-style', $layer_style, $this->id, $thi
 			title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
 
 		<div class="wdpu-msg-inner resize">
-			<?php if ( $show_title ) : ?>
 			<div class="wdpu-head">
-				<?php if ( $has_title ) : ?>
-					<div class="wdpu-title">
-						<?php echo esc_html( $this->title ); ?>
-					</div>
-				<?php endif; ?>
-				<?php if ( $has_subtitle ) : ?>
-					<div class="wdpu-subtitle">
-						<?php echo esc_html( $this->subtitle ); ?>
-					</div>
-				<?php endif; ?>
+				<div class="wdpu-title">
+					<?php echo esc_html( $this->title ); ?>
+				</div>
+				<div class="wdpu-subtitle">
+					<?php echo esc_html( $this->subtitle ); ?>
+				</div>
 			</div>
-			<?php endif; ?>
 
 			<div class="wdpu-middle">
 				<?php if ( $has_img && $img_left ) : ?>

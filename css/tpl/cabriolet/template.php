@@ -79,9 +79,15 @@ if ( $this->custom_size ) {
  * @var   string
  * @since 4.6.1.2
  */
+$classes = $this->custom_class;
+if ( $has_title ) { $classes[] = 'with-title'; }
+else { $classes[] = 'no-title'; }
+if ( $has_subtitle ) { $classes[] = 'with-subtitle'; }
+else { $classes[] = 'no-subtitle'; }
+
 $msg_class .= implode(
 	' ',
-	apply_filters( 'popup-template-class', $this->custom_class, $this->id, $this )
+	apply_filters( 'popup-template-class', $classes, $this->id, $this )
 );
 
 /**
@@ -104,20 +110,14 @@ $layer_style = apply_filters( 'popup-layer-style', $layer_style, $this->id, $thi
 		<div class="wdpu-msg move <?php echo esc_attr( $move_class ); ?>" style="<?php echo esc_attr( $pos_style ); ?>">
 
 		<div class="wdpu-msg-inner">
-			<?php if ( $has_title || $has_subtitle ) : ?>
-				<div class="wdpu-head">
-				<?php if ( $has_title ) : ?>
-					<div class="wdpu-title">
-						<?php echo esc_html( $this->title ); ?>
-					</div>
-				<?php endif; ?>
-				<?php if ( $has_subtitle ) : ?>
-					<div class="wdpu-subtitle">
-						<?php echo esc_html( $this->subtitle ); ?>
-					</div>
-				<?php endif; ?>
+			<div class="wdpu-head">
+				<div class="wdpu-title">
+					<?php echo esc_html( $this->title ); ?>
 				</div>
-			<?php endif; ?>
+				<div class="wdpu-subtitle">
+					<?php echo esc_html( $this->subtitle ); ?>
+				</div>
+			</div>
 
 			<div class="wdpu-message-wrap resize" data-reduce-height=".wdpu-head">
 				<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>

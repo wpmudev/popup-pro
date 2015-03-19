@@ -76,6 +76,58 @@ function() {
 				function markup_loaded( response ) {
 					me.markup = response.data;
 					Upfront.Views.ObjectView.prototype.render.call( me );
+
+					// Add additional HTML markup for the editor.
+					add_edit_fields( me.$el );
+				}
+
+				// Add a few inline-editor fields to the PopUp preview.
+				function add_edit_fields( el ) {
+					var edit_title, edit_subtitle,
+						el_title, el_subtitle,
+						edit_wrap = '<div class="uf-inline-edit"></div>',
+						value_wrap = '<div class="uf-inline-value"></div>';
+
+					el_title =  el.find( '.wdpu-title' );
+					el_subtitle =  el.find( '.wdpu-subtitle' );
+
+					edit_title = jQuery( '<input type="text">' )
+						.attr( 'placeholder', l10n.title )
+						.attr( 'name', 'title' )
+						.change( change_inline_value )
+						.val( jQuery.trim( el_title.text() ) );
+					edit_subtitle = jQuery( '<input type="text">' )
+						.attr( 'placeholder', l10n.subtitle )
+						.attr( 'name', 'subtitle' )
+						.change( change_inline_value )
+						.val( jQuery.trim( el_subtitle.text() ) );
+
+					el_title.wrapInner( value_wrap );
+					el_subtitle.wrapInner( value_wrap );
+
+					edit_title.appendTo( el_title ).wrap( edit_wrap );
+					edit_subtitle.appendTo( el_subtitle ).wrap( edit_wrap );
+
+var new_region = new Upfront.Models.Region(
+	_.extend(
+		_.clone( Upfront.data.region_default_args ),
+		{
+			"name": 'popup_test',
+			"container": 'body',
+			"title": 'Demo Region'
+		}
+	)
+);
+
+				}
+
+				// When an inline field was modified we update the property.
+				function change_inline_value( ev ) {
+					var inp = jQuery( this ),
+						field = inp.attr( 'name' ),
+						value = inp.val();
+
+					me.model.set_property( field, value, false );
 				}
 
 				data['action'] = 'upfront-popup_element-get_markup';
@@ -88,6 +140,8 @@ function() {
 			} else {
 				Upfront.Views.ObjectView.prototype.render.call( this );
 			}
+
+
 		},
 
 		// ========== Get_content_markup

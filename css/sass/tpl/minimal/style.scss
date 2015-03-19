@@ -72,6 +72,24 @@ $col_secondary: #000002;
 		}
 	}
 
+	&.no-title.no-subtitle {
+		.wdpu-head {
+			display: none;
+		}
+	}
+
+	&.no-title {
+		.wdpu-title {
+			display: none;
+		}
+	}
+
+	&.no-subtitle {
+		.wdpu-subtitle {
+			display: none;
+		}
+	}
+
 	.wdpu-msg {
 		position: relative;
 		display: block;

@@ -72,6 +72,24 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		}
 	}
 
+	&.no-title.no-subtitle {
+		.wdpu-head {
+			display: none;
+		}
+	}
+
+	&.no-title {
+		.wdpu-title {
+			display: none;
+		}
+	}
+
+	&.no-subtitle {
+		.wdpu-subtitle {
+			display: none;
+		}
+	}
+
 	/* wrap is positioned inside the #messagebox layer. */
 	.wdpu-msg {
 		position: relative;

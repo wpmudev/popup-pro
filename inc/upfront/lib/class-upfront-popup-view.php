@@ -158,6 +158,9 @@ class Upfront_PopupView extends Upfront_Object {
 			'panel_cta' => __( 'Call To Action', PO_LANG ),
 			'cta_label' => __( 'Label', PO_LANG ),
 			'cta_link' => __( 'Link', PO_LANG ),
+
+			'title' => __( 'Enter title...', PO_LANG ),
+			'subtitle' => __( 'Enter subtitle...', PO_LANG ),
 		);
 
 		// Return the requested value.
