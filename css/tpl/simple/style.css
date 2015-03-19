@@ -40,6 +40,16 @@
 #messagebox.custom-size {
   padding: 0;
 }
+#messagebox.inline {
+  position: relative;
+  overflow: visible;
+  background: transparent;
+  padding: 0;
+}
+#messagebox.inline .wdpu-msg {
+  max-width: 100%;
+  margin: 0;
+}
 #messagebox.custom-pos .wdpu-msg {
   position: absolute;
   display: inline-block;
