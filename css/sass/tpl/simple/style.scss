@@ -52,6 +52,18 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 		padding: 0;
 	}
 
+	&.inline {
+		position: relative;
+		overflow: visible;
+		background: transparent;
+		padding: 0;
+
+		.wdpu-msg {
+			max-width: 100%;
+			margin: 0;
+		}
+	}
+
 	&.custom-pos {
 		.wdpu-msg {
 			position: absolute;

@@ -125,6 +125,12 @@ class IncPopupItem {
 	// Hiding animation
 	public $animation_out = '';
 
+	// If true, then the PopUp will be displayed instantly.
+	public $show_on_load = false;
+
+	// Adds a custom class to the popup.
+	public $custom_class = array();
+
 	// -- Conditions
 
 	// Conditions that need to be true in order to use the popup.
@@ -221,6 +227,8 @@ class IncPopupItem {
 		);
 		$this->animation_in = '';
 		$this->animation_out = '';
+		$this->show_on_load = false;
+		$this->custom_class = array();
 		$this->rule = array();
 		$this->rule_files = array();
 		$this->rule_data = array();
@@ -268,6 +276,8 @@ class IncPopupItem {
 		isset( $data['custom_css'] ) && $this->custom_css = $data['custom_css'];
 		isset( $data['animation_in'] ) && $this->animation_in = $data['animation_in'];
 		isset( $data['animation_out'] ) && $this->animation_out = $data['animation_out'];
+		isset( $data['show_on_load'] ) && $this->show_on_load = $data['show_on_load'];
+		is_array( $data['custom_class'] ) && $this->custom_class = $data['custom_class'];
 
 		isset( $data['size']['width'] ) && $this->size['width'] = $data['size']['width'];
 		isset( $data['size']['height'] ) && $this->size['height'] = $data['size']['height'];
@@ -328,14 +338,15 @@ class IncPopupItem {
 		$this->deprecated_style = @$styles[ $this->style ]->deprecated;
 
 		// Boolean types.
-		$this->custom_size = (true == @$this->custom_size);
-		$this->custom_colors = (true == @$this->custom_colors);
-		$this->deprecated_style = (true == @$this->deprecated_style);
-		$this->round_corners = (true == @$this->round_corners);
-		$this->scroll_body = (true == @$this->scroll_body);
-		$this->can_hide = (true == @$this->can_hide);
-		$this->close_hides = (true == @$this->close_hides);
-		$this->overlay_close = (true == @$this->overlay_close);
+		$this->custom_size = (true == $this->custom_size);
+		$this->custom_colors = (true == $this->custom_colors);
+		$this->deprecated_style = (true == $this->deprecated_style);
+		$this->round_corners = (true == $this->round_corners);
+		$this->scroll_body = (true == $this->scroll_body);
+		$this->can_hide = (true == $this->can_hide);
+		$this->close_hides = (true == $this->close_hides);
+		$this->overlay_close = (true == $this->overlay_close);
+		$this->show_on_load = (true == $this->show_on_load);
 
 		// Numeric types.
 		$this->hide_expire = absint( $this->hide_expire );
@@ -407,6 +418,7 @@ class IncPopupItem {
 		$this->script_data['form_submit'] = $this->form_submit;
 		$this->script_data['animation_in'] = $this->animation_in;
 		$this->script_data['animation_out'] = $this->animation_out;
+		$this->script_data['show_on_load'] = $this->show_on_load;
 
 		// Validation only done when editing popups.
 		if ( is_admin() ) {
@@ -490,6 +502,8 @@ class IncPopupItem {
 		$this->custom_css = get_post_meta( $this->id, 'po_custom_css', true );
 		$this->animation_in = get_post_meta( $this->id, 'po_animation_in', true );
 		$this->animation_out = get_post_meta( $this->id, 'po_animation_out', true );
+		$this->show_on_load = get_post_meta( $this->id, 'po_show_on_load', true );
+		$this->custom_class = get_post_meta( $this->id, 'po_custom_class', true );
 		$this->round_corners = get_post_meta( $this->id, 'po_round_corners', true );
 		$this->scroll_body = get_post_meta( $this->id, 'po_scroll_body', true );
 		$this->can_hide = get_post_meta( $this->id, 'po_can_hide', true );
@@ -571,6 +585,8 @@ class IncPopupItem {
 			update_post_meta( $this->id, 'po_custom_css', $this->custom_css );
 			update_post_meta( $this->id, 'po_animation_in', $this->animation_in );
 			update_post_meta( $this->id, 'po_animation_out', $this->animation_out );
+			update_post_meta( $this->id, 'po_show_on_load', $this->show_on_load );
+			update_post_meta( $this->id, 'po_custom_class', $this->custom_class );
 			update_post_meta( $this->id, 'po_round_corners', $this->round_corners );
 			update_post_meta( $this->id, 'po_scroll_body', $this->scroll_body );
 			update_post_meta( $this->id, 'po_can_hide', $this->can_hide );
@@ -634,7 +650,7 @@ class IncPopupItem {
 
 		// Check for specific/frequently used shortcodes.
 
-		if ( $method !== 'footer'
+		if ( 'footer' !== $method
 			&& preg_match( '#\[gravityforms?(\s.*?\]|\])#', $content )
 		) {
 			lib2()->ui->admin_message(

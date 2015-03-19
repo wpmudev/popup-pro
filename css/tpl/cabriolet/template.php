@@ -79,12 +79,27 @@ if ( $this->custom_size ) {
  * @var   string
  * @since 4.6.1.2
  */
-$msg_class .= apply_filters( 'popup-template-class', '', $this->id, $this );
+$msg_class .= implode(
+	' ',
+	apply_filters( 'popup-template-class', $this->custom_class, $this->id, $this )
+);
+
+/**
+ * This determines if the PopUp is initially hidden on the page.
+ *
+ * @var   bool
+ * @since 4.8.0.0
+ */
+$layer_style = 'display:none;';
+if ( $this->show_on_load ) {
+	$layer_style = '';
+}
+$layer_style = apply_filters( 'popup-layer-style', $layer_style, $this->id, $this );
 
 ?>
 <div id="<?php echo esc_attr( $this->code->id ); ?>"
 	class="style-cabriolet wdpu-container wdpu-background <?php echo esc_attr( $msg_class ); ?>"
-	style="display: none;">
+	style="<?php echo esc_attr( $layer_style ); ?>">
 
 		<div class="wdpu-msg move <?php echo esc_attr( $move_class ); ?>" style="<?php echo esc_attr( $pos_style ); ?>">
 
