@@ -173,8 +173,62 @@ class Upfront_PopupView extends Upfront_Object {
 		}
 	}
 
+	/**
+	 * Returns a list of the popups on the current Upfront page.
+	 *
+	 * @since  4.8.0.0
+	 * @param  array $list List of IncPopupItem objects.
+	 * @param  IncPopup $base The base IncPopup object.
+	 * @return array
+	 */
+	public static function select_popup( $list, $base ) {
+		//TODO: check with Ve/Ivan if this process is okay:
+		$resolved_ids = Upfront_EntityResolver::get_entity_ids();
+		$output_obj = Upfront_Output::get_layout( $resolved_ids );
+		$layout = $output_obj->get_layout_data();
+
+		$popups = array();
+
+		/*
+		 * Upfront object hierarchy is quite nested:
+		 *
+		 * Layout
+		 *   +-- region1
+		 *   |     +-- module1
+		 *   |     |     +-- object1
+		 *   |     |     +-- object2
+		 *   |     +-- module2
+		 *   |    ...
+		 *   +-- region2
+		 *  ...
+		 */
+		foreach ( $layout['regions'] as $r_id => $region ) {
+			foreach ( $region['modules'] as $m_id => $module ) {
+				foreach ( $module['objects'] as $o_id => $object ) {
+					$view_class = upfront_get_property_value( 'view_class', $object );
+					if ( 'PopupView' == $view_class ) {
+						$popups[] = $object;
+					}
+				}
+			}
+		}
+
+		return $list;
+	}
+
 	// -------------------------------------------------------------------------
 	// -------------------------------------------------------- OBJECT FUNCTIONS
+
+	/**
+	 * Constructor hooks up some actions/filters
+	 *
+	 * @since  4.8.0.0
+	 */
+	public function __construct( $data ) {
+		parent::__construct( $data );
+
+		// Possibility to add new hooks...
+	}
 
 	/**
 	 * Return the actual HTML code that represents the element on the page.

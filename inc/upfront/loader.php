@@ -91,6 +91,13 @@ class Upfront_PopupMain {
 			array( $this, 'load_scripts' ),
 			100
 		);
+
+		// PopUp Pro logic: Make sure the right popup is displayed!
+		add_filter(
+			'popup-select-popups',
+			array( 'Upfront_PopupView', 'select_popup' ),
+			10, 2
+		);
 	}
 
 	/**
