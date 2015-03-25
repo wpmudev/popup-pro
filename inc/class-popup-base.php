@@ -446,6 +446,13 @@ abstract class IncPopupBase {
 		$items = $this->find_popups();
 		$this->popups = array();
 
+		/**
+		 * Filter the popup list so other modules can modify the popup details.
+		 *
+		 * @since  4.8.0.0
+		 */
+		$items = apply_filters( 'popup-select-popups', $items, $this );
+
 		if ( empty( $items ) ) {
 			return;
 		}
@@ -465,15 +472,39 @@ abstract class IncPopupBase {
 		$popups = array();
 		lib2()->array->equip_request( 'po_id', 'preview' );
 
-		$popup_id = absint( $_REQUEST['po_id'] );
+		/**
+		 * Allow other modules to provide a single popup ID to display.
+		 * The value 0 will use the default logic, which evaluates all active
+		 * Popups instead of displaying a single Popup.
+		 *
+		 * @since 4.8.0.0
+		 */
+		$popup_id = apply_filters(
+			'popup-find-popup-single',
+			absint( $_REQUEST['po_id'] )
+		);
+
 		if ( $popup_id ) {
 			// Check for forced popup.
-			$active_ids = array( $popup_id );
+			$popup_ids = array( $popup_id );
 		} else {
-			$active_ids = IncPopupDatabase::get_active_ids();
+			$popup_ids = IncPopupDatabase::get_active_ids();
 		}
 
-		foreach ( $active_ids as $id ) {
+		/**
+		 * Filter the list of Popup IDs that will be considered for display.
+		 * These Popups will be loaded and their rules evaluated in the next step.
+		 *
+		 * @since  4.8.0.0
+		 */
+		$popup_ids = apply_filters(
+			'popup-active-popup-ids',
+			$popup_ids,
+			$popup_id,
+			$this
+		);
+
+		foreach ( $popup_ids as $id ) {
 			$popup = IncPopupDatabase::get( $id );
 
 			if ( $popup_id ) {
@@ -590,7 +621,6 @@ abstract class IncPopupBase {
 
 		// 2. get the footer script.
 		$this->compat_data['script'] .= '(function($) {' . $script . '})(jQuery);';
-
 
 		return '';
 	}
