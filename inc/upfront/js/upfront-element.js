@@ -24,7 +24,12 @@ function() {
 	var PopupModel = Upfront.Models.ObjectModel.extend({
 
 		// ========== Init
-		init: function () {
+		init: function() {
+			/*
+			 * All static properties are defined in php class Upfront_PopupView
+			 * and are accessed here via `Upfront.data.upfront_popup.defaults`
+			 */
+
 			var properties = _.clone( Upfront.data.upfront_popup.defaults );
 
 			properties.element_id = Upfront.Util.get_unique_id(
@@ -107,7 +112,7 @@ function() {
 
 					edit_title.appendTo( el_title ).wrap( edit_wrap );
 					edit_subtitle.appendTo( el_subtitle ).wrap( edit_wrap );
-
+/*
 var new_region = new Upfront.Models.Region(
 	_.extend(
 		_.clone( Upfront.data.region_default_args ),
@@ -118,6 +123,7 @@ var new_region = new Upfront.Models.Region(
 		}
 	)
 );
+*/
 
 				}
 
@@ -127,7 +133,7 @@ var new_region = new Upfront.Models.Region(
 						field = inp.attr( 'name' ),
 						value = inp.val();
 
-					me.model.set_property( field, value, false );
+					me.model.set_property( 'popup__' + field, value, false );
 				}
 
 				data['action'] = 'upfront-popup_element-get_markup';
@@ -145,25 +151,25 @@ var new_region = new Upfront.Models.Region(
 		},
 
 		// ========== Get_content_markup
-		get_content_markup: function () {
+		get_content_markup: function() {
 			var data, rendered,
-				content = this.model.get_content(),
-				$content
+				code = this.model.get_content(),
+				element
 			;
 
 			// Fix tagless content causes WSOD
 			try {
-				$content = jQuery( content );
+				element = jQuery( code );
 			} catch ( error ) {
-				$content = jQuery( '<p>' + content + '</p>' );
+				element = jQuery( '<p>' + code + '</p>' );
 			}
 
-			if ( $content.hasClass( 'plaintxt_padding' ) ) {
-				content = $content.html();
+			if ( element.hasClass( 'plaintxt_padding' ) ) {
+				code = element.html();
 			}
 
 			data = {
-				'content' : content,
+				'content': code
 			};
 
 			rendered = _.template( template, data );
@@ -176,7 +182,7 @@ var new_region = new Upfront.Models.Region(
 		},
 
 		// ========== Is_edited
-		is_edited: function () {
+		is_edited: function() {
 			var is_edited = this.model.get_property_value_by_name( 'is_edited' );
 			return is_edited ? true : false;
 		},
@@ -240,7 +246,7 @@ var new_region = new Upfront.Models.Region(
 		},
 
 		// ========== Get_content_markup
-		get_content_markup: function () {
+		get_content_markup: function() {
 			return !! this.markup ? this.markup : l10n.hold_on;
 		}
 	});
@@ -251,7 +257,7 @@ var new_region = new Upfront.Models.Region(
 	 */
 	var Popup_SettingsItem_ComplexItem = Upfront.Views.Editor.Settings.Item.extend({
 		// ========== Save_fields
-		save_fields: function () {
+		save_fields: function() {
 			var model = this.model;
 
 			function save_field( field ) {
@@ -262,7 +268,7 @@ var new_region = new Upfront.Models.Region(
 			}
 
 			function save_field_val( val, idx ) {
-				if ( 'appearance' == idx && ! val ) { return true; }
+				//if ( 'appearance' == idx && ! val ) { return true; }
 				model.set_property( idx, val );
 			}
 
@@ -277,7 +283,7 @@ var new_region = new Upfront.Models.Region(
 	 */
 	var PopupSettings = Upfront.Views.Editor.Settings.Settings.extend({
 		// ========== Initialize
-		initialize: function (opts) {
+		initialize: function( opts ) {
 			var panel;
 
 			panel = new PopupSettings_Panel({model: this.model});
@@ -290,7 +296,7 @@ var new_region = new Upfront.Models.Region(
 		},
 
 		// ========== Get_title
-		get_title: function () {
+		get_title: function() {
 			return l10n.settings;
 		}
 	});
@@ -303,7 +309,7 @@ var new_region = new Upfront.Models.Region(
 	 */
 	var PopupSettings_Panel = Upfront.Views.Editor.Settings.Panel.extend({
 		// ========== Initialize
-		initialize: function (opts) {
+		initialize: function(opts) {
 			var attr, appearance, cta,
 				me = this
 			;
@@ -320,13 +326,13 @@ var new_region = new Upfront.Models.Region(
 			]);
 
 			appearance.on( 'popup:appearance:changed', cta.update, cta );
-			appearance.on( 'popup:appearance:changed', function () {
+			appearance.on( 'popup:appearance:changed', function() {
 				me.trigger( 'upfront:settings:panel:refresh', me );
 			})
 		},
 
 		// ========== Render
-		render: function () {
+		render: function() {
 			function update_setting( setting ) {
 				if ( setting.update ) {
 					setting.update();
@@ -340,12 +346,12 @@ var new_region = new Upfront.Models.Region(
 		},
 
 		// ========== Get_label
-		get_label: function () {
+		get_label: function() {
 			return l10n.settings;
 		},
 
 		// ========== Get_title
-		get_title: function () {
+		get_title: function() {
 			return l10n.settings;
 		}
 	});
@@ -357,7 +363,7 @@ var new_region = new Upfront.Models.Region(
 		className: 'upfront_popup-item-appearance',
 
 		// ========== Initialize
-		initialize: function () {
+		initialize: function() {
 			var key, style,
 				me = this,
 				styles = []
@@ -368,6 +374,7 @@ var new_region = new Upfront.Models.Region(
 				if ( ! Upfront.data.upfront_popup.styles.hasOwnProperty( key ) ) {
 					continue;
 				}
+
 				style = Upfront.data.upfront_popup.styles[key];
 				if ( style.deprecated ) { continue; }
 				styles.push( {label: style.name, value: key} );
@@ -381,13 +388,13 @@ var new_region = new Upfront.Models.Region(
 			this.fields = _([
 				new Upfront.Views.Editor.Field.Select({
 					model: this.model,
-					property: 'style',
+					property: 'popup__style',
 					values: styles,
 					change: did_change
 				}),
 				new Upfront.Views.Editor.Field.Checkboxes({
 					model: this.model,
-					property: 'round_corners',
+					property: 'popup__round_corners',
 					values: [
 						{ label: l10n.round_corners, value: 'yes' }
 					],
@@ -397,19 +404,19 @@ var new_region = new Upfront.Models.Region(
 		},
 
 		// ========== Render
-		render: function () {
+		render: function() {
 			Upfront.Views.Editor.Settings.Item.prototype.render.call(this);
 			this.$el.find('.upfront-settings-item-content').addClass('clearfix');
 		},
 
 		// ========== Get_title
-		get_title: function () {
+		get_title: function() {
 			return l10n.panel_appearance;
 		},
 
 		// ========== Register_change
-		register_change: function () {
-			this.fields.each(function (field) {
+		register_change: function() {
+			this.fields.each(function(field) {
 				field.property.set({'value': field.get_value()}, {'silent': false});
 			});
 			this.trigger('popup:appearance:changed');
@@ -423,7 +430,7 @@ var new_region = new Upfront.Models.Region(
 		className: 'upfront_popup-item-cta',
 
 		// ========== Initialize
-		initialize: function () {
+		initialize: function() {
 			var me = this;
 
 			function did_change() {
@@ -433,13 +440,13 @@ var new_region = new Upfront.Models.Region(
 			this.fields = _([
 				new Upfront.Views.Editor.Field.Text({
 					model: this.model,
-					property: 'cta_label',
+					property: 'popup__cta_label',
 					label: l10n.cta_label,
 					change: did_change
 				}),
 				new Upfront.Views.Editor.Field.Text({
 					model: this.model,
-					property: 'cta_link',
+					property: 'popup__cta_link',
 					label: l10n.cta_link,
 					change: did_change
 				}),
@@ -447,19 +454,19 @@ var new_region = new Upfront.Models.Region(
 		},
 
 		// ========== Render
-		render: function () {
+		render: function() {
 			Upfront.Views.Editor.Settings.Item.prototype.render.call(this);
 			this.$el.find('.upfront-settings-item-content').addClass('clearfix');
 		},
 
 		// ========== Get_title
-		get_title: function () {
+		get_title: function() {
 			return l10n.panel_cta;
 		},
 
 		// ========== Register_change
-		register_change: function () {
-			this.fields.each(function (field) {
+		register_change: function() {
+			this.fields.each(function(field) {
 				field.property.set({'value': field.get_value()}, {'silent': false});
 			});
 			this.trigger('popup:cta:changed');
@@ -473,13 +480,13 @@ var new_region = new Upfront.Models.Region(
 		priority: 130,
 
 		// ========== Render
-		render: function () {
+		render: function() {
 			this.$el.addClass( 'upfront-icon-element upfront-icon-element-popup' );
 			this.$el.html( l10n.element_name );
 		},
 
 		// ========== Add_element
-		add_element: function () {
+		add_element: function() {
 			var object = new PopupModel(),
 				module = new Upfront.Models.Module({
 					name: '',
@@ -568,9 +575,25 @@ var new_region = new Upfront.Models.Region(
 			'Model': PopupModel,
 			'View': PopupView,
 			'Element': PopupElement,
+
+			// Define the settings panel.
 			'Settings': PopupSettings,
+
+			// Modifications to the right-click context menu.
 			'ContextMenu': PopupMenu,
-			cssSelectors: {},
+
+			// Definitions for the built-in CSS editor.
+			cssSelectors: {
+				'.wdpu-head': {label: l10n.css.header_label, info: l10n.css.header_info},
+				'.wdpu-title': {label: l10n.css.title_label, info: l10n.css.title_info},
+				'.wdpu-subtitle': {label: l10n.css.subtitle_label, info: l10n.css.subtitle_info},
+				'.wdpu-cta': {label: l10n.css.cta_label, info: l10n.css.cta_info},
+				'.wdpu-buttons': {label: l10n.css.buttons_label, info: l10n.css.buttons_info},
+				'.wdpu-text': {label: l10n.css.outer_content_label, info: l10n.css.outer_content_info},
+				'.wdpu-content': {label: l10n.css.content_label, info: l10n.css.content_info},
+				'.wdpu-container': {label: l10n.css.popup_label, info: l10n.css.popup_info}
+			},
+			cssSelectorsId: 'PopupModel'
 		}
 	);
 

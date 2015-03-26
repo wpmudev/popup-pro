@@ -54,4 +54,9 @@ jQuery(function() {
 	// Try to load and setup the plugin for Upfront.
 	init_module();
 
+	// Remove the empty popup preview containers from the page.
+	var el_previews = jQuery( '.upfront-popup_element_object' ),
+		preview_rows = el_previews.closest( '.upfront-output-wrapper' );
+	preview_rows.remove();
+
 });

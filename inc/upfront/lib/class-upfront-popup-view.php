@@ -48,18 +48,18 @@ class Upfront_PopupView extends Upfront_Object {
 			// Upfront-specific defaults:
 			'type' => 'PopupModel', // Has to match the JS class!
 			'view_class' => 'PopupView', // Has to match the JS class + the PHP class!
-			'class' => 'c24 upfront-popup_element-object',
+			'class' => 'c24 upfront-popup_element_object',
 			'has_settings' => 1,
 			'id_slug' => 'upfront-popup_element',
 
 			// Popup-specific defaults:
-			'title' => '',
-			'subtitle' => '',
-			'style' => 'simple',
-			'content' => __( 'See this new PopUp here?', PO_LANG ),
-			'round_corners' => true,
-			'cta_label' => '',
-			'cta_link' => '',
+			'popup__title' => __( 'Your new PopUp', PO_LANG ),
+			'popup__subtitle' => __( 'You\'ll love it!', PO_LANG ),
+			'popup__style' => 'simple',
+			'popup__content' => __( 'See this new PopUp here?', PO_LANG ),
+			'popup__round_corners' => true,
+			'popup__cta_label' => '',
+			'popup__cta_link' => '',
 		);
 
 		return apply_filters( 'po_upfront_defaults', $defaults );
@@ -84,25 +84,28 @@ class Upfront_PopupView extends Upfront_Object {
 	 * @return string HTML Code to output on the page.
 	 */
 	public static function get_element_markup( $properties ) {
+		// Sanitize the properties.
 		$properties = upfront_properties_to_array( $properties );
-
 		lib2()->array->equip( $properties, '_is_editor' );
 
 		// Flag "_is_editor" is set in Upfront_PopupAjax::json_get_markup()
-		if ( $properties['_is_editor'] ) {
-			/*
-			 * This PopUp is a preview in the Upfront editor. We're going to
-			 * make small adjustments that will not be made to the real PopUp.
-			 */
-			$properties['show_on_load'] = true;
-			$properties['custom_class'][] = 'inline';
-		}
+		if ( ! $properties['_is_editor'] ) { return ''; }
+
+		// Extract the PopUp details and escape some values.
+		$popup_args = self::extract_popup_args( $properties );
+
+		/*
+		 * This PopUp is a preview in the Upfront editor. We're going to
+		 * make small adjustments that will not be made to the real PopUp.
+		 */
+		$popup_args['show_on_load'] = true;
+		$popup_args['custom_class'][] = 'inline';
 
 		// Translate checkbox-values to usable data.
-		$properties['round_corners'] = is_array( $properties['round_corners'] );
+		$popup_args['round_corners'] = is_array( $popup_args['round_corners'] );
 
 		// Create a populated PopUp item.
-		$popup = new IncPopupItem( $properties );
+		$popup = new IncPopupItem( $popup_args );
 		$data = $popup->get_script_data();
 
 		// Prepare the response code.
@@ -112,7 +115,12 @@ class Upfront_PopupView extends Upfront_Object {
 			$data['styles']
 		);
 
-		return apply_filters( 'po_upfront_element', $code, $properties );
+		return apply_filters(
+			'po_upfront_element',
+			$code,
+			$popup_args,
+			$properties
+		);
 	}
 
 	/**
@@ -161,6 +169,26 @@ class Upfront_PopupView extends Upfront_Object {
 
 			'title' => __( 'Enter title...', PO_LANG ),
 			'subtitle' => __( 'Enter subtitle...', PO_LANG ),
+
+			// Translations used for the built-in CSS editor.
+			'css' => array(
+				'header_label' => __( 'PopUp Header', PO_LANG ),
+				'header_info' => __( 'The header contains the title and subtitle', PO_LANG ),
+				'title_label' => __( 'PopUp Title', PO_LANG ),
+				'title_info' => __( 'The main title of the PopUp', PO_LANG ),
+				'subtitle_label' => __( 'PopUp Subtitle', PO_LANG ),
+				'subtitle_info' => __( 'The subtitle of the PopUp', PO_LANG ),
+				'cta_label' => __( 'CTA Button', PO_LANG ),
+				'cta_info' => __( 'The Call-To-Action button', PO_LANG ),
+				'buttons_label' => __( 'Button Area', PO_LANG ),
+				'buttons_info' => __( 'Button area that contains the close and CTA buttons', PO_LANG ),
+				'content_label' => __( 'PopUp text', PO_LANG ),
+				'content_info' => __( 'Text inside the PopUp', PO_LANG ),
+				'outer_content_label' => __( 'PopUp contents', PO_LANG ),
+				'outer_content_info' => __( 'This area contains the text and button area', PO_LANG ),
+				'popup_label' => __( 'PopUp container', PO_LANG ),
+				'popup_info' => __( 'The whole PopUp container', PO_LANG ),
+			),
 		);
 
 		// Return the requested value.
@@ -174,6 +202,33 @@ class Upfront_PopupView extends Upfront_Object {
 	}
 
 	/**
+	 * Extracts and (un)escapes popup details from the Upfront property list.
+	 *
+	 * @since  4.8.0.0
+	 * @param  array $properties
+	 * @return array
+	 */
+	public static function extract_popup_args( $properties ) {
+		$popup_args = array();
+
+		foreach ( $properties as $key => $value ) {
+			if ( 0 === strpos( $key, 'popup__' ) ) {
+				$key = substr( $key, 7 );
+				$popup_args[$key] = $value;
+			}
+		}
+
+		lib2()->array->strip_slashes(
+			$popup_args,
+			'cta_label',
+			'title',
+			'subtitle'
+		);
+
+		return $popup_args;
+	}
+
+	/**
 	 * Returns a list of the popups on the current Upfront page.
 	 *
 	 * @since  4.8.0.0
@@ -182,12 +237,9 @@ class Upfront_PopupView extends Upfront_Object {
 	 * @return array
 	 */
 	public static function select_popup( $list, $base ) {
-		//TODO: check with Ve/Ivan if this process is okay:
 		$resolved_ids = Upfront_EntityResolver::get_entity_ids();
 		$output_obj = Upfront_Output::get_layout( $resolved_ids );
 		$layout = $output_obj->get_layout_data();
-
-		$popups = array();
 
 		/*
 		 * Upfront object hierarchy is quite nested:
@@ -207,7 +259,9 @@ class Upfront_PopupView extends Upfront_Object {
 				foreach ( $module['objects'] as $o_id => $object ) {
 					$view_class = upfront_get_property_value( 'view_class', $object );
 					if ( 'PopupView' == $view_class ) {
-						$popups[] = $object;
+						$data = upfront_properties_to_array( $object['properties'] );
+						$data = self::extract_popup_args( $data );
+						$list[] = new IncPopupItem( $data );
 					}
 				}
 			}
