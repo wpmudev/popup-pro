@@ -1,7 +1,7 @@
 (function() {
-require(
+define(
 [
-    // No other modules required
+	_popup_uf_data.base_url + 'js/element-settings',
 ],
 /**
  * Contains the logic for the Upfront Editor.
@@ -11,7 +11,7 @@ require(
  * @param  string editor_style
  * @param  string public_style
  */
-function() {
+function( PopupSettings ) {
 
 	/**
 	 * Define the translations
@@ -288,7 +288,7 @@ var new_region = new Upfront.Models.Region(
 
 			panel = new PopupSettings_Panel({model: this.model});
 
-			this.has_tabs = false;
+			this.has_tabs = true;
 			this.options = opts;
 			this.panels = _([
 				panel

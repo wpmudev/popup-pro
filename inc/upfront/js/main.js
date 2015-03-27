@@ -32,8 +32,8 @@ jQuery(function() {
 			 *   the callback function.
 			 */
 			var dependencies = [
-				_popup_uf_data.base_url + 'js/upfront-element.js',
-				'text!' + _popup_uf_data.base_url + 'css/upfront-element.css'
+				_popup_uf_data.base_url + 'js/element.js',
+				'text!' + _popup_uf_data.base_url + 'css/element.css'
 			];
 
 			require(
