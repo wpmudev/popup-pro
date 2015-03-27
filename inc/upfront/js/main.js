@@ -24,7 +24,7 @@ jQuery(function() {
 		 * At some points Upfront will broadcast events. To hook into these
 		 * events we need to register our event handler using Upfront.Events.on
 		 */
-		Upfront.Events.on( 'Upfront:loaded', function() {
+		Upfront.Events.on( 'application:loaded:layout_editor', function() {
 			/*
 			 * Dependencies:
 			 * - A normal URL will be loaded and interpreted as javascript
