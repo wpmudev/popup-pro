@@ -158,17 +158,30 @@ class Upfront_PopupView extends Upfront_Object {
 			'hold_on' => __( 'Please, hold on', PO_LANG ),
 			'edit_text' => __( 'Edit Contents', PO_LANG ),
 			'dbl_click' => __( 'Double click to edit PopUp contents', PO_LANG ),
-			'settings' => __( 'Settings', PO_LANG ),
-
-			'panel_appearance' => __( 'Appearance', PO_LANG ),
-			'round_corners' => __( 'Round corners', PO_LANG ),
-
-			'panel_cta' => __( 'Call To Action', PO_LANG ),
-			'cta_label' => __( 'Label', PO_LANG ),
-			'cta_link' => __( 'Link', PO_LANG ),
 
 			'title' => __( 'Enter title...', PO_LANG ),
 			'subtitle' => __( 'Enter subtitle...', PO_LANG ),
+
+			'settings' => array(
+				// TAB: Contents
+				'tab_contents' => __( 'Contents', PO_LANG ),
+				'group_cta' => __( 'Call To Action', PO_LANG ),
+				'cta_label' => __( 'Label', PO_LANG ),
+				'cta_link' => __( 'Link', PO_LANG ),
+
+				// TAB: Appearance
+				'tab_appearance' => __( 'Appearance', PO_LANG ),
+				'group_template' => __( 'Template', PO_LANG ),
+				'round_corners' => __( 'Round corners', PO_LANG ),
+
+				// TAB: Behavior
+				'tab_behavior' => __( 'Behavior', PO_LANG ),
+				'group_appears_on' => __( 'Appear after/on', PO_LANG ),
+
+				// TAB: Rules
+				'tab_rules' => __( 'Conditions', PO_LANG ),
+				'group_rules' => __( 'Rules', PO_LANG ),
+			),
 
 			// Translations used for the built-in CSS editor.
 			'css' => array(
