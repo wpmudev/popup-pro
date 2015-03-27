@@ -98,7 +98,7 @@ class IncPopupItem {
 	public $can_hide = false;
 
 	// "Close button acts as 'Never show popup again'".
-	public $close_is_hide = false;
+	public $close_hides = false;
 
 	// Expiration of "Never show popup again" (in days).
 	public $hide_expire = 365;
@@ -379,6 +379,7 @@ class IncPopupItem {
 		}
 
 		// Generate unique ID.
+		$this->code = (object) array();
 		$this->code->id = 'a' . md5( $this->id . date( 'dis' ) );
 
 		// Display data (legacy code for old styles).
