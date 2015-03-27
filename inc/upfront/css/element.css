@@ -3,22 +3,40 @@
  * preview and configuration options.
  */
 
-/* Icon for the Element button */
+/*
+ * ELEMENT ICON
+ */
 .upfront-ui .upfront-icon-element-popup:before {
 	background-image: url([BASE_URL]img/element-sprite.svg);
 	background-position: 0 0;
 }
 
-/* Add some hover function to the Upfront editor */
+/*
+ * UPFRONT PREVIEW TOOLS
+ */
 .upfront-popup_element-module .upfront-editable_entity .upfront-object-content {
 	-webkit-transition: all 0.5s;
     transition: all 0.5s;
 }
-.upfront-popup_element-module:hover .upfront-editable_entity .upfront-object-content {
-	margin-right: 20px;
+.upfront-popup_element-module .upfront-entity_meta {
+	z-index: 999999;
+}
+.upfront-popup_element-module:hover .upfront-objects_container:after {
+	content: '';
+	display: block;
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 52px;
+	background: #FFF;
+	opacity: 0.5;
+	width: 28px;
+	z-index: 999998;
 }
 
-/* Styling the inline editor fields */
+/*
+ * INLINE EDITOR STYLES
+ */
 .upfront-popup_element-module .upfront_popup .uf-inline-edit {
 	display: none;
 	border: 1px solid #CEDDEA;
