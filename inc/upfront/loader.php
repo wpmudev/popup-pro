@@ -55,7 +55,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 class Upfront_PopupMain {
 
 	/**
-	 * Init module and load scripts
+	 * The element ID of our custom Element. It should be something unique!
+	 * It is mainly used for JS and in PHP functions related to the CSS editor.
+	 */
+	const TYPE = 'popup';
+
+	/**
+	 * Init module and load scripts.
 	 */
 	static public function initialize() {
 		static $Inst = null;
@@ -71,25 +77,41 @@ class Upfront_PopupMain {
 	 * Private constructor: Singleton pattern.
 	 */
 	private function __construct() {
-		// Include the backend support stuff
+		// Only load our dependencies when we know that Upfront is loaded.
 		require_once dirname( __FILE__ ) . '/lib/class-upfront-popup-view.php';
 		require_once dirname( __FILE__ ) . '/lib/class-upfront-popup-ajax.php';
 
+		// Tell Upfront about translations used by our element.
 		add_filter(
 			'upfront_l10n',
 			array( 'Upfront_PopupView', 'add_l10n_strings' )
 		);
 
+		// Tell Upfront which JS data is needed for our element.
 		add_filter(
 			'upfront_data',
 			array( 'Upfront_PopupView', 'upfront_data' ),
 			100
 		);
 
+		// Add the element init/loading script to the page.
 		add_action(
 			'wp_footer',
 			array( $this, 'load_scripts' ),
 			100
+		);
+
+		// Modify the CSS before it's saved to the DB.
+		add_filter(
+			'upfront-save_styles',
+			array( 'Upfront_PopupAjax', 'save_styles' ),
+			10, 3
+		);
+
+		// Revert modification from save_styles for display in CSS Editor.
+		add_filter(
+			'upfront_get_theme_styles',
+			array( 'Upfront_PopupAjax', 'theme_styles' )
 		);
 
 		// PopUp Pro logic: Make sure the right popup is displayed!
@@ -120,6 +142,8 @@ class Upfront_PopupMain {
 		?>
 		<script type="text/javascript">
 			if ( undefined === window._popup_uf_data ) { _popup_uf_data = {}; }
+			_popup_uf_data.type = '<?php echo esc_js( Upfront_PopupMain::TYPE ); ?>';
+			_popup_uf_data.label = '<?php _e( 'PopUp', PO_LANG ); ?>';
 			_popup_uf_data.base_url = '<?php echo esc_js( PO_UF_URL ); ?>';
 		</script>
 		<script src="<?php echo esc_url( $module_js_url ); ?>"></script>
@@ -127,8 +151,14 @@ class Upfront_PopupMain {
 	}
 }
 
-// Initialize the entity when Upfront is good and ready
+/**
+ * Initialize the entity when Upfront is good and ready
+ *
+ * The hook 'upfront-loaded' is called when all Upfront files are loaded but
+ * before any Upfront component is initialized. This is the point where we can
+ * add any kind of action hook or filter to Upfront.
+ */
 add_action(
-	'upfront-core-initialized',
+	'upfront-loaded',
 	array( 'Upfront_PopupMain', 'initialize' )
 );

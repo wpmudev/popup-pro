@@ -1,7 +1,10 @@
 <?php
 /**
  * The Popup Ajax server.
- * This class handles the server-side functionality of the Upfront integration!
+ * This class handles the server-side functionality of the Upfront integration.
+ * Main purposes are to
+ * (1) return updated preview markup during edit-mode and
+ * (2) add the custom CSS styles to the styles in live-mode.
  *
  * @todo: Interface IUpfront_Server defines a static method. Static methods
  *        cannot be overwritten, so this is definition is pointless...
@@ -33,6 +36,42 @@ class Upfront_PopupAjax extends Upfront_Server {
 		}
 
 		return $Instance;
+	}
+
+	/**
+	 * Modify the custom CSS code before it's saved to the DB.
+	 *
+	 * @since 4.8.0.0
+	 * @internal
+	 *
+	 * @return string Modified CSS code.
+	 */
+	public static function save_styles( $style, $name, $element_type ) {
+		if ( Upfront_PopupMain::TYPE == $element_type ) {
+			$style = str_replace( '#page ', '.wdpu-container', $style );
+		}
+
+		return $style;
+	}
+
+	/**
+	 * Revert CSS modification made in `save_styles` for the CSS editor.
+	 * We do this, so the CSS editor will not modify the selectors by appending
+	 * another #page selector to the front.
+	 *
+	 * @since  4.8.0.0
+	 * @param  array $styles Array of custom CSS styles.
+	 * @return array Modified list of styles.
+	 */
+	public static function theme_styles( $styles ) {
+		if ( isset( $styles[Upfront_PopupMain::TYPE] ) ) {
+			foreach ( $styles[Upfront_PopupMain::TYPE] as $key => $style ) {
+				$style = str_replace( '.wdpu-container', '#page ', $style );
+				$styles[Upfront_PopupMain::TYPE][ $key ] = $style;
+			}
+		}
+
+		return $styles;
 	}
 
 	// -------------------------------------------------------------------------
@@ -96,6 +135,7 @@ class Upfront_PopupAjax extends Upfront_Server {
 		// Return it! This function will also exit the request, so we're done.
 		$this->_out( $json_response );
 	}
+
 }
 
 // Initialize the Ajax Server instantly!

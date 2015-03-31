@@ -19,12 +19,19 @@ jQuery(function() {
 			return;
 		}
 
-		/*
+		/**
 		 * Upfront.Events is actually the Backbone.Events model.
 		 * At some points Upfront will broadcast events. To hook into these
 		 * events we need to register our event handler using Upfront.Events.on
 		 */
+
+		/**
+		 * == application:loaded:layout_editor
+		 * The first event that is broadcast when the user changes into
+		 * edit-mode.
+		 */
 		Upfront.Events.on( 'application:loaded:layout_editor', function() {
+
 			/*
 			 * Dependencies:
 			 * - A normal URL will be loaded and interpreted as javascript
@@ -49,6 +56,18 @@ jQuery(function() {
 				}
 			);
 		});
+
+		/**
+		 * == settings:prepare
+		 * This event indicates that the CSS-Editor is about to load.
+		 * We should register our Element now, else it will be displayed
+		 * as "Unknown Element"
+		 */
+		Upfront.Events.on( 'settings:prepare', function() {
+			var css_element = {label: _popup_uf_data.label, id: _popup_uf_data.type};
+			Upfront.Application.cssEditor.elementTypes['PopupModel'] = css_element;
+		});
+
 	}
 
 	// Try to load and setup the plugin for Upfront.

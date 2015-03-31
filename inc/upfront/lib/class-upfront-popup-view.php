@@ -1,7 +1,8 @@
 <?php
 /**
- * The PopUp element.
- * This is how we integrate to Upfront :-)
+ * The PopUp View element. Main PHP class needed for the integration.
+ * Responsible to create the markup, parse parameters of a single element,
+ * display the real PopUp in live mode, etc.
  *
  * @uses Upfront_Object (class_upfront_output.php)
  * @uses IUpfront_Server (class_upfront_output.php)
@@ -93,6 +94,9 @@ class Upfront_PopupView extends Upfront_Object {
 
 		// Extract the PopUp details and escape some values.
 		$popup_args = self::extract_popup_args( $properties );
+
+		// Generate a unique preview ID.
+		$popup_args['id'] = -1 * rand( 1000, 9999 ) . date( 'disH' );
 
 		/*
 		 * This PopUp is a preview in the Upfront editor. We're going to
@@ -254,6 +258,14 @@ class Upfront_PopupView extends Upfront_Object {
 		$output_obj = Upfront_Output::get_layout( $resolved_ids );
 		$layout = $output_obj->get_layout_data();
 
+		// @todo Maybe the following code-block is better to get layout data
+		//       than the code above... Check if possible/correct
+		/*
+		$grid = Upfront_Grid::get_grid();
+		$layout = apply_filters('upfront-style-base_layout', Upfront_Layout::get_instance());
+		$preprocessor = new Upfront_StylePreprocessor($grid, $layout);
+		*/
+
 		/*
 		 * Upfront object hierarchy is quite nested:
 		 *
@@ -273,8 +285,11 @@ class Upfront_PopupView extends Upfront_Object {
 					$view_class = upfront_get_property_value( 'view_class', $object );
 					if ( 'PopupView' == $view_class ) {
 						$data = upfront_properties_to_array( $object['properties'] );
-						$data = self::extract_popup_args( $data );
-						$list[] = new IncPopupItem( $data );
+						$obj_id = '1' . $r_id . $m_id . $o_id;
+						$po_args = self::extract_popup_args( $data );
+						$po_args['custom_class'][] = $data['theme_style'];
+						$po_args['id'] = $obj_id;
+						$list[] = new IncPopupItem( $po_args );
 					}
 				}
 			}
@@ -294,7 +309,7 @@ class Upfront_PopupView extends Upfront_Object {
 	public function __construct( $data ) {
 		parent::__construct( $data );
 
-		// Possibility to add new hooks...
+		// Possibility to add some Upfront hooks and filters...
 	}
 
 	/**
@@ -310,7 +325,7 @@ class Upfront_PopupView extends Upfront_Object {
 	 * @return string Full HTML Code to represent the element.
 	 */
 	public function get_markup() {
-		// Demo code to illustrate how css/js files should be loaded.
+		// Demo code to illustrate how custom css/js files should be loaded.
 		/*
 		upfront_add_element_style(
 			'upfront_popup',
