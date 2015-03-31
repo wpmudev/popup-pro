@@ -57,8 +57,7 @@ function( PopupModel ) {
 			if ( ! this.markup ) {
 				var me = this,
 					options = Upfront.Util.model_to_json( this.model ),
-					data = {}
-				;
+					data = {};
 
 				function markup_loaded( response ) {
 					me.markup = response.data;
@@ -94,19 +93,8 @@ function( PopupModel ) {
 
 					edit_title.appendTo( el_title ).wrap( edit_wrap );
 					edit_subtitle.appendTo( el_subtitle ).wrap( edit_wrap );
-/*
-var new_region = new Upfront.Models.Region(
-	_.extend(
-		_.clone( Upfront.data.region_default_args ),
-		{
-			"name": 'popup_test',
-			"container": 'body',
-			"title": 'Demo Region'
-		}
-	)
-);
-*/
 
+					add_region( me, 'Popup Demo Region' );
 				}
 
 				// When an inline field was modified we update the property.
@@ -171,60 +159,10 @@ var new_region = new Upfront.Models.Region(
 
 		// ========== On_render
 		on_render: function() {
-			var me = this,
-				ueditor_config = {
-					linebreaks: false,
-					inserts: {},
-					autostart: false
-				}
-			;
-
-			function ueditor_start() {
-				var $swap = jQuery(this).find('.upfront-quick-swap');
-				if ( $swap.length ) {
-					$swap.remove();
-				}
-				me.model.set_property('is_edited', true, true);
-				Upfront.Events.trigger('upfront:element:edit:start', 'text');
-			}
-
-			function ueditor_stop() {
-				var ed = me.$el.find('.upfront-object-content').data('ueditor'),
-					text = ''
-				;
-
-				try {
-					text = ed.getValue(true);
-				} catch (e) {
-					text = '';
-				}
-
-				if ( text ) {
-					me.model.set_content( text, {silent: true} );
-				}
-
-				Upfront.Events.trigger( 'upfront:element:edit:stop' );
-				ed.redactor.events.trigger( 'cleanUpListeners' );
-				me.render();
-			}
-
-			function ueditor_sync() {
-				//return;
-				var text = jQuery.trim( jQuery(this).html() );
-
-				if ( text ) {
-					text = jQuery( text ).html();
-					me.model.set_content( text, {silent: true} );
-				}
-			}
+			var me = this;
 
 			this.$el.find( '.upfront-object-content' )
-				.addClass( 'upfront-plain_txt' )
-				.ueditor( ueditor_config )
-				.on( 'start', ueditor_start )
-				.on( 'stop', ueditor_stop )
-				.on( 'syncAfter', ueditor_sync )
-			;
+				.addClass( 'upfront-plain_txt' );
 		},
 
 		// ========== Get_content_markup
@@ -232,6 +170,37 @@ var new_region = new Upfront.Models.Region(
 			return !! this.markup ? this.markup : l10n.hold_on;
 		}
 	});
+
+	/**
+	 * Add a new region to the view.
+	 */
+	function add_region( popup_view, region_title ) {
+		var new_region,
+			//collection = popup_view.model.collection,
+			region_name = region_title.toLowerCase().replace( /\s/g, '-' );
+
+		// Create the region object.
+		new_region = new Upfront.Models.Region(
+			_.extend(
+				_.clone( Upfront.data.region_default_args ),
+				{
+					"name": region_name,
+					"container": region_name,
+					"title": region_title
+				}
+			)
+		);
+
+		// Set some properties of the new region
+		new_region.set_property( 'row', Upfront.Util.height_to_row( 300 ) );
+
+		//@TODO: That's the problem -> Where should we add this region to?
+		//       Our Popup element has no collection (yet) that can hold a region...
+		//new_region.add_to( collection, 0, {} );
+
+		//@TODO: This causes a JS error 'undefined is not a function'
+		//new_region.show();
+	}
 
 	// Return the module object.
 	return PopupView;

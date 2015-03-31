@@ -51,65 +51,6 @@ function( PopupModel, PopupView, PopupSettings ) {
 	});
 
 	/**
-	 * Defines custom Context-Menu-Items to manually switch to "Edit Text" mode.
-	 */
-	var PopupMenuList = Upfront.Views.ContextMenuList.extend({
-		// ========== Initialize
-		initialize: function() {
-			var me = this,
-				mnu_editmode;
-
-			// Define the menu item "Edit Text"
-			mnu_editmode = new Upfront.Views.ContextMenuItem({
-				// Menu item label.
-				get_label: function() {
-					return l10n.edit_text;
-				},
-
-				// Action handler, on click.
-				action: function() {
-					var container = me.for_view.$el.find( 'div.upfront-object-content' ),
-						editor = container.data( 'ueditor' );
-
-					// Start editor mode, when not started yet.
-					if ( ! container.data( 'redactor' ) ) {
-						editor.start();
-
-						// Stop editor mode when user clicks outside the editor.
-						jQuery( document ).on('click', function( ev ){
-							if ( ! editor.options.autostart && editor.redactor ) {
-								var $target = jQuery( ev.target );
-
-								if ( ! editor.disableStop &&
-									! $target.closest( 'li' ).length &&
-									! $target.closest( '.redactor_air' ).length &&
-									! $target.closest( '.ueditable' ).length
-								) {
-									editor.stop();
-								}
-							}
-						});
-					}
-				}
-			});
-
-			this.menuitems = _([ mnu_editmode ]);
-		}
-	});
-
-	/**
-	 * Defines the full Context-Menu when right-clicking on the PopUp container.
-	 * This menu effectively adds our custom menu-items that we defined above.
-	 */
-	var PopupMenu = Upfront.Views.ContextMenu.extend({
-		initialize: function() {
-			this.menulists = _([
-				new PopupMenuList()
-			]);
-		}
-	});
-
-	/**
 	 * Register the new upfront element.
 	 *
 	 * This function ties everything together and delivers the whole package to
@@ -124,9 +65,6 @@ function( PopupModel, PopupView, PopupSettings ) {
 
 			// Define the settings panel.
 			'Settings': PopupSettings,
-
-			// Modifications to the right-click context menu.
-			'ContextMenu': PopupMenu,
 
 			// Definitions for the built-in CSS editor.
 			cssSelectors: {
