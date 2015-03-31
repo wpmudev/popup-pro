@@ -381,6 +381,7 @@ class IncPopupItem {
 		// Generate unique ID.
 		$this->code = (object) array();
 		$this->code->id = 'a' . md5( $this->id . date( 'dis' ) );
+		$this->code->cls = 'wdpu-' . $this->id;
 
 		// Display data (legacy code for old styles).
 		if ( $this->custom_colors ) {
@@ -422,7 +423,7 @@ class IncPopupItem {
 		$this->script_data['show_on_load'] = $this->show_on_load;
 
 		// Validation only done when editing popups.
-		if ( is_admin() ) {
+		if ( is_admin() && $this->id >= 0 ) {
 			// Name.
 			if ( empty( $this->name ) ) {
 				$this->name = __( 'New PopUp', PO_LANG );
@@ -770,14 +771,14 @@ class IncPopupItem {
 				$Code[ $this->id ] = ob_get_contents();
 				ob_end_clean();
 
-				$Code[ $this->id ] = str_replace( '#messagebox', '#' . $this->code->id, $Code[ $this->id ] );
+				$Code[ $this->id ] = str_replace( '#messagebox', '.' . $this->code->cls, $Code[ $this->id ] );
 				$Code[ $this->id ] = str_replace( '%styleurl%', $details->url, $Code[ $this->id ] );
 				$Code[ $this->id ] = str_replace( '#000001', $this->code->color1, $Code[ $this->id ] );
 				$Code[ $this->id ] = str_replace( '#000002', $this->code->color2, $Code[ $this->id ] );
 			}
 			$custom_css = $this->custom_css;
 			$custom_css = str_replace( '#popup', '#' . $this->code->id, $custom_css );
-			$custom_css = str_replace( '#messagebox', '#' . $this->code->id, $custom_css );
+			$custom_css = str_replace( '#messagebox', '.' . $this->code->cls, $custom_css );
 			$custom_css = str_replace( '%styleurl%', $details->url, $custom_css );
 			$Code[ $this->id ] .= $custom_css;
 		}
