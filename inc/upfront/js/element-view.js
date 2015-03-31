@@ -50,6 +50,7 @@ function( PopupModel ) {
 			Upfront.Views.ObjectView.prototype.initialize.call( this );
 
 			this.model.get( 'properties' ).on( 'change', property_changed );
+			window.po_view = me; // DEBUG ONLY
 		},
 
 		// ========== Render
@@ -94,7 +95,7 @@ function( PopupModel ) {
 					edit_title.appendTo( el_title ).wrap( edit_wrap );
 					edit_subtitle.appendTo( el_subtitle ).wrap( edit_wrap );
 
-					add_region( me, 'Popup Demo Region' );
+					add_inner_region( me, 'Popup Contents' );
 				}
 
 				// When an inline field was modified we update the property.
@@ -173,33 +174,45 @@ function( PopupModel ) {
 
 	/**
 	 * Add a new region to the view.
+	 *
+	 * @todo: This region is currently added above the popup. It should be inside .wdpu-content.
+	 * @todo: Dropping elements onto this region adds them to the parent region instead of this region.
 	 */
-	function add_region( popup_view, region_title ) {
+	function add_inner_region( the_view, region_title ) {
 		var new_region,
-			//collection = popup_view.model.collection,
-			region_name = region_title.toLowerCase().replace( /\s/g, '-' );
+			the_model = the_view.model,
+			collection = the_model.collection,
+			region_name = region_title.toLowerCase().replace( /\s/g, '-' ),
+			region_args = {};
+
+		// Set-up the initial options of the new region.
+		region_args.name = region_name; // Internal region name.
+		region_args.container = 'lightbox'; // Parent container (?? not sure what this refers to) @todo: review and correct!
+		region_args.title = region_title; // Title displayed in the region-editor.
+		region_args.type = 'lightbox'; // Types: lightbox|fixed|wide|(...)
+		region_args.scope = 'global'; // Scope: global|local
 
 		// Create the region object.
 		new_region = new Upfront.Models.Region(
 			_.extend(
 				_.clone( Upfront.data.region_default_args ),
-				{
-					"name": region_name,
-					"container": region_name,
-					"title": region_title
-				}
+				region_args
 			)
 		);
 
-		// Set some properties of the new region
+		// Set some advanced properties of the new region.
 		new_region.set_property( 'row', Upfront.Util.height_to_row( 300 ) );
 
-		//@TODO: That's the problem -> Where should we add this region to?
-		//       Our Popup element has no collection (yet) that can hold a region...
-		//new_region.add_to( collection, 0, {} );
+		// Add our new region to the PopupModel collection.
+		// @todo: I don't understand this part, but without this the region is not displayed at all...
+		new_region.add_to( collection, 0, {} );
 
-		//@TODO: This causes a JS error 'undefined is not a function'
-		//new_region.show();
+		/**
+		 * Upfront.Application.layout_view.local_view
+		 * This is the `Regions` view as defined in upfront-views.js
+		 */
+		// @todo: This seems to have no effect if left away. Not sure what it's used for or if needed...
+		Upfront.Application.layout_view.local_view.create_region_instance( new_region );
 	}
 
 	// Return the module object.
