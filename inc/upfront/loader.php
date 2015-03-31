@@ -159,6 +159,6 @@ class Upfront_PopupMain {
  * add any kind of action hook or filter to Upfront.
  */
 add_action(
-	'upfront-loaded',
+	'upfront-core-initialized',
 	array( 'Upfront_PopupMain', 'initialize' )
 );
