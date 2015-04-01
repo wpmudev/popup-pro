@@ -120,20 +120,24 @@ function( PopupModel ) {
 
 			// Add an Edit-Button that opens the contents lightbox of the popup.
 			function add_content_editor( el ) {
-				var button, region_name = 'PopUp Contents';
+				var button, parent;
+
+				// Remove old hover action elements.
+				el.find( '.uf-hover-action' ).remove();
+
+				// Find the correct parent element to append the hover actions to.
+				parent = el.find( '.wdpu-buttons' );
+				if ( ! parent.length ) {
+					parent = el.find( '.wdpu-text' );
+				}
+				parent = parent.parent();
 
 				// Add the button to the preview.
 				button = jQuery( '<button type="button"></button>' )
 					.text( l10n.edit_text )
 					.click( edit_contents )
-					.appendTo( el.find( '.wdpu-text' ) )
+					.appendTo( parent )
 					.wrap( '<div class="uf-hover-action"></div>' );
-
-				// Create the new lightbox container.
-				//me.model.set({
-				//	url: '#' + Upfront.Application.LayoutEditor.createLightboxRegion( region_name )
-				//});
-				//me.render();
 			}
 
 			// When an inline field was modified we update the property.
@@ -147,7 +151,13 @@ function( PopupModel ) {
 
 			// Show the Popup contents region.
 			function edit_contents() {
-				alert( 'Edit...' );
+				var region_name = 'PopUp Contents';
+
+				// Create the new lightbox container.
+				me.model.set({
+					url: '#' + Upfront.Application.LayoutEditor.createLightboxRegion( region_name )
+				});
+				me.render();
 			}
 
 			// Add additional HTML markup for the editor.

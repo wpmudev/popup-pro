@@ -87,13 +87,17 @@
 	height: 100px;
 	right: 0;
 	bottom: 0;
-	background: rgba(255,255,255,0.7);
+	background: rgba(0,0,0,0.45);
 	text-align: center;
 	padding-top: 30px;
 	box-sizing: border-box;
+	z-index: 9999;
 }
 .upfront-popup_element-module:hover .upfront_popup .wdpu-text {
 	min-height: 100px;
+}
+.upfront-popup_element-module:hover .upfront_popup .wdpu-buttons {
+	z-index: -1;
 }
 .upfront-popup_element-module .upfront_popup .uf-hover-action button {
 	background: #1FCD8B;
@@ -105,6 +109,7 @@
 	padding: 0 20px;
 	text-align: center;
 	font-size: 14px;
+	box-shadow: 0 0 0 1px #3EA;
 }
 .upfront-popup_element-module .upfront_popup .uf-hover-action button:hover {
 	background: #3EA;
