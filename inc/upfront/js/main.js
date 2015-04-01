@@ -78,25 +78,40 @@ jQuery(function() {
 			debugging_events: false,
 			setup_timer: false,
 			setup_timer_iterations: 0,
+			event_list: false,
+			event_counter: 1000000,
 
 			/**
 			 * Turn Event-Logging on/off.
+			 *
 			 * @api
+			 *
+			 * @param bool state True means that all events will be logged.
+			 * @param string event_list Comma-separated list of events to log.
+			 *               If undefined/not a string then all events are logged.
 			 */
-			show_events: function show_events( state ) {
+			show_events: function show_events( state, event_list ) {
 				if ( state == this.debugging_events ) { return; }
 				this.debugging_events = (state == true);
+
+				if ( typeof event_list == 'string' || event_list instanceof String ) {
+					Upfront.Debug.set_cookie( 'uf_debug_eventlist', event_list );
+				} else {
+					Upfront.Debug.del_cookie( 'uf_debug_eventlist' );
+				}
 
 				if ( this.debugging_events ) {
 					Upfront.Debug.set_cookie( 'uf_debug_events', true );
 				} else {
 					Upfront.Debug.del_cookie( 'uf_debug_events' );
 				}
+
 				Upfront.Debug.setup_debugger();
 			},
 
 			/**
 			 * Display a stacktrace in the console window.
+			 *
 			 * @api
 			 */
 			trace: function trace() {
@@ -150,7 +165,7 @@ jQuery(function() {
 				// Upfront seems to overwrite the Upfront.Events object at least once during init...
 
 				function start_timer() {
-					Upfront.Debug.setup_timer = window.setInterval( Upfront.Debug.setup_debugger, 1 );
+					Upfront.Debug.setup_timer = window.setInterval( Upfront.Debug.setup_debugger, 5 );
 				};
 
 				function stop_timer() {
@@ -166,24 +181,47 @@ jQuery(function() {
 					if ( ! Upfront.Debug.setup_timer ) {
 						start_timer();
 					} else {
+						// Note that browsers have minimum timer-interval of 4ms.
+						// Also the interval can be longer when the browser is busy.
+						// This is a very inaccurate measurement. But a simple one.
 						Upfront.Debug.setup_timer_iterations += 1;
-						if ( Upfront.Debug.setup_timer_iterations > 5000 ) {
+						if ( Upfront.Debug.setup_timer_iterations > 1000 ) {
 							stop_timer();
 						}
 					}
 				}
 
 				if ( Upfront.Debug.get_cookie( 'uf_debug_events' ) ) {
+					var event_list = Upfront.Debug.get_cookie( 'uf_debug_eventlist' );
+					if ( event_list && event_list.length ) {
+						if ( event_list != Upfront.Debug.event_list.toString() ) {
+							event_list = event_list.split(',');
+							Upfront.Debug.event_list = event_list;
+							window.console.info( '[UF INFO] Starting to log following Upfront Events: ', Upfront.Debug.event_list );
+						}
+					} else {
+						if ( Upfront.Debug.event_list ) {
+							Upfront.Debug.event_list = false;
+							window.console.info( '[UF INFO] Starting to log all Upfront Events.' );
+						}
+					}
+
 					if ( undefined === Upfront.Events.trigger_orig ||
 						Upfront.Events.trigger_orig === Upfront.Events.trigger
 					) {
 						var func = Upfront.Events.trigger;
 						Upfront.Events.trigger_orig = func;
 						Upfront.Events.trigger = function trigger( event ) {
-							window.console.debug( '[UF EVENT]   <' + event + '>' );
+							if ( ! Upfront.Debug.event_list ||
+								Upfront.Debug.event_list.indexOf( event ) >= 0
+							) {
+								var params = Array.prototype.slice.call( arguments, 1 );
+								var count = Upfront.Debug.event_counter.toString().slice( 1 );
+								window.console.debug( '[UF EVENT ' + count + ']   <' + event + '>', params );
+								Upfront.Debug.event_counter += 1;
+							}
 							return func.apply( this, arguments );
 						}
-						window.console.info( '[UF INFO] Starting to log all Upfront Events. Refresh the page to see all events.' );
 					}
 				} else {
 					if ( undefined !== Upfront.Events.trigger_orig ) {
