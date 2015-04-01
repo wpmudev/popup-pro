@@ -161,7 +161,6 @@ class Upfront_PopupView extends Upfront_Object {
 			'element_name' => __( 'PopUp', PO_LANG ),
 			'hold_on' => __( 'Please, hold on', PO_LANG ),
 			'edit_text' => __( 'Edit Contents', PO_LANG ),
-			'dbl_click' => __( 'Double click to edit PopUp contents', PO_LANG ),
 
 			'title' => __( 'Enter title...', PO_LANG ),
 			'subtitle' => __( 'Enter subtitle...', PO_LANG ),
