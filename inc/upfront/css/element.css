@@ -55,18 +55,18 @@
 	border-color: #CEDDEA;
 }
 .upfront-popup_element-module .upfront_popup .uf-inline-edit input::-webkit-input-placeholder {
-    color:    #CCC;
+    color: #CCC;
 }
 .upfront-popup_element-module .upfront_popup .uf-inline-edit input:-moz-placeholder {
-   color:    #CCC;
-   opacity:  1;
+   color: #CCC;
+   opacity: 1;
 }
 .upfront-popup_element-module .upfront_popup .uf-inline-edit input::-moz-placeholder {
-   color:    #CCC;
-   opacity:  1;
+   color: #CCC;
+   opacity: 1;
 }
 .upfront-popup_element-module .upfront_popup .uf-inline-edit input:-ms-input-placeholder {
-   color:    #CCC;
+   color: #CCC;
 }
 
 .upfront-popup_element-module:hover .upfront_popup .uf-inline-value {
@@ -79,4 +79,36 @@
 .upfront-popup_element-module:hover .upfront_popup .wdpu-title,
 .upfront-popup_element-module:hover .upfront_popup .wdpu-subtitle {
 	display: inherit !important;
+}
+.upfront-popup_element-module .upfront_popup .uf-hover-action {
+	display: none;
+	position: absolute;
+	left: 0;
+	height: 100px;
+	right: 0;
+	bottom: 0;
+	background: rgba(255,255,255,0.7);
+	text-align: center;
+	padding-top: 30px;
+	box-sizing: border-box;
+}
+.upfront-popup_element-module:hover .upfront_popup .wdpu-text {
+	min-height: 100px;
+}
+.upfront-popup_element-module .upfront_popup .uf-hover-action button {
+	background: #1FCD8B;
+	color: #FFF;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 0;
+	border: 0;
+	padding: 0 20px;
+	text-align: center;
+	font-size: 14px;
+}
+.upfront-popup_element-module .upfront_popup .uf-hover-action button:hover {
+	background: #3EA;
+}
+.upfront-popup_element-module:hover .upfront_popup .uf-hover-action {
+	display: block;
 }

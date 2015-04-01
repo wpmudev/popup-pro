@@ -29,7 +29,7 @@ function( PopupModel ) {
 		markup: null,
 
 		// ========== Initialize
-		initialize: function() {
+		initialize: function initialize() {
 			var me = this;
 
 			function property_changed( model ) {
@@ -49,12 +49,19 @@ function( PopupModel ) {
 
 			Upfront.Views.ObjectView.prototype.initialize.call( this );
 
+			Upfront.Events.on( 'preview:build:stop', function() {
+				me.update_dom.apply( me );
+			});
+			Upfront.Events.on( 'entity:object:after_render', function( view, model ) {
+				if ( view !== me ) { window.console.log( 'NOT ME!!!!' ); return; }
+				me.update_dom.apply( me );
+			});
+
 			this.model.get( 'properties' ).on( 'change', property_changed );
-			window.po_view = me; // DEBUG ONLY
 		},
 
 		// ========== Render
-		render: function() {
+		render: function render() {
 			if ( ! this.markup ) {
 				var me = this,
 					options = Upfront.Util.model_to_json( this.model ),
@@ -64,49 +71,6 @@ function( PopupModel ) {
 				function markup_loaded( response ) {
 					me.markup = response.data;
 					Upfront.Views.ObjectView.prototype.render.call( me );
-
-					// Add additional HTML markup for the editor.
-					add_edit_fields( me.$el );
-
-					// Add a drop-region inside the Popup to add Upfront elements.
-					add_inner_region( me, 'Popup Contents' );
-				}
-
-				// Add a few inline-editor fields to the PopUp preview.
-				function add_edit_fields( el ) {
-					var edit_title, edit_subtitle,
-						el_title, el_subtitle,
-						edit_wrap = '<div class="uf-inline-edit"></div>',
-						value_wrap = '<div class="uf-inline-value"></div>';
-
-					el_title =  el.find( '.wdpu-title' );
-					el_subtitle =  el.find( '.wdpu-subtitle' );
-
-					edit_title = jQuery( '<input type="text">' )
-						.attr( 'placeholder', l10n.title )
-						.attr( 'name', 'title' )
-						.change( change_inline_value )
-						.val( jQuery.trim( el_title.text() ) );
-					edit_subtitle = jQuery( '<input type="text">' )
-						.attr( 'placeholder', l10n.subtitle )
-						.attr( 'name', 'subtitle' )
-						.change( change_inline_value )
-						.val( jQuery.trim( el_subtitle.text() ) );
-
-					el_title.wrapInner( value_wrap );
-					el_subtitle.wrapInner( value_wrap );
-
-					edit_title.appendTo( el_title ).wrap( edit_wrap );
-					edit_subtitle.appendTo( el_subtitle ).wrap( edit_wrap );
-				}
-
-				// When an inline field was modified we update the property.
-				function change_inline_value( ev ) {
-					var inp = jQuery( this ),
-						field = inp.attr( 'name' ),
-						value = inp.val();
-
-					me.model.set_property( 'popup__' + field, value, false );
 				}
 
 				data['action'] = 'upfront-popup_element-get_markup';
@@ -120,17 +84,87 @@ function( PopupModel ) {
 				Upfront.Views.ObjectView.prototype.render.call( this );
 			}
 
+		},
 
+		// ========== Update_dom
+		update_dom: function update_dom() {
+			var me = this;
+
+			// Add a few inline-editor fields to the PopUp preview.
+			function add_edit_fields( el ) {
+				var edit_title, edit_subtitle,
+					el_title, el_subtitle,
+					edit_wrap = '<div class="uf-inline-edit"></div>',
+					value_wrap = '<div class="uf-inline-value"></div>';
+
+				el_title =  el.find( '.wdpu-title' );
+				el_subtitle =  el.find( '.wdpu-subtitle' );
+
+				edit_title = jQuery( '<input type="text">' )
+					.attr( 'placeholder', l10n.title )
+					.attr( 'name', 'title' )
+					.change( change_inline_value )
+					.val( jQuery.trim( el_title.text() ) );
+				edit_subtitle = jQuery( '<input type="text">' )
+					.attr( 'placeholder', l10n.subtitle )
+					.attr( 'name', 'subtitle' )
+					.change( change_inline_value )
+					.val( jQuery.trim( el_subtitle.text() ) );
+
+				el_title.wrapInner( value_wrap );
+				el_subtitle.wrapInner( value_wrap );
+
+				edit_title.appendTo( el_title ).wrap( edit_wrap );
+				edit_subtitle.appendTo( el_subtitle ).wrap( edit_wrap );
+			}
+
+			// Add an Edit-Button that opens the contents lightbox of the popup.
+			function add_content_editor( el ) {
+				var button, region_name = 'PopUp Contents';
+
+				// Add the button to the preview.
+				button = jQuery( '<button type="button"></button>' )
+					.text( l10n.edit_text )
+					.click( edit_contents )
+					.appendTo( el.find( '.wdpu-text' ) )
+					.wrap( '<div class="uf-hover-action"></div>' );
+
+				// Create the new lightbox container.
+				//me.model.set({
+				//	url: '#' + Upfront.Application.LayoutEditor.createLightboxRegion( region_name )
+				//});
+				//me.render();
+			}
+
+			// When an inline field was modified we update the property.
+			function change_inline_value( ev ) {
+				var inp = jQuery( this ),
+					field = inp.attr( 'name' ),
+					value = inp.val();
+
+				me.model.set_property( 'popup__' + field, value, false );
+			}
+
+			// Show the Popup contents region.
+			function edit_contents() {
+				alert( 'Edit...' );
+			}
+
+			// Add additional HTML markup for the editor.
+			add_edit_fields( me.$el );
+
+			// Add an Edit-Button to edit the popup contents.
+			add_content_editor( me.$el );
 		},
 
 		// ========== Is_edited
-		is_edited: function() {
+		is_edited: function is_edited() {
 			var is_edited = this.model.get_property_value_by_name( 'is_edited' );
 			return is_edited ? true : false;
 		},
 
 		// ========== On_render
-		on_render: function() {
+		on_render: function on_render() {
 			var me = this;
 
 			this.$el.find( '.upfront-object-content' )
@@ -138,55 +172,11 @@ function( PopupModel ) {
 		},
 
 		// ========== Get_content_markup
-		get_content_markup: function() {
+		get_content_markup: function get_content_markup() {
 			return !! this.markup ? this.markup : l10n.hold_on;
 		}
 
 	});
-
-	/**
-	 * Add a new region to the view.
-	 * Called by the Views render() method.
-	 *
-	 * @todo: This region is currently added above the popup. It should be inside .wdpu-content.
-	 * @todo: Dropping elements onto this region adds them to the parent region instead of this region.
-	 */
-	function add_inner_region( the_view, region_title ) {
-		var new_region,
-			the_model = the_view.model,
-			collection = the_model.collection,
-			region_name = region_title.toLowerCase().replace( /\s/g, '-' ),
-			region_args = {};
-
-		// Set-up the initial options of the new region.
-		region_args.name = region_name; // Internal region name.
-		region_args.container = 'lightbox'; // Parent container (?? not sure what this refers to) @todo: review and correct!
-		region_args.title = region_title; // Title displayed in the region-editor.
-		region_args.type = 'lightbox'; // Types: lightbox|fixed|wide|(...)
-		region_args.scope = 'global'; // Scope: global|local
-
-		// Create the region object.
-		new_region = new Upfront.Models.Region(
-			_.extend(
-				_.clone( Upfront.data.region_default_args ),
-				region_args
-			)
-		);
-
-		// Set some advanced properties of the new region.
-		new_region.set_property( 'row', Upfront.Util.height_to_row( 300 ) );
-
-		// Add our new region to the PopupModel collection.
-		// @todo: I don't understand this part, but without this the region is not displayed at all...
-		new_region.add_to( collection, 0, {} );
-
-		/**
-		 * Upfront.Application.layout_view.local_view
-		 * This is the `Regions` view as defined in upfront-views.js
-		 */
-		// @todo: This seems to have no effect if left away. Not sure what it's used for or if needed...
-		Upfront.Application.layout_view.local_view.create_region_instance( new_region );
-	}
 
 	// Return the module object.
 	return PopupView;
