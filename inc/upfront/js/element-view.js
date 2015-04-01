@@ -60,12 +60,16 @@ function( PopupModel ) {
 					options = Upfront.Util.model_to_json( this.model ),
 					data = {};
 
+				// Display the Popup preview that we got from the Server object.
 				function markup_loaded( response ) {
 					me.markup = response.data;
 					Upfront.Views.ObjectView.prototype.render.call( me );
 
 					// Add additional HTML markup for the editor.
 					add_edit_fields( me.$el );
+
+					// Add a drop-region inside the Popup to add Upfront elements.
+					add_inner_region( me, 'Popup Contents' );
 				}
 
 				// Add a few inline-editor fields to the PopUp preview.
@@ -94,8 +98,6 @@ function( PopupModel ) {
 
 					edit_title.appendTo( el_title ).wrap( edit_wrap );
 					edit_subtitle.appendTo( el_subtitle ).wrap( edit_wrap );
-
-					add_inner_region( me, 'Popup Contents' );
 				}
 
 				// When an inline field was modified we update the property.
@@ -121,37 +123,6 @@ function( PopupModel ) {
 
 		},
 
-		// ========== Get_content_markup
-		get_content_markup: function() {
-			var data, rendered,
-				code = this.model.get_content(),
-				element
-			;
-
-			// Fix tagless content causes WSOD
-			try {
-				element = jQuery( code );
-			} catch ( error ) {
-				element = jQuery( '<p>' + code + '</p>' );
-			}
-
-			if ( element.hasClass( 'plaintxt_padding' ) ) {
-				code = element.html();
-			}
-
-			data = {
-				'content': code
-			};
-
-			rendered = _.template( template, data );
-
-			if ( ! this.is_edited() || jQuery.trim( content ) == '' ) {
-				rendered += '<div class="upfront-quick-swap"><p>' + l10n.dbl_click + '</p></div>';
-			}
-
-			return rendered;
-		},
-
 		// ========== Is_edited
 		is_edited: function() {
 			var is_edited = this.model.get_property_value_by_name( 'is_edited' );
@@ -170,10 +141,12 @@ function( PopupModel ) {
 		get_content_markup: function() {
 			return !! this.markup ? this.markup : l10n.hold_on;
 		}
+
 	});
 
 	/**
 	 * Add a new region to the view.
+	 * Called by the Views render() method.
 	 *
 	 * @todo: This region is currently added above the popup. It should be inside .wdpu-content.
 	 * @todo: Dropping elements onto this region adds them to the parent region instead of this region.
