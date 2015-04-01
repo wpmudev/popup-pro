@@ -68,6 +68,139 @@ jQuery(function() {
 			Upfront.Application.cssEditor.elementTypes['PopupModel'] = css_element;
 		});
 
+
+		// DEBUGGING EXTENSION
+		// =====================================================================
+		//
+		//
+		Upfront.Debug = Upfront.Debug || {};
+		Upfront.Debug = _.extend(Upfront.Debug, {
+			debugging_events: false,
+			setup_timer: false,
+			setup_timer_iterations: 0,
+
+			/**
+			 * Turn Event-Logging on/off.
+			 * @api
+			 */
+			show_events: function show_events( state ) {
+				if ( state == this.debugging_events ) { return; }
+				this.debugging_events = (state == true);
+
+				if ( this.debugging_events ) {
+					Upfront.Debug.set_cookie( 'uf_debug_events', true );
+				} else {
+					Upfront.Debug.del_cookie( 'uf_debug_events' );
+				}
+				Upfront.Debug.setup_debugger();
+			},
+
+			/**
+			 * Display a stacktrace in the console window.
+			 * @api
+			 */
+			trace: function trace() {
+				var err = new Error();
+				window.console.log( '[UF LOG] Stacktrace: ', err.stack );
+			},
+
+			/**
+			 * Set a cookie.
+			 * @internal
+			 */
+			set_cookie: function set_cookie( name, value, exdays ) {
+				var d = new Date();
+				if ( isNaN( exdays ) ) { exdays = 31; }
+				d.setTime( d.getTime() + (exdays*24*60*60*1000) );
+				var expires = "expires=" + d.toUTCString();
+				document.cookie = name + "=" + value + "; " + expires;
+			},
+
+			/**
+			 * Remove a cookie.
+			 * @internal
+			 */
+			del_cookie: function del_cookie( name ) {
+				Upfront.Debug.set_cookie( name, false, -1 );
+			},
+
+			/**
+			 * Return a cookie value.
+			 * @internal
+			 */
+			get_cookie: function get_cookie( name ) {
+				var name = name + "=";
+				var ca = document.cookie.split( ';' );
+				for ( var i=0; i<ca.length; i++ ) {
+					var c = ca[i];
+					while (c.charAt(0)==' ') c = c.substring(1);
+					if ( c.indexOf(name) == 0 ) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return "";
+			},
+
+			/**
+			 * Initialize or update the debugging functions.
+			 * @internal
+			 */
+			setup_debugger: function setup_debugger() {
+				// Timer is used to keep the debugging upright during page load.
+				// Upfront seems to overwrite the Upfront.Events object at least once during init...
+
+				function start_timer() {
+					Upfront.Debug.setup_timer = window.setInterval( Upfront.Debug.setup_debugger, 1 );
+				};
+
+				function stop_timer() {
+					window.clearInterval( Upfront.Debug.setup_timer );
+					Upfront.Debug.setup_timer = false;
+				}
+
+				var do_debug = false;
+				if ( Upfront.Debug.get_cookie( 'uf_debug_events' ) ) { do_debug = true; }
+
+				if ( do_debug ) {
+					// Enforce debugging settings during the first 5 seconds of page load.
+					if ( ! Upfront.Debug.setup_timer ) {
+						start_timer();
+					} else {
+						Upfront.Debug.setup_timer_iterations += 1;
+						if ( Upfront.Debug.setup_timer_iterations > 5000 ) {
+							stop_timer();
+						}
+					}
+				}
+
+				if ( Upfront.Debug.get_cookie( 'uf_debug_events' ) ) {
+					if ( undefined === Upfront.Events.trigger_orig ||
+						Upfront.Events.trigger_orig === Upfront.Events.trigger
+					) {
+						var func = Upfront.Events.trigger;
+						Upfront.Events.trigger_orig = func;
+						Upfront.Events.trigger = function trigger( event ) {
+							window.console.debug( '[UF EVENT]   <' + event + '>' );
+							return func.apply( this, arguments );
+						}
+						window.console.info( '[UF INFO] Starting to log all Upfront Events. Refresh the page to see all events.' );
+					}
+				} else {
+					if ( undefined !== Upfront.Events.trigger_orig ) {
+						Upfront.Events.trigger = Upfront.Events.trigger_orig;
+						delete Upfront.Events.trigger_orig;
+						window.console.info( '[UF INFO] Events will not be logged anymore.' );
+					}
+				}
+			}
+
+		});
+
+		Upfront.Debug.setup_debugger();
+		//
+		//
+		// =====================================================================
+		//
 	}
 
 	// Try to load and setup the plugin for Upfront.
