@@ -105,6 +105,13 @@ class Upfront_PopupView extends Upfront_Object {
 		$popup_args['show_on_load'] = true;
 		$popup_args['custom_class'][] = 'inline';
 
+		// If event-debugging is enabled add a marker to the popup contents that
+		// changes every time this function is called.
+		if ( empty( $_COOKIES['uf_debug_events'] ) ) {
+			$marker = lib2()->debug->marker_html();
+			$popup_args['content'] = $marker . $popup_args['content'];
+		}
+
 		// Translate checkbox-values to usable data.
 		$popup_args['round_corners'] = is_array( $popup_args['round_corners'] );
 

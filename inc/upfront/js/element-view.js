@@ -53,7 +53,7 @@ function( PopupModel ) {
 				me.update_dom.apply( me );
 			});
 			Upfront.Events.on( 'entity:object:after_render', function( view, model ) {
-				if ( view !== me ) { window.console.log( 'NOT ME!!!!' ); return; }
+				if ( view !== me ) { return; }
 				me.update_dom.apply( me );
 			});
 
@@ -151,12 +151,21 @@ function( PopupModel ) {
 
 			// Show the Popup contents region.
 			function edit_contents() {
-				var region_name = 'PopUp Contents';
+				var region_id,
+					region_name = 'PopUp Contents';
 
-				// Create the new lightbox container.
-				me.model.set({
-					url: '#' + Upfront.Application.LayoutEditor.createLightboxRegion( region_name )
-				});
+				region_id = me.model.get_property_value_by_name( 'content_region' );
+
+				if ( region_id ) {
+					// If we created the Content-Region already then open it now.
+					Upfront.Application.LayoutEditor.openLightboxRegion( region_id );
+				} else {
+					// If we do not have a Content-Region for this Popup then create one.
+					region_id = Upfront.Application.LayoutEditor.createLightboxRegion( region_name );
+					me.model.set_property( 'content_region', region_id );
+					me.model.set({ url: '#' + region_id });
+				}
+
 				me.render();
 			}
 
