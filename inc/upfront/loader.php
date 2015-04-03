@@ -152,11 +152,7 @@ class Upfront_PopupMain {
 }
 
 /**
- * Initialize the entity when Upfront is good and ready
- *
- * The hook 'upfront-loaded' is called when all Upfront files are loaded but
- * before any Upfront component is initialized. This is the point where we can
- * add any kind of action hook or filter to Upfront.
+ * Initialize the entity when Upfront is good and ready.
  */
 add_action(
 	'upfront-core-initialized',

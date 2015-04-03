@@ -52,13 +52,14 @@ class Upfront_PopupView extends Upfront_Object {
 			'class' => 'c24 upfront-popup_element_object',
 			'has_settings' => 1,
 			'id_slug' => 'upfront-popup_element',
+			'content_region' => false,
 
 			// Popup-specific defaults:
 			'popup__title' => __( 'Your new PopUp', PO_LANG ),
 			'popup__subtitle' => __( 'You\'ll love it!', PO_LANG ),
 			'popup__style' => 'simple',
 			'popup__content' => __( 'See this new PopUp here?', PO_LANG ),
-			'popup__round_corners' => true,
+			'popup__round_corners' => array( 'yes' ),
 			'popup__cta_label' => '',
 			'popup__cta_link' => '',
 		);
@@ -105,12 +106,11 @@ class Upfront_PopupView extends Upfront_Object {
 		$popup_args['show_on_load'] = true;
 		$popup_args['custom_class'][] = 'inline';
 
-		// If event-debugging is enabled add a marker to the popup contents that
-		// changes every time this function is called.
-		if ( empty( $_COOKIES['uf_debug_events'] ) ) {
-			$marker = lib2()->debug->marker_html();
-			$popup_args['content'] = $marker . $popup_args['content'];
-		}
+		// Filter provided by plugin "Upfront Debugger"
+		$popup_args['content'] = apply_filters(
+			'uf_debugger_mark_element',
+			$popup_args['content']
+		);
 
 		// Translate checkbox-values to usable data.
 		$popup_args['round_corners'] = is_array( $popup_args['round_corners'] );
@@ -225,6 +225,24 @@ class Upfront_PopupView extends Upfront_Object {
 	}
 
 	/**
+	 * Returns the layout data for the current page.
+	 *
+	 * @since  4.8.0.0
+	 * @return array Upfront Layout data.
+	 */
+	protected static function get_layout_data() {
+		static $Layout = null;
+
+		if ( null === $Layout ) {
+			$resolved_ids = Upfront_EntityResolver::get_entity_ids();
+			$output_obj = Upfront_Output::get_layout( $resolved_ids );
+			$Layout = $output_obj->get_layout_data();
+		}
+
+		return $Layout;
+	}
+
+	/**
 	 * Extracts and (un)escapes popup details from the Upfront property list.
 	 *
 	 * @since  4.8.0.0
@@ -248,6 +266,30 @@ class Upfront_PopupView extends Upfront_Object {
 			'subtitle'
 		);
 
+		// Get the PopUp contents from the Content-Region
+		$layout = self::get_layout_data();
+		$region_id = $properties['content_region'];
+		$popup_args['content'] = '';
+
+		// Loop all regions to find the linked Content-Region.
+		foreach ( $layout['regions'] as $region ) {
+			if ( $region_id == $region['name'] ) {
+				// Found the Content-Region: Now get the content as HTML markup.
+				$region_view = new Upfront_Region( $region );
+				$markup = trim( $region_view->get_markup() );
+
+				/*
+				 * We need to strip the outermost tag, since that is the
+				 * lightbox-wrapper that has fixed positioning and other styling
+				 * that messes with the Popup.
+				 */
+				$contents = preg_replace( '/^<[^>]+>|<\/[^>]+>$/', '', $markup );
+
+				$popup_args['content'] = $contents;
+				break;
+			}
+		}
+
 		return $popup_args;
 	}
 
@@ -260,17 +302,7 @@ class Upfront_PopupView extends Upfront_Object {
 	 * @return array
 	 */
 	public static function select_popup( $list, $base ) {
-		$resolved_ids = Upfront_EntityResolver::get_entity_ids();
-		$output_obj = Upfront_Output::get_layout( $resolved_ids );
-		$layout = $output_obj->get_layout_data();
-
-		// @todo Maybe the following code-block is better to get layout data
-		//       than the code above... Check if possible/correct
-		/*
-		$grid = Upfront_Grid::get_grid();
-		$layout = apply_filters('upfront-style-base_layout', Upfront_Layout::get_instance());
-		$preprocessor = new Upfront_StylePreprocessor($grid, $layout);
-		*/
+		$layout = self::get_layout_data();
 
 		/*
 		 * Upfront object hierarchy is quite nested:
