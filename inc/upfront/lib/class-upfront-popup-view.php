@@ -62,6 +62,9 @@ class Upfront_PopupView extends Upfront_Object {
 			'popup__round_corners' => array( 'yes' ),
 			'popup__cta_label' => '',
 			'popup__cta_link' => '',
+			'popup__image' => '',
+			'popup__image_pos' => 'left',
+			'popup__image_not_mobile' => array( '' ),
 		);
 
 		return apply_filters( 'po_upfront_defaults', $defaults );
@@ -114,6 +117,10 @@ class Upfront_PopupView extends Upfront_Object {
 
 		// Translate checkbox-values to usable data.
 		$popup_args['round_corners'] = is_array( $popup_args['round_corners'] );
+		$popup_args['image_not_mobile'] = is_array( $popup_args['image_not_mobile'] );
+
+		// We actually need the param 'image_mobile' instead of 'image_not_mobile'.
+		$popup_args['image_mobile'] = ! $popup_args['image_not_mobile'];
 
 		// Create a populated PopUp item.
 		$popup = new IncPopupItem( $popup_args );
@@ -168,21 +175,28 @@ class Upfront_PopupView extends Upfront_Object {
 			'element_name' => __( 'PopUp', PO_LANG ),
 			'hold_on' => __( 'Please, hold on', PO_LANG ),
 			'edit_text' => __( 'Edit Contents', PO_LANG ),
-
-			'title' => __( 'Enter title...', PO_LANG ),
-			'subtitle' => __( 'Enter subtitle...', PO_LANG ),
+			'preparing_image' => __( 'Nice image!', PO_LANG ),
+			'select_image' => __( 'Select Image', PO_LANG ),
+			'remove_image' => __( 'Remove Image', PO_LANG ),
 
 			'settings' => array(
 				// TAB: Contents
 				'tab_contents' => __( 'Contents', PO_LANG ),
+				'group_title' => __( 'PopUp Title', PO_LANG ),
 				'group_cta' => __( 'Call To Action', PO_LANG ),
-				'cta_label' => __( 'Label', PO_LANG ),
-				'cta_link' => __( 'Link', PO_LANG ),
+				'title' => __( 'Enter title...', PO_LANG ),
+				'subtitle' => __( 'Enter subtitle...', PO_LANG ),
+				'cta_label' => __( 'Click here!', PO_LANG ),
+				'cta_link' => __( 'http://www...', PO_LANG ),
 
 				// TAB: Appearance
 				'tab_appearance' => __( 'Appearance', PO_LANG ),
-				'group_template' => __( 'Template', PO_LANG ),
+				'group_template' => __( 'PopUp Template', PO_LANG ),
+				'group_image' => __( 'PopUp Feature Image', PO_LANG ),
 				'round_corners' => __( 'Round corners', PO_LANG ),
+				'pos_left' => __( 'Left Side', PO_LANG ),
+				'pos_right' => __( 'Right Side', PO_LANG ),
+				'image_not_mobile' => __( 'Hide image on mobile devices', PO_LANG ),
 
 				// TAB: Behavior
 				'tab_behavior' => __( 'Behavior', PO_LANG ),
@@ -302,6 +316,11 @@ class Upfront_PopupView extends Upfront_Object {
 	 * @return array
 	 */
 	public static function select_popup( $list, $base ) {
+		// Do not display any PopUp when user is in edit-mode.
+		if ( ! empty( $_GET['editmode'] ) && is_user_logged_in() ) {
+			return array();
+		}
+
 		$layout = self::get_layout_data();
 
 		/*

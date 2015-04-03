@@ -1,4 +1,4 @@
-(function () {
+(function _define_settings_contents() {
 define(
 [
 	_popup_uf_data.base_url + 'js/element-settings-itemgroup.js',
@@ -8,7 +8,7 @@ define(
  *
  * @since  4.8.0.0
  */
-function( ItemGroup ) {
+function _load_settings_contents( ItemGroup ) {
 
 	/**
 	 * Define the translations.
@@ -26,7 +26,7 @@ function( ItemGroup ) {
 	var PopupSettings_PanelContents = Upfront.Views.Editor.Settings.Panel.extend({
 
 		// ========== PopupSettings_PanelContents --- Initialize
-		initialize: function( opts ) {
+		initialize: function initialize( opts ) {
 			var attr, ind,
 				groups = [],
 				me = this;
@@ -35,7 +35,8 @@ function( ItemGroup ) {
 			attr = {model: this.model};
 
 			// Create the settings groups.
-			groups[0] = new PopupSettings_Group_Cta( attr );
+			groups[0] = new PopupSettings_Group_Title( attr );
+			groups[1] = new PopupSettings_Group_Cta( attr );
 
 			// Assign groups to the panel.
 			this.settings = _( groups );
@@ -43,7 +44,7 @@ function( ItemGroup ) {
 			// Add event handlers to the groups.
 			for ( ind = 0; ind < groups.length; ind += 1 ) {
 				groups[ind].on( 'popup:settings:changed', groups[ind].update, groups[ind] );
-				groups[ind].on( 'popup:settings:changed', function() {
+				groups[ind].on( 'popup:settings:changed', function on_popup_settings_changed() {
 					me.trigger( 'upfront:settings:panel:refresh', me );
 				});
 			}
@@ -51,7 +52,7 @@ function( ItemGroup ) {
 		},
 
 		// ========== PopupSettings_PanelContents --- Render
-		render: function() {
+		render: function render() {
 			function update_setting( setting ) {
 				if ( setting.update ) {
 					setting.update();
@@ -65,8 +66,44 @@ function( ItemGroup ) {
 		},
 
 		// ========== PopupSettings_PanelContents --- Get_label
-		get_label: function() {
+		get_label: function get_label() {
 			return l10n.tab_contents;
+		}
+
+	});
+
+	/**
+	 * PopUp Title settings.
+	 */
+	var PopupSettings_Group_Title = ItemGroup.extend({
+
+		// ========== PopupSettings_Group_Title --- Initialize
+		initialize: function initialize() {
+			var me = this;
+
+			function did_change() {
+				me.register_change( me );
+			}
+
+			this.fields = _([
+				new Upfront.Views.Editor.Field.Text({
+					model: this.model,
+					property: 'popup__title',
+					placeholder: l10n.title,
+					change: did_change
+				}),
+				new Upfront.Views.Editor.Field.Text({
+					model: this.model,
+					property: 'popup__subtitle',
+					placeholder: l10n.subtitle,
+					change: did_change
+				}),
+			]);
+		},
+
+		// ========== PopupSettings_Group_Title --- Get_title
+		get_title: function get_title() {
+			return l10n.group_title;
 		}
 
 	});
@@ -77,7 +114,7 @@ function( ItemGroup ) {
 	var PopupSettings_Group_Cta = ItemGroup.extend({
 
 		// ========== PopupSettings_Group_Cta --- Initialize
-		initialize: function() {
+		initialize: function initialize() {
 			var me = this;
 
 			function did_change() {
@@ -88,20 +125,20 @@ function( ItemGroup ) {
 				new Upfront.Views.Editor.Field.Text({
 					model: this.model,
 					property: 'popup__cta_label',
-					label: l10n.cta_label,
+					placeholder: l10n.cta_label,
 					change: did_change
 				}),
 				new Upfront.Views.Editor.Field.Text({
 					model: this.model,
 					property: 'popup__cta_link',
-					label: l10n.cta_link,
+					placeholder: l10n.cta_link,
 					change: did_change
 				}),
 			]);
 		},
 
 		// ========== PopupSettings_Group_Cta --- Get_title
-		get_title: function() {
+		get_title: function get_title() {
 			return l10n.group_cta;
 		}
 
