@@ -1,20 +1,27 @@
-(function _define_settings_itemgroup() {
+(function _define_field_image() {
 define(
 [
-	'text!' + _popup_uf_data.base_url + 'tpl/image_field.html'
+	'text!' + _popup_uf_data.base_url + 'tpl/templates.html'
 ],
 /**
- * Defines the settings item-group base class
+ * Defines the custom input field: Image Field
  *
  * @since  4.8.0.0
  */
-function _load_settings_itemgroup( tpl_image_field ) {
+function _load_field_image( tpl_source ) {
+
 	/**
 	 * Define the translations.
 	 *
-	 * NOTE: This uses the .settings sub-collection of the l10n data!!
+	 * NOTE: This uses the .fields sub-collection of the l10n data!!
 	 */
-	var l10n = Upfront.Settings.l10n.popup_element;
+	var l10n = Upfront.Settings.l10n.popup_element.fields;
+
+	/**
+	 * HTML markup for custom settings fields.
+	 */
+	var templates = jQuery( tpl_source ),
+		tpl_image_field = templates.filter( '#wdpu-image-field' );
 
 	/**
 	 * Custom Field Definition: ImageField
@@ -24,7 +31,7 @@ function _load_settings_itemgroup( tpl_image_field ) {
 
 		// ===== Field HTML template.
 		template: _.template(
-			jQuery( tpl_image_field ).html()
+			tpl_image_field.html()
 		),
 
 		// ===== Field event handlers.
@@ -71,7 +78,7 @@ function _load_settings_itemgroup( tpl_image_field ) {
 			var me = this,
 				selectorOptions = {
 					multiple: false,
-					preparingText: l10n.preparing_img,
+					preparingText: l10n.preparing_image,
 					element_id: this.model.get_property_value_by_name( 'element_id' ),
 					customImageSize: {
 						width: 200,
@@ -141,43 +148,8 @@ function _load_settings_itemgroup( tpl_image_field ) {
 
 	});
 
-	/**
-	 * Simply a collection of fields.
-	 * This is the base-class of setting fields.
-	 *
-	 * We also add custom field-types here that can be used by child classes via
-	 * the `this` scope. E.g.
-	 * var img_field = new this.Fields.ImageField( {...} );
-	 */
-	var PopupSettings_ItemGroup = Upfront.Views.Editor.Settings.Item.extend({
-
-		// ===== ImageField object
-		Fields: {
-			ImageField: ImageField
-		},
-
-		// ========== PopupSettings_ItemGroup --- Render
-		render: function render() {
-			Upfront.Views.Editor.Settings.Item.prototype.render.call( this );
-			this.$el.find('.upfront-settings-item-content').addClass( 'clearfix' );
-		},
-
-		// ========== PopupSettings_ItemGroup --- Register_change
-		register_change: function register_change() {
-			this.fields.each(function loop_fields( field ) {
-				window.console.log ( 'register change:', field, field.get_value())
-				field.property.set(
-					{'value': field.get_value()},
-					{'silent': false}
-				);
-			});
-			this.trigger( 'popup:settings:changed' );
-		}
-
-	});
-
 	// Return the module object.
-	return PopupSettings_ItemGroup;
+	return ImageField;
 
 });
 })();

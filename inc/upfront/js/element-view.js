@@ -90,34 +90,6 @@ function( PopupModel ) {
 		update_dom: function update_dom() {
 			var me = this;
 
-			// Add a few inline-editor fields to the PopUp preview.
-			/*function add_edit_fields( el ) {
-				var edit_title, edit_subtitle,
-					el_title, el_subtitle,
-					edit_wrap = '<div class="uf-inline-edit"></div>',
-					value_wrap = '<div class="uf-inline-value"></div>';
-
-				el_title =  el.find( '.wdpu-title' );
-				el_subtitle =  el.find( '.wdpu-subtitle' );
-
-				edit_title = jQuery( '<input type="text">' )
-					.attr( 'placeholder', l10n.title )
-					.attr( 'name', 'title' )
-					.change( change_inline_value )
-					.val( jQuery.trim( el_title.text() ) );
-				edit_subtitle = jQuery( '<input type="text">' )
-					.attr( 'placeholder', l10n.subtitle )
-					.attr( 'name', 'subtitle' )
-					.change( change_inline_value )
-					.val( jQuery.trim( el_subtitle.text() ) );
-
-				el_title.wrapInner( value_wrap );
-				el_subtitle.wrapInner( value_wrap );
-
-				edit_title.appendTo( el_title ).wrap( edit_wrap );
-				edit_subtitle.appendTo( el_subtitle ).wrap( edit_wrap );
-			}*/
-
 			// Add an Edit-Button that opens the contents lightbox of the popup.
 			function add_content_editor( el ) {
 				var button, parent;
@@ -136,15 +108,6 @@ function( PopupModel ) {
 					.wrap( '<div class="uf-hover-action"></div>' )
 					.wrap( '<div class="uf-elements"></div>' );
 			}
-
-			// When an inline field was modified we update the property.
-			/*function change_inline_value( ev ) {
-				var inp = jQuery( this ),
-					field = inp.attr( 'name' ),
-					value = inp.val();
-
-				me.model.set_property( 'popup__' + field, value, false );
-			}*/
 
 			// Show the Popup contents region.
 			function edit_contents() {
@@ -165,9 +128,6 @@ function( PopupModel ) {
 
 				me.render();
 			}
-
-			// Add additional HTML markup for the editor.
-			//add_edit_fields( me.$el );
 
 			// Add an Edit-Button to edit the popup contents.
 			add_content_editor( me.$el );

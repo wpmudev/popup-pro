@@ -175,9 +175,13 @@ class Upfront_PopupView extends Upfront_Object {
 			'element_name' => __( 'PopUp', PO_LANG ),
 			'hold_on' => __( 'Please, hold on', PO_LANG ),
 			'edit_text' => __( 'Edit Contents', PO_LANG ),
-			'preparing_image' => __( 'Nice image!', PO_LANG ),
-			'select_image' => __( 'Select Image', PO_LANG ),
-			'remove_image' => __( 'Remove Image', PO_LANG ),
+
+			'fields' => array(
+				// Custom Field: ImageField
+				'preparing_image' => __( 'Nice image!', PO_LANG ),
+				'select_image' => __( 'Select Image', PO_LANG ),
+				'remove_image' => __( 'Remove Image', PO_LANG ),
+			),
 
 			'settings' => array(
 				// TAB: Contents
