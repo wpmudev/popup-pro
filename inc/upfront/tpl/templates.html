@@ -6,7 +6,27 @@
 		<img src="{{image}}" />
 		<input type="hidden" name="{{field_name}}" value="{{image}}" />
 	</div>
-	<a href="#" class="select-image image-action">{{l10n.select_image}}</a>
-	<a href="#" class="remove-image image-action">{{l10n.remove_image}}</a>
+	<a href="#" class="select-image image-action wdpu-uf-button">{{l10n.select_image}}</a>
+	<a href="#" class="remove-image image-action wdpu-uf-button">{{l10n.remove_image}}</a>
+</div>
+</script>
+
+
+<!-- Field: Rule list -->
+
+<script type="text/template" id="wdpu-rule-field">
+<div class="wdpu-rule-field upfront-field-multiple rule-item-{{key}}">
+	<input
+		type="checkbox"
+		name="{{field_name}}"
+		value="{{key}}"
+		id="{{field_id}}"
+		class="upfront-field-checkbox wdpu-rule" />
+	<label for="{{field_id}}" class="wdpu-rule-field-title">
+		<span class="upfront-field-label-text">{{label}}</span>
+		<span class="wdpu-details" style="display:none">
+			<i class="dashicons dashicons-admin-generic"></i>
+		</span>
+	</label>
 </div>
 </script>

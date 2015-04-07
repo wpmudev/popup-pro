@@ -1,14 +1,15 @@
 (function _define_field_itemgroup() {
 define(
 [
-	_popup_uf_data.base_url + 'js/element-field-image.js'
+	_popup_uf_data.base_url + 'js/element-field-image.js',
+	_popup_uf_data.base_url + 'js/element-field-rule.js'
 ],
 /**
  * Defines the settings item-group base class
  *
  * @since  4.8.0.0
  */
-function _load_field_itemgroup( ImageField ) {
+function _load_field_itemgroup( ImageField, RuleField ) {
 
 	/**
 	 * Simply a collection of fields.
@@ -22,7 +23,8 @@ function _load_field_itemgroup( ImageField ) {
 
 		// ===== ImageField object
 		Fields: {
-			ImageField: ImageField
+			ImageField: ImageField,
+			RuleField: RuleField
 		},
 
 		// ========== ItemGroup --- Render
@@ -34,7 +36,6 @@ function _load_field_itemgroup( ImageField ) {
 		// ========== ItemGroup --- Register_change
 		register_change: function register_change() {
 			this.fields.each(function loop_fields( field ) {
-				window.console.log ( 'register change:', field, field.get_value())
 				field.property.set(
 					{'value': field.get_value()},
 					{'silent': false}

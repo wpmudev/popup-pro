@@ -119,7 +119,68 @@
 	max-width: 100%;
 	max-height: 100%;
 }
-.upfront-settings_panel .wdpu-image-field .image-action {
+
+.upfront-settings_panel .wdpu-rule-field {
+	position: relative;
+	line-height: 16px;
+	padding: 6px 46px 6px 17px;
+	margin: 0 0 2px 0;
+}
+.upfront-settings_panel .wdpu-rule-field input.upfront-field-checkbox {
+	top: 8px;
+	bottom: auto;
+}
+.upfront-settings_panel .wdpu-rule-field .wdpu-details {
+	position: absolute;
+	right: 0;
+	top: 4px;
+	opacity: 0.8;
+	cursor: pointer;
+}
+.upfront-settings_panel .wdpu-rule-field .wdpu-details:hover {
+	opacity: 1;
+}
+.upfront-settings_panel .wdpu-rule-field.excluded {
+	opacity: .3;
+	position: relative;
+}
+.upfront-settings_panel .wdpu-rule-field.excluded:before {
+	content: '';
+	position: absolute;
+	z-index: 99;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	cursor: not-allowed;
+}
+.wdpu-rule-detail {
+	font-size: 14px;
+}
+.wdpu-rule-detail .rule-title,
+.wdpu-rule-detail .rule-toggle {
+	display: none;
+}
+.wdpu-rule-detail .rule-description {
+	margin: 0 0 1em;
+	padding: 0 0 1em;
+	border-bottom: 1px solid #E5E5E5;
+}
+.wdpu-rule-detail input,
+.wdpu-rule-detail textarea,
+.wdpu-rule-detail select {
+	padding: 4px;
+	border: 1px solid #DDD;
+	display: block;
+	margin: 6px 0 12px;
+}
+.wdpu-rule-detail textarea {
+	font-family: monospace;
+	width: 100%;
+}
+
+/* Button */
+.upfront-settings_panel .wdpu-uf-button {
 	float: left;
 	clear: both;
 	min-height: 24px;
@@ -134,13 +195,21 @@
 	box-shadow: inset 0 2px 0 #F2F9FF;
 	color: #30475E;
 }
-.upfront-settings_panel .wdpu-image-field .image-action:hover,
-.upfront-settings_panel .wdpu-image-field .image-action:focus {
+.upfront-settings_panel .wdpu-uf-button:hover,
+.upfront-settings_panel .wdpu-uf-button:focus {
 	border-color: #607F99;
 }
-.upfront-settings_panel .wdpu-image-field .image-action:active {
+.upfront-settings_panel .wdpu-uf-button:active {
 	border-color: #607F99;
 	background: #607F99;
 	color: #EEF7FF;
 	box-shadow: inset 0 1px 0 #C0CFD9;
+}
+
+/* wpmUi Popup window */
+.wpmui-wnd {
+	z-index: 10000001;
+}
+.wpmui-overlay {
+	z-index: 10000000;
 }

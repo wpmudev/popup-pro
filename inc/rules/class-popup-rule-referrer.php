@@ -29,7 +29,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 			'referrer',
 			__( 'From a specific referrer', PO_LANG ),
 			__( 'Shows the PopUp if the user arrived via a specific referrer.', PO_LANG ),
-			'',
+			'no_referrer',
 			15
 		);
 
@@ -38,7 +38,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 			'no_referrer',
 			__( 'Not from a specific referrer', PO_LANG ),
 			__( 'Hides the PopUp if the user arrived via a specific referrer.', PO_LANG ),
-			'',
+			'referrer',
 			15
 		);
 

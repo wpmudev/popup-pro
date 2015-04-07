@@ -27,6 +27,7 @@ class Upfront_PopupView extends Upfront_Object {
 
 		$data['upfront_popup'] = array(
 			'defaults' => self::default_properties(),
+			'rules' => self::get_all_rules(),
 			'styles' => $style_infos,
 		);
 
@@ -52,7 +53,6 @@ class Upfront_PopupView extends Upfront_Object {
 			'class' => 'c24 upfront-popup_element_object',
 			'has_settings' => 1,
 			'id_slug' => 'upfront-popup_element',
-			'content_region' => false,
 
 			// Popup-specific defaults:
 			'popup__title' => __( 'Your new PopUp', PO_LANG ),
@@ -65,6 +65,8 @@ class Upfront_PopupView extends Upfront_Object {
 			'popup__image' => '',
 			'popup__image_pos' => 'left',
 			'popup__image_not_mobile' => array( '' ),
+			'popup__rule' => array(),
+			'popup__rule_data' => array(),
 		);
 
 		return apply_filters( 'po_upfront_defaults', $defaults );
@@ -126,11 +128,20 @@ class Upfront_PopupView extends Upfront_Object {
 		$popup = new IncPopupItem( $popup_args );
 		$data = $popup->get_script_data();
 
+		ob_start();
+		foreach ( IncPopupRules::$rules as $prio => $list ) {
+			foreach ( $list as $key => $rule ) {
+				$rule->obj->_admin_rule_form( $key, $rule, $popup );
+			}
+		}
+		$rule_forms = ob_get_clean();
+
 		// Prepare the response code.
 		$code = sprintf(
-			'<div class="upfront_popup">%1$s</div><style>%2$s</style>',
+			'<div class="upfront_popup">%1$s<ul class="forms" style="display:none">%3$s</ul></div><style>%2$s</style>',
 			$data['html'],
-			$data['styles']
+			$data['styles'],
+			$rule_forms
 		);
 
 		return apply_filters(
@@ -181,6 +192,8 @@ class Upfront_PopupView extends Upfront_Object {
 				'preparing_image' => __( 'Nice image!', PO_LANG ),
 				'select_image' => __( 'Select Image', PO_LANG ),
 				'remove_image' => __( 'Remove Image', PO_LANG ),
+
+				// Custom Field: RulesField
 			),
 
 			'settings' => array(
@@ -258,6 +271,50 @@ class Upfront_PopupView extends Upfront_Object {
 		}
 
 		return $Layout;
+	}
+
+	/**
+	 * Returns an ordered array that contains all available PopUp rules.
+	 *
+	 * @since  4.8.0.0
+	 * @return array An ordered array of rules. Each item is an object with
+	 *               $key and $label elements.
+	 */
+	protected static function get_all_rules() {
+		$rules = array();
+
+		/**
+		 * Some PopUp Conditions are not supported in Upfront or they don't
+		 * make any sense. So we hide some rules in the Upfront Settings.
+		 *
+		 * @var   array
+		 * @since 4.8.0.0
+		 */
+		$skipped_rules = apply_filters(
+			'po_upfront_skipped_rules',
+			array(
+				'url',
+				'no_url',
+			)
+		);
+
+		foreach ( IncPopupRules::$rules as $prio => $list ) {
+			foreach ( $list as $key => $rule ) {
+				if ( in_array( $key, $skipped_rules ) ) { continue; }
+
+				$rules[] = (object) array(
+					'key' => $key,
+					'label' => $rule->label,
+					'exclude' => $rule->exclude,
+					'description' => $rule->description,
+				);
+			}
+		}
+
+		return apply_filters(
+			'po_upfront_all_rules',
+			$rules
+		);
 	}
 
 	/**

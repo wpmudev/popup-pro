@@ -80,23 +80,28 @@ function( ItemGroup ) {
 		initialize: function() {
 			var me = this;
 
-			function did_change() {
-				me.register_change( me );
+			function did_change_rule( rule, data ) {
+				var prp_rule = this.model.get_property_by_name( 'popup__rule' ),
+					prp_data = this.model.get_property_by_name( 'popup__rule_data' );
+
+				prp_rule.set(
+					{'value': rule},
+					{'silent': true}
+				);
+				prp_data.set(
+					{'value': data},
+					{'silent': true}
+				);
+
+				this.trigger( 'popup:settings:changed' );
 			}
 
 			this.fields = _([
-				new Upfront.Views.Editor.Field.Text({
-					model: this.model,
-					property: 'popup__cta_label',
-					label: l10n.cta_label,
-					change: did_change
-				}),
-				new Upfront.Views.Editor.Field.Text({
-					model: this.model,
-					property: 'popup__cta_link',
-					label: l10n.cta_link,
-					change: did_change
-				}),
+				new me.Fields.RuleField({
+					model: me.model,
+					change: did_change_rule,
+					parent: me
+				})
 			]);
 		},
 

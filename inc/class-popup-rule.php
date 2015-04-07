@@ -20,7 +20,6 @@ class IncPopupRules {
 		self::$classes[$classname] = new $classname();
 	}
 
-
 	/**
 	 * Checks which php file defines the specified rule-ID
 	 *

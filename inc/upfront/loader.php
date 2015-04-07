@@ -100,6 +100,8 @@ class Upfront_PopupMain {
 			array( $this, 'load_scripts' ),
 			100
 		);
+		// Also enqueue the lib2() javascript collection for wpmUi.popup()
+		lib2()->ui->add( 'core', 'front' );
 
 		// Modify the CSS before it's saved to the DB.
 		add_filter(
