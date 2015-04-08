@@ -54,6 +54,9 @@ class IncPopupItem {
 	// Link for the CTA button.
 	public $cta_link = '';
 
+	// Link target for the CTA button.
+	public $cta_target = '';
+
 	// Image dispalyed in the popup.
 	public $image = '';
 
@@ -194,6 +197,7 @@ class IncPopupItem {
 		$this->subtitle = '';
 		$this->cta_label = '';
 		$this->cta_link = '';
+		$this->cta_target = '';
 		$this->image = '';
 		$this->image_pos = 'right';
 		$this->image_mobile = true;
@@ -272,6 +276,7 @@ class IncPopupItem {
 		isset( $data['subtitle'] ) && $this->subtitle = $data['subtitle'];
 		isset( $data['cta_label'] ) && $this->cta_label = $data['cta_label'];
 		isset( $data['cta_link'] ) && $this->cta_link = $data['cta_link'];
+		isset( $data['cta_target'] ) && $this->cta_target = $data['cta_target'];
 		isset( $data['custom_size'] ) && $this->custom_size = $data['custom_size'];
 		isset( $data['custom_css'] ) && $this->custom_css = $data['custom_css'];
 		isset( $data['animation_in'] ) && $this->animation_in = $data['animation_in'];
@@ -496,6 +501,7 @@ class IncPopupItem {
 		$this->subtitle = get_post_meta( $this->id, 'po_subtitle', true );
 		$this->cta_label = get_post_meta( $this->id, 'po_cta_label', true );
 		$this->cta_link = get_post_meta( $this->id, 'po_cta_link', true );
+		$this->cta_target = get_post_meta( $this->id, 'po_cta_target', true );
 		$this->custom_size = get_post_meta( $this->id, 'po_custom_size', true );
 		$this->size = get_post_meta( $this->id, 'po_size', true );
 		$this->color = get_post_meta( $this->id, 'po_color', true );
@@ -579,6 +585,7 @@ class IncPopupItem {
 			update_post_meta( $this->id, 'po_subtitle', $this->subtitle );
 			update_post_meta( $this->id, 'po_cta_label', $this->cta_label );
 			update_post_meta( $this->id, 'po_cta_link', $this->cta_link );
+			update_post_meta( $this->id, 'po_cta_target', $this->cta_target );
 			update_post_meta( $this->id, 'po_custom_size', $this->custom_size );
 			update_post_meta( $this->id, 'po_size', $this->size );
 			update_post_meta( $this->id, 'po_color', $this->color );

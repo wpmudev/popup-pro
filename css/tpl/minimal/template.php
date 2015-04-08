@@ -7,6 +7,7 @@
 $has_title = ! empty( $this->title );
 $has_subtitle = ! empty( $this->subtitle );
 $has_cta = ! empty( $this->cta_label ) && ! empty( $this->cta_link );
+$cta_target = empty( $this->cta_target ) ? '_self' : $this->cta_target;
 $has_img = ! empty( $this->image );
 $has_buttons = $has_cta || $this->can_hide;
 $show_title = $has_title || $has_subtitle;
@@ -154,7 +155,7 @@ $layer_style = apply_filters( 'popup-layer-style', $layer_style, $this->id, $thi
 					<?php endif; ?>
 
 					<?php if ( $has_cta ) : ?>
-						<a href="<?php echo esc_url( $this->cta_link ); ?>" class="wdpu-cta">
+						<a href="<?php echo esc_url( $this->cta_link ); ?>" class="wdpu-cta" target="<?php echo esc_attr( $cta_target ); ?>">
 							<?php echo esc_html( $this->cta_label ); ?>
 						</a>
 					<?php endif; ?>

@@ -74,6 +74,15 @@ $has_image = ! empty( $popup->image );
 				placeholder="<?php _e( 'Button Link (http://www.example.com)', PO_LANG ); ?>"
 				value="<?php echo esc_attr( $popup->cta_link ); ?>" />
 		</div>
+		<div class="col-4">
+			<input class="block"
+				type="text"
+				id="po-cta-target"
+				name="po_cta_target"
+				placeholder="<?php _e( 'Optional Link target', PO_LANG ); ?>"
+				title="<?php _e( 'Default: _self / To open link in new window use: _blank', PO_LANG ); ?>"
+				value="<?php echo esc_attr( $popup->cta_target ); ?>" />
+		</div>
 	</div>
 </div>
 
