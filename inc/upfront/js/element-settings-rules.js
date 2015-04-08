@@ -31,14 +31,14 @@ function( ItemGroup ) {
 				groups = [],
 				me = this;
 
-			this.options = opts;
-			attr = {model: this.model};
+			me.options = opts;
+			attr = {model: me.model};
 
 			// Create the settings groups.
 			groups[0] = new PopupSettings_Group_Rules( attr );
 
 			// Assign groups to the panel.
-			this.settings = _( groups );
+			me.settings = _( groups );
 
 			// Add event handlers to the groups.
 			for ( ind = 0; ind < groups.length; ind += 1 ) {
@@ -81,22 +81,29 @@ function( ItemGroup ) {
 			var me = this;
 
 			function did_change_rule( rule, data ) {
-				var prp_rule = this.model.get_property_by_name( 'popup__rule' ),
-					prp_data = this.model.get_property_by_name( 'popup__rule_data' );
+				var prp_rule = me.model.get_property_by_name( 'popup__rule' ),
+					prp_data = me.model.get_property_by_name( 'popup__rule_data' );
 
-				prp_rule.set(
-					{'value': rule},
-					{'silent': true}
-				);
-				prp_data.set(
-					{'value': data},
-					{'silent': true}
-				);
+				if ( undefined !== rule ) {
+					// Condition triggered by:
+					//   element-field-rule.js -> on_change()
+					prp_rule.set( 'value', rule );
+window.console.log( 'Changed Prop: Rule', prp_rule.get( 'value' ) );
+				}
+				if ( undefined !== data ) {
+					// Condition triggered by:
+					//   element-field-rule.js -> on_details() -> settings_changed()
+					prp_data.set( 'value', data );
+window.console.log( 'Changed Prop: Data', prp_data.get( 'value' ) );
+				}
 
-				this.trigger( 'popup:settings:changed' );
+window.debug_prop1 = prp_rule;
+window.debug_prop2 = prp_data;
+
+				me.trigger( 'popup:settings:changed' );
 			}
 
-			this.fields = _([
+			me.fields = _([
 				new me.Fields.RuleField({
 					model: me.model,
 					change: did_change_rule,

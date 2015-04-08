@@ -180,14 +180,14 @@
 }
 
 /* Button */
-.upfront-settings_panel .wdpu-uf-button {
-	float: left;
+.upfront-edit-layout .btn {
+	display: inline-block;
 	clear: both;
 	min-height: 24px;
 	line-height: 24px;
-	margin: 0 0 5px 0;
 	padding: 0 10px;
 	cursor: pointer;
+	margin: 0 0 5px 10px;
 
 	background: #E6F3FE;
 	border: 1px solid #A3BFD9;
@@ -195,16 +195,27 @@
 	box-shadow: inset 0 2px 0 #F2F9FF;
 	color: #30475E;
 }
-.upfront-settings_panel .wdpu-uf-button:hover,
-.upfront-settings_panel .wdpu-uf-button:focus {
-	border-color: #607F99;
+.upfront-edit-layout .btn:hover,
+.upfront-edit-layout .btn:focus {
+	border: 1px solid #607F99;
 }
-.upfront-settings_panel .wdpu-uf-button:active {
-	border-color: #607F99;
+.upfront-edit-layout .btn:active {
+	border: 1px solid #607F99;
 	background: #607F99;
 	color: #EEF7FF;
 	box-shadow: inset 0 1px 0 #C0CFD9;
 }
+.upfront-edit-layout .btn-link {
+	background: rgba(0, 0, 0, 0);
+	border: 0;
+	box-shadow: none;
+	text-decoration: underline;
+}
+.upfront-edit-layout .btn-link:hover,
+.upfront-edit-layout .btn-link:active {
+	color: #1FCD8F;
+}
+
 
 /* wpmUi Popup window */
 .wpmui-wnd {

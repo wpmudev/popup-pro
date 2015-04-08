@@ -29,7 +29,8 @@ function _load_field_rule( tpl_source ) {
 	 * HTML markup for custom settings fields.
 	 */
 	var templates = jQuery( tpl_source ),
-		tpl_rule_field = templates.filter( '#wdpu-rule-field' );
+		tpl_rule_field = templates.filter( '#wdpu-rule-field' ),
+		tpl_rule_details = templates.filter( '#wdpu-rule-details' );
 
 	/**
 	 * Custom Field Definition: RuleField
@@ -40,6 +41,11 @@ function _load_field_rule( tpl_source ) {
 		// ===== Field HTML template.
 		template: _.template(
 			tpl_rule_field.html()
+		),
+
+		// ===== Field HTML template.
+		detail_template: _.template(
+			tpl_rule_details.html()
 		),
 
 		// ===== Field event handlers.
@@ -55,18 +61,22 @@ function _load_field_rule( tpl_source ) {
 				i = 0,
 				code = '',
 				prp_rules = me.model.get_property_by_name( 'popup__rule' ),
-				active = prp_rules.get( 'value' );
+				active = prp_rules.get( 'value' ),
+				prp_data = me.model.get_property_by_name( 'popup__rule_data' ),
+				rule_data = prp_data.get( 'value' );
+
+			if ( typeof rule_data !== 'object' ) { rule_data = {}; }
 
 			for ( i = 0; i < Upfront.data.upfront_popup.rules.length; i += 1 ) {
 				var tpl_args, data, field;
 
 				data = Upfront.data.upfront_popup.rules[i];
+				item_data = rule_data[data.key];
 				tpl_args = {
-					field_name: 'rule',
 					field_id: 'rule-' + data.key,
-					property: 'popup__rule',
 					key: data.key,
 					label: data.label,
+					data: item_data,
 					l10n: l10n
 				};
 
@@ -90,16 +100,79 @@ function _load_field_rule( tpl_source ) {
 			var me = this,
 				data = get_data_from_element( ev.target )
 				view = me.options.parent.panel.parent_view.for_view.$el,
-				form = view.find( '.forms #po-rule-' + data.key );
+				form = view.find( '.forms #po-rule-' + data.key + ' .rule-inner' ),
+				tpl_args = { form: form.html() },
+				content = me.detail_template( tpl_args ),
+				dlg = wpmUi.popup();
 
 			ev.preventDefault();
 
-			wpmUi.popup()
-				.title( data.label )
+			function settings_changed() {
+				var data,
+					modified_form = dlg.$().find( '.the-form' ),
+					fields = modified_form.find( 'input,select,textarea' ),
+					ajax = wpmUi.ajax(),
+					data = ajax.extract_data( fields ),
+					prop = me.model.get_property_by_name( 'popup__rule_data' ),
+					prop_val = prop.get( 'value' );
+
+				// 1. Update the Element property.
+				if ( undefined !== data.po_rule_data ) {
+					if ( typeof prop_val != 'object' ) { prop_val = {}; }
+
+					for ( var key in data.po_rule_data ) {
+						if ( ! data.po_rule_data.hasOwnProperty( key ) ) {
+							continue;
+						}
+
+						prop_val[key] = data.po_rule_data[key];
+					}
+
+					// Save the rule details.
+					me.trigger( 'changed', undefined, prop_val );
+				}
+
+				// 2. We need to update the HTLM attr of the form input fields
+				//    so we can cache the form inside the view later.
+				fields.each(function() {
+					var el = jQuery( this ),
+						val = el.val(),
+						name = el.attr( 'name' );
+
+					if ( el.is( 'textarea' ) ) {
+						el.text( val );
+					} else if ( el.is( 'select' ) ) {
+						el.find( 'option' ).each(function() {
+							var opt = jQuery( this );
+							if ( opt.is( ':selected' ) ) {
+								opt.attr( 'selected', 'selected' );
+							} else {
+								opt.removeAttr( 'selected' );
+							}
+						});
+					} else if ( el.is( ':checkbox' ) || el.is( ':radio' ) ) {
+						if ( el.is( ':checked' ) ) {
+							el.attr( 'checked', 'checked' );
+						} else {
+							el.removeAttr( 'checked' );
+						}
+					} else {
+						el.attr( 'value', val );
+					}
+				});
+				form.html( modified_form.html() );
+
+				// 3. Close the dialog.
+				dlg.close();
+			}
+
+			dlg.title( data.label )
 				.modal( true )
-				.content( form )
+				.content( content )
 				.set_class( 'wdpu-rule-detail' )
-				.show();
+				.size( 650, 320 )
+				.show()
+				.on( 'click', '.okay', settings_changed );
 		},
 
 		// ========== RuleField --- Update_states
@@ -134,8 +207,7 @@ function _load_field_rule( tpl_source ) {
 			var me = this,
 				i = 0,
 				fields = null,
-				active = [],
-				data = [];
+				active = [];
 
 			me.update_states();
 
@@ -145,7 +217,7 @@ function _load_field_rule( tpl_source ) {
 			}
 
 			// Save the rule details.
-			me.trigger( 'changed', active, data );
+			me.trigger( 'changed', active );
 		}
 
 	});

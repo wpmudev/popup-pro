@@ -40,7 +40,7 @@ jQuery(function() {
 			 */
 			var dependencies = [
 				_popup_uf_data.base_url + 'js/element.js',
-				'text!' + _popup_uf_data.base_url + 'css/element.css?v5'
+				'text!' + _popup_uf_data.base_url + 'css/element.css?v8'
 			];
 
 			require(

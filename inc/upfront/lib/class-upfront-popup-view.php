@@ -139,7 +139,7 @@ class Upfront_PopupView extends Upfront_Object {
 		// Prepare the response code.
 		$code = sprintf(
 			'<div class="upfront_popup">%1$s<ul class="forms" style="display:none">%3$s</ul></div><style>%2$s</style>',
-			$data['html'],
+			$data['html'] . '<hr>' . print_r( $popup->rule_data, true ) . '<hr>',
 			$data['styles'],
 			$rule_forms
 		);

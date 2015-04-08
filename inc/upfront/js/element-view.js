@@ -35,15 +35,18 @@ function( PopupModel ) {
 			function property_changed( model ) {
 				if ( ! model || ! model.get) { return true; }
 
+window.console.log ( 'Property changed -----------' );
+window.console.log ( 'Properties', model.id, model.get( 'value' ) );
+
 				if ( 'row' !== model.get( 'name' ) ) {
 					me.markup = null;
 					me.render();
 				}
 			}
 
-			if ( ! ( this.model instanceof PopupModel ) ) {
-				this.model = new PopupModel({
-					properties: this.model.get( 'properties' )
+			if ( ! ( me.model instanceof PopupModel ) ) {
+				me.model = new PopupModel({
+					properties: me.model.get( 'properties' )
 				});
 			}
 
@@ -57,14 +60,15 @@ function( PopupModel ) {
 				me.update_dom.apply( me );
 			});
 
-			this.model.get( 'properties' ).on( 'change', property_changed );
+			me.model.get( 'properties' ).on( 'change', property_changed );
 		},
 
 		// ========== Render
 		render: function render() {
-			if ( ! this.markup ) {
-				var me = this,
-					options = Upfront.Util.model_to_json( this.model ),
+			var me = this;
+
+			if ( ! me.markup ) {
+				var options = Upfront.Util.model_to_json( me.model ),
 					data = {};
 
 				// Display the Popup preview that we got from the Server object.
