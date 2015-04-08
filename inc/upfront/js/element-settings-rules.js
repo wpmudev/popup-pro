@@ -88,17 +88,16 @@ function( ItemGroup ) {
 					// Condition triggered by:
 					//   element-field-rule.js -> on_change()
 					prp_rule.set( 'value', rule );
+// OK: Function "property_changed()" in element-view.js called, value is stored correctly.
 window.console.log( 'Changed Prop: Rule', prp_rule.get( 'value' ) );
 				}
 				if ( undefined !== data ) {
 					// Condition triggered by:
 					//   element-field-rule.js -> on_details() -> settings_changed()
 					prp_data.set( 'value', data );
+// ERR: Function "property_changed()" in element-view.js was not called! Value in element-view is still empty...
 window.console.log( 'Changed Prop: Data', prp_data.get( 'value' ) );
 				}
-
-window.debug_prop1 = prp_rule;
-window.debug_prop2 = prp_data;
 
 				me.trigger( 'popup:settings:changed' );
 			}
