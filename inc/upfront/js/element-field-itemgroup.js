@@ -2,14 +2,15 @@
 define(
 [
 	_popup_uf_data.base_url + 'js/element-field-image.js',
-	_popup_uf_data.base_url + 'js/element-field-rule.js'
+	_popup_uf_data.base_url + 'js/element-field-rule.js',
+	_popup_uf_data.base_url + 'js/element-field-select.js'
 ],
 /**
  * Defines the settings item-group base class
  *
  * @since  4.8.0.0
  */
-function _load_field_itemgroup( ImageField, RuleField ) {
+function _load_field_itemgroup( ImageField, RuleField, SelectField ) {
 
 	/**
 	 * Simply a collection of fields.
@@ -21,16 +22,23 @@ function _load_field_itemgroup( ImageField, RuleField ) {
 	 */
 	var ItemGroup = Upfront.Views.Editor.Settings.Item.extend({
 
-		// ===== ImageField object
+		// ===== Fields object
 		Fields: {
 			ImageField: ImageField,
-			RuleField: RuleField
+			RuleField: RuleField,
+			SelectList: SelectField
 		},
 
 		// ========== ItemGroup --- Render
 		render: function render() {
-			Upfront.Views.Editor.Settings.Item.prototype.render.call( this );
-			this.$el.find('.upfront-settings-item-content').addClass( 'clearfix' );
+			var me = this;
+
+			Upfront.Views.Editor.Settings.Item.prototype.render.call( me );
+			me.$el.find('.upfront-settings-item-content').addClass( 'clearfix' );
+
+			if ( me.className ) {
+				me.$el.addClass( me.className );
+			}
 		},
 
 		// ========== ItemGroup --- Register_change
