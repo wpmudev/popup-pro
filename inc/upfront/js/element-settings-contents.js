@@ -81,22 +81,21 @@ function _load_settings_contents( ItemGroup ) {
 		initialize: function initialize() {
 			var me = this;
 
-			function did_change() {
-				me.register_change( me );
-			}
+			function preview_change() { me.preview_change(); }
+			function silent_change() { me.silent_change(); }
 
 			this.fields = _([
 				new Upfront.Views.Editor.Field.Text({
 					model: this.model,
 					property: 'popup__title',
 					placeholder: l10n.title,
-					change: did_change
+					change: preview_change
 				}),
 				new Upfront.Views.Editor.Field.Text({
 					model: this.model,
 					property: 'popup__subtitle',
 					placeholder: l10n.subtitle,
-					change: did_change
+					change: preview_change
 				}),
 			]);
 		},
@@ -117,22 +116,27 @@ function _load_settings_contents( ItemGroup ) {
 		initialize: function initialize() {
 			var me = this;
 
-			function did_change() {
-				me.register_change( me );
-			}
+			function preview_change() { me.preview_change(); }
+			function silent_change() { me.silent_change(); }
 
 			this.fields = _([
 				new Upfront.Views.Editor.Field.Text({
 					model: this.model,
 					property: 'popup__cta_label',
 					placeholder: l10n.cta_label,
-					change: did_change
+					change: preview_change
 				}),
 				new Upfront.Views.Editor.Field.Text({
 					model: this.model,
 					property: 'popup__cta_link',
 					placeholder: l10n.cta_link,
-					change: did_change
+					change: preview_change
+				}),
+				new Upfront.Views.Editor.Field.Text({
+					model: this.model,
+					property: 'popup__cta_target',
+					placeholder: l10n.cta_target,
+					change: silent_change
 				}),
 			]);
 		},

@@ -31,15 +31,18 @@ function _load_settings_appearance( ItemGroup ) {
 				groups = [],
 				me = this;
 
-			this.options = opts;
-			attr = {model: this.model};
+			me.options = opts;
+			attr = { model: me.model };
 
 			// Create the settings groups.
 			groups[0] = new PopupSettings_Group_Appearance( attr );
 			groups[1] = new PopupSettings_Group_Image( attr );
+			groups[2] = new PopupSettings_Group_Size( attr );
+			groups[3] = new PopupSettings_Group_Scrolling( attr );
+			groups[4] = new PopupSettings_Group_Animations( attr );
 
 			// Assign groups to the panel.
-			this.settings = _( groups );
+			me.settings = _( groups );
 
 			// Add event handlers to the groups.
 			for ( ind = 0; ind < groups.length; ind += 1 ) {
@@ -82,6 +85,9 @@ function _load_settings_appearance( ItemGroup ) {
 				me = this,
 				styles = [];
 
+			function preview_change() { me.preview_change(); }
+			function silent_change() { me.silent_change(); }
+
 			// Prepare the styles-select-values.
 			for ( key in Upfront.data.upfront_popup.styles ) {
 				if ( ! Upfront.data.upfront_popup.styles.hasOwnProperty( key ) ) {
@@ -93,17 +99,13 @@ function _load_settings_appearance( ItemGroup ) {
 				styles.push( {label: style.name, value: key} );
 			}
 
-			function did_change() {
-				me.register_change( me );
-			}
-
 			// Collect all Display setting fields.
 			this.fields = _([
 				new Upfront.Views.Editor.Field.Select({
 					model: this.model,
 					property: 'popup__style',
 					values: styles,
-					change: did_change
+					change: preview_change
 				}),
 				new Upfront.Views.Editor.Field.Checkboxes({
 					model: this.model,
@@ -111,7 +113,7 @@ function _load_settings_appearance( ItemGroup ) {
 					values: [
 						{ label: l10n.round_corners, value: 'yes' }
 					],
-					change: did_change
+					change: preview_change
 				})
 			]);
 		},
@@ -130,20 +132,17 @@ function _load_settings_appearance( ItemGroup ) {
 
 		// ========== PopupSettings_Group_Image --- Initialize
 		initialize: function initialize() {
-			var key, style,
-				me = this,
-				styles = [];
+			var me = this;
 
-			function did_change() {
-				me.register_change( me );
-			}
+			function preview_change() { me.preview_change(); }
+			function silent_change() { me.silent_change(); }
 
 			// Collect all Display setting fields.
 			this.fields = _([
 				new this.Fields.ImageField({
 					model: this.model,
 					property: 'popup__image',
-					change: did_change
+					change: preview_change
 				}),
 				new Upfront.Views.Editor.Field.Radios({
 					model: this.model,
@@ -154,7 +153,7 @@ function _load_settings_appearance( ItemGroup ) {
 						{ label: l10n.pos_left, value: 'left', icon: 'pos-left' },
 						{ label: l10n.pos_right, value: 'right', icon: 'pos-right' }
 					],
-					change: did_change
+					change: preview_change
 				}),
 				new Upfront.Views.Editor.Field.Checkboxes({
 					model: this.model,
@@ -162,7 +161,7 @@ function _load_settings_appearance( ItemGroup ) {
 					values: [
 						{ label: l10n.image_not_mobile, value: 'yes' }
 					],
-					change: did_change
+					change: silent_change
 				})
 			]);
 		},
@@ -170,6 +169,111 @@ function _load_settings_appearance( ItemGroup ) {
 		// ========== PopupSettings_Group_Image --- Get_title
 		get_title: function get_title() {
 			return l10n.group_image;
+		}
+
+	});
+
+	/**
+	 * PopUp-Size options.
+	 */
+	var PopupSettings_Group_Size = ItemGroup.extend({
+
+		// ========== PopupSettings_Group_Size --- Initialize
+		initialize: function initialize() {
+			var me = this;
+
+			function preview_change() { me.preview_change(); }
+			function silent_change() { me.silent_change(); }
+
+			// Collect all Display setting fields.
+			this.fields = _([
+				new Upfront.Views.Editor.Field.Radios({
+					model: this.model,
+					property: 'popup__custom_size',
+					label: '',
+					values: [
+						{ label: l10n.responsive_size, value: '' },
+						{ label: l10n.custom_size, value: 'yes' }
+					],
+					change: silent_change
+				})
+			]);
+		},
+
+		// ========== PopupSettings_Group_Size --- Get_title
+		get_title: function get_title() {
+			return l10n.group_size;
+		}
+
+	});
+
+	/**
+	 * PopUp-Scrolling options.
+	 */
+	var PopupSettings_Group_Scrolling = ItemGroup.extend({
+
+		// ========== PopupSettings_Group_Scrolling --- Initialize
+		initialize: function initialize() {
+			var me = this;
+
+			function preview_change() { me.preview_change(); }
+			function silent_change() { me.silent_change(); }
+
+			// Collect all Display setting fields.
+			this.fields = _([
+				new Upfront.Views.Editor.Field.Checkboxes({
+					model: this.model,
+					property: 'popup__scroll_body',
+					label: '',
+					values: [
+						{ value: 'yes', label: l10n.scroll_body },
+					],
+					change: silent_change
+				})
+			]);
+		},
+
+		// ========== PopupSettings_Group_Scrolling --- Get_title
+		get_title: function get_title() {
+			return l10n.group_scrolling;
+		}
+
+	});
+
+	/**
+	 * Animation options.
+	 */
+	var PopupSettings_Group_Animations = ItemGroup.extend({
+
+		// ========== PopupSettings_Group_Animations --- Initialize
+		initialize: function initialize() {
+			var me = this;
+
+			function preview_change() { me.preview_change(); }
+			function silent_change() { me.silent_change(); }
+
+			// Collect all Display setting fields.
+			this.fields = _([
+				new me.Fields.SelectList({
+					model: this.model,
+					property: 'popup__animation_in',
+					label: l10n.animation_in,
+					values_array: Upfront.data.upfront_popup.animations.in,
+					change: silent_change
+				}),
+				new me.Fields.SelectList({
+					model: this.model,
+					property: 'popup__animation_out',
+					label: l10n.animation_out,
+					values_array: Upfront.data.upfront_popup.animations.out,
+					change: silent_change
+				})
+			]);
+		},
+
+		// ========== PopupSettings_Group_Animations --- Get_title
+		get_title: function get_title() {
+			return l10n.group_animation;
 		}
 
 	});

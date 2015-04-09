@@ -41,15 +41,27 @@ function _load_field_itemgroup( ImageField, RuleField, SelectField ) {
 			}
 		},
 
-		// ========== ItemGroup --- Register_change
-		register_change: function register_change() {
+		// ========== ItemGroup --- Update_fields  (internal function)
+		update_fields: function update_fields( refresh_preview ) {
+			refresh_preview = (true == refresh_preview);
+
 			this.fields.each(function loop_fields( field ) {
 				field.property.set(
 					{'value': field.get_value()},
-					{'silent': false}
+					{'silent': ! refresh_preview}
 				);
 			});
 			this.trigger( 'popup:settings:changed' );
+		},
+
+		// ========== ItemGroup --- Preview_change
+		preview_change: function preview_change() {
+			this.update_fields( true );
+		},
+
+		// ========== ItemGroup --- Silent_change
+		silent_change: function silent_change() {
+			this.update_fields( false );
 		}
 
 	});

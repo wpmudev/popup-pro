@@ -24,10 +24,12 @@ class Upfront_PopupView extends Upfront_Object {
 	 */
 	public function upfront_data( $data ) {
 		$style_infos = IncPopup::style_infos();
+		$animations = IncPopup::get_animations();
 
 		$data['upfront_popup'] = array(
 			'defaults' => self::default_properties(),
 			'rules' => self::get_all_rules(),
+			'animations' => $animations,
 			'styles' => $style_infos,
 		);
 
@@ -64,9 +66,23 @@ class Upfront_PopupView extends Upfront_Object {
 			'popup__cta_link' => '',
 			'popup__image' => '',
 			'popup__image_pos' => 'left',
-			'popup__image_not_mobile' => array( '' ),
+			'popup__image_not_mobile' => '',
+			'popup__custom_size' => '',
 			'popup__rule' => array(),
 			'popup__rule_data' => array(),
+			'popup__display' => 'delay',
+			'popup__display_data__delay' => '0',
+			'popup__display_data__delay_type' => 's',
+			'popup__display_data__scroll' => '0',
+			'popup__display_data__scroll_type' => '%',
+			'popup__display_data__anchor' => '',
+			'popup__display_data__click' => '',
+			'popup__display_data__click_multi' => '',
+			'popup__can_hide' => '',
+			'popup__close_hides' => '',
+			'popup__hide_expire' => '365',
+			'popup__overlay_close' => array( 'yes' ),
+			'popup__form_submit' => 'default',
 		);
 
 		return apply_filters( 'po_upfront_defaults', $defaults );
@@ -116,13 +132,6 @@ class Upfront_PopupView extends Upfront_Object {
 			'uf_debugger_mark_element',
 			$popup_args['content']
 		);
-
-		// Translate checkbox-values to usable data.
-		$popup_args['round_corners'] = is_array( $popup_args['round_corners'] );
-		$popup_args['image_not_mobile'] = is_array( $popup_args['image_not_mobile'] );
-
-		// We actually need the param 'image_mobile' instead of 'image_not_mobile'.
-		$popup_args['image_mobile'] = ! $popup_args['image_not_mobile'];
 
 		// Create a populated PopUp item.
 		$popup = new IncPopupItem( $popup_args );
@@ -205,19 +214,55 @@ class Upfront_PopupView extends Upfront_Object {
 				'subtitle' => __( 'Enter subtitle...', PO_LANG ),
 				'cta_label' => __( 'Click here!', PO_LANG ),
 				'cta_link' => __( 'http://www...', PO_LANG ),
+				'cta_target' => __( '_self (link target)', PO_LANG ),
 
 				// TAB: Appearance
 				'tab_appearance' => __( 'Appearance', PO_LANG ),
 				'group_template' => __( 'PopUp Template', PO_LANG ),
-				'group_image' => __( 'PopUp Feature Image', PO_LANG ),
+				'group_image' => __( 'Feature Image', PO_LANG ),
+				'group_size' => __( 'Size', PO_LANG ),
+				'group_scrolling' => __( 'Scroll behavior', PO_LANG ),
+				'group_animation' => __( 'Animations', PO_LANG ),
 				'round_corners' => __( 'Round corners', PO_LANG ),
 				'pos_left' => __( 'Left Side', PO_LANG ),
 				'pos_right' => __( 'Right Side', PO_LANG ),
 				'image_not_mobile' => __( 'Hide image on mobile devices', PO_LANG ),
+				'responsive_size' => __( 'Responsive PopUp', PO_LANG ),
+				'custom_size' => __( 'Static PopUp size', PO_LANG ),
+				'scroll_body' => __( 'Allow scrolling when PopUp is open', PO_LANG ),
+				'animation_in' => __( 'Loading animation', PO_LANG ),
+				'animation_out' => __( 'Closing animation', PO_LANG ),
 
 				// TAB: Behavior
 				'tab_behavior' => __( 'Behavior', PO_LANG ),
 				'group_appears_on' => __( 'Appear after/on', PO_LANG ),
+				'group_hide' => __( '"Don\'t show again"', PO_LANG ),
+				'group_closing' => __( 'Closing conditions', PO_LANG ),
+				'group_forms' => __( 'Form submit', PO_LANG ),
+				'display_option' => __( 'When to display the Pop-up', PO_LANG ),
+				'display_option_delay' => __( 'After a delay', PO_LANG ),
+				'display_option_scroll' => __( 'After scrolling to position', PO_LANG ),
+				'display_option_anchor' => __( 'After scrolling to an element', PO_LANG ),
+				'display_option_leave' => __( 'When mouse leaves the browser', PO_LANG ),
+				'display_option_click' => __( 'When user clicks on an element', PO_LANG ),
+				'display_delay' => __( 'After Delay of', PO_LANG ),
+				'delay_type_sec' => __( 'Seconds', PO_LANG ),
+				'delay_type_min' => __( 'Minutes', PO_LANG ),
+				'display_scroll' => __( 'At scroll position', PO_LANG ),
+				'scroll_type_percent' => __( '%', PO_LANG ),
+				'scroll_type_px' => __( 'px', PO_LANG ),
+				'display_anchor' => __( 'When scrolled to element selector', PO_LANG ),
+				'display_click' => __( 'Click on element selector', PO_LANG ),
+				'click_repeat' => __( 'Repeated', PO_LANG ),
+				'hide_button' => __( 'Add "Don\'t show again" link', PO_LANG ),
+				'hide_always' => __( 'Close button is "Don\'t show again"', PO_LANG ),
+				'hide_expire' => __( 'Expire time in days', PO_LANG ),
+				'overlay_close' => __( 'Click on background closes PopUp', PO_LANG ),
+				'form_submit' => __( 'When a form is submitted', PO_LANG ),
+				'form_submit_default' => __( 'Refresh contents or close (default)', PO_LANG ),
+				'form_submit_ignore' => __( 'Keep PopUp open (Ajax forms)', PO_LANG ),
+				'form_submit_redirect' => __( 'Redirect to form target URL', PO_LANG ),
+				'hint_selector' => __( '.class or #id', PO_LANG ),
 
 				// TAB: Rules
 				'tab_rules' => __( 'Conditions', PO_LANG ),
@@ -330,7 +375,13 @@ class Upfront_PopupView extends Upfront_Object {
 		foreach ( $properties as $key => $value ) {
 			if ( 0 === strpos( $key, 'popup__' ) ) {
 				$key = substr( $key, 7 );
-				$popup_args[$key] = $value;
+
+				if ( 0 === strpos( $key, 'display_data__' ) ) {
+					$key = substr( $key, 14 );
+					$popup_args['display_data'][$key] = $value;
+				} else {
+					$popup_args[$key] = $value;
+				}
 			}
 		}
 
@@ -340,6 +391,20 @@ class Upfront_PopupView extends Upfront_Object {
 			'title',
 			'subtitle'
 		);
+
+		// Translate checkbox-values to usable data.
+		$popup_args['round_corners'] = is_array( $popup_args['round_corners'] );
+		$popup_args['image_not_mobile'] = is_array( $popup_args['image_not_mobile'] );
+		$popup_args['display_data']['click_multi'] = is_array( $popup_args['display_data']['click_multi'] );
+		$popup_args['can_hide'] = is_array( $popup_args['can_hide'] );
+		$popup_args['close_hides'] = is_array( $popup_args['close_hides'] );
+		$popup_args['overlay_close'] = is_array( $popup_args['overlay_close'] );
+		$popup_args['scroll_body'] = is_array( $popup_args['scroll_body'] );
+
+		$popup_args['custom_size'] = ! empty( $popup_args['custom_size'] );
+
+		// Some flags are negated for better UX, we need to invert them again.
+		$popup_args['image_mobile'] = ! $popup_args['image_not_mobile'];
 
 		// Get the PopUp contents from the Content-Region
 		$layout = self::get_layout_data();
