@@ -327,7 +327,7 @@ function _load_settings_behavior( ItemGroup ) {
 				}),
 				new Upfront.Views.Editor.Field.Text({
 					model: this.model,
-					property: 'popup__display_data__delay',
+					property: 'popup__hide_expire',
 					label: l10n.hide_expire,
 					change: silent_change
 				})
