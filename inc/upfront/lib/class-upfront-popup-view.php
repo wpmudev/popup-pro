@@ -482,8 +482,22 @@ class Upfront_PopupView extends Upfront_Object {
 	 */
 	public static function select_popup( $list, $base ) {
 		// Do not display any PopUp when user is in edit-mode.
-		if ( ! empty( $_GET['editmode'] ) && is_user_logged_in() ) {
-			return array();
+		if ( is_user_logged_in() ) {
+			if ( ! empty( $_GET['editmode'] ) ) {
+				return array();
+			} elseif ( defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_GET['thefrom'] ) ) {
+				$querystr = parse_url( $_GET['thefrom'], PHP_URL_QUERY );
+				parse_str( $querystr, $params );
+
+				if ( ! empty( $params['editmode'] ) ) {
+					return array();
+				}
+				if ( ! empty( $params['dev'] ) ) {
+					$_GET['dev'] = $params['dev'];
+					$_POST['dev'] = $params['dev'];
+					$_REQUEST['dev'] = $params['dev'];
+				}
+			}
 		}
 
 		$layout = self::get_layout_data();
