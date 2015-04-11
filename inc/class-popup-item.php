@@ -134,6 +134,10 @@ class IncPopupItem {
 	// Adds a custom class to the popup.
 	public $custom_class = array();
 
+	// Set to true by Upfront. This means that the PopUp is not stored as
+	// custom post type but inside upfront layout.
+	public $is_upfront = false;
+
 	// -- Conditions
 
 	// Conditions that need to be true in order to use the popup.
@@ -282,6 +286,7 @@ class IncPopupItem {
 		isset( $data['animation_in'] ) && $this->animation_in = $data['animation_in'];
 		isset( $data['animation_out'] ) && $this->animation_out = $data['animation_out'];
 		isset( $data['show_on_load'] ) && $this->show_on_load = $data['show_on_load'];
+		isset( $data['is_upfront'] ) && $this->is_upfront = $data['is_upfront'];
 		is_array( $data['custom_class'] ) && $this->custom_class = $data['custom_class'];
 
 		isset( $data['size']['width'] ) && $this->size['width'] = $data['size']['width'];
@@ -428,7 +433,7 @@ class IncPopupItem {
 		$this->script_data['show_on_load'] = $this->show_on_load;
 
 		// Validation only done when editing popups.
-		if ( is_admin() && $this->id >= 0 ) {
+		if ( ! $this->is_upfront && is_admin() && $this->id >= 0 ) {
 			// Name.
 			if ( empty( $this->name ) ) {
 				$this->name = __( 'New PopUp', PO_LANG );

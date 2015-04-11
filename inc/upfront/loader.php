@@ -122,6 +122,12 @@ class Upfront_PopupMain {
 			array( 'Upfront_PopupView', 'select_popup' ),
 			10, 2
 		);
+
+		// PopUp Pro logic: Add flag to ajax requests to identify Upfront.
+		add_filter(
+			'popup-ajax-data',
+			array( 'Upfront_PopupView', 'inject_ajax_posttype' )
+		);
 	}
 
 	/**

@@ -864,7 +864,7 @@
 
 		// Initialize a single or multiple PopUps, depending on provided data.
 		if ( popup_data.popup instanceof Array ) {
-			for ( var i = 0; i < popup_data.popup.length; i+= 1 ) {
+			for ( var i = 0; i < popup_data.popup.length; i += 1 ) {
 				var data = jQuery.extend( {}, popup_data );
 				data.popup = popup_data.popup[i];
 				spawn_popup( data );

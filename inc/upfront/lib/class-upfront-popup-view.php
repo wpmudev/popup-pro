@@ -37,6 +37,21 @@ class Upfront_PopupView extends Upfront_Object {
 	}
 
 	/**
+	 * Injects details about the current Upfront page to PopUp Ajax requests.
+	 * (Required for any ajax loading method)
+	 *
+	 * @since  4.8.0.0
+	 */
+	public static function inject_ajax_posttype( $data ) {
+		$resolved_ids = Upfront_EntityResolver::get_entity_ids();
+
+		$data['ajax_data'] = lib2()->array->get( $data['ajax_data'] );
+		$data['ajax_data']['uf_ids'] = $resolved_ids;
+
+		return $data;
+	}
+
+	/**
 	 * Returns an array of properties that are passed to the Upfront editor
 	 * and define defaults for each new element that is inserted to the page.
 	 *
@@ -80,7 +95,7 @@ class Upfront_PopupView extends Upfront_Object {
 			'popup__display_data__click_multi' => '',
 			'popup__can_hide' => '',
 			'popup__close_hides' => '',
-			'popup__hide_expire' => '365',
+			'popup__hide_expire' => PO_DEFAULT_EXPIRY,
 			'popup__overlay_close' => array( 'yes' ),
 			'popup__form_submit' => 'default',
 		);
@@ -310,7 +325,12 @@ class Upfront_PopupView extends Upfront_Object {
 		static $Layout = null;
 
 		if ( null === $Layout ) {
-			$resolved_ids = Upfront_EntityResolver::get_entity_ids();
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+				$resolved_ids = $_GET['uf_ids'];
+			} else {
+				$resolved_ids = Upfront_EntityResolver::get_entity_ids();
+			}
+
 			$output_obj = Upfront_Output::get_layout( $resolved_ids );
 			$Layout = $output_obj->get_layout_data();
 		}
@@ -392,6 +412,24 @@ class Upfront_PopupView extends Upfront_Object {
 			'subtitle'
 		);
 
+		// Make sure that all properties have a value
+		lib2()->array->equip(
+			$popup_args,
+			'round_corners',
+			'image_not_mobile',
+			'display_data',
+			'can_hide',
+			'close_hides',
+			'overlay_close',
+			'scroll_body',
+			'custom_size'
+		);
+		$popup_args['display_data'] = lib2()->array->get( $popup_args['display_data'] );
+		lib2()->array->equip(
+			$popup_args['display_data'],
+			'click_multi'
+		);
+
 		// Translate checkbox-values to usable data.
 		$popup_args['round_corners'] = is_array( $popup_args['round_corners'] );
 		$popup_args['image_not_mobile'] = is_array( $popup_args['image_not_mobile'] );
@@ -400,7 +438,6 @@ class Upfront_PopupView extends Upfront_Object {
 		$popup_args['close_hides'] = is_array( $popup_args['close_hides'] );
 		$popup_args['overlay_close'] = is_array( $popup_args['overlay_close'] );
 		$popup_args['scroll_body'] = is_array( $popup_args['scroll_body'] );
-
 		$popup_args['custom_size'] = ! empty( $popup_args['custom_size'] );
 
 		// Some flags are negated for better UX, we need to invert them again.
@@ -408,8 +445,10 @@ class Upfront_PopupView extends Upfront_Object {
 
 		// Get the PopUp contents from the Content-Region
 		$layout = self::get_layout_data();
-		$region_id = $properties['content_region'];
+		$region_id = empty( $properties['content_region'] ) ? '' : $properties['content_region'];
 		$popup_args['content'] = '';
+
+		$popup_args['is_upfront'] = true;
 
 		// Loop all regions to find the linked Content-Region.
 		foreach ( $layout['regions'] as $region ) {
@@ -463,9 +502,16 @@ class Upfront_PopupView extends Upfront_Object {
 		 *  ...
 		 */
 		foreach ( $layout['regions'] as $r_id => $region ) {
+			if ( empty ( $region['modules'] ) ) { continue; }
+			if ( ! is_array( $region['modules'] ) ) { continue; }
+
 			foreach ( $region['modules'] as $m_id => $module ) {
+				if ( empty ( $module['objects'] ) ) { continue; }
+				if ( ! is_array( $module['objects'] ) ) { continue; }
+
 				foreach ( $module['objects'] as $o_id => $object ) {
 					$view_class = upfront_get_property_value( 'view_class', $object );
+
 					if ( 'PopupView' == $view_class ) {
 						$data = upfront_properties_to_array( $object['properties'] );
 						$obj_id = '1' . $r_id . $m_id . $o_id;
