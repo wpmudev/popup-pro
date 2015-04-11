@@ -325,7 +325,7 @@ class Upfront_PopupView extends Upfront_Object {
 		static $Layout = null;
 
 		if ( null === $Layout ) {
-			if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_GET['uf_ids'] ) ) {
 				$resolved_ids = $_GET['uf_ids'];
 			} else {
 				$resolved_ids = Upfront_EntityResolver::get_entity_ids();
