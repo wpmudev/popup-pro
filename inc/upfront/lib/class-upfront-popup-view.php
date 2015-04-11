@@ -139,8 +139,7 @@ class Upfront_PopupView extends Upfront_Object {
 		 * This PopUp is a preview in the Upfront editor. We're going to
 		 * make small adjustments that will not be made to the real PopUp.
 		 */
-		$popup_args['show_on_load'] = true;
-		$popup_args['custom_class'][] = 'inline';
+		$popup_args['inline'] = true;
 
 		// Filter provided by plugin "Upfront Debugger"
 		$popup_args['content'] = apply_filters(
@@ -530,7 +529,7 @@ class Upfront_PopupView extends Upfront_Object {
 						$data = upfront_properties_to_array( $object['properties'] );
 						$obj_id = '1' . $r_id . $m_id . $o_id;
 						$po_args = self::extract_popup_args( $data );
-						$po_args['custom_class'][] = $data['theme_style'];
+						$po_args['class'][] = $data['theme_style'];
 						$po_args['id'] = $obj_id;
 						$list[] = new IncPopupItem( $po_args );
 					}
