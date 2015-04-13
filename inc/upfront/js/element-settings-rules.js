@@ -80,32 +80,14 @@ function( ItemGroup ) {
 		initialize: function() {
 			var me = this;
 
-			function did_change_rule( rule, data ) {
-				var prp_rule = me.model.get_property_by_name( 'popup__rule' ),
-					prp_data = me.model.get_property_by_name( 'popup__rule_data' );
-
-				if ( undefined !== rule ) {
-					// Condition triggered by:
-					//   element-field-rule.js -> on_change()
-					prp_rule.set( 'value', rule );
-// OK: Function "property_changed()" in element-view.js called, value is stored correctly.
-window.console.log( 'Changed Prop: Rule', prp_rule.get( 'value' ) );
-				}
-				if ( undefined !== data ) {
-					// Condition triggered by:
-					//   element-field-rule.js -> on_details() -> settings_changed()
-					prp_data.set( 'value', data );
-// ERR: Function "property_changed()" in element-view.js was not called! Value in element-view is still empty...
-window.console.log( 'Changed Prop: Data', prp_data.get( 'value' ) );
-				}
-
-				me.trigger( 'popup:settings:changed' );
-			}
+			function preview_change() { me.preview_change(); }
+			function silent_change() { me.silent_change(); }
 
 			me.fields = _([
 				new me.Fields.RuleField({
 					model: me.model,
-					change: did_change_rule,
+					property: 'popup__rules',
+					change: silent_change,
 					parent: me
 				})
 			]);

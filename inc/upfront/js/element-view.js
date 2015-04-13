@@ -32,13 +32,10 @@ function( PopupModel ) {
 		initialize: function initialize() {
 			var me = this;
 
-			function property_changed( model ) {
-				if ( ! model || ! model.get) { return true; }
+			function property_changed( field ) {
+				if ( ! field || ! field.get) { return true; }
 
-window.console.log ( 'Property changed -----------' );
-window.console.log ( 'Properties', model.id, model.get( 'value' ) );
-
-				if ( 'row' !== model.get( 'name' ) ) {
+				if ( 'row' !== field.get( 'name' ) ) {
 					me.markup = null;
 					me.render();
 				}

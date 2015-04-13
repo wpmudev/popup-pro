@@ -177,6 +177,7 @@
 .wdpu-rule-detail textarea {
 	font-family: monospace;
 	width: 100%;
+	min-height: 70px;
 }
 
 /* Button */

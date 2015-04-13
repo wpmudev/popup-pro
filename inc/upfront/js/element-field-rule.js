@@ -54,17 +54,19 @@ function _load_field_rule( tpl_source ) {
 			'click .wdpu-details' : 'on_details'
 		},
 
+		// ===== Field value container.
+		field: jQuery( '<input type="hidden" />' ),
+
 		// ========== RuleField --- Render
 		render: function render() {
 			var me = this,
 				rule_fields = [],
 				i = 0,
 				code = '',
-				prp_rules = me.model.get_property_by_name( 'popup__rule' ),
-				active = prp_rules.get( 'value' ),
-				prp_data = me.model.get_property_by_name( 'popup__rule_data' ),
-				rule_data = prp_data.get( 'value' );
+				active = me.get_val( 'active' ),
+				rule_data = me.get_val( 'data' );
 
+			if ( typeof active !== 'object' ) { active = []; }
 			if ( typeof rule_data !== 'object' ) { rule_data = {}; }
 
 			for ( i = 0; i < Upfront.data.upfront_popup.rules.length; i += 1 ) {
@@ -73,6 +75,7 @@ function _load_field_rule( tpl_source ) {
 				data = Upfront.data.upfront_popup.rules[i];
 				item_data = rule_data[data.key];
 				tpl_args = {
+					field_name: me.get_field_name(),
 					field_id: 'rule-' + data.key,
 					key: data.key,
 					label: data.label,
@@ -98,7 +101,7 @@ function _load_field_rule( tpl_source ) {
 		// ========== RuleField --- On_details
 		on_details: function on_details( ev ) {
 			var me = this,
-				data = get_data_from_element( ev.target )
+				data = me.get_data_from_el( ev.target )
 				view = me.options.parent.panel.parent_view.for_view.$el,
 				form = view.find( '.forms #po-rule-' + data.key + ' .rule-inner' ),
 				tpl_args = { form: form.html() },
@@ -108,28 +111,27 @@ function _load_field_rule( tpl_source ) {
 			ev.preventDefault();
 
 			function settings_changed() {
-				var data,
-					modified_form = dlg.$().find( '.the-form' ),
+				var modified_form = dlg.$().find( '.the-form' ),
 					fields = modified_form.find( 'input,select,textarea' ),
 					ajax = wpmUi.ajax(),
 					data = ajax.extract_data( fields ),
-					prop = me.model.get_property_by_name( 'popup__rule_data' ),
-					prop_val = prop.get( 'value' );
+					val = me.get_val( 'data' );
 
 				// 1. Update the Element property.
 				if ( undefined !== data.po_rule_data ) {
-					if ( typeof prop_val != 'object' ) { prop_val = {}; }
+					if ( typeof val !== 'object' ) { val = {}; }
+					if ( jQuery.isArray( val ) ) { val = {}; }
 
 					for ( var key in data.po_rule_data ) {
 						if ( ! data.po_rule_data.hasOwnProperty( key ) ) {
 							continue;
 						}
 
-						prop_val[key] = data.po_rule_data[key];
+						val[key] = data.po_rule_data[key];
 					}
 
 					// Save the rule details.
-					me.trigger( 'changed', undefined, prop_val );
+					me.set_val( 'data', val );
 				}
 
 				// 2. We need to update the HTLM attr of the form input fields
@@ -217,33 +219,114 @@ function _load_field_rule( tpl_source ) {
 			}
 
 			// Save the rule details.
-			me.trigger( 'changed', active );
+			me.set_val( 'active', active );
+		},
+
+		// ========== RuleField --- Get_field
+		/**
+		 * Custom implementation of the get_field function, overrides the
+		 * default from upfront-views-editor.js
+		 */
+		get_field: function get_field() {
+			return this.field;
+		},
+
+		// ========== RuleField --- Get_value
+		/**
+		 * Custom implementation of the get_value function, overrides the
+		 * default from upfront-views-editor.js
+		 */
+		get_value: function get_value() {
+			var field = this.get_field(),
+				value = field.val();
+
+			try {
+				value = jQuery.parseJSON( value );
+			} catch( err ) {
+				value = {};
+			}
+			return value;
+		},
+
+		// ========== RuleField --- Set_value
+		/**
+		 * Custom implementation of the get_value function, overrides the
+		 * default from upfront-views-editor.js
+		 */
+		set_value: function set_value( value ) {
+			var field = this.get_field();
+			value = JSON.stringify( value );
+			field.val( value );
+		},
+
+		// ========== RuleField --- Get_val
+		/**
+		 * Returns the current value of the specified field
+		 *
+		 * Possible fields: active|data
+		 */
+		get_val: function get_val( field ) {
+			var me = this,
+				prop = me.model.get_property_by_name( 'popup__rules' ),
+				val = prop.get( 'value' );
+
+			if ( typeof val !== 'object' ) { val = {}; }
+			if ( -1 === ['active','data'].indexOf( field ) ) { return; }
+
+			return val[field];
+		},
+
+		// ========== RuleField --- Set_val
+		/**
+		 * Sets the value of a specified field.
+		 *
+		 * Possible fields: active|data
+		 */
+		set_val: function set_val( field, value ) {
+			var me = this,
+				prop = me.model.get_property_by_name( 'popup__rules' ),
+				val = prop.get( 'value' );
+
+			if ( typeof val !== 'object' ) { val = {}; }
+			if ( -1 === ['active','data'].indexOf( field ) ) { return; }
+
+			// Update the property.
+			val[field] = value;
+			prop.set( 'value', val );
+
+			me.set_value( val );
+
+			// Notify the parent panel about the change.
+			me.trigger( 'changed', val );
+		},
+
+		// ========== RuleField --- Get_data_from_el
+		/**
+		 * Returns the rule-data object for the given html-element.
+		 * The data object is stored in the global Upfront.data object and only
+		 * contains global data, like the rule description and title.
+		 */
+		get_data_from_el: function get_data_from_el( el ) {
+			var item = jQuery( el ).closest( '.wdpu-rule-field' ),
+				key = item.find( '.wdpu-rule' ).val()
+				res = null
+				i = 0;
+
+			for ( i = 0; i < Upfront.data.upfront_popup.rules.length; i += 1 ) {
+				var data;
+
+				data = Upfront.data.upfront_popup.rules[i];
+
+				if ( key == data.key ) {
+					res = data;
+					break;
+				}
+			}
+
+			return res;
 		}
 
 	});
-
-	/**
-	 * Returns the rule-data object for the given html-element.
-	 */
-	function get_data_from_element( el ) {
-		var item = jQuery( el ).closest( '.wdpu-rule-field' ),
-			key = item.find( '.wdpu-rule' ).val()
-			res = null
-			i = 0;
-
-		for ( i = 0; i < Upfront.data.upfront_popup.rules.length; i += 1 ) {
-			var data;
-
-			data = Upfront.data.upfront_popup.rules[i];
-
-			if ( key == data.key ) {
-				res = data;
-				break;
-			}
-		}
-
-		return res;
-	}
 
 	// Return the module object.
 	return RuleField;

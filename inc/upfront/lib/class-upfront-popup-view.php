@@ -83,8 +83,10 @@ class Upfront_PopupView extends Upfront_Object {
 			'popup__image_pos' => 'left',
 			'popup__image_not_mobile' => '',
 			'popup__custom_size' => '',
-			'popup__rule' => array(),
-			'popup__rule_data' => array(),
+			'popup__rules' => array(
+				'active' => array(),  // $popup->rule
+				'data' => array(),    // $popup->rule_data
+			),
 			'popup__display' => 'delay',
 			'popup__display_data__delay' => '0',
 			'popup__display_data__delay_type' => 's',
@@ -162,7 +164,7 @@ class Upfront_PopupView extends Upfront_Object {
 		// Prepare the response code.
 		$code = sprintf(
 			'<div class="upfront_popup">%1$s<ul class="forms" style="display:none">%3$s</ul></div><style>%2$s</style>',
-			$data['html'] . '<hr>' . print_r( $popup->rule_data, true ) . '<hr>',
+			$data['html'],
 			$data['styles'],
 			$rule_forms
 		);
@@ -396,9 +398,20 @@ class Upfront_PopupView extends Upfront_Object {
 				$key = substr( $key, 7 );
 
 				if ( 0 === strpos( $key, 'display_data__' ) ) {
+					// display_data is a sub-array.
 					$key = substr( $key, 14 );
 					$popup_args['display_data'][$key] = $value;
+				} elseif ( 'rules' === $key ) {
+					// rule/rule_data is contained in a single property.
+					if ( ! is_array( $value ) ) { continue; }
+					if ( isset( $value['active'] ) ) {
+						$popup_args['rule'] = $value['active'];
+					}
+					if ( isset( $value['data'] ) ) {
+						$popup_args['rule_data'] = $value['data'];
+					}
 				} else {
+					// A normal property.
 					$popup_args[$key] = $value;
 				}
 			}
