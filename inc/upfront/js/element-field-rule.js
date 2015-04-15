@@ -66,8 +66,8 @@ function _load_field_rule( tpl_source ) {
 				active = me.get_val( 'active' ),
 				rule_data = me.get_val( 'data' );
 
-			if ( typeof active !== 'object' ) { active = []; }
-			if ( typeof rule_data !== 'object' ) { rule_data = {}; }
+			if ( ! active || typeof active !== 'object' ) { active = []; }
+			if ( ! rule_data || typeof rule_data !== 'object' ) { rule_data = {}; }
 
 			for ( i = 0; i < Upfront.data.upfront_popup.rules.length; i += 1 ) {
 				var tpl_args, data, field;
@@ -119,7 +119,7 @@ function _load_field_rule( tpl_source ) {
 
 				// 1. Update the Element property.
 				if ( undefined !== data.po_rule_data ) {
-					if ( typeof val !== 'object' ) { val = {}; }
+					if ( ! val || typeof val !== 'object' ) { val = {}; }
 					if ( jQuery.isArray( val ) ) { val = {}; }
 
 					for ( var key in data.po_rule_data ) {
@@ -270,7 +270,7 @@ function _load_field_rule( tpl_source ) {
 				prop = me.model.get_property_by_name( 'popup__rules' ),
 				val = prop.get( 'value' );
 
-			if ( typeof val !== 'object' ) { val = {}; }
+			if ( ! val || typeof val !== 'object' ) { val = {}; }
 			if ( -1 === ['active','data'].indexOf( field ) ) { return; }
 
 			return val[field];
@@ -287,7 +287,7 @@ function _load_field_rule( tpl_source ) {
 				prop = me.model.get_property_by_name( 'popup__rules' ),
 				val = prop.get( 'value' );
 
-			if ( typeof val !== 'object' ) { val = {}; }
+			if ( ! val || typeof val !== 'object' ) { val = {}; }
 			if ( -1 === ['active','data'].indexOf( field ) ) { return; }
 
 			// Update the property.
