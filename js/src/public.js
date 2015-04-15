@@ -587,7 +587,6 @@
 
 				// Allow other javascript functions to pre-process the event.
 				$doc.trigger( 'popup-submit-process', [frame, me, me.data] );
-				close_on_fail = true;
 
 				/*
 				 * Use the event jQuery('document').on('popup-submit-process')
@@ -597,6 +596,8 @@
 
 				if ( 'ignore' === me.data.form_submit ) {
 					close_on_fail = false;
+				} else {
+					close_on_fail = true;
 				}
 
 				try {
@@ -631,6 +632,7 @@
 						me.data.new_content,
 						me.data.new_title,
 						me.data.new_subtitle
+					);
 
 				} else if ( external ) {
 					// =========================================================

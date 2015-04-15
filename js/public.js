@@ -395,9 +395,15 @@
 			if ( me.data && me.data.close_hide ) {
 				$po_close.off( 'click', me.close_forever )
 					.on( 'click', me.close_forever );
+
+				$po_msg.off( 'click', '.close', me.close_forever )
+					.on( 'click', '.close', me.close_forever );
 			} else {
 				$po_close.off( 'click', me.close_popup )
 					.on( 'click', me.close_popup );
+
+				$po_msg.off( 'click', '.close', me.close_popup )
+					.on( 'click', '.close', me.close_popup );
 			}
 
 			$po_msg.hover(function() {
@@ -537,18 +543,23 @@
 
 			// Replaces the popup contents with some new contents.
 			function do_replace_contents( contents, title, subtitle ) {
-				var el_inner = popup.find( '.wdpu-msg-inner' ),
+				var new_content = contents,
+					el_inner = popup.find( '.wdpu-msg-inner' ),
 					el_title = popup.find( '.wdpu-title' ),
 					el_subtitle = popup.find( '.wdpu-subtitle' );
 
-				if ( ! contents instanceof jQuery ) {
-					contents = jQuery( '<div>' + contents + '</div>' );
+				if ( ! ( new_content instanceof jQuery ) ) {
+					new_content = jQuery( '<div></div>' ).html( contents );
 				}
 
-				if ( contents.hasClass( 'wdpu-msg-inner' ) ) {
-					el_inner.replaceWith( contents );
-				} else {
-					el_inner.empty().append( contents );
+				if ( new_content instanceof jQuery ) {
+					if ( new_content.hasClass( 'wdpu-msg-inner' ) ) {
+						el_inner.replaceWith( new_content );
+					} else {
+						el_inner.find( '.wdpu-content' )
+							.empty()
+							.append( new_content );
+					}
 				}
 
 				if ( undefined !== title ) {
@@ -576,8 +587,6 @@
 			function process_document() {
 				var inner_new, inner_old, html, external, close_on_fail;
 
-				me.data.close_popup = undefined;
-
 				// Allow other javascript functions to pre-process the event.
 				$doc.trigger( 'popup-submit-process', [frame, me, me.data] );
 				close_on_fail = true;
@@ -604,12 +613,7 @@
 					external = true;
 				}
 
-				if ( undefined === me.data.close_popup ) {
-					me.data.close_popup = false;
-				} else {
-					close_on_fail = me.data.close_popup;
-				}
-
+				me.data.close_popup = false;
 				msg.removeClass( 'wdpu-loading' );
 
 				// Get the new and old Popup Contents.
@@ -620,15 +624,15 @@
 				jQuery( "#wdpu-frame" ).remove();
 				me.data.last_ajax = undefined;
 
-				if ( me.data.contents ) {
+				if ( me.data.new_content ) {
 					// =========================================================
 					// Popup contents were explicitely defined by the javascript
 					// event 'popup-submit-process'
 
 					do_replace_contents(
-						me.data.contents,
-						me.data.title,
-						me.data.subtitle
+						me.data.new_content,
+						me.data.new_title,
+						me.data.new_subtitle
 					);
 
 				} else if ( external ) {
