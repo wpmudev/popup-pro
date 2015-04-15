@@ -142,7 +142,7 @@ class Upfront_PopupMain {
 		 * to bypass the Upfront script-cache. If this is not done then Upfront
 		 * will serve the cached old scripts.
 		 */
-		$cache_version = 1;
+		$cache_version = 2;
 
 		/*
 		 * main.js will initialize the Upfront element when Upfront switches to

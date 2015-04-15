@@ -217,6 +217,13 @@
 	color: #1FCD8F;
 }
 
+/* SelectList */
+.uf-field-selectlist .upfront-field-select-options {
+	display: none;
+}
+.uf-field-selectlist .upfront-field-select-expanded .upfront-field-select-options {
+	display: block;
+}
 
 /* wpmUi Popup window */
 .wpmui-wnd {

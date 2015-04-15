@@ -251,6 +251,24 @@ function _load_settings_appearance( ItemGroup ) {
 
 			function preview_change() { me.preview_change(); }
 			function silent_change() { me.silent_change(); }
+			function preview_animation() {
+				var anim = this.get_value(),
+					view = me.panel.parent_view.for_view,
+					popup = view.$el.find( '.wdpu-msg' ),
+					anim_class = 'animated ' + anim;
+
+				me.silent_change();
+
+				if ( ! popup.hasClass( 'animated' ) ) {
+					// This starts the animation.
+					popup.addClass( anim_class );
+
+					// Reset the Popup after a short delay.
+					window.setTimeout(function() {
+						popup.removeClass( anim_class );
+					}, 2000);
+				}
+			}
 
 			// Collect all Display setting fields.
 			this.fields = _([
@@ -259,14 +277,16 @@ function _load_settings_appearance( ItemGroup ) {
 					property: 'popup__animation_in',
 					label: l10n.animation_in,
 					values_array: Upfront.data.upfront_popup.animations.in,
-					change: silent_change
+					change: preview_animation,
+					parent: me
 				}),
 				new me.Fields.SelectList({
 					model: this.model,
 					property: 'popup__animation_out',
 					label: l10n.animation_out,
 					values_array: Upfront.data.upfront_popup.animations.out,
-					change: silent_change
+					change: preview_animation,
+					parent: me
 				})
 			]);
 		},

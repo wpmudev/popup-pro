@@ -32,6 +32,11 @@ function _load_field_select() {
 	 */
 	var SelectField = Upfront.Views.Editor.Field.Select.extend({
 
+		className: 'upfront-field-wrap upfront-field-wrap-select uf-field-selectlist',
+
+		option_counter: 0,
+
+		// ========== SelectField --- Initialize
 		initialize: function initialize( opts ) {
 			var me = this;
 
@@ -40,8 +45,86 @@ function _load_field_select() {
 			}
 
 			Upfront.Views.Editor.Field.Field.prototype.initialize.call( me, opts );
+
+			window.setTimeout(function(){ me.delayed_init(); }, 20);
 		},
 
+		// ========== SelectField --- Delayed_init
+		/**
+		 * This init function is called by initialize() with a short delay.
+		 * That delay gives Upfront the possibility to finish setting up the
+		 * Settings panel and other elements.
+		 */
+		delayed_init: function delayed_init() {
+			var me = this;
+
+			jQuery( window ).on( 'scroll', me.fix_position );
+
+			if ( ! me.options.parent ) {
+				window.console.log( 'DEVELOPER: Specify the parent object for the SelectList!' );
+			} else {
+				me.options.parent.panel.$el
+					.find( '.upfront-settings_panel_scroll' )
+					.on( 'scroll', me.fix_position );
+			}
+		},
+
+		// ========== SelectField --- OpenOptions
+		openOptions: function openOptions( ev ) {
+			var me = this,
+				field_width,
+				sel_field = me.$el.find( '.upfront-field-select' )
+				sel_options = sel_field.find( '.upfront-field-select-options' );
+
+			if ( ev ) {
+				ev.stopPropagation();
+			}
+			if ( me.options.disabled ) {
+				return;
+			}
+
+			// Collapse any open select field.
+			jQuery( '.upfront-field-select-expanded' )
+				.removeClass( 'upfront-field-select-expanded' )
+				.find( '.upfront-field-select-options' );
+
+			field_width = sel_field.width();
+
+			// Start opening the current select field (using animation).
+			sel_field
+				.css({ 'min-width': '' })
+				.css({ 'min-width': field_width })
+				.addClass( 'upfront-field-select-expanded' );
+
+			me.fix_position();
+
+			me.trigger( 'focus' );
+		},
+
+		// ========== SelectField --- Fix_position
+		fix_position: function fix_position( ev ) {
+			var offset, field_width,
+				wnd = jQuery( window ),
+				sel_field = jQuery( '.upfront-field-select-expanded' ),
+				sel_options = sel_field.find( '.upfront-field-select-options' );
+
+			if ( ! sel_field || ! sel_field.length ) {
+				return;
+			}
+
+			offset = sel_field.offset();
+			field_width = sel_field.width();
+
+			sel_options
+				.css({
+					'position': 'fixed',
+					'left': 2 + offset.left - wnd.scrollLeft(),
+					'top': offset.top - wnd.scrollTop(),
+					'width': field_width
+				});
+		},
+
+		// ========== SelectField --- Get_value_html
 		/**
 		 * Renders a single select-item or a select-group (if the item is a
 		 * group item)
@@ -62,7 +145,9 @@ function _load_field_select() {
 				item.level = 0;
 			}
 
-			var id = this.get_field_id() + '-' + index,
+			this.option_counter += 1;
+
+			var id = this.get_field_id() + '-' + this.option_counter,
 				children = '',
 				code = '',
 				style = 'padding-left:' + (item.level * 24) + 'px',
@@ -124,6 +209,7 @@ function _load_field_select() {
 			return code;
 		},
 
+		// ========== SelectField --- Convert_array
 		/**
 		 * Converts a normal key->value based array to an argument list that
 		 * can be used for the SelectField value param.
