@@ -181,6 +181,9 @@
 	</div>
 	<div class="col-12 inp-row">
 		<select name="po_form_submit" id="po-form-submit">
+			<option value="close" <?php selected( $popup->form_submit, 'close' ); ?>>
+				<?php _e( 'Always close after form submit', PO_LANG ); ?>
+			</option>
 			<option value="default" <?php selected( $popup->form_submit, 'default' ); ?>>
 				<?php _e( 'Refresh PopUp or close (default)', PO_LANG ); ?>
 			</option>
