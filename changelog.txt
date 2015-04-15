@@ -10,6 +10,7 @@ Change Log:
 - Add a link target option for CTA Button (use _blank to open CTA in new tab)
 - Add JS hook 'popup-submit-process' to allow manual updating of popup contents after form submit
 - Simplify PopUp template structure to encourage creation of custom templates
+- Fix several small issues with different rules
 
 4.7.0.6
 ----------------------------------------------------------------------
