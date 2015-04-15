@@ -94,8 +94,14 @@ class IncPopupRule_Events extends IncPopupRule {
 	 * @return array Modified data collection.
 	 */
 	public function append_data_on_exit( $script_data, $popup ) {
+		$script_data = lib2()->array->get( $script_data );
+
 		if ( 'leave' == $popup->display ) {
-			@$script_data['script'] .= 'me.custom_handler = ' . $this->script_on_exit();
+			if ( ! isset( $script_data['script'] ) ) {
+				$script_data['script'] = '';
+			}
+
+			$script_data['script'] .= 'me.custom_handler = ' . $this->script_on_exit();
 		}
 
 		return $script_data;
@@ -185,8 +191,14 @@ class IncPopupRule_Events extends IncPopupRule {
 	 * @return array Modified data collection.
 	 */
 	public function append_data_on_click( $script_data, $popup ) {
+		$script_data = lib2()->array->get( $script_data );
+
 		if ( 'click' == $popup->display ) {
-			@$script_data['script'] .= 'me.custom_handler = ' . $this->script_on_click();
+			if ( ! isset( $script_data['script'] ) ) {
+				$script_data['script'] = '';
+			}
+
+			$script_data['script'] .= 'me.custom_handler = ' . $this->script_on_click();
 		}
 
 		return $script_data;
