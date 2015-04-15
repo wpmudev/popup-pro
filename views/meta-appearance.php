@@ -166,12 +166,14 @@ endif; ?>
 				<optgroup label="<?php echo esc_attr( $group ); ?>">
 				<?php endif; ?>
 
-				<?php foreach ( $items as $key => $label ) : ?>
-					<option value="<?php echo esc_attr( $key ); ?>"
-						<?php selected( $key, $popup->animation_in ); ?>>
-						<?php echo esc_attr( $label ); ?>
-					</option>
-				<?php endforeach; ?>
+				<?php foreach ( $items as $key => $label ) {
+					printf(
+						'<option value="%2$s" %3$s>%1$s</option>',
+						esc_attr( $label ),
+						esc_attr( $key ),
+						selected( $key, $popup->animation_out, false )
+					);
+				} ?>
 
 				<?php if ( ! empty( $group ) ) : ?>
 				</optgroup>
@@ -187,12 +189,14 @@ endif; ?>
 				<optgroup label="<?php echo esc_attr( $group ); ?>">
 				<?php endif; ?>
 
-				<?php foreach ( $items as $key => $label ) : ?>
-					<option value="<?php echo esc_attr( $key ); ?>"
-						<?php selected( $key, $popup->animation_out ); ?>>
-						<?php echo esc_attr( $label ); ?>
-					</option>
-				<?php endforeach; ?>
+				<?php foreach ( $items as $key => $label ) {
+					printf(
+						'<option value="%2$s" %3$s>%1$s</option>',
+						esc_attr( $label ),
+						esc_attr( $key ),
+						selected( $key, $popup->animation_out, false )
+					);
+				} ?>
 
 				<?php if ( ! empty( $group ) ) : ?>
 				</optgroup>

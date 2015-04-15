@@ -216,7 +216,7 @@ abstract class IncPopupBase {
 
 		// Add core styles to the response.
 		foreach ( $core_styles as $key => $data ) {
-			lib2()->array->equip( $data, 'pro', 'deprecated' );
+			lib2()->array->equip( $data, 'pro', 'deprecated', 'name' );
 
 			$list[ $key ] = (object) array(
 				'url' => trailingslashit( PO_TPL_URL . $key ),
