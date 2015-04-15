@@ -47,14 +47,13 @@ class IncPopupRule_Membership extends IncPopupRule {
 		// -- Initialize rule.
 
 		$this->is_active = (
-				function_exists( 'M_get_membership_active' ) && M_get_membership_active()
-			);
+			function_exists( 'M_get_membership_active' ) && M_get_membership_active()
+		);
 
 		if ( ! $this->is_active ) { return; }
 
 		$prefix = $wpdb->get_blog_prefix();
 
-		// TODO: find a more fancy way to get the membership table name.
 		$table_lvl = defined( 'MEMBERSHIP_TABLE_LEVELS' ) ? MEMBERSHIP_TABLE_LEVELS : $prefix . 'm_membership_levels';
 		$sql = "
 			SELECT *
@@ -62,7 +61,6 @@ class IncPopupRule_Membership extends IncPopupRule {
 		";
 		$this->levels = $wpdb->get_results( $sql );
 
-		// TODO: find a more fancy way to get the membership table name.
 		$table_sub = defined( 'MEMBERSHIP_TABLE_SUBSCRIPTIONS' ) ? MEMBERSHIP_TABLE_SUBSCRIPTIONS : $prefix . 'm_subscriptions';
 		$sql = "
 			SELECT *
@@ -269,16 +267,19 @@ class IncPopupRule_Membership extends IncPopupRule {
 	protected function user_has_level( $data ) {
 		$result = false;
 
-		$data = lib2()->array->get( $data );
-		lib2()->array->equip( $data, 'membership_lvl' );
-		$data['membership_lvl'] = lib2()->array->get( $data['membership_lvl'] );
+		if ( $this->is_active ) {
+			$data = lib2()->array->get( $data );
+			lib2()->array->equip( $data, 'membership_lvl' );
+			$data['membership_lvl'] = lib2()->array->get( $data['membership_lvl'] );
 
-		foreach ( $data['membership_lvl'] as $level ) {
-			if ( current_user_on_level( $level ) ) {
-				$result = true;
-				break;
+			foreach ( $data['membership_lvl'] as $level ) {
+				if ( current_user_on_level( $level ) ) {
+					$result = true;
+					break;
+				}
 			}
 		}
+
 		return $result;
 	}
 
@@ -292,16 +293,19 @@ class IncPopupRule_Membership extends IncPopupRule {
 	protected function user_has_subscription( $data ) {
 		$result = false;
 
-		$data = lib2()->array->get( $data );
-		lib2()->array->equip( $data, 'membership_sub' );
-		$data['membership_sub'] = lib2()->array->get( $data['membership_sub'] );
+		if ( $this->is_active ) {
+			$data = lib2()->array->get( $data );
+			lib2()->array->equip( $data, 'membership_sub' );
+			$data['membership_sub'] = lib2()->array->get( $data['membership_sub'] );
 
-		foreach ( $data['membership_sub'] as $subscription ) {
-			if ( current_user_on_subscription( $subscription ) ) {
-				$result = true;
-				break;
+			foreach ( $data['membership_sub'] as $subscription ) {
+				if ( current_user_on_subscription( $subscription ) ) {
+					$result = true;
+					break;
+				}
 			}
 		}
+
 		return $result;
 	}
 
