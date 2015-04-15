@@ -109,7 +109,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_referrer() {
-		return explode( "\n", @$_POST['po_rule_data']['referrer'] );
+		return explode( "\n", $_POST['po_rule_data']['referrer'] );
 	}
 
 
@@ -159,7 +159,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_referrer() {
-		return explode( "\n", @$_POST['po_rule_data']['no_referrer'] );
+		return explode( "\n", $_POST['po_rule_data']['no_referrer'] );
 	}
 
 
@@ -180,9 +180,15 @@ class IncPopupRule_Referrer extends IncPopupRule {
 	 * @return bool Decission to display popup or not.
 	 */
 	protected function apply_no_internal( $data ) {
-		$internal = preg_replace( '#^https?://#', '', get_option( 'home' ) );
+		if ( ! empty( $_POST['_po_method_'] ) && 'raw' == $_POST['_po_method_'] ) {
+			// This indicates a form-submit from inside a popup. Naturally the
+			// referrer will always be internal, so ignore this rule here.
+			return true;
+		} else {
+			$internal = preg_replace( '#^https?://#', '', get_option( 'home' ) );
 
-		return ! $this->test_referrer( $internal );
+			return ! $this->test_referrer( $internal );
+		}
 	}
 
 
@@ -243,6 +249,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 				}
 			}
 		}
+
 		return $response;
 	}
 
@@ -303,7 +310,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 
 		foreach ( explode( '&', $qs ) as $keyval ) {
 			$kv = explode( '=', $keyval );
-			if ( count( $kv ) == 2 ) {
+			if ( 2 == count( $kv ) ) {
 				$qget[ trim( $kv[0] ) ] = trim( $kv[1] );
 			}
 		}
@@ -323,9 +330,14 @@ class IncPopupRule_Referrer extends IncPopupRule {
 	 */
 	public function get_referrer() {
 		$referrer = '';
+
+		$is_ajax = (defined( 'DOING_AJAX' ) && DOING_AJAX)
+			|| ( ! empty( $_POST['_po_method_'] ) && 'raw' == $_POST['_po_method_'] );
+
 		if ( isset( $_REQUEST['thereferrer'] ) ) {
 			$referrer = $_REQUEST['thereferrer'];
-		} else if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
+		} else if ( ! $is_ajax && isset( $_SERVER['HTTP_REFERER'] ) ) {
+			// When doing Ajax request we NEVER use the HTTP_REFERER!
 			$referrer = $_SERVER['HTTP_REFERER'];
 		}
 
