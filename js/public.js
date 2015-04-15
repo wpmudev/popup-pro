@@ -517,9 +517,9 @@
 			}
 
 			// Closes the popup
-			function do_close_popup( close_on_fail ) {
-				if ( undefined !== close_on_fail ) {
-					me.data.close_popup = close_on_fail;
+			function do_close_popup( close_it ) {
+				if ( undefined !== close_it ) {
+					me.data.close_popup = close_it;
 				}
 
 				if ( recent_ajax_calls ) {
@@ -537,7 +537,9 @@
 
 				if ( me.data.close_popup ) {
 					me.close_popup();
-					return;
+					return true;
+				} else {
+					return false;
 				}
 			}
 
@@ -589,7 +591,6 @@
 
 				// Allow other javascript functions to pre-process the event.
 				$doc.trigger( 'popup-submit-process', [frame, me, me.data] );
-				close_on_fail = true;
 
 				/*
 				 * Use the event jQuery('document').on('popup-submit-process')
@@ -599,6 +600,8 @@
 
 				if ( 'ignore' === me.data.form_submit ) {
 					close_on_fail = false;
+				} else {
+					close_on_fail = true;
 				}
 
 				try {
@@ -624,7 +627,13 @@
 				jQuery( "#wdpu-frame" ).remove();
 				me.data.last_ajax = undefined;
 
-				if ( me.data.new_content ) {
+				if ( 'close' === me.data.form_submit ) {
+					// =========================================================
+					// Admin defined to close this popup after every form submit
+
+					do_close_popup( true );
+
+				} else if ( me.data.new_content ) {
 					// =========================================================
 					// Popup contents were explicitely defined by the javascript
 					// event 'popup-submit-process'
@@ -651,7 +660,7 @@
 
 					// E.g. Gravity Forms
 
-					do_close_popup();
+					do_close_popup( true );
 
 				} else if ( ! inner_old.length || ! inner_new.length || ! inner_new.text().length ) {
 					// =========================================================

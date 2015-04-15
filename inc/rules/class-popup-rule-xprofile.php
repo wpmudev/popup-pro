@@ -90,7 +90,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_xprofile() {
-		return $this->sanitize_values( @$_POST['po_rule_data']['xprofile'] );
+			return $this->sanitize_values( $_POST['po_rule_data']['xprofile'] );
 	}
 
 
@@ -139,7 +139,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_xprofile() {
-		return $this->sanitize_values( @$_POST['po_rule_data']['no_xprofile'] );
+		return $this->sanitize_values( $_POST['po_rule_data']['no_xprofile'] );
 	}
 
 
@@ -160,7 +160,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @return array
 	 */
 	protected function sanitize_values( $data ) {
-		if ( ! is_array( $data ) ) { $data = array(); }
+		$data = lib2()->array->get( $data );
 		if ( ! isset( $data['field'] ) ) { $data['field'] = ''; }
 		if ( ! isset( $data['correlation'] ) ) { $data['correlation'] = ''; }
 		if ( ! isset( $data['value'] ) ) { $data['value'] = ''; }
@@ -233,7 +233,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 
 		<input type="text"
 			name="po_rule_data[<?php echo esc_attr( $name ); ?>][value]"
-			value="<?php esc_attr( $data['value'] ); ?>" />
+			value="<?php echo esc_attr( $data['value'] ); ?>" />
 		<?php
 	}
 
@@ -247,7 +247,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @param  string $value
 	 * @return bool
 	 */
-	protected function check_xprofile( $type, $field, $cond, $value ) {
+	protected function check_xprofile( $type, $field, $cond, $po_value ) {
 		if ( ! function_exists( 'xprofile_get_field_data' ) ) {
 			return true;
 		}
@@ -256,7 +256,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 			return true;
 		}
 
-		$value = xprofile_get_field_data(
+		$user_value = xprofile_get_field_data(
 			$field,
 			get_current_user_id(),
 			'comma'
@@ -265,19 +265,19 @@ class IncPopupRule_XProfile extends IncPopupRule {
 
 		switch ( $cond ) {
 			case 'regex_is':
-				$match = preg_match( "#{$value}#i", $value );
+				$match = preg_match( "#{$po_value}#i", $user_value );
 				break;
 
 			case 'regex_not':
-				$match = ! preg_match( "#{$value}#i", $value );
+				$match = ! preg_match( "#{$po_value}#i", $user_value );
 				break;
 
 			case 'reverse':
-				$match = $value != $value;
+				$match = $po_value != $user_value;
 				break;
 
 			default:
-				$match = $value == $value;
+				$match = $po_value == $user_value;
 				break;
 		}
 
