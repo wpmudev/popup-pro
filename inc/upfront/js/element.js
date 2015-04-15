@@ -1,9 +1,9 @@
 (function() {
 define(
 [
-	_popup_uf_data.base_url + 'js/element-model.js',
-	_popup_uf_data.base_url + 'js/element-view.js',
-	_popup_uf_data.base_url + 'js/element-settings.js',
+	_popup_uf_data.base_url + 'js/element-model.js' + _popup_uf_data.cache_ver,
+	_popup_uf_data.base_url + 'js/element-view.js' + _popup_uf_data.cache_ver,
+	_popup_uf_data.base_url + 'js/element-settings.js' + _popup_uf_data.cache_ver,
 ],
 /**
  * Contains the logic for the Upfront Editor.

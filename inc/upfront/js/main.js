@@ -39,8 +39,8 @@ jQuery(function() {
 			 *   the callback function.
 			 */
 			var dependencies = [
-				_popup_uf_data.base_url + 'js/element.js',
-				'text!' + _popup_uf_data.base_url + 'css/element.css?v8'
+				_popup_uf_data.base_url + 'js/element.js' + _popup_uf_data.cache_ver,
+				'text!' + _popup_uf_data.base_url + 'css/element.css' + _popup_uf_data.cache_ver
 			];
 
 			require(

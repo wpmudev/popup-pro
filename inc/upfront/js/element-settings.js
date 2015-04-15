@@ -1,10 +1,10 @@
 (function () {
 define(
 [
-	_popup_uf_data.base_url + 'js/element-settings-contents.js',
-	_popup_uf_data.base_url + 'js/element-settings-appearance.js',
-	_popup_uf_data.base_url + 'js/element-settings-behavior.js',
-	_popup_uf_data.base_url + 'js/element-settings-rules.js',
+	_popup_uf_data.base_url + 'js/element-settings-contents.js' + _popup_uf_data.cache_ver,
+	_popup_uf_data.base_url + 'js/element-settings-appearance.js' + _popup_uf_data.cache_ver,
+	_popup_uf_data.base_url + 'js/element-settings-behavior.js' + _popup_uf_data.cache_ver,
+	_popup_uf_data.base_url + 'js/element-settings-rules.js' + _popup_uf_data.cache_ver,
 ],
 /**
  * Settings module defines the element settings.

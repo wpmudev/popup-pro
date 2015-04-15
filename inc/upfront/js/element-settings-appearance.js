@@ -1,7 +1,7 @@
 (function _define_settings_appearance() {
 define(
 [
-	_popup_uf_data.base_url + 'js/element-field-itemgroup.js',
+	_popup_uf_data.base_url + 'js/element-field-itemgroup.js' + _popup_uf_data.cache_ver,
 ],
 /**
  * The settings tab "Appearance"

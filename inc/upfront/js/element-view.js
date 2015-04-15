@@ -1,7 +1,7 @@
 (function () {
 define(
 [
-	_popup_uf_data.base_url + 'js/element-model.js',
+	_popup_uf_data.base_url + 'js/element-model.js' + _popup_uf_data.cache_ver,
 ],
 /**
  * The view object - this is the preview displayed in the Upfront editor.

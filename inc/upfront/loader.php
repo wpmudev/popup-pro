@@ -136,6 +136,14 @@ class Upfront_PopupMain {
 	 * @since 4.8.0.0
 	 */
 	public function load_scripts() {
+		/**
+		 * Increment this number before every public release or when sending
+		 * the plugin for testing. This value is attached to all dependency-URLs
+		 * to bypass the Upfront script-cache. If this is not done then Upfront
+		 * will serve the cached old scripts.
+		 */
+		$cache_version = 1;
+
 		/*
 		 * main.js will initialize the Upfront element when Upfront switches to
 		 * edit-mode. So that script is quite small.
@@ -153,6 +161,7 @@ class Upfront_PopupMain {
 			_popup_uf_data.type = '<?php echo esc_js( Upfront_PopupMain::TYPE ); ?>';
 			_popup_uf_data.label = '<?php _e( 'PopUp', PO_LANG ); ?>';
 			_popup_uf_data.base_url = '<?php echo esc_js( PO_UF_URL ); ?>';
+			_popup_uf_data.cache_ver = '?cv=<?php echo esc_js( $cache_version ); ?>';
 		</script>
 		<script src="<?php echo esc_url( $module_js_url ); ?>"></script>
 		<?php

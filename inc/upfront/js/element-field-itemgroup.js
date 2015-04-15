@@ -1,9 +1,9 @@
 (function _define_field_itemgroup() {
 define(
 [
-	_popup_uf_data.base_url + 'js/element-field-image.js',
-	_popup_uf_data.base_url + 'js/element-field-rule.js',
-	_popup_uf_data.base_url + 'js/element-field-select.js'
+	_popup_uf_data.base_url + 'js/element-field-image.js' + _popup_uf_data.cache_ver,
+	_popup_uf_data.base_url + 'js/element-field-rule.js' + _popup_uf_data.cache_ver,
+	_popup_uf_data.base_url + 'js/element-field-select.js' + _popup_uf_data.cache_ver
 ],
 /**
  * Defines the settings item-group base class

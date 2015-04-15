@@ -9,7 +9,7 @@
 (function _define_field_rule() {
 define(
 [
-	'text!' + _popup_uf_data.base_url + 'tpl/templates.html'
+	'text!' + _popup_uf_data.base_url + 'tpl/templates.html' + _popup_uf_data.cache_ver
 ],
 /**
  * Defines the custom input field: Rule Field
