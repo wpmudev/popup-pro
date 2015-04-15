@@ -301,6 +301,9 @@
 		 */
 		this.show_popup = function show_popup() {
 			popup_open( me );
+
+			// Prevent default action when user attached this to a click event.
+			return false;
 		};
 
 		/**
@@ -483,20 +486,6 @@
 
 			if ( ! popup.length ) { return true; }
 
-
-			if ( 'redirect' !== me.data.form_submit ) {
-				// Only change the form target when NOT redirecting
-				frame = jQuery( '<iframe id="wdpu-frame" name="wdpu-frame"></iframe>' )
-					.hide()
-					.appendTo( 'body' );
-
-				// Set form target to the hidden frame.
-				form.attr( 'target', 'wdpu-frame' );
-				inp_popup.appendTo( form ).val( 'raw' );
-			}
-
-			msg.addClass( 'wdpu-loading' );
-
 			// Frequently checks the loading state of the hidden iframe.
 			function check_state() {
 				var is_done = false;
@@ -509,7 +498,10 @@
 					iteration += 1; // 20 iterations is equal to 1 second.
 
 					// 200 iterations are 10 seconds.
-					if ( iteration > 200 ) { is_done = true; }
+					if ( iteration > 200 ) {
+						$doc.trigger( 'popup-submit-timeout', [me, me.data] );
+						is_done = true;
+					}
 				}
 
 				if ( is_done ) {
@@ -518,17 +510,87 @@
 				}
 			}
 
+			// Closes the popup
+			function do_close_popup( close_on_fail ) {
+				if ( undefined !== close_on_fail ) {
+					me.data.close_popup = close_on_fail;
+				}
+
+				if ( recent_ajax_calls ) {
+					me.data.ajax_history = recent_ajax_calls;
+
+					if ( recent_ajax_calls.length ) {
+						me.data.last_ajax = recent_ajax_calls[0];
+					}
+				} else {
+					me.data.ajax_history = [];
+					me.data.last_ajax = {};
+				}
+
+				$doc.trigger( 'popup-submit-done', [me, me.data] );
+
+				if ( me.data.close_popup ) {
+					me.close_popup();
+					return;
+				}
+			}
+
+			// Replaces the popup contents with some new contents.
+			function do_replace_contents( contents, title, subtitle ) {
+				var el_inner = popup.find( '.wdpu-msg-inner' ),
+					el_title = popup.find( '.wdpu-title' ),
+					el_subtitle = popup.find( '.wdpu-subtitle' );
+
+				if ( ! contents instanceof jQuery ) {
+					contents = jQuery( '<div>' + contents + '</div>' );
+				}
+
+				if ( contents.hasClass( 'wdpu-msg-inner' ) ) {
+					el_inner.replaceWith( contents );
+				} else {
+					el_inner.empty().append( contents );
+				}
+
+				if ( undefined !== title ) {
+					el_title.html( title );
+				}
+				if ( undefined !== subtitle ) {
+					el_subtitle.html( subtitle );
+				}
+
+				me.move_popup();
+				me.setup_popup();
+
+				do_close_popup();
+
+				me.fetch_dom();
+				me.setup_popup();
+
+				// Re-initialize the local DOM cache.
+				$doc.trigger( 'popup-init', [me, me.data] );
+			}
+
 			// Executed once the iframe is fully loaded.
 			// This will remove the loading animation and update the popup
 			// contents if required.
 			function process_document() {
-				var inner_new, inner_old, html, external, handled, close_on_fail;
+				var inner_new, inner_old, html, external, close_on_fail;
+
+				me.data.close_popup = undefined;
 
 				// Allow other javascript functions to pre-process the event.
 				$doc.trigger( 'popup-submit-process', [frame, me, me.data] );
-				handled = false;
 				close_on_fail = true;
-				if ( 'ignore' === me.data.form_submit ) { close_on_fail = false; }
+
+				/*
+				 * Use the event jQuery('document').on('popup-submit-process')
+				 * to set `data.form_submit = false` to prevent form handling.
+				 */
+				if ( ! me.data.form_submit ) { return false; }
+
+				if ( 'ignore' === me.data.form_submit ) {
+					close_on_fail = false;
+				}
 
 				try {
 					// grab the HTML from the body, using the raw DOM node (frame[0])
@@ -542,7 +604,12 @@
 					external = true;
 				}
 
-				me.data.close_popup = false;
+				if ( undefined === me.data.close_popup ) {
+					me.data.close_popup = false;
+				} else {
+					close_on_fail = me.data.close_popup;
+				}
+
 				msg.removeClass( 'wdpu-loading' );
 
 				// Get the new and old Popup Contents.
@@ -553,73 +620,64 @@
 				jQuery( "#wdpu-frame" ).remove();
 				me.data.last_ajax = undefined;
 
-				// For external pages we have no access to the response:
-				// Close the popup!
-				if ( external ) {
+				if ( me.data.contents ) {
+					// =========================================================
+					// Popup contents were explicitely defined by the javascript
+					// event 'popup-submit-process'
+
+					do_replace_contents(
+						me.data.contents,
+						me.data.title,
+						me.data.subtitle
+					);
+
+				} else if ( external ) {
+					// =========================================================
+					// For external pages we have no access to the response:
+					// Close the popup!
+
 					// E.g. Contact Form 7
-					me.data.close_popup = close_on_fail;
 
-					me.data.ajax_history = recent_ajax_calls;
-					if ( recent_ajax_calls.length ) {
-						me.data.last_ajax = recent_ajax_calls[0];
-					}
+					do_close_popup( close_on_fail );
 
-					$doc.trigger( 'popup-submit-done', [me, me.data] );
-					handled = true;
+				} else if ( ! html.length || ! html.html().length ) {
+					// =========================================================
+					// The PopUp is completely empty, possibly another
+					// ajax-handler did process the form. Keep the popup open.
 
-					if ( me.data.close_popup ) {
-						me.close_popup();
-						return;
-					}
-				}
-
-				// The PopUp is completely empty, possibly another ajax-handler
-				// did process the form. Keep the popup open.
-				else if ( ! html.length || ! html.html().length ) {
 					// E.g. Gravity Forms
-					$doc.trigger( 'popup-submit-done', [me, me.data] );
-					handled = true;
 
-					if ( me.data.close_popup ) {
-						me.close_popup();
-						return;
-					}
-				}
+					do_close_popup();
 
-				// A new page was loaded that does not contain new content for
-				// the current PopUp. Close the popup!
-				else if ( ! inner_old.length || ! inner_new.length || ! inner_new.text().length ) {
-					me.data.close_popup = close_on_fail;
+				} else if ( ! inner_old.length || ! inner_new.length || ! inner_new.text().length ) {
+					// =========================================================
+					// A new page was loaded that does not contain new content
+					// for the current PopUp. Close the popup!
 
-					$doc.trigger( 'popup-submit-done', [me, me.data] );
-					handled = true;
+					do_close_popup( close_on_fail );
 
-					if ( me.data.close_popup ) {
-						me.close_popup();
-						return;
-					}
-				}
-
-				else {
+				} else {
+					// =========================================================
 					// Update the Popup contents.
-					inner_old.replaceWith( inner_new );
 
-					me.move_popup();
-					me.setup_popup();
+					do_replace_contents( inner_new );
 
-					$doc.trigger( 'popup-submit-done', [me, me.data] );
-
-					if ( me.data.close_popup ) {
-						me.close_popup();
-					}
-
-					me.fetch_dom();
-					me.setup_popup();
-
-					// Re-initialize the local DOM cache.
-					$doc.trigger( 'popup-init', [me, me.data] );
 				}
 			}
+			// end of process_document()
+
+			if ( 'redirect' !== me.data.form_submit ) {
+				// Only change the form target when NOT redirecting
+				frame = jQuery( '<iframe id="wdpu-frame" name="wdpu-frame"></iframe>' )
+					.hide()
+					.appendTo( 'body' );
+
+				// Set form target to the hidden frame.
+				form.attr( 'target', 'wdpu-frame' );
+				inp_popup.appendTo( form ).val( 'raw' );
+			}
+
+			msg.addClass( 'wdpu-loading' );
 
 			if ( 'redirect' === me.data.form_submit ) {
 				/**
