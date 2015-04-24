@@ -108,8 +108,9 @@ module.exports = function( grunt ) {
 				testsuite: 'default',
 				configuration: 'tests/php/phpunit.xml',
 				colors: true,
-				tap: true,
+				//tap: true,
 				//testdox: true,
+				//stopOnError: true,
 				staticBackup: false,
 				noGlobalsBackup: false
 			}
@@ -124,6 +125,37 @@ module.exports = function( grunt ) {
 					style: 'expanded'
 				},
 				files: paths.css_files_compile
+			}
+		},
+
+
+		autoprefixer: {
+			options: {
+				browsers: ['last 2 version', 'ie 8', 'ie 9'],
+				diff: false
+			},
+			single_file: {
+				files: [{
+					expand: true,
+					src: ['**/*.css', '!**/*.min.css'],
+					cwd: 'css/',
+					dest: 'css/',
+					ext: '.css',
+					extDot: 'last',
+					flatten: false
+				}]
+			}
+		},
+
+
+		//compass - required for autoprefixer
+		compass: {
+			options: {
+			},
+			server: {
+				options: {
+					debugInfo: true
+				}
 			}
 		},
 
@@ -150,7 +182,7 @@ module.exports = function( grunt ) {
 		watch:  {
 			sass: {
 				files: ['css/**/*.scss'],
-				tasks: ['sass', 'cssmin'],
+				tasks: ['sass', 'autoprefixer'],
 				options: {
 					debounceDelay: 500
 				}
@@ -224,6 +256,7 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 
 	grunt.loadNpmTasks('grunt-contrib-sass');
+	grunt.loadNpmTasks('grunt-autoprefixer');
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
@@ -246,9 +279,9 @@ module.exports = function( grunt ) {
 
 	// Default task.
 
-	grunt.registerTask( 'default', ['clean:temp', 'jshint', 'concat', 'uglify', 'sass', 'cssmin', 'notes'] );
+	grunt.registerTask( 'default', ['clean:temp', 'jshint', 'concat', 'uglify', 'sass', 'autoprefixer', 'cssmin'] );
 	grunt.registerTask( 'build', ['phpunit', 'default', 'clean', 'copy', 'compress', 'notes'] );
-	grunt.registerTask( 'test', ['phpunit', 'jshint', 'notes'] );
+	grunt.registerTask( 'test', ['phpunit', 'jshint'] );
 
 	grunt.util.linefeed = '\n';
 };
