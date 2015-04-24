@@ -6,6 +6,24 @@
 class Popup_Test_General extends WP_UnitTestCase {
 
 	/**
+	 * Runs before the first test
+	 * @beforeClass
+	 */
+	static function setup_once() {
+		WP_UnitTestCase::setUpBeforeClass();
+		require_once 'shared-setup.php';
+	}
+
+	/**
+	 * Runs before the each test
+	 * @before
+	 */
+	function setup() {
+		parent::setUp();
+		TData::reset();
+	}
+
+	/**
 	 * Check if all constants are defined.
 	 */
 	function test_constants() {

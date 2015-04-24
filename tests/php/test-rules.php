@@ -5,6 +5,24 @@
  */
 class Popup_Test_Rules extends WP_UnitTestCase {
 
+	/**
+	 * Runs before the first test
+	 * @beforeClass
+	 */
+	static function setup_once() {
+		WP_UnitTestCase::setUpBeforeClass();
+		require_once 'shared-setup.php';
+	}
+
+	/**
+	 * Runs before the each test
+	 * @before
+	 */
+	function setup() {
+		parent::setUp();
+		TData::reset();
+	}
+
 	protected $rules = array(
 		array(
 			'file' => 'class-popup-rule-advurl.php',     'class' => 'IncPopupRule_AdvUrl',     'available' => true,
