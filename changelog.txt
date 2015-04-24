@@ -4,12 +4,12 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
-4.8.0.0
+4.7.0.6
 ----------------------------------------------------------------------
-- Add integration to Upfront
 - Add a link target option for CTA Button (use _blank to open CTA in new tab)
 - Add JS hook 'popup-submit-process' to allow manual updating of popup contents after form submit
 - Simplify PopUp template structure to encourage creation of custom templates
+- Fix XSS vulnerability (add_query_arg/remove_query_arg)
 - Fix several small issues with different rules
 
 4.7.0.6
