@@ -54,7 +54,6 @@ function inc_popup_pro_init() {
 		define( 'PO_JS_URL', $plugin_url . 'js/' );
 		define( 'PO_CSS_URL', $plugin_url . 'css/' );
 		define( 'PO_IMG_URL', $plugin_url . 'img/' );
-		define( 'PO_UF_URL', $plugin_url . 'inc/upfront/' );
 
 		// Include function library.
 		if ( file_exists( PO_INC_DIR . 'external/wpmu-lib/core.php' ) ) {
@@ -72,9 +71,6 @@ function inc_popup_pro_init() {
 
 		// Initialize the plugin as soon as we have identified the current user.
 		IncPopup::instance();
-
-		// Initialize the Upfront integration
-		require_once( PO_INC_DIR . 'upfront/loader.php');
 	}
 }
 
