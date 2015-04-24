@@ -96,9 +96,11 @@ class IncPopupAddon_HeaderFooter {
 			);
 
 			// Build the url to call, NOTE: uses home_url and thus requires WordPress 3.0
-			$url = add_query_arg(
-				array( 'popup-headerfooter-check' => '1' ),
-				home_url()
+			$url = esc_url_raw(
+				add_query_arg(
+					array( 'popup-headerfooter-check' => '1' ),
+					home_url()
+				)
 			);
 
 			// Perform the HTTP GET ignoring SSL errors

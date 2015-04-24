@@ -12,7 +12,7 @@ $main_url = admin_url( 'edit.php?post_type=' . IncPopupItem::POST_TYPE );
 $blog_title = get_bloginfo( 'name' );
 restore_current_blog();
 
-$dismiss_url = add_query_arg( 'popup_network', 'hide' );
+$dismiss_url = esc_url_raw( add_query_arg( 'popup_network', 'hide' ) );
 
 ?>
 <style>
@@ -29,7 +29,8 @@ blockquote p {
 		<h2><?php _e( 'Global PopUps', PO_LANG ); ?></h2>
 
 		<blockquote>
-		<p><?php printf(
+		<p><?php
+		printf(
 			__(
 				'Please note:<br />We moved the global PopUp menu items ' .
 				'to the <strong>Main Blog</strong> of your multisite ' .
@@ -38,15 +39,18 @@ blockquote p {
 			),
 			$blog_title,
 			esc_url( $main_url )
-		); ?></p>
+		);
+		?></p>
 		</blockquote>
 
 		<div>
-			<p><?php _e(
+			<p><?php
+			_e(
 				'Because the "PopUp" menu items here on the ' .
 				'<strong>Network Admin</strong> are not used anymore ' .
 				'you can <strong>hide them</strong> at any time:', PO_LANG
-				); ?>
+			);
+			?>
 			</p>
 			<p>
 				<a href="<?php echo esc_url( $dismiss_url ); ?>" class="button-primary">

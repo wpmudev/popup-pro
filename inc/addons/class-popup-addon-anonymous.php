@@ -81,7 +81,7 @@ class IncPopupAddon_AnonyousLoading {
 			'info'  => __(
 				'Load PopUp like WordPress AJAX, but the URL to the ' .
 				'JavaScript file will be masked.', PO_LANG
-				),
+			),
 		);
 		return $loading_methods;
 	}
@@ -100,7 +100,9 @@ class IncPopupAddon_AnonyousLoading {
 		// Generate a random Script URL.
 		$slug = self::$_slug;
 		$val = self::_rot( time(), rand( 1, 22 ) );
-		$script_url = add_query_arg( array( $slug => $val ), lib2()->net->current_url() );
+		$script_url = esc_url_raw(
+			add_query_arg( array( $slug => $val ), lib2()->net->current_url() )
+		);
 
 		// The script is the home URL with a special URL-param.
 		wp_enqueue_script(

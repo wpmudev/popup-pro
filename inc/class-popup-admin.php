@@ -125,7 +125,6 @@ class IncPopup extends IncPopupBase {
 				)
 			);
 
-
 			// -- PopUp LIST -----------------------
 
 			if ( 'edit' === $hook->base ) {
@@ -367,7 +366,7 @@ class IncPopup extends IncPopupBase {
 	static public function handle_settings_update() {
 		lib2()->array->equip_post( 'action', 'po_option' );
 
-		if ( $_POST['action'] == 'updatesettings' ) {
+		if ( 'updatesettings' == $_POST['action'] ) {
 			check_admin_referer( 'update-popup-settings' );
 
 			$old_settings = IncPopupDatabase::get_settings();
@@ -390,7 +389,9 @@ class IncPopup extends IncPopupBase {
 			}
 
 			lib2()->ui->admin_message( __( 'Your settings have been updated.', PO_LANG ) );
-			$redirect_url = remove_query_arg( array( 'message', 'count' ), wp_get_referer() );
+			$redirect_url = esc_url_raw(
+				remove_query_arg( array( 'message', 'count' ), wp_get_referer() )
+			);
 			wp_safe_redirect( $redirect_url );
 			die();
 		}
@@ -776,7 +777,9 @@ class IncPopup extends IncPopupBase {
 						break;
 				}
 
-				$back_url = remove_query_arg( array( 'action', 'post_id', '_wpnonce' ) );
+				$back_url = esc_url_raw(
+					remove_query_arg( array( 'action', 'post_id', '_wpnonce' ) )
+				);
 				wp_safe_redirect( $back_url );
 				die();
 			}
@@ -917,8 +920,12 @@ class IncPopup extends IncPopupBase {
 				$item->save();
 
 				// Show the new item in the editor.
-				$new_url = remove_query_arg( array( 'post', 'do' ) );
-				$new_url = add_query_arg( array( 'post' => $item->id, 'post_type' => IncPopupItem::POST_TYPE ), $new_url );
+				$new_url = esc_url_raw(
+					add_query_arg(
+						array( 'post' => $item->id, 'post_type' => IncPopupItem::POST_TYPE ),
+						remove_query_arg( array( 'post', 'do' ) )
+					)
+				);
 				wp_safe_redirect( $new_url );
 				die();
 
@@ -1181,7 +1188,7 @@ class IncPopup extends IncPopupBase {
 	 * @return string The modified redirect URL.
 	 */
 	static public function form_redirect( $url, $post_id ) {
-		return remove_query_arg( 'message', $url );
+		return esc_url_raw( remove_query_arg( 'message', $url ) );
 	}
 
 };

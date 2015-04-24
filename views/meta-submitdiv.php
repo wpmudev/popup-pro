@@ -7,7 +7,7 @@
  */
 
 $delete_url = get_delete_post_link( $post->ID );
-$duplicate_url = add_query_arg( 'do', 'duplicate' );
+$duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 
 ?>
 <div class="submitbox" id="submitpost">
