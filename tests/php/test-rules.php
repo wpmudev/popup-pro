@@ -139,7 +139,7 @@ class Popup_Test_Rules extends WP_UnitTestCase {
 		unset( $_REQUEST['thefrom'] );
 
 		// Default PHPUnit Request URL:
-		$this->assertEquals( 'http://example.org', $rule->current_url(), 'Invalid URL' );
+		$this->assertEquals( 'http://example.org/', $rule->current_url(), 'Invalid URL' );
 
 		// -- Test the "check_url" function, which is the core of this condition!
 
@@ -157,7 +157,7 @@ class Popup_Test_Rules extends WP_UnitTestCase {
 			$this->assertFalse( $rule->check_url( 'example.org', $list ), 'Rule-1' . $key . '-3' );
 			$this->assertFalse( $rule->check_url( 'example.org/', $list ), 'Rule-1' . $key . '-4' );
 
-			if ( $key == 'a' or $key == 'b' ) {
+			if ( 'a' == $key or 'b' == $key ) {
 				$this->assertFalse( $rule->check_url( 'https://example.org', $list ), 'Rule-1' . $key . '-5' );
 			} else {
 				$this->assertTrue( $rule->check_url( 'https://example.org', $list ), 'Rule-1' . $key . '-5' );
