@@ -90,7 +90,6 @@ div.msg-err {
   padding: 0 0.6em;
   padding: 1px 12px;
   background-color: #FAFAFA;
-  -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
   clear: both;
   margin: 15px 0 0;
@@ -161,7 +160,6 @@ div.msg-err {
 
 .tbl-addons tbody td,
 .tbl-addons tbody th {
-  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 .tbl-addons code {
@@ -217,7 +215,6 @@ div.msg-err {
 }
 .post-type-inc_popup .wp-list-table tbody td,
 .post-type-inc_popup .wp-list-table tbody th {
-  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   padding-top: 15px;
   padding-bottom: 15px;
@@ -859,6 +856,7 @@ div.msg-err {
 /* For IE8 - See #6727 */
 .ui-slider.ui-state-disabled .ui-slider-handle,
 .ui-slider.ui-state-disabled .ui-slider-range {
+  -webkit-filter: inherit;
   filter: inherit;
 }
 
