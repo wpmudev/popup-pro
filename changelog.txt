@@ -4,7 +4,7 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
-4.7.0.6
+4.7.0.7
 ----------------------------------------------------------------------
 - Add a link target option for CTA Button (use _blank to open CTA in new tab)
 - Add JS hook 'popup-submit-process' to allow manual updating of popup contents after form submit

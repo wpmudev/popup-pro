@@ -50,8 +50,7 @@ blockquote p {
 				'<strong>Network Admin</strong> are not used anymore ' .
 				'you can <strong>hide them</strong> at any time:', PO_LANG
 			);
-			?>
-			</p>
+			?></p>
 			<p>
 				<a href="<?php echo esc_url( $dismiss_url ); ?>" class="button-primary">
 					<?php _e( 'Hide the menu items here!', PO_LANG ); ?>
