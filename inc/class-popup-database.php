@@ -190,7 +190,7 @@ class IncPopupDatabase {
 				";
 				$sql = $wpdb->prepare( $sql, $item->id );
 				$status = $wpdb->get_var( $sql );
-				if ( $status != '1' ) { continue; }
+				if ( '1' != $status ) { continue; }
 
 				$raw = maybe_unserialize( $item->popover_settings );
 				$checks = explode( ',', @$raw['popover_check']['order'] );
@@ -218,8 +218,8 @@ class IncPopupDatabase {
 				if ( isset( $raw['on_click'] ) ) { $display = 'click'; }
 
 				$custom_colors = false;
-				if ( $colors['col1'] != 'FFFFFF' ) { $custom_colors = true; }
-				if ( $colors['col2'] != '000000' ) { $custom_colors = true; }
+				if ( 'FFFFFF' != $colors['col1'] ) { $custom_colors = true; }
+				if ( '000000' != $colors['col2'] ) { $custom_colors = true; }
 
 				$custom_size = true;
 				if ( ! empty( $raw['popover_size']['usejs'] ) ) { $custom_size = false; }
@@ -304,12 +304,12 @@ class IncPopupDatabase {
 			lib2()->ui->admin_message(
 				sprintf(
 					__(
-					'<strong>PopUp Pro</strong><br />' .
-					'Your installation was successfully updated to use the ' .
-					'latest version of the plugin!<br />' .
-					'<em>Note: Some PopUp options changed or were replaced. ' .
-					'You should have a look at your <a href="%s">PopUps</a> ' .
-					'to see if they still look as intended.</em>', PO_LANG
+						'<strong>PopUp Pro</strong><br />' .
+						'Your installation was successfully updated to use the ' .
+						'latest version of the plugin!<br />' .
+						'<em>Note: Some PopUp options changed or were replaced. ' .
+						'You should have a look at your <a href="%s">PopUps</a> ' .
+						'to see if they still look as intended.</em>', PO_LANG
 					),
 					admin_url( 'edit.php?post_type=' . IncPopupItem::POST_TYPE )
 				)
@@ -418,19 +418,16 @@ class IncPopupDatabase {
 
 		if ( null === $List ) {
 			self::before_db();
-			$sql_get = "
-				SELECT ID
-				FROM {$wpdb->posts}
-				WHERE post_type=%s
-					AND post_status=%s
-				ORDER BY menu_order
-			";
-			$sql = $wpdb->prepare(
-				$sql_get,
-				IncPopupItem::POST_TYPE,
-				'publish'
+			// Using get_posts() adds support for WPML
+			$active_posts = get_posts(
+				array(
+					'post_type' => IncPopupItem::POST_TYPE,
+					'suppress_filters' => 0,
+				)
 			);
-			$List = $wpdb->get_col( $sql );
+			foreach ( $active_posts as $post ) {
+				$List[] = $post->ID;
+			}
 			self::after_db();
 		}
 
@@ -587,7 +584,7 @@ class IncPopupDatabase {
 				'info'  => __(
 					'Include PopUp as part of your site\'s HTML (no AJAX call).',
 					PO_LANG
-					),
+				),
 			);
 
 			$Loading_methods[] = (object) array(
