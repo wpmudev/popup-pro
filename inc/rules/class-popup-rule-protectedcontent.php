@@ -1,12 +1,12 @@
 <?php
 /*
-Name:        Protected Content
+Name:        Membership2
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Conditions based on the users Protected Content subscriptions. <a href="http://premium.wpmudev.org/project/protected-content/" target="_blank">Learn more &raquo;</a>
+Description: Conditions based on the users Membership2 subscriptions. (Former "Protected Content") <a href="http://premium.wpmudev.org/project/membership/" target="_blank">Learn more &raquo;</a>
 Author:      Philipp Stracker
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
-Rules:       For Members (Protected Content)
+Rules:       For Members (Membership2), For Non-Members (Membership2)
 Limit:       pro
 Version:     1.0
 
@@ -36,21 +36,28 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 		// 'pc_subscription' rule.
 		$this->add_rule(
 			'pc_subscription',
-			__( 'For Members (Protected Content)', PO_LANG ),
-			__( 'Shows the PopUp if the user subscribed to a certain Protected Content Membership.', PO_LANG ),
-			'',
+			__( 'For Members (Membership2)', PO_LANG ),
+			__( 'Only shows the PopUp if the user has subscribed to a certain Membership (Membership2 plugin).', PO_LANG ),
+			'pc_unsubscription',
+			25
+		);
+
+		// 'pc_unsubscription' rule.
+		$this->add_rule(
+			'pc_unsubscription',
+			__( 'For Non-Members (Membership2)', PO_LANG ),
+			__( 'Only shows the PopUp if the user has not yet subscribed to a certain Membership (Membership2 plugin).', PO_LANG ),
+			'pc_subscription',
 			25
 		);
 
 		// -- Initialize rule.
 
-		$this->is_active = (
-			class_exists( 'MS_Plugin' ) && MS_Plugin::is_enabled()
-		);
+		$this->is_active = apply_filters( 'ms_active' );
 
 		if ( ! $this->is_active ) { return; }
 
-		$this->memberships = MS_Model_Membership::get_memberships();
+		$this->memberships = MS_Plugin::$api->list_memberships( true );
 	}
 
 
@@ -96,6 +103,51 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 	 */
 	protected function save_pc_subscription() {
 		return $_POST['po_rule_data']['pc_subscription'];
+	}
+
+
+	/*====================================*\
+	========================================
+	==                                    ==
+	==           NON-MEMBERSHIP           ==
+	==                                    ==
+	========================================
+	\*====================================*/
+
+
+	/**
+	 * Apply the rule-logic to the specified popup
+	 *
+	 * @since  1.0
+	 * @param  mixed $data Rule-data which was saved via the save_() handler.
+	 * @return bool Decission to display popup or not.
+	 */
+	protected function apply_pc_unsubscription( $data ) {
+		return ! $this->user_has_membership( $data );
+	}
+
+	/**
+	 * Output the Admin-Form for the active rule.
+	 *
+	 * @since  1.0
+	 * @param  mixed $data Rule-data which was saved via the save_() handler.
+	 */
+	protected function form_pc_unsubscription( $data ) {
+		$this->render_subscription_form(
+			'pc_unsubscription',
+			__( 'Show to users that do not belong to any of the following Memberships:', PO_LANG ),
+			$data
+		);
+	}
+
+	/**
+	 * Update and return the $settings array to save the form values.
+	 *
+	 * @since  1.0
+	 * @return mixed Data collection of this rule.
+	 */
+	protected function save_pc_unsubscription() {
+		return $_POST['po_rule_data']['pc_unsubscription'];
 	}
 
 
@@ -158,9 +210,9 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 			printf(
 				__(
 					'This condition requires that the <a href="%s" target="_blank">' .
-					'Protected Content Plugin</a> is installed and activated.', PO_LANG
+					'Membership2 Plugin</a> is installed and activated.', PO_LANG
 				),
-				'http://premium.wpmudev.org/project/protected-content/'
+				'http://premium.wpmudev.org/project/membership/'
 			);
 			?>
 		</p></div>
@@ -171,7 +223,7 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 	 * Tests if the current user has a specific membership subscription.
 	 *
 	 * @since  1.0.0
-	 * @param  array $data Contains the element ['membership_sub']
+	 * @param  array $data Contains the element ['pc_subscription']
 	 * @return boolean
 	 */
 	protected function user_has_membership( $data ) {
@@ -179,10 +231,10 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 		$data = lib2()->array->get( $data );
 		$data['pc_subscription'] = lib2()->array->get( $data['pc_subscription'] );
 
-		$member = MS_Model_Member::get_current_member();
+		$member = MS_Plugin::$api->get_current_member();
 
-		foreach ( $member->subscriptions as $subscription ) {
-			if ( in_array( $subscription->membership_id, $data['pc_subscription'] ) ) {
+		foreach ( $data['pc_subscription'] as $membership_id ) {
+			if ( $member->has_membership( $membership_id ) ) {
 				$result = true;
 				break;
 			}
