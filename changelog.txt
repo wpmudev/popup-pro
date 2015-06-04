@@ -4,6 +4,11 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.7.0.8
+----------------------------------------------------------------------
+- Add integration for Membership2
+- Fix issues with WPML integration
+
 4.7.0.7
 ----------------------------------------------------------------------
 - Add a link target option for CTA Button (use _blank to open CTA in new tab)
