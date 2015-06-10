@@ -56,14 +56,16 @@ $animations = IncPopup::get_animations();
 	?>
 	<div class="wpmui-grid-12">
 		<div class="col-12">
-			<p style="margin-top:0"><em><?php _e(
+			<p style="margin-top:0"><em><?php
+			_e(
 				'*) This style is outdated and does not support all options '.
 				'on this page. ' .
 				'Once you save your PopUp with a new style you cannot ' .
 				'revert to this style!<br />' .
 				'Tipp: Use the Preview function to test this PopUp with one ' .
 				'of the new styles before saving it.', PO_LANG
-			); ?></em></p>
+			);
+			?></em></p>
 		</div>
 	</div>
 	<?php
@@ -171,7 +173,7 @@ endif; ?>
 						'<option value="%2$s" %3$s>%1$s</option>',
 						esc_attr( $label ),
 						esc_attr( $key ),
-						selected( $key, $popup->animation_out, false )
+						selected( $key, $popup->animation_in, false )
 					);
 				} ?>
 

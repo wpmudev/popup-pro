@@ -109,10 +109,12 @@ class IncPopupRule_Membership extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_membership_lvl() {
-		return $_POST['po_rule_data']['membership_lvl'];
+	protected function save_membership_lvl( $data ) {
+		lib2()->array->equip( $data, 'membership_lvl' );
+		return $data['membership_lvl'];
 	}
 
 
@@ -154,10 +156,12 @@ class IncPopupRule_Membership extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_membership_sub() {
-		return $_POST['po_rule_data']['membership_sub'];
+	protected function save_membership_sub( $data ) {
+		lib2()->array->equip( $data, 'membership_sub' );
+		return $data['membership_sub'];
 	}
 
 

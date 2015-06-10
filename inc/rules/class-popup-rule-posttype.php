@@ -126,10 +126,12 @@ class IncPopupRule_Posttype extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_posttype() {
-		return @$_POST['po_rule_data']['posttype'];
+	protected function save_posttype( $data ) {
+		lib2()->array->equip( $data, 'posttype' );
+		return $data['posttype'];
 	}
 
 
@@ -174,10 +176,12 @@ class IncPopupRule_Posttype extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_no_posttype() {
-		return @$_POST['po_rule_data']['no_posttype'];
+	protected function save_no_posttype( $data ) {
+		lib2()->array->equip( $data, 'no_posttype' );
+		return $data['no_posttype'];
 	}
 
 

@@ -87,10 +87,12 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_xprofile() {
-			return $this->sanitize_values( $_POST['po_rule_data']['xprofile'] );
+	protected function save_xprofile( $data ) {
+		lib2()->array->equip( $data, 'xprofile' );
+		return $this->sanitize_values( $data['xprofile'] );
 	}
 
 
@@ -136,10 +138,12 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_no_xprofile() {
-		return $this->sanitize_values( $_POST['po_rule_data']['no_xprofile'] );
+	protected function save_no_xprofile( $data ) {
+		lib2()->array->equip( $data, 'no_xprofile' );
+		return $this->sanitize_values( $data['no_xprofile'] );
 	}
 
 

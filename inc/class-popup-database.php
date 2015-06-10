@@ -611,7 +611,10 @@ class IncPopupDatabase {
 			 *
 			 * @var array
 			 */
-			$Loading_methods = apply_filters( 'popup-settings-loading-method', $Loading_methods );
+			$Loading_methods = apply_filters(
+				'popup-settings-loading-method',
+				$Loading_methods
+			);
 		}
 
 		return $Loading_methods;

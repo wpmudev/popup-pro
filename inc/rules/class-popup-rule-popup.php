@@ -87,10 +87,13 @@ class IncPopupRule_Popup extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_count() {
-		$count = absint( @$_POST['po_rule_data']['count'] );
+	protected function save_count( $data ) {
+		lib2()->array->equip( $data, 'count' );
+
+		$count = absint( $data['count'] );
 		if ( $count < 1 ) { $count = 1; }
 		return $count;
 	}

@@ -95,10 +95,10 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_url() {
-		$data = lib2()->array->get( $_POST['po_rule_data'] );
+	protected function save_url( $data ) {
 		lib2()->array->equip( $data, 'url' );
 		return $this->sanitize_values( $data['url'] );
 	}
@@ -155,10 +155,10 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_no_url() {
-		$data = lib2()->array->get( $_POST['po_rule_data'] );
+	protected function save_no_url( $data ) {
 		lib2()->array->equip( $data, 'no_url' );
 		return $this->sanitize_values( $data['no_url'] );
 	}
@@ -251,7 +251,6 @@ class IncPopupRule_Url extends IncPopupRule {
 				}
 			}
 		}
-
 
 		return $response;
 	}

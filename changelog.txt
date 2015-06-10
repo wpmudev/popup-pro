@@ -4,6 +4,11 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.7.0.9
+----------------------------------------------------------------------
+- Fix bug with Display Animation field in PopUp editor
+- Small code improvements to avoid PHP notices
+
 4.7.0.8
 ----------------------------------------------------------------------
 - Add integration for Membership2

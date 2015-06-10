@@ -127,10 +127,12 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_category() {
-		return @$_POST['po_rule_data']['category'];
+	protected function save_category( $data ) {
+		lib2()->array->equip( $data, 'category' );
+		return $data['category'];
 	}
 
 
@@ -175,10 +177,12 @@ class IncPopupRule_Category extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_no_category() {
-		return @$_POST['po_rule_data']['no_category'];
+	protected function save_no_category( $data ) {
+		lib2()->array->equip( $data, 'no_category' );
+		return $data['no_category'];
 	}
 
 

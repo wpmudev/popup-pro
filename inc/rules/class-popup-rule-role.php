@@ -46,7 +46,7 @@ class IncPopupRule_UserRole extends IncPopupRule {
 		// -- Initialize rule.
 
 		global $wp_roles;
-        $this->roles = $wp_roles->get_names();
+		$this->roles = $wp_roles->get_names();
 	}
 
 
@@ -88,10 +88,12 @@ class IncPopupRule_UserRole extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_role() {
-		return @$_POST['po_rule_data']['role'];
+	protected function save_role( $data ) {
+		lib2()->array->equip( $data, 'role' );
+		return $data['role'];
 	}
 
 
@@ -133,10 +135,12 @@ class IncPopupRule_UserRole extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_no_role() {
-		return @$_POST['po_rule_data']['no_role'];
+	protected function save_no_role( $data ) {
+		lib2()->array->equip( $data, 'no_role' );
+		return $data['no_role'];
 	}
 
 
@@ -190,16 +194,16 @@ class IncPopupRule_UserRole extends IncPopupRule {
 		$role_list = $data['roles'];
 
 		$user = wp_get_current_user();
-        $user_roles = $user->roles;
+		$user_roles = $user->roles;
 
-        // Can a user have more than one Role? Better be sure and use a loop...
-        foreach ( $user_roles as $key ) {
-            if ( in_array( $key, $role_list ) ) {
-                $result = true;
-                break;
-            }
-        }
-        return $result;
+		// Can a user have more than one Role? Better be sure and use a loop...
+		foreach ( $user_roles as $key ) {
+			if ( in_array( $key, $role_list ) ) {
+				$result = true;
+				break;
+			}
+		}
+		return $result;
 	}
 };
 

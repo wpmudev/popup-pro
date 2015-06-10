@@ -799,8 +799,8 @@ abstract class IncPopupBase {
 		return;
 
 		// These functions will never be called, but poedit recognizes the text.
-		__( 'PRO Version only', PO_LANG );
-		__( 'Pro feature only. <a href="%1$s" target="_blank">Find out more &raquo;</a>', PO_LANG );
+		__( 'PRO Version', PO_LANG );
+		__( 'Pro feature. <a href="%1$s" target="_blank">Find out more &raquo;</a>', PO_LANG );
 		__( '<strong>WordPress PopUp</strong><br />Your installation was successfully updated to use the latest version of the plugin!<br /><em>Note: Some PopUp options changed or were replaced. You should have a look at your <a href="%s">PopUps</a> to see if they still look as intended.</em>', PO_LANG );
 		__( 'In the free version you can activate 1 PopUp. When you activate this PopUp then all other PopUps will be deactivated ', PO_LANG );
 		__( 'In the free version you can activate 1 PopUp. The PRO Version allows you to have unlimited active PopUps! <a href=\"%1$s\" target=\"_blank\">Find out more &raquo;</a>', PO_LANG );

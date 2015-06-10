@@ -107,10 +107,12 @@ class IncPopupRule_Geo extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_country() {
-		return @$_POST['po_rule_data']['country'];
+	protected function save_country( $data ) {
+		lib2()->array->equip( $data, 'country' );
+		return $data['country'];
 	}
 
 
@@ -173,8 +175,9 @@ class IncPopupRule_Geo extends IncPopupRule {
 	 * @since  4.6
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_no_country() {
-		return @$_POST['po_rule_data']['no_country'];
+	protected function save_no_country( $data ) {
+		lib2()->array->equip( $data, 'no_country' );
+		return $data['no_country'];
 	}
 
 
@@ -308,7 +311,10 @@ class IncPopupRule_Geo extends IncPopupRule {
 			$url = str_replace( '%ip%', $ip, $service->url );
 			$response = wp_remote_get( $url );
 
-			if ( ! is_wp_error( $response ) && $response['response']['code'] == '200' && $response['body'] != 'XX' ) {
+			if ( ! is_wp_error( $response )
+				&& '200' == $response['response']['code']
+				&& 'XX' != $response['body']
+			) {
 				if ( 'text' == $service->type ) {
 					$country = trim( $response['body'] );
 				} else if ( 'json' == $service->type ) {
@@ -337,7 +343,7 @@ class IncPopupRule_Geo extends IncPopupRule {
 		$response = true;
 		$country = $this->get_user_country();
 
-		if ( $country == 'XX' ) {
+		if ( 'XX' == $country ) {
 			return $response;
 		}
 

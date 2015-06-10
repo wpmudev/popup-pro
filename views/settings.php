@@ -102,6 +102,7 @@ $ordered_rules = array();
 								<?php foreach ( $loading_methods as $item ) : ?>
 									<option
 										value="<?php echo esc_attr( $item->id ); ?>"
+										<?php if ( ! empty( $item->disabled ) ) { echo 'disabled="disabled"'; } ?>
 										<?php selected( $cur_method, $item->id ); ?>>
 										<?php _e( $item->label, PO_LANG ); ?>
 									</option>

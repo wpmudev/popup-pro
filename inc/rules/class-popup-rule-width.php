@@ -179,10 +179,12 @@ class IncPopupRule_Width extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_width() {
-		return $this->sanitize_values( @$_POST['po_rule_data']['width'] );
+	protected function save_width( $data ) {
+		lib2()->array->equip( $data, 'width' );
+		return $this->sanitize_values( $data['width'] );
 	}
 
 
@@ -212,7 +214,7 @@ class IncPopupRule_Width extends IncPopupRule {
 		$data['min'] = absint( @$data['min'] );
 		$data['max'] = absint( @$data['max'] );
 
-		if ( $data['max'] == 0 || $data['max'] < $data['min'] ) {
+		if ( ! $data['max'] || $data['max'] < $data['min'] ) {
 			$data['max'] = $this->max_width;
 		}
 

@@ -1,18 +1,21 @@
 <?php
 /*
-Name:        Membership2
+Name:        Membership 2
 Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
 Description: Conditions based on the users Membership2 subscriptions. (Former "Protected Content") <a href="http://premium.wpmudev.org/project/membership/" target="_blank">Learn more &raquo;</a>
 Author:      Philipp Stracker
 Author URI:  http://premium.wpmudev.org
 Type:        Rule
-Rules:       For Members (Membership2), For Non-Members (Membership2)
+Rules:       For Members (Membership 2), For Non-Members (Membership 2)
 Limit:       pro
 Version:     1.0
 
 NOTE: DON'T RENAME THIS FILE!!
 This filename is saved as metadata with each popup that uses these rules.
 Renaming the file will DISABLE the rules, which is very bad!
+
+This rule is called PROTECTED CONTENT but it actually handles the MEMBERSHIP 2
+integration since the plugin was re-branded as M2.
 */
 
 class IncPopupRule_ProtectedContent extends IncPopupRule {
@@ -36,7 +39,7 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 		// 'pc_subscription' rule.
 		$this->add_rule(
 			'pc_subscription',
-			__( 'For Members (Membership2)', PO_LANG ),
+			__( 'For Members (Membership 2)', PO_LANG ),
 			__( 'Only shows the PopUp if the user has subscribed to a certain Membership (Membership2 plugin).', PO_LANG ),
 			'pc_unsubscription',
 			25
@@ -45,7 +48,7 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 		// 'pc_unsubscription' rule.
 		$this->add_rule(
 			'pc_unsubscription',
-			__( 'For Non-Members (Membership2)', PO_LANG ),
+			__( 'For Non-Members (Membership 2)', PO_LANG ),
 			__( 'Only shows the PopUp if the user has not yet subscribed to a certain Membership (Membership2 plugin).', PO_LANG ),
 			'pc_subscription',
 			25
@@ -99,10 +102,12 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  1.0
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_pc_subscription() {
-		return $_POST['po_rule_data']['pc_subscription'];
+	protected function save_pc_subscription( $data ) {
+		lib2()->array->equip( $data, 'pc_subscription' );
+		return $data['pc_subscription'];
 	}
 
 
@@ -144,10 +149,12 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  1.0
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_pc_unsubscription() {
-		return $_POST['po_rule_data']['pc_unsubscription'];
+	protected function save_pc_unsubscription( $data ) {
+		lib2()->array->equip( $data, 'pc_unsubscription' );
+		return $data['pc_unsubscription'];
 	}
 
 

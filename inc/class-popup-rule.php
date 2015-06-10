@@ -278,9 +278,10 @@ abstract class IncPopupRule {
 	 * }
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_() {
+	protected function save_( $data ) {
 		return false;
 	}
 
@@ -377,8 +378,11 @@ abstract class IncPopupRule {
 	 */
 	public function _save( $key, $data ) {
 		$method = 'save_' . $key;
+		$data = isset( $_POST['po_rule_data'] ) ? $_POST['po_rule_data'] : array();
+		$data = lib2()->array->get( $data );
+
 		if ( method_exists( $this, $method ) ) {
-			$data[$key] = $this->$method();
+			$data[$key] = $this->$method($data);
 		}
 
 		return $data;

@@ -83,7 +83,7 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 		<label for="po-rule-data-adv-url">
 			<?php _e( 'URL regex (one per line):', PO_LANG ); ?>
 		</label>
-		<textarea name="po_rule_data[adv-url]" id="po-rule-data-adv-url" class="block"><?php
+		<textarea name="po_rule_data[adv_url]" id="po-rule-data-adv-url" class="block"><?php
 			echo esc_html( $urls );
 		?></textarea>
 		<?php
@@ -93,10 +93,12 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_adv_url() {
-		return explode( "\n", @$_POST['po_rule_data']['adv-url'] );
+	protected function save_adv_url( $data ) {
+		lib2()->array->equip( $data, 'adv_url' );
+		return explode( "\n", $data['adv_url'] );
 	}
 
 
@@ -148,10 +150,12 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 	 * Update and return the $settings array to save the form values.
 	 *
 	 * @since  4.6
+	 * @param  array $data The contents of $_POST['po_rule_data'].
 	 * @return mixed Data collection of this rule.
 	 */
-	protected function save_no_adv_url() {
-		return explode( "\n", @$_POST['po_rule_data']['no_adv_url'] );
+	protected function save_no_adv_url( $data ) {
+		lib2()->array->equip( $data, 'no_adv_url' );
+		return explode( "\n", $data['no_adv_url'] );
 	}
 
 
