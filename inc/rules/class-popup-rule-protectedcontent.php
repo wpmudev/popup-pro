@@ -56,7 +56,7 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 
 		// -- Initialize rule.
 
-		$this->is_active = apply_filters( 'ms_active' );
+		$this->is_active = apply_filters( 'ms_active', false );
 
 		if ( ! $this->is_active ) { return; }
 
