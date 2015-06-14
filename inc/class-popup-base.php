@@ -633,6 +633,7 @@ abstract class IncPopupBase {
 			$this
 		);
 
+		$popup_ids = lib2()->array->get( $popup_ids );
 		foreach ( $popup_ids as $id ) {
 			$popup = IncPopupDatabase::get( $id );
 

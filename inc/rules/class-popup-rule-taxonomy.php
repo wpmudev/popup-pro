@@ -87,7 +87,7 @@ class IncPopupRule_Taxonomy extends IncPopupRule {
 		global $post;
 		$taxonomies = '';
 		$tax_terms = get_the_terms( $post->ID, POP_UP_TAXONOMY );
-		if ( $tax_terms ) {
+		if ( $tax_terms && ! is_wp_error( $tax_terms ) ) {
 			$taxonomies = json_encode( wp_list_pluck( $tax_terms, 'term_id' ) );
 		}
 
