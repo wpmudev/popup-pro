@@ -574,16 +574,16 @@ jQuery(function init_admin() {
 	}
 
     //SUBMIT BUTTON
-    $submitButtons = $('#submitpost').find( ':submit, a.submitdelete, #post-preview' ).on( 'click.edit-post', function( event ) {
-        var $button = $(this);
-        if( 'po-action' == $button.attr('name') && $button.val()){
+    submitButtons = jQuery('#submitpost').find( ':submit, a.submitdelete, #post-preview' ).on( 'click.edit-post', function( event ) {
+        var button = jQuery(this);
+        if( 'po-action' == button.attr('name') && button.val()){
             // Some plugins (i.e. ACF) intercepts the default submit click event, triggering the form.submit() directly and therefore loosing the reference to the button.
             // We need to replicate the button action value in a hidden field so that it is included in the POST object.
-            $('<input>').attr({
+            jQuery('<input>').attr({
                 type: 'hidden',
                 id: 'po-action',
                 name: 'po-action',
-                value: $button.val()
+                value: button.val()
             }).appendTo('form#post');
         }
     });
