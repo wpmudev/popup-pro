@@ -15,7 +15,7 @@ if ( ! defined( 'PO_GLOBAL' ) ) {
 // It should only return the country code for the passed IP address!
 # Example:
 # define( 'PO_REMOTE_IP_URL', 'http://api.hostip.info/country.php?ip=%ip%' );
-if ( ! defined( 'PO_GLOBAL' ) ) {
+if ( ! defined( 'PO_REMOTE_IP_URL' ) ) {
 	define( 'PO_REMOTE_IP_URL', '' );
 }
 

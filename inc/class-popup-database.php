@@ -423,6 +423,7 @@ class IncPopupDatabase {
 				array(
 					'post_type' => IncPopupItem::POST_TYPE,
 					'suppress_filters' => 0,
+					'posts_per_page' => -1,
 				)
 			);
 			foreach ( $active_posts as $post ) {
