@@ -56,11 +56,30 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 
 		// -- Initialize rule.
 
-		$this->is_active = apply_filters( 'ms_active', false );
+		/**
+		 * Note we're not using the M2 API yet, because it was introduced only
+		 * a few releases back and some people that use older version of M2/PC
+		 * will have problems if we do.
+		 *
+		 * @todo replace with official API function anytime in 2016
+		 *
+		 * $this->is_active = false;
+		 * if ( apply_filters( 'ms_active', false ) ) {
+		 *   $this->is_active = true;
+		 *   $this->memberships = MS_Plugin::$api->list_memberships( true );
+		 * }
+		 *
+		 */
+		$this->is_active = class_exists( 'MS_Plugin' );
 
 		if ( ! $this->is_active ) { return; }
 
-		$this->memberships = MS_Plugin::$api->list_memberships( true );
+		$args = array(
+			'include_base' => false,
+			'include_guest' => true,
+		);
+		$list = MS_Model_Membership::get_memberships( $args );
+		$this->memberships = $list;
 	}
 
 
