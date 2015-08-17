@@ -4,6 +4,11 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.7.1.0
+----------------------------------------------------------------------
+- Fix PHP warning caused by Membership 2 integration
+- Fix issue that made rules inaccessible (not clickable in editor)
+
 4.7.0.9
 ----------------------------------------------------------------------
 - Fix bug with Display Animation field in PopUp editor
