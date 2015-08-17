@@ -63,8 +63,6 @@ abstract class IncPopupBase {
 		if ( ! empty( $_POST['thefrom'] ) ) { $_POST['thefrom'] = strrev( $_POST['thefrom'] ); }
 		if ( ! empty( $_POST['thereferrer'] ) ) { $_POST['thereferrer'] = strrev( $_POST['thereferrer'] ); }
 
-		lib2()->translate_plugin( PO_LANG, PO_LANG_DIR );
-
 		// Register the popup post type.
 		add_action(
 			'init',
