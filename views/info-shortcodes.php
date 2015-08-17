@@ -13,6 +13,7 @@ $limited = array(
 	'app_.*',
 	'.*-form.*',
 	'.*_form.*',
+	'embed',
 );
 
 $shortcodes = array();
