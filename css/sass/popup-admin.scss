@@ -997,11 +997,13 @@ div.msg-err {
 
 	.col-all-rules {
 		width: 320px;
+		z-index: 2;
 	}
 
 	.col-active-rules {
 		float: none;
 		display: block;
+		z-index: 1;
 	}
 
 	.wpmui-toggle {

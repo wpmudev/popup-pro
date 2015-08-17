@@ -799,10 +799,12 @@ div.msg-err {
 }
 .post-type-inc_popup #post .col-all-rules {
   width: 320px;
+  z-index: 2;
 }
 .post-type-inc_popup #post .col-active-rules {
   float: none;
   display: block;
+  z-index: 1;
 }
 .post-type-inc_popup #post .wpmui-toggle {
   float: right;
