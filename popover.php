@@ -56,9 +56,9 @@ function inc_popup_pro_init() {
 		define( 'PO_IMG_URL', $plugin_url . 'img/' );
 
 		// Include function library.
-		if ( file_exists( PO_INC_DIR . 'external/wpmu-lib/core.php' ) ) {
-			require_once PO_INC_DIR . 'external/wpmu-lib/core.php';
-		}
+		require_once PO_INC_DIR . 'external/wpmu-lib/core.php';
+
+		lib2()->translate_plugin( PO_LANG, PO_LANG_DIR );
 
 		require_once( PO_INC_DIR . 'config-defaults.php');
 		if ( is_admin() ) {
