@@ -61,7 +61,8 @@ $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 					<?php _e( 'Duplicate', PO_LANG ); ?>
 				</a>
 			<?php endif; ?>
-			<button class="button-primary" id="publish" name="po-action" value="save">
+			<input type="hidden" name="po-action" value="save" />
+			<button class="button-primary" id="publish" name="publish">
 			<?php _e( 'Save', PO_LANG ); ?>
 			</button>
 		</div>
@@ -80,7 +81,8 @@ $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 		</div>
 
 		<div class="publishing-action">
-			<button class="button-primary" name="po-action" value="save">
+			<input type="hidden" name="po-action" value="save" />
+			<button class="button-primary" id="publish" name="publish">
 			<?php _e( 'Save', PO_LANG ); ?>
 			</button>
 		</div>

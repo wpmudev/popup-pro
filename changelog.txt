@@ -6,8 +6,9 @@ Change Log:
 
 4.7.1.0
 ----------------------------------------------------------------------
-- Fix PHP warning caused by Membership 2 integration
+- Fix incompatibility with ACF Pro plugin
 - Fix issue that made rules inaccessible (not clickable in editor)
+- Fix several PHP warnings and noticed
 
 4.7.0.9
 ----------------------------------------------------------------------
