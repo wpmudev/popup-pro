@@ -13,7 +13,7 @@
 			<strong><?php _e( 'Available Conditions', PO_LANG ); ?></strong>
 		</div>
 		<div class="col-active-rules">
-			<strong><?php _e( 'Show this PopUp if the following conditions are met', PO_LANG ); ?></strong>
+			<strong><?php _e( 'Show this PopUp if all of the following conditions are met', PO_LANG ); ?></strong>
 		</div>
 	</div>
 	<div class="wpmui-grid-12">
