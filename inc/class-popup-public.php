@@ -10,16 +10,16 @@ require_once PO_INC_DIR . 'class-popup-base.php';
 class IncPopup extends IncPopupBase {
 
 	/**
-	 * Defines the current popup that is displayed.
-	 * @var IncPopupItem
-	 */
-	protected $popup = null;
-
-	/**
 	 * Data added to the page via wp_localize_script()
 	 * @var array
 	 */
 	protected $script_data = array();
+
+	/**
+	 * Lists all popups that have been enqueued via the footer loading method.
+	 * @var array
+	 */
+	protected $enqueued = array();
 
 	/**
 	 * Returns the singleton instance of the popup (front end) class.
@@ -56,17 +56,26 @@ class IncPopup extends IncPopupBase {
 			'wp',   // "wp", not "init"!
 			array( $this, 'init_public' )
 		);
+
+		/**
+		 * Experimental hook to dynamically create popups on your site.
+		 * Call the action hook `wdev-popup` with param 1 being the content and
+		 * param 2 is an optional array of popup options.
+		 *
+		 * Note that currently this plays nice with existing popups if FOOTER
+		 * loading method is used, but all other loading methods will interfere
+		 * with this hook and only show either the dynamic or predefined popups.
+		 *
+		 * @since  4.7.1
+		 * @param  string $content The popup contents (HTML code allowed).
+		 * @param  array $options Optional. List of popup configuration options.
+		 */
+		add_action(
+			'wdev-popup',
+			array( $this, 'show_popup' ),
+			10, 2
+		);
 	}
-
-
-	/*==================================*\
-	======================================
-	==                                  ==
-	==           LOAD METHODS           ==
-	==                                  ==
-	======================================
-	\*==================================*/
-
 
 	/**
 	 * Initialize the public part of the plugin on every front-end page:
@@ -103,7 +112,7 @@ class IncPopup extends IncPopupBase {
 				$this->load_method_front();
 
 				if ( isset( $_GET['action'] )
-					&& $_GET['action'] == 'inc_popup'
+					&& 'inc_popup' == $_GET['action']
 				) {
 					$this->ajax_load_popup();
 				}
@@ -127,27 +136,89 @@ class IncPopup extends IncPopupBase {
 	}
 
 	/**
+	 * Action handler that allows us to add a popup via WordPress hook.
+	 *
+	 * @since  4.7.1
+	 * @param  string $contents The PopUp contents.
+	 * @param  array $options PopUp options.
+	 */
+	public function show_popup( $contents, $options = array() ) {
+		$this->script_data['popup'] = lib2()->array->get( $this->script_data['popup'] );
+
+		$popup = new IncPopupItem();
+		$data = lib2()->array->get( $options );
+		$data['content'] = $contents;
+		$popup->populate( $data );
+		$popup->script_data['manual'] = true;
+
+		// 1. Add the popup to the global popup-list.
+		$this->popups[] = $popup;
+
+		// 2. Enqueue the popup in the page footer.
+		$item = $popup->get_script_data( false );
+		unset( $item['html'] );
+		unset( $item['styles'] );
+		$this->script_data['popup'][] = $item;
+
+		$this->load_scripts();
+		$this->enqueue_footer();
+	}
+
+	/**
 	 * Enqueues the PopUp javascripts and data.
 	 *
 	 * @since  4.6
 	 */
 	public function load_scripts() {
+		static $Loaded = false;
+
 		if ( ! did_action( 'wp' ) ) {
 			// We have to make sure that wp is fully initialized:
 			// Some rules that use filter 'popup-ajax-data' depend on this.
 			add_action(
 				'wp',
-				array( __CLASS__, 'load_scripts' )
+				array( $this, 'load_scripts' )
 			);
 			return;
 		}
 
-		$popup_data = apply_filters( 'popup-ajax-data', $this->script_data );
+		if ( ! $Loaded ) {
+			if ( is_array( $this->script_data ) && ! empty( $this->script_data ) ) {
+				$popup_data = apply_filters( 'popup-ajax-data', $this->script_data );
+				lib2()->ui->data( '_popup_data', $popup_data, 'front' );
 
-		lib2()->ui->data( '_popup_data', $popup_data, 'front' );
-		lib2()->ui->add( PO_JS_URL . 'public.min.js', 'front' );
-		lib2()->ui->add( PO_CSS_URL . 'animate.min.css', 'front' );
+				foreach ( $popup_data['popup'] as $item ) {
+					$this->enqueued[] = $item['html_id'];
+				}
+			}
+
+			lib2()->ui->add( PO_JS_URL . 'public.min.js', 'front' );
+			lib2()->ui->add( PO_CSS_URL . 'animate.min.css', 'front' );
+		} else {
+			if ( is_array( $this->script_data ) && is_array( $this->script_data['popup'] ) ) {
+				foreach ( $this->script_data['popup'] as $popup ) {
+					if ( in_array( $popup['html_id'], $this->enqueued ) ) {
+						continue;
+					}
+
+					$script = 'window._popup_data.popup.push(' . json_encode( $popup ) . ')';
+					lib2()->ui->script( $script );
+					$this->enqueued[] = $popup['html_id'];
+				}
+			}
+		}
+		$Loaded = true;
 	}
+
+
+	/*==================================*\
+	======================================
+	==                                  ==
+	==           LOAD METHODS           ==
+	==                                  ==
+	======================================
+	\*==================================*/
+
 
 	/**
 	 * Load-Method: External
@@ -225,22 +296,17 @@ class IncPopup extends IncPopupBase {
 		if ( empty( $this->popups ) ) { return; }
 
 		$data = $this->get_popup_data();
-		foreach ( $data as $ind => $item ) {
-			unset( $data[$ind]['html'] );
-			unset( $data[$ind]['styles'] );
+		foreach ( $data as $item ) {
+			if ( ! empty( $item['manual'] ) ) { continue; }
+			if ( in_array( $item['html_id'], $this->enqueued ) ) { continue; }
+
+			unset( $item['html'] );
+			unset( $item['styles'] );
+			$this->script_data['popup'][] = $item;
 		}
-		$this->script_data['popup'] = $data;
 		$this->load_scripts();
 
-		add_action(
-			'wp_head',
-			array( $this, 'show_header')
-		);
-
-		add_action(
-			'wp_footer',
-			array( $this, 'show_footer')
-		);
+		$this->enqueue_footer();
 	}
 
 	/**
@@ -273,6 +339,38 @@ class IncPopup extends IncPopupBase {
 		die();
 	}
 
+
+	/*======================================*\
+	==========================================
+	==                                      ==
+	==           HELPER FUNCTIONS           ==
+	==                                      ==
+	==========================================
+	\*======================================*/
+
+
+	/**
+	 * Adds the wp_header/wp_footer actions to the action queue.
+	 *
+	 * @since  4.7.1
+	 */
+	protected function enqueue_footer() {
+		static $Did_Enqueue = false;
+
+		if ( $Did_Enqueue ) { return; }
+		$Did_Enqueue = true;
+
+		add_action(
+			'wp_head',
+			array( $this, 'show_header')
+		);
+
+		add_action(
+			'wp_footer',
+			array( $this, 'show_footer')
+		);
+	}
+
 	/**
 	 * Used by "load_method_footer" to print the popup CSS styles.
 	 *
@@ -302,7 +400,7 @@ class IncPopup extends IncPopupBase {
 		foreach ( $data as $ind => $item ) {
 			$code .= $item['html'];
 		}
-		echo '' . $code;
+		echo $code;
 	}
 
 };

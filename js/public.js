@@ -48,7 +48,7 @@
 		 * Depending on the "multi_open" flag it can be opened again.
 		 */
 		this.close_popup = function close_popup() {
-			jQuery( 'html' ).removeClass( 'has-popup' );
+			jQuery( 'html' ).removeClass( 'has-popup can-scroll no-scroll' );
 
 			function close_it() {
 				if ( me.data.display_data['click_multi'] ) {
