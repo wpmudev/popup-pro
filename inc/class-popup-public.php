@@ -187,6 +187,7 @@ class IncPopup extends IncPopupBase {
 				$popup_data = apply_filters( 'popup-ajax-data', $this->script_data );
 				lib2()->ui->data( '_popup_data', $popup_data, 'front' );
 
+				$popup_data['popup'] = lib2()->array->get( $popup_data['popup'] );
 				foreach ( $popup_data['popup'] as $item ) {
 					$this->enqueued[] = $item['html_id'];
 				}
