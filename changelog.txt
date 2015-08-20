@@ -9,7 +9,7 @@ Change Log:
 - Add new rules: Show on date, Hide on date
 - Fix incompatibility with ACF Pro plugin
 - Fix issue that made rules inaccessible (not clickable in editor)
-- Fix several PHP warnings and noticed
+- Fix several PHP warnings and notices
 
 4.7.0.9
 ----------------------------------------------------------------------
