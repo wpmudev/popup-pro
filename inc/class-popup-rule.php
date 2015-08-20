@@ -385,7 +385,6 @@ abstract class IncPopupRule {
 
 		if ( method_exists( $this, $method ) ) {
 			$data[$key] = $this->$method($data);
-			lib2()->debug->dump( $key, $data );
 		}
 
 		return $data;
