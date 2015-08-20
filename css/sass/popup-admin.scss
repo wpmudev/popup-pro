@@ -1259,6 +1259,32 @@ div.msg-err {
 \*===================================*/
 
 
+.pro-icon {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	font-size: 20px;
+	line-height: 1;
+	font-family: "dashicons";
+	text-decoration: inherit;
+	font-weight: normal;
+	font-style: normal;
+	vertical-align: top;
+	text-align: center;
+	-webkit-transition: color .1s ease-in 0;
+	transition: color .1s ease-in 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: #DBA901;
+	margin-left: -2px;
+	margin-right: 4px;
+	transition: opacity .2s;
+}
+
+.pro-icon:before {
+	content: "\f160";
+}
+
 .pro-only {
 	position: relative;
 	margin: 3px 0;
@@ -1277,7 +1303,6 @@ div.msg-err {
 		left: -3px;
 		right: -3px;
 		bottom: -3px;
-		text-align: center;
 		background: rgba(0, 0, 0, 0.6);
 		color: #FFF;
 		font-family: "Source Sans Pro", "Open Sans", sans-serif;
@@ -1287,14 +1312,43 @@ div.msg-err {
 
 		transition: opacity .2s;
 
+		.text {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 50%;
+			margin-top: -20px;
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+		}
+
+		.pro-icon {
+			position: absolute;
+			font-size: 64px;
+			left: 10px;
+			top: 50%;
+			margin-top: -32px;
+			opacity: 0.6;
+		}
+
 		a {
 			color: rgb( 126,211,33 );
 		}
 	}
 
+
 	&:hover {
 		.pro-note {
 			opacity: 1;
+
+			.pro-icon {
+				opacity: 0.6;
+			}
+		}
+
+		.pro-icon {
+			opacity: 0.3;
 		}
 	}
 }
