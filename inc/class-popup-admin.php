@@ -373,6 +373,7 @@ class IncPopup extends IncPopupBase {
 
 			$settings = array();
 			$settings['loadingmethod'] = $_POST['po_option']['loadingmethod'];
+
 			$settings['geo_lookup'] = $_POST['po_option']['geo_lookup'];
 			$settings['geo_db'] = ( 'geo_db' === $settings['geo_lookup'] );
 
