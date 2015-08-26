@@ -6,6 +6,7 @@ Change Log:
 
 4.7.1.1
 ----------------------------------------------------------------------
+- Fix compatibility issues caused by WordPress 4.3 changes
 - Fix a PHP notice about invalid foreach value
 - Remove debug output when saving a PopUp
 

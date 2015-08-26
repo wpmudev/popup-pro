@@ -134,6 +134,19 @@ class IncPopup extends IncPopupBase {
 					array( 'IncPopup', 'post_columns' )
 				);
 
+				// Added for WordPress 4.3: Define main column of the list.
+				add_filter(
+					'list_table_primary_column',
+					array( 'IncPopup', 'primary_column' )
+				);
+
+				// Added for WordPress 4.3: Define custom row actions.
+				add_filter(
+					'post_row_actions',
+					array( 'IncPopup', 'post_row_actions' ),
+					10, 2
+				);
+
 				// Returns the content for the custom columns.
 				add_action(
 					'manage_' . IncPopupItem::POST_TYPE . '_posts_custom_column',
@@ -435,6 +448,30 @@ class IncPopup extends IncPopupBase {
 		}
 
 		return $new_columns;
+	}
+
+	/**
+	 * Define the column that gets the action links in the list table.
+	 *
+	 * @since  4.7.1.1
+	 * @param  string $column WordPress choice of the column ID.
+	 * @return string Column ID
+	 */
+	static public function primary_column( $column ) {
+		return 'po_name';
+	}
+
+	/**
+	 * Filter. Define our own row-actions for the popup list.
+	 *
+	 * @since  4.7.1.1
+	 * @param  array $actions
+	 * @param  WP_Post $post
+	 * @return array New list of row-actions.
+	 */
+	static public function post_row_actions( $actions, $post ) {
+		// Actions are returned as part of the po_name column contents below.
+		return array();
 	}
 
 	/**
