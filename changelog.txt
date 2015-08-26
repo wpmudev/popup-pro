@@ -4,6 +4,11 @@ Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.7.1.1
+----------------------------------------------------------------------
+- Fix a PHP notice about invalid foreach value
+- Remove debug output when saving a PopUp
+
 4.7.1.0
 ----------------------------------------------------------------------
 - Add new rules: Show on date, Hide on date
