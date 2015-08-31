@@ -329,7 +329,7 @@ abstract class IncPopupBase {
 		$data = array(
 			// Meta: Content
 			'name' => $form['po_name'],
-			'content' => stripslashes( $form['po_content'] ),
+			'content' => $form['po_content'],
 			'title' => $form['po_heading'],
 			'subtitle' => $form['po_subheading'],
 			'cta_label' => $form['po_cta'],

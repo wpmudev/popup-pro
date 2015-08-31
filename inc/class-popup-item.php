@@ -542,8 +542,6 @@ class IncPopupItem {
 	 *                displayed. Set to false when saving via ajax.
 	 */
 	public function save( $show_message = true ) {
-		global $allowedposttags;
-
 		$this->validate_data();
 
 		if ( ! did_action( 'wp_loaded' ) ) {
@@ -562,7 +560,7 @@ class IncPopupItem {
 		if ( $this->content != $this->orig_content
 			&& ! current_user_can( 'unfiltered_html' )
 		) {
-			$this->content = wp_kses( $this->content, $allowedposttags );
+			$this->content = wp_kses_post( $this->content );
 		}
 
 		// Check if the content contains (potentially) incompatible shortcodes.

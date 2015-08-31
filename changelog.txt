@@ -8,6 +8,7 @@ Change Log:
 ----------------------------------------------------------------------
 - Fix compatibility issues caused by WordPress 4.3 changes
 - Fix a PHP notice about invalid foreach value
+- Fix bug that removed backslashs "\" from popup contents upon saving
 - Remove debug output when saving a PopUp
 
 4.7.1.0
