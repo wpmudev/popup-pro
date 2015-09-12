@@ -17,6 +17,7 @@ class IncPopupItem {
 		'delay'  /* show popup after X seconds */,
 		'scroll' /* show popup when user scrolls X % down */,
 		'anchor' /* show popup when user scrolls past element X */,
+		'manual' /* popup is controlled via javascript */,
 	);
 
 	// Internal Popup ID.
@@ -229,7 +230,7 @@ class IncPopupItem {
 		$this->display = 'delay';
 		$this->display_data = array(
 			'delay' => 0,
-			'delay_type' => 0,
+			'delay_type' => 's',
 			'scroll' => 0,
 			'scroll_type' => '%',
 			'anchor' => '',
@@ -1037,7 +1038,12 @@ class IncPopupItem {
 	public function get_script_data( $is_preview = false ) {
 		static $Data = array();
 
+		if ( ! $this->id ) {
+			$this->id = time() * -1;
+		}
+
 		if ( ! isset( $Data[ $this->id ] ) ) {
+			$this->validate_data();
 			$this->is_preview = $is_preview;
 			$Data[ $this->id ] = $this->script_data;
 			$Data[ $this->id ]['html'] = $this->load_html();
@@ -1068,6 +1074,33 @@ class IncPopupItem {
 		$data['close_hide'] = false;
 		$data['preview'] = true;
 		return $data;
+	}
+
+	/**
+	 * Outputs the javascript code that is needed to display the popup via
+	 * javascript later.
+	 *
+	 * The name-parameter defines the name of the popup object in javascript.
+	 *
+	 * @since  4.7
+	 * @param  strong $name Name of the javascript variable that holds the popup.
+	 */
+	public function output( $name ) {
+		// Make sure the JS/CSS files are enqueued.
+		lib2()->ui->add( PO_JS_URL . 'public.min.js' );
+		lib2()->ui->add( PO_CSS_URL . 'animate.min.css' );
+
+		// Sanitize the variable name.
+		$name = sanitize_html_class( $name );
+		$name = str_replace( '-', '_', $name );
+		$data_name = '__inc_popup_' . $name;
+
+		// Output the javascript details.
+		$js_data = $this->get_script_data();
+		$script = 'jQuery(function() { window.' . $name . ' = wdev_popup(' . $data_name . '); });';
+
+		lib2()->ui->data( $data_name, $js_data );
+		lib2()->ui->script( $script );
 	}
 
 

@@ -143,6 +143,15 @@ class IncPopup extends IncPopupBase {
 	 * @param  array $options PopUp options.
 	 */
 	public function show_popup( $contents, $options = array() ) {
+		static $Count = 0;
+
+		if ( empty( $options['name'] ) ) {
+			$Count += 1;
+			$the_name = 'dynamic_' . $Count;
+		} else {
+			$the_name = $options['name'];
+		}
+
 		$this->script_data['popup'] = lib2()->array->get( $this->script_data['popup'] );
 
 		$popup = new IncPopupItem();
@@ -151,17 +160,7 @@ class IncPopup extends IncPopupBase {
 		$popup->populate( $data );
 		$popup->script_data['manual'] = true;
 
-		// 1. Add the popup to the global popup-list.
-		$this->popups[] = $popup;
-
-		// 2. Enqueue the popup in the page footer.
-		$item = $popup->get_script_data( false );
-		unset( $item['html'] );
-		unset( $item['styles'] );
-		$this->script_data['popup'][] = $item;
-
-		$this->load_scripts();
-		$this->enqueue_footer();
+		$popup->output( $the_name );
 	}
 
 	/**
