@@ -1,8 +1,9 @@
-/*! PopUp Pro - v4.7.11
+/*! PopUp Pro - v4.7.2
  * http://premium.wpmudev.org/project/the-pop-over-plugin/
  * Copyright (c) 2015; * Licensed GPLv2+ */
 /*global window:false */
 /*global document:false */
+/*global wpmUi:false */
 /*jslint evil: true */   // Allows us to keep the `fn = new Function()` line
 
 ;(function () {
@@ -17,71 +18,45 @@
 		me.have_popup = false;
 		me.ajax_data = {};
 		me.opened = 0;
-		me.elements = {
-			doc: jQuery( document ),
-			win: jQuery( window ),
-			div: null,
-			msg: null,
-			close: null,
-			hide: null,
-			move: null,
-			resize: null,
-			img: null,
-			back: null
-		};
-
-		/**
-		 * Close PopUp and set the "never see again" flag.
-		 */
-		me.close_forever = function close_forever() {
-			var expiry = me.data.expiry || 365;
-
-			me.close_popup();
-			if ( _options.preview ) { return false; }
-
-			me.set_cookie( 'po_h', 1, expiry );
-			return false;
-		};
+		me.popup = null;
 
 		/**
 		 * Close PopUp.
 		 * Depending on the "multi_open" flag it can be opened again.
 		 */
 		me.close_popup = function close_popup() {
-			jQuery( 'html' ).removeClass( 'has-popup can-scroll no-scroll' );
+			jQuery( 'html' ).removeClass( 'can-scroll no-scroll' );
 
-			function close_it() {
-				if ( me.data.display_data.click_multi ) {
-					me.elements.back.hide();
-					me.elements.div.hide();
-				} else {
-					me.elements.back.remove();
-					me.elements.div.remove();
-
-					me.have_popup = false;
-				}
-
-				me.elements.doc.trigger( 'popup-closed', [me, me.data] );
-				// Legacy trigger.
-				me.elements.doc.trigger( 'popover-closed', [me, me.data] );
-			}
-
-			if ( me.data.animation_out ) {
-				me.elements.msg.addClass( me.data.animation_out + ' animated' );
-				me.elements.msg.one(
-					'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
-					function() {
-						me.elements.msg.removeClass( 'animated' );
-						me.elements.msg.removeClass( me.data.animation_out );
-						close_it();
-					}
-				);
+			if ( me.data.display_data.click_multi ) {
+				me.popup.hide();
 			} else {
-				close_it();
+				me.popup.close();
+				me.have_popup = false;
 			}
+
+			jQuery( document ).trigger( 'popup-closed', [me, me.data] );
+			// Legacy trigger.
+			jQuery( document ).trigger( 'popover-closed', [me, me.data] );
 
 			popup_close( me );
+
+			// Check if we should hide the popup "forever".
+			if ( me.data.close_hide ) {
+				var expiry = me.data.expiry || 365;
+				if ( _options.preview ) { return false; }
+
+				me.set_cookie( 'po_h', 1, expiry );
+			}
+
 			return false;
+		};
+
+		/**
+		 * Permanently close the popup.
+		 */
+		me.close_popup_forever = function close_popup_forever() {
+			me.data.close_hide = true;
+			me.close_popup();
 		};
 
 		/**
@@ -92,12 +67,7 @@
 
 			if ( el.hasClass( 'wdpu-background' ) ) {
 				if ( ! me.data.overlay_close ) { return; }
-
-				if ( me.data.close_hide ) {
-					me.close_forever();
-				} else {
-					me.close_popup();
-				}
+				me.close_popup();
 			}
 		};
 
@@ -105,54 +75,60 @@
 		 * Resize and move the PopUp. Triggered when PopUp is loaded and
 		 * window is resized.
 		 */
-		me.move_popup = function move_popup() {
-			var new_width, new_height, reduce_el, reduce_w_by = 0, reduce_h_by = 0;
+		me.move_popup = function move_popup( wnd ) {
+			var new_width, new_height,
+				reduce_w_by = 0, reduce_h_by = 0,
+				_el_reduce = null,
+				_el_resize = wnd.find( '.resize' ),
+				_el_move = wnd.find( '.move' ),
+				_el_wnd = wnd.find( '.popup' );
 
 			// Resize, if custom-size is active.
-			if ( me.data.custom_size ) {
+			if ( me.data.custom_size && _el_resize.length ) {
 				if ( me.data.height && ! isNaN( me.data.height ) ) {
-					if ( me.elements.resize.data( 'reduce-height' ) ) {
-						reduce_el = jQuery( me.elements.resize.data( 'reduce-height' ) );
-						reduce_h_by = reduce_el.outerHeight();
+					if ( _el_resize.data( 'reduce-height' ) ) {
+						_el_reduce = jQuery( _el_resize.data( 'reduce-height' ) );
+						reduce_h_by = _el_reduce.outerHeight();
 					}
 					new_height = me.data.height - reduce_h_by;
 					if ( new_height < 100 ) { new_height = 100; }
-					me.elements.resize.height( new_height );
+					_el_resize.height( new_height );
 				}
 
 				if ( me.data.width && ! isNaN( me.data.width ) ) {
-					if ( me.elements.resize.data( 'reduce-width' ) ) {
-						reduce_el = jQuery( me.elements.resize.data( 'reduce-width' ) );
-						reduce_w_by = reduce_el.outerWidth();
+					if ( _el_resize.data( 'reduce-width' ) ) {
+						_el_reduce = jQuery( _el_resize.data( 'reduce-width' ) );
+						reduce_w_by = _el_reduce.outerWidth();
 					}
 					new_width = me.data.width - reduce_w_by;
 					if ( new_width < 100 ) { new_width = 100; }
-					me.elements.resize.width( new_width );
+					_el_resize.width( new_width );
 				}
 			}
 
 			// This function centers the PopUp and the featured image.
 			var update_position = function update_position() {
-				if ( ! me.elements.move.hasClass( 'no-move-x' ) ) {
-					var win_width = me.elements.win.width(),
-						msg_width = me.elements.msg.outerWidth(),
+				if ( ! _el_move.hasClass( 'no-move-x' ) ) {
+					var win_width = jQuery( window ).width(),
+						msg_width = _el_wnd.outerWidth(),
 						msg_left = (win_width - msg_width) / 2;
 
 					// Move window horizontally.
 					if ( msg_left < 10 ) { msg_left = 10; }
-					me.elements.move.css({ 'left': msg_left });
+					_el_move.css({ 'left': msg_left });
 				}
 
-				if ( ! me.elements.move.hasClass( 'no-move-y' ) ) {
-					var win_height = me.elements.win.height(),
-						msg_height = me.elements.msg.outerHeight(),
+				if ( ! _el_move.hasClass( 'no-move-y' ) ) {
+					var win_height = jQuery( window ).height(),
+						msg_height = _el_wnd.outerHeight(),
 						msg_top = (win_height - msg_height) / 2;
 
 					// Move window vertically.
 					if ( msg_top < 10 ) { msg_top = 10; }
-					me.elements.move.css({ 'top': msg_top });
+					_el_move.css({ 'top': msg_top });
 				}
 
+				/*
 				// Move the image.
 				if ( me.elements.img.length ) {
 					var offset_x, offset_y,
@@ -181,6 +157,7 @@
 						me.elements.img.css({ 'margin-top': 0 });
 					}
 				}
+				*/
 			};
 
 			// Short delay before positioning the popup to give the browser time
@@ -207,6 +184,7 @@
 			// Move the PopUp out of the viewport but make it visible.
 			// This way the browser will start to render the contents and there
 			// will be no delay when the PopUp is made visible later.
+			/*
 			me.elements.div.css({
 				'opacity': 0,
 				'z-index': -1,
@@ -218,17 +196,18 @@
 				'height': 100,
 				'bottom': 'auto'
 			}).show();
+			*/
 
-			me.elements.doc.trigger( 'popup-init', [me, me.data] );
+			jQuery( document ).trigger( 'popup-init', [me, me.data] );
 
 			if ( me.have_popup ) {
 				switch ( me.data.display ) {
 					case 'scroll':
-						me.elements.win.on( 'scroll', me.show_at_position );
+						jQuery( window ).on( 'scroll', me.show_at_position );
 						break;
 
 					case 'anchor':
-						me.elements.win.on( 'scroll', me.show_at_element );
+						jQuery( window ).on( 'scroll', me.show_at_element );
 						break;
 
 					case 'delay':
@@ -266,15 +245,15 @@
 
 			if ( 'px' === me.data.display_data.scroll_type ) {
 				if ( top >= me.data.display_data.scroll ) {
-					me.elements.win.off( 'scroll', me.show_at_position );
+					jQuery( window ).off( 'scroll', me.show_at_position );
 					popup_open( me );
 				}
 			} else { // this handles '%'
-				height = me.elements.doc.height() - me.elements.win.height();
+				height = jQuery( document ).height() - jQuery( window ).height();
 				perc = 100 * top / height;
 
 				if ( perc >= me.data.display_data.scroll ) {
-					me.elements.win.off( 'scroll', me.show_at_position );
+					jQuery( window ).off( 'scroll', me.show_at_position );
 					popup_open( me );
 				}
 			}
@@ -287,14 +266,14 @@
 		 */
 		me.show_at_element = function show_at_element( ev ) {
 			var anchor = jQuery( me.data.display_data.anchor ),
-				view_top = me.elements.win.scrollTop(),
-				view_bottom = view_top + me.elements.win.height(),
+				view_top = jQuery( window ).scrollTop(),
+				view_bottom = view_top + jQuery( window ).height(),
 				el_top = anchor.offset().top,
 				offset = view_bottom - el_top;
 
 			// When 10px of the element are visible show the PopUp.
 			if ( offset > 10 ) {
-				me.elements.win.off( 'scroll', me.show_at_element );
+				jQuery( window ).off( 'scroll', me.show_at_element );
 				popup_open( me );
 			}
 		};
@@ -314,116 +293,62 @@
 		 * This function is called by popup_open() below!!!
 		 */
 		me._show = function _show() {
-			var count;
-
-			// If for some reason the popup container is missing then exit.
-			if ( ! me.elements.div.length ) {
-				return false;
-			}
+			var count,
+				wnd_width = 'auto',
+				wnd_height = 'auto';
 
 			count = parseInt( me.get_cookie('po_c'), 10 );
 			if ( isNaN( count ) ) { count = 0; }
 			me.set_cookie( 'po_c', count + 1, 365 );
 
-			me.opened += 1;
-			me.elements.back.on( 'click', me.background_clicked );
-
-			me.elements.win.off("resize.popup")
-				.on("resize.popup", function () { me.move_popup(me.data); });
-
-			me.elements.div.removeAttr( 'style' ).show();
-			me.elements.back.show();
-
-			if ( me.data.scroll_body ) {
-				jQuery( 'html' ).addClass( 'has-popup can-scroll' );
-			} else {
-				jQuery( 'html' ).addClass( 'has-popup no-scroll' );
+			if ( me.data.custom_size ) {
+				wnd_width = me.data.width;
+				wnd_height = me.data.height;
 			}
 
-			// Fix issue where Buttons are not available in Chrome
-			// https://app.asana.com/0/11388810124414/18688920614102
-			me.elements.msg.hide();
-			window.setTimeout(function() {
-				// The timer is so short that the element will *not* be hidden
-				// but webkit will still redraw the element.
-				me.elements.msg.show();
-			}, 2);
+			me.opened += 1;
 
-			me.move_popup(me.data);
-			me.setup_popup();
+			me.popup = wpmUi.popup( _options.popup.html, _options.popup.styles )
+				.size( wnd_width, wnd_height )
+				.animate( me.data.animation_in, me.data.animation_out )
+				.onresize( me.move_popup )
+				.on( 'click', '.wdpu-background', me.background_clicked )
+				.on( 'click', '.wdpu-hide-forever', me.close_popup_forever )
+				.on( 'click', '.wdpu-close', me.close_popup )
+				.on( 'click', '.close', me.close_popup )
+				.show()
+			;
 
-			// Disables the CSS animation is browser does not support them.
-			me.prepare_animation();
-
-			if ( me.data.animation_in ) {
-				me.elements.msg.addClass( me.data.animation_in + ' animated' );
-				me.elements.msg.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-					me.elements.msg.removeClass( 'animated' );
-					me.elements.msg.removeClass( me.data.animation_in );
-				});
+			if ( me.data.scroll_body ) {
+				jQuery( 'html' ).addClass( 'can-scroll' );
+			} else {
+				jQuery( 'html' ).addClass( 'no-scroll' );
 			}
 
 			return true;
-		};
-
-		me.prepare_animation = function prepare_animation() {
-			var can_animate = false,
-				domPrefixes = 'Webkit Moz O ms Khtml'.split(' ');
-
-			if ( me.elements.msg[0].style.animationName !== undefined ) { can_animate = true; }
-
-			if ( can_animate === false ) {
-				for ( var i = 0; i < domPrefixes.length; i++ ) {
-					if ( me.elements.msg[0].style[ domPrefixes[i] + 'AnimationName' ] !== undefined ) {
-						can_animate = true;
-						break;
-					}
-				}
-			}
-
-			if ( ! can_animate ) {
-				// Sorry guys, CSS animations are not supported...
-				me.data.animation_in = '';
-				me.data.animation_out = '';
-			}
 		};
 
 		/**
 		 * Add event handlers to the PopUp controls.
 		 */
 		me.setup_popup = function setup_popup() {
-			me.elements.hide.off( 'click', me.close_forever )
-				.on( 'click', me.close_forever );
-
-			if ( me.data && me.data.close_hide ) {
-				me.elements.close.off( 'click', me.close_forever )
-					.on( 'click', me.close_forever );
-
-				me.elements.msg.off( 'click', '.close', me.close_forever )
-					.on( 'click', '.close', me.close_forever );
-			} else {
-				me.elements.close.off( 'click', me.close_popup )
-					.on( 'click', me.close_popup );
-
-				me.elements.msg.off( 'click', '.close', me.close_popup )
-					.on( 'click', '.close', me.close_popup );
-			}
-
+			/*
 			me.elements.msg.hover(function() {
 				jQuery( '.claimbutton' ).removeClass( 'hide' );
 			}, function() {
 				jQuery( '.claimbutton' ).addClass( 'hide' );
 			});
 
-			me.elements.doc.trigger( 'popup-displayed', [me.data, me] );
+			jQuery( document ).trigger( 'popup-displayed', [me.data, me] );
 			// Legacy trigger.
-			me.elements.doc.trigger( 'popover-displayed', [me.data, me] );
+			jQuery( document ).trigger( 'popover-displayed', [me.data, me] );
 
 			me.elements.div.off( 'submit', 'form', me.form_submit )
 				.on( 'submit', 'form', me.form_submit );
 
 			me.elements.msg.off( 'click', '.wdpu-cta', me.cta_click )
 				.on( 'click', '.wdpu-cta', me.cta_click );
+			*/
 		};
 
 
@@ -436,32 +361,30 @@
 		 */
 		me.fetch_dom = function fetch_dom() {
 			// The top container of the PopUp.
-			me.elements.div = jQuery( '#' + me.data['html_id'] );
+		//	me.elements.div = jQuery( '#' + me.data['html_id'] );
 
 			// Reject this PopUp if the HTML element is missing.
-			if ( ! me.elements.div.length ) { me.reject(); }
+		//	if ( ! me.elements.div.length ) { me.reject(); }
 
 			// The container that should be resized (custom size).
-			me.elements.resize = me.elements.div.find( '.resize' );
+		//	me.elements.resize = me.elements.div.find( '.resize' );
 
 			// The container that should be moved (centered on screen).
-			me.elements.move = me.elements.div.find( '.move' );
+		//	me.elements.move = me.elements.div.find( '.move' );
 
 			// The container that holds the message:
 			// For new styles this is same as me.elements.resize.
 			// For old popup styles this is a different contianer...
-			me.elements.msg = me.elements.div.find( '.wdpu-msg' );
+		//	me.elements.msg = me.elements.div.find( '.wdpu-msg' );
 
 			// Close button.
-			me.elements.close = me.elements.div.find( '.wdpu-close' );
-
-			// Hide forever button.
-			me.elements.hide = me.elements.div.find( '.wdpu-hide-forever' );
+		//	me.elements.close = me.elements.div.find( '.wdpu-close' );
 
 			// Featured image.
-			me.elements.img = me.elements.div.find( '.wdpu-image > img' );
+		//	me.elements.img = me.elements.div.find( '.wdpu-image > img' );
 
 			// The modal background.
+			/*
 			if ( me.elements.div.hasClass( 'wdpu-background' ) ) {
 				me.elements.back = me.elements.div;
 			} else {
@@ -471,9 +394,10 @@
 					me.elements.back = me.elements.div.parents( '.wdpu-background' );
 				}
 			}
+			*/
 
-			if ( ! me.elements.move.length ) { me.elements.move = me.elements.div; }
-			if ( ! me.elements.resize.length ) { me.elements.resize = me.elements.div; }
+		//	if ( ! me.elements.move.length ) { me.elements.move = me.elements.div; }
+		//	if ( ! me.elements.resize.length ) { me.elements.resize = me.elements.div; }
 		};
 
 		/**
@@ -520,7 +444,7 @@
 
 					// 200 iterations are 10 seconds.
 					if ( iteration > 200 ) {
-						me.elements.doc.trigger( 'popup-submit-timeout', [me, me.data] );
+						jQuery( document ).trigger( 'popup-submit-timeout', [me, me.data] );
 						is_done = true;
 					}
 				}
@@ -548,7 +472,7 @@
 					me.data.last_ajax = {};
 				}
 
-				me.elements.doc.trigger( 'popup-submit-done', [me, me.data] );
+				jQuery( document ).trigger( 'popup-submit-done', [me, me.data] );
 
 				if ( me.data.close_popup ) {
 					me.close_popup();
@@ -586,26 +510,24 @@
 					el_subtitle.html( subtitle );
 				}
 
-				me.move_popup();
-				me.setup_popup();
+				//me.move_popup();
+				//me.setup_popup();
 
-				do_close_popup();
+				//do_close_popup();
 
-				me.fetch_dom();
-				me.setup_popup();
+				//me.fetch_dom();
+				//me.setup_popup();
 
 				// Re-initialize the local DOM cache.
-				me.elements.doc.trigger( 'popup-init', [me, me.data] );
+				jQuery( document ).trigger( 'popup-init', [me, me.data] );
 			}
 
 			// Executed once the iframe is fully loaded.
-			// This will remove the loading animation and update the popup
-			// contents if required.
 			function process_document() {
 				var inner_new, inner_old, html, external, close_on_fail;
 
 				// Allow other javascript functions to pre-process the event.
-				me.elements.doc.trigger( 'popup-submit-process', [frame, me, me.data] );
+				jQuery( document ).trigger( 'popup-submit-process', [frame, me, me.data] );
 
 				/*
 				 * Use the event jQuery('document').on('popup-submit-process')
@@ -1042,38 +964,5 @@
 			initialize( window._popup_data );
 		}
 	});
-
-	//
-	// ================================ JS API ================================
-	// Export some functions into the global namespace so other plugins can use
-	// the popup functions.
-	//
-
-	window.wdev_popup = function( data ) {
-		var obj = null,
-			args = {
-				preview: false,
-				dynamic: true,
-				ajaxurl: '',
-				do: 'get_data',
-				ajax_data: {},
-				popup: data
-			};
-
-		// Append the CSS/HTML to the page.
-		jQuery( '<style type="text/css">' + data.styles + '</style>' )
-			.appendTo('head');
-
-		jQuery( data.html )
-			.appendTo('body')
-			.hide();
-
-		// Setting, so the popup can be dsplayed multiple times.
-		args.popup.display_data.click_multi = true;
-
-		// Create and return the new Popup object.
-		obj = new Popup( args );
-		return obj;
-	};
 
 })();
