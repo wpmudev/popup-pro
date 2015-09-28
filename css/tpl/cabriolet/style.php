@@ -1,3 +1,3 @@
 <?php
-$info->name = __( 'Cabriolet', PO_LANG );
+$info->name = __( 'Cabriolet', 'popover' );
 $info->pro = true;

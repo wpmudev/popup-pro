@@ -11,7 +11,7 @@
 ?>
 <div class="wpmui-grid-12">
 	<label for="po-custom-css">
-		<?php _e( 'Provide custom CSS rules to customize this PopUp', PO_LANG ); ?>
+		<?php _e( 'Provide custom CSS rules to customize this PopUp', 'popover' ); ?>
 	</label>
 </div>
 <div class="wpmui-grid-12">
@@ -27,5 +27,5 @@
 	?></div>
 </div>
 <div class="wpmui-grid-12">
-	<?php _e( 'Note: To target this PopUp you need to prefix all rules with <code>#popup</code>, e.g. <code>#popup .wdpu-text { font-family: sans }</code>', PO_LANG ); ?>
+	<?php _e( 'Note: To target this PopUp you need to prefix all rules with <code>#popup</code>, e.g. <code>#popup .wdpu-text { font-family: sans }</code>', 'popover' ); ?>
 </div>

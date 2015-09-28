@@ -29,15 +29,15 @@ class IncPopupRule_Taxonomy extends IncPopupRule {
 		if ( IncPopup::use_global() ) { return; }
 
 		if ( ! defined( 'POP_UP_TAXONOMY' ) ) {
-			lib2()->ui->admin_message( __( 'Please define pop up taxonomy by adding <code>define("POP_UP_TAXONOMY", "custom_taxonomy_name");</code> in your wpconfig.php file.' ), 'err' );
+			lib3()->ui->admin_message( __( 'Please define pop up taxonomy by adding <code>define("POP_UP_TAXONOMY", "custom_taxonomy_name");</code> in your wpconfig.php file.' ), 'err' );
 		}
 
 		// 'taxonomy' rule.
 		$this->add_rule(
 			'taxonomy',
-			__( 'On custom taxonomy', PO_LANG ),
+			__( 'On custom taxonomy', 'popover' ),
 			sprintf(
-				__( 'Shows the PopUp on pages that match any of the specified <strong>%s</strong>-taxonomies.', PO_LANG ),
+				__( 'Shows the PopUp on pages that match any of the specified <strong>%s</strong>-taxonomies.', 'popover' ),
 				esc_html( POP_UP_TAXONOMY )
 			),
 			'no_taxonomy',
@@ -47,9 +47,9 @@ class IncPopupRule_Taxonomy extends IncPopupRule {
 		// 'no_taxonomy' rule.
 		$this->add_rule(
 			'no_taxonomy',
-			__( 'Not on custom taxonomy', PO_LANG ),
+			__( 'Not on custom taxonomy', 'popover' ),
 			sprintf(
-				__( 'Hides the PopUp on pages that match any of the specified <strong>%s</strong>-taxonomies.', PO_LANG ),
+				__( 'Hides the PopUp on pages that match any of the specified <strong>%s</strong>-taxonomies.', 'popover' ),
 				esc_html( POP_UP_TAXONOMY )
 			),
 			'taxonomy',
@@ -72,8 +72,8 @@ class IncPopupRule_Taxonomy extends IncPopupRule {
 		);
 
 		$this->url_types = array(
-			'singular' => __( 'Singular', PO_LANG ),
-			'plural'   => __( 'Archive', PO_LANG ),
+			'singular' => __( 'Singular', 'popover' ),
+			'plural'   => __( 'Archive', 'popover' ),
 		);
 	}
 
@@ -134,8 +134,8 @@ class IncPopupRule_Taxonomy extends IncPopupRule {
 	protected function form_taxonomy( $data ) {
 		$this->render_form(
 			'taxonomy',
-			__( 'Show on these post taxonomies:', PO_LANG ),
-			__( 'Show on these taxonomy type URLs:', PO_LANG ),
+			__( 'Show on these post taxonomies:', 'popover' ),
+			__( 'Show on these taxonomy type URLs:', 'popover' ),
 			$data
 		);
 	}
@@ -148,7 +148,7 @@ class IncPopupRule_Taxonomy extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_taxonomy( $data ) {
-		lib2()->array->equip( $data, 'taxonomy' );
+		lib3()->array->equip( $data, 'taxonomy' );
 		return $data['taxonomy'];
 	}
 
@@ -184,8 +184,8 @@ class IncPopupRule_Taxonomy extends IncPopupRule {
 	protected function form_no_taxonomy( $data ) {
 		$this->render_form(
 			'no_taxonomy',
-			__( 'Hide on these post taxonomies:', PO_LANG ),
-			__( 'Hide on these taxonomy type URLs:', PO_LANG ),
+			__( 'Hide on these post taxonomies:', 'popover' ),
+			__( 'Hide on these taxonomy type URLs:', 'popover' ),
 			$data
 		);
 	}
@@ -198,7 +198,7 @@ class IncPopupRule_Taxonomy extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_taxonomy( $data ) {
-		lib2()->array->equip( $data, 'no_taxonomy' );
+		lib3()->array->equip( $data, 'no_taxonomy' );
 		return $data['no_taxonomy'];
 	}
 

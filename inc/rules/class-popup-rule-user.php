@@ -27,8 +27,8 @@ class IncPopupRule_User extends IncPopupRule {
 		// 'login' rule.
 		$this->add_rule(
 			'login',
-			__( 'Visitor is logged in', PO_LANG ),
-			__( 'Shows the PopUp if the user is logged in to your site.', PO_LANG ),
+			__( 'Visitor is logged in', 'popover' ),
+			__( 'Shows the PopUp if the user is logged in to your site.', 'popover' ),
 			'no_login',
 			1
 		);
@@ -36,8 +36,8 @@ class IncPopupRule_User extends IncPopupRule {
 		// 'no_login' rule.
 		$this->add_rule(
 			'no_login',
-			__( 'Visitor is not logged in', PO_LANG ),
-			__( 'Shows the PopUp if the user is not logged in to your site.', PO_LANG ),
+			__( 'Visitor is not logged in', 'popover' ),
+			__( 'Shows the PopUp if the user is not logged in to your site.', 'popover' ),
 			'login',
 			1
 		);
@@ -45,11 +45,11 @@ class IncPopupRule_User extends IncPopupRule {
 		// 'comment' rule.
 		$this->add_rule(
 			'comment',
-			__( 'Visitor has commented before', PO_LANG ),
+			__( 'Visitor has commented before', 'popover' ),
 			__(
 				'Shows the PopUp if the user has already left a comment. ' .
 				'You may want to combine this condition with either "Visitor ' .
-				'is logged in" or "Visitor is not logged in".', PO_LANG
+				'is logged in" or "Visitor is not logged in".', 'popover'
 			),
 			'no_comment',
 			20
@@ -58,11 +58,11 @@ class IncPopupRule_User extends IncPopupRule {
 		// 'no_comment' rule.
 		$this->add_rule(
 			'no_comment',
-			__( 'Visitor has never commented', PO_LANG ),
+			__( 'Visitor has never commented', 'popover' ),
 			__(
 				'Shows the PopUp if the user has never left a comment. ' .
 				'You may want to combine this condition with either "Visitor ' .
-				'is logged in" or "Visitor is not logged in".', PO_LANG
+				'is logged in" or "Visitor is not logged in".', 'popover'
 			),
 			'comment',
 			20

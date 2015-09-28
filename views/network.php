@@ -26,7 +26,7 @@ blockquote p {
 </style>
 <div id="wpbody-content" tabindex="0">
 	<div class="wrap">
-		<h2><?php _e( 'Global PopUps', PO_LANG ); ?></h2>
+		<h2><?php _e( 'Global PopUps', 'popover' ); ?></h2>
 
 		<blockquote>
 		<p><?php
@@ -35,7 +35,7 @@ blockquote p {
 				'Please note:<br />We moved the global PopUp menu items ' .
 				'to the <strong>Main Blog</strong> of your multisite ' .
 				'network!<br />The Main Blog of this network is "%1$s" - ' .
-				'<a href="%2$s">Go to the Main Blog now</a>!', PO_LANG
+				'<a href="%2$s">Go to the Main Blog now</a>!', 'popover'
 			),
 			$blog_title,
 			esc_url( $main_url )
@@ -48,12 +48,12 @@ blockquote p {
 			_e(
 				'Because the "PopUp" menu items here on the ' .
 				'<strong>Network Admin</strong> are not used anymore ' .
-				'you can <strong>hide them</strong> at any time:', PO_LANG
+				'you can <strong>hide them</strong> at any time:', 'popover'
 			);
 			?></p>
 			<p>
 				<a href="<?php echo esc_url( $dismiss_url ); ?>" class="button-primary">
-					<?php _e( 'Hide the menu items here!', PO_LANG ); ?>
+					<?php _e( 'Hide the menu items here!', 'popover' ); ?>
 				</a>
 			</p>
 		</div>

@@ -381,7 +381,7 @@ abstract class IncPopupRule {
 	 */
 	public function _save( $key, $data ) {
 		$method = 'save_' . $key;
-		$data = lib2()->array->get( $data );
+		$data = lib3()->array->get( $data );
 
 		if ( method_exists( $this, $method ) ) {
 			$data[$key] = $this->$method($data);

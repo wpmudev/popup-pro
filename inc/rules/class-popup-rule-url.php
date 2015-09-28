@@ -27,8 +27,8 @@ class IncPopupRule_Url extends IncPopupRule {
 		// 'url' rule.
 		$this->add_rule(
 			'url',
-			__( 'On specific URL', PO_LANG ),
-			__( 'Shows the PopUp if the user is on a certain URL.', PO_LANG ),
+			__( 'On specific URL', 'popover' ),
+			__( 'Shows the PopUp if the user is on a certain URL.', 'popover' ),
 			'no_url',
 			20
 		);
@@ -36,8 +36,8 @@ class IncPopupRule_Url extends IncPopupRule {
 		// 'no_url' rule.
 		$this->add_rule(
 			'no_url',
-			__( 'Not on specific URL', PO_LANG ),
-			__( 'Shows the PopUp if the user is not on a certain URL.', PO_LANG ),
+			__( 'Not on specific URL', 'popover' ),
+			__( 'Shows the PopUp if the user is not on a certain URL.', 'popover' ),
 			'url',
 			20
 		);
@@ -78,7 +78,7 @@ class IncPopupRule_Url extends IncPopupRule {
 		$urls = implode( "\n", $data );
 		?>
 		<label for="po-rule-data-url">
-			<?php _e( 'Show on these URLs (one per line):', PO_LANG ); ?>
+			<?php _e( 'Show on these URLs (one per line):', 'popover' ); ?>
 		</label>
 		<textarea name="po_rule_data[url]" id="po-rule-data-url" class="block"><?php
 			echo esc_html( $urls );
@@ -99,7 +99,7 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_url( $data ) {
-		lib2()->array->equip( $data, 'url' );
+		lib3()->array->equip( $data, 'url' );
 		return $this->sanitize_values( $data['url'] );
 	}
 
@@ -138,7 +138,7 @@ class IncPopupRule_Url extends IncPopupRule {
 		$urls = implode( "\n", $data );
 		?>
 		<label for="po-rule-data-no-url">
-			<?php _e( 'Not on these URLs (one per line):', PO_LANG ); ?>
+			<?php _e( 'Not on these URLs (one per line):', 'popover' ); ?>
 		</label>
 		<textarea name="po_rule_data[no_url]" id="po-rule-data-no-url" class="block"><?php
 			echo esc_html( $urls );
@@ -159,7 +159,7 @@ class IncPopupRule_Url extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_url( $data ) {
-		lib2()->array->equip( $data, 'no_url' );
+		lib3()->array->equip( $data, 'no_url' );
 		return $this->sanitize_values( $data['no_url'] );
 	}
 
@@ -207,7 +207,7 @@ class IncPopupRule_Url extends IncPopupRule {
 		$current_url = '';
 
 		if ( empty( $_REQUEST['thefrom'] ) ) {
-			$current_url = lib2()->net->current_url();
+			$current_url = lib3()->net->current_url();
 		} else {
 			$current_url = strtok( $_REQUEST['thefrom'], '#' );
 		}

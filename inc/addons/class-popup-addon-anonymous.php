@@ -77,11 +77,11 @@ class IncPopupAddon_AnonyousLoading {
 	static public function settings( $loading_methods ) {
 		$loading_methods[] = (object) array(
 			'id'    => self::METHOD,
-			'label' => __( 'Anonymous Script', PO_LANG ),
+			'label' => __( 'Anonymous Script', 'popover' ),
 			'info'  => __(
 				'Drastically increase the chance to bypass ad-blockers. ' .
 				'Loads PopUp like WordPress AJAX, but the URL to the ' .
-				'JavaScript file is masked. ', PO_LANG
+				'JavaScript file is masked. ', 'popover'
 			),
 		);
 		return $loading_methods;
@@ -102,7 +102,7 @@ class IncPopupAddon_AnonyousLoading {
 		$slug = self::$_slug;
 		$val = self::_rot( time(), rand( 1, 22 ) );
 		$script_url = esc_url_raw(
-			add_query_arg( array( $slug => $val ), lib2()->net->current_url() )
+			add_query_arg( array( $slug => $val ), lib3()->net->current_url() )
 		);
 
 		// The script is the home URL with a special URL-param.
@@ -113,7 +113,7 @@ class IncPopupAddon_AnonyousLoading {
 		);
 
 		// Enable animations in 'Anonymous Script'
-		lib2()->ui->add( PO_CSS_URL . 'animate.min.css', 'front' );
+		lib3()->ui->add( 'animate', 'front' );
 
 		// This checks if the current URL contains the special URL-param.
 		// If the param is found then the PopUp details are output instead of the page.

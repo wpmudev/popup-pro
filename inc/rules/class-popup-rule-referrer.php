@@ -27,8 +27,8 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		// 'referrer' rule.
 		$this->add_rule(
 			'referrer',
-			__( 'From a specific referrer', PO_LANG ),
-			__( 'Shows the PopUp if the user arrived via a specific referrer.', PO_LANG ),
+			__( 'From a specific referrer', 'popover' ),
+			__( 'Shows the PopUp if the user arrived via a specific referrer.', 'popover' ),
 			'no_referrer',
 			15
 		);
@@ -36,8 +36,8 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		// 'no_referrer' rule.
 		$this->add_rule(
 			'no_referrer',
-			__( 'Not from a specific referrer', PO_LANG ),
-			__( 'Hides the PopUp if the user arrived via a specific referrer.', PO_LANG ),
+			__( 'Not from a specific referrer', 'popover' ),
+			__( 'Hides the PopUp if the user arrived via a specific referrer.', 'popover' ),
 			'referrer',
 			15
 		);
@@ -45,8 +45,8 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		// 'no_internal' rule.
 		$this->add_rule(
 			'no_internal',
-			__( 'Not from an internal link', PO_LANG ),
-			__( 'Shows the PopUp if the user did not arrive on this page via another page on your site.', PO_LANG ),
+			__( 'Not from an internal link', 'popover' ),
+			__( 'Shows the PopUp if the user did not arrive on this page via another page on your site.', 'popover' ),
 			'',
 			15
 		);
@@ -54,8 +54,8 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		// 'searchengine' rule.
 		$this->add_rule(
 			'searchengine',
-			__( 'From a search engine', PO_LANG ),
-			__( 'Shows the PopUp if the user arrived via a search engine.', PO_LANG ),
+			__( 'From a search engine', 'popover' ),
+			__( 'Shows the PopUp if the user arrived via a search engine.', 'popover' ),
 			'',
 			15
 		);
@@ -94,7 +94,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		else { $referrer = ''; }
 		?>
 		<label for="po-rule-data-referrer">
-			<?php _e( 'Referrers. Can be full URL or a pattern like ".example.com" (one per line):', PO_LANG ); ?>
+			<?php _e( 'Referrers. Can be full URL or a pattern like ".example.com" (one per line):', 'popover' ); ?>
 		</label>
 		<textarea name="po_rule_data[referrer]" id="po-rule-data-referrer" class="block"><?php
 			echo esc_attr( $referrer );
@@ -110,7 +110,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_referrer( $data ) {
-		lib2()->array->equip( $data, 'referrer' );
+		lib3()->array->equip( $data, 'referrer' );
 		return explode( "\n", $data['referrer'] );
 	}
 
@@ -146,7 +146,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 		else { $no_referrer = ''; }
 		?>
 		<label for="po-rule-data-no_referrer">
-			<?php _e( 'Referrers. Can be full URL or a pattern like ".example.com" (one per line):', PO_LANG ); ?>
+			<?php _e( 'Referrers. Can be full URL or a pattern like ".example.com" (one per line):', 'popover' ); ?>
 		</label>
 		<textarea name="po_rule_data[no_referrer]" id="po-rule-data-no_referrer" class="block"><?php
 			echo esc_attr( $no_referrer );
@@ -162,7 +162,7 @@ class IncPopupRule_Referrer extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_referrer( $data ) {
-		lib2()->array->equip( $data, 'no_referrer' );
+		lib3()->array->equip( $data, 'no_referrer' );
 		return explode( "\n", $data['no_referrer'] );
 	}
 

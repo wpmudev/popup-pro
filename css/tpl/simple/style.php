@@ -1,2 +1,2 @@
 <?php
-$info->name = __( 'Simple', PO_LANG );
+$info->name = __( 'Simple', 'popover' );

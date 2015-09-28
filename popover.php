@@ -1,35 +1,35 @@
 <?php
 /**
-Plugin Name: PopUp Pro
-Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
-Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of advertising a mailing list, special offer or running a plain old ad.
-Version:     4.7.1.1
-Author:      WPMU DEV
-Author URI:  http://premium.wpmudev.org
-Textdomain:  popover
-WDP ID:      123
-
-Copyright 2007-2013 Incsub (http://incsub.com)
-Author - Barry (Incsub)
-Contributors - Marko Miljus (Incsub), Ve Bailovity (Incsub)
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License (Version 2 - GPLv2) as published by
-the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Plugin Name: PopUp Pro
+ * Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
+ * Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of  * advertising a mailing list, special offer or running a plain old ad.
+ * Version:     4.7.2
+ * Author:      WPMU DEV
+ * Author URI:  http://premium.wpmudev.org
+ * Textdomain:  popover
+ * WDP ID:      123
+ *
+ * ============================================================================
+ *
+ * Copyright 2007-2013 Incsub (http://incsub.com)
+ * Author - Barry (Incsub)
+ * Contributors - Marko Miljus (Incsub), Ve Bailovity (Incsub)
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License (Version 2 - GPLv2) as published by
+ * the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 function inc_popup_pro_init() {
-	if ( ! defined( 'PO_LANG' ) ) {
-		// Used for more readable i18n functions: __( 'text', PO_LANG );
-		define( 'PO_LANG', 'popover' );
+	if ( ! defined( 'PO_VERSION' ) ) {
 		define( 'PO_VERSION', 'pro' );
 
 		/**
@@ -58,15 +58,19 @@ function inc_popup_pro_init() {
 		// Include function library.
 		require_once PO_INC_DIR . 'external/wpmu-lib/core.php';
 
-		lib2()->translate_plugin( PO_LANG, PO_LANG_DIR );
+		// Translation.
+		function inc_popup_translate() {
+			load_plugin_textdomain( 'popover', false, PO_LANG_DIR );
+		}
+		add_action( 'plugins_loaded', 'inc_popup_translate' );
 
 		require_once( PO_INC_DIR . 'config-defaults.php');
 		if ( is_admin() ) {
 			// Defines class 'IncPopup'.
-			require_once( PO_INC_DIR . 'class-popup-admin.php');
+			require_once PO_INC_DIR . 'class-popup-admin.php';
 		} else {
 			// Defines class 'IncPopup'.
-			require_once( PO_INC_DIR . 'class-popup-public.php');
+			require_once PO_INC_DIR . 'class-popup-public.php';
 		}
 
 		// Initialize the plugin as soon as we have identified the current user.

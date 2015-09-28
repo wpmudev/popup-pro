@@ -30,8 +30,8 @@ class IncPopupRule_Posttype extends IncPopupRule {
 		// 'posttype' rule.
 		$this->add_rule(
 			'posttype',
-			__( 'For specific Post Types', PO_LANG ),
-			__( 'Shows the PopUp on pages that match any of the specified Post Types.', PO_LANG ),
+			__( 'For specific Post Types', 'popover' ),
+			__( 'Shows the PopUp on pages that match any of the specified Post Types.', 'popover' ),
 			'no_posttype',
 			30
 		);
@@ -39,8 +39,8 @@ class IncPopupRule_Posttype extends IncPopupRule {
 		// 'no_posttype' rule.
 		$this->add_rule(
 			'no_posttype',
-			__( 'Not for specific Post Types', PO_LANG ),
-			__( 'Shows the PopUp on pages that do not match any of the specified Post Type.', PO_LANG ),
+			__( 'Not for specific Post Types', 'popover' ),
+			__( 'Shows the PopUp on pages that do not match any of the specified Post Type.', 'popover' ),
 			'posttype',
 			30
 		);
@@ -60,8 +60,8 @@ class IncPopupRule_Posttype extends IncPopupRule {
 		);
 
 		$this->url_types = array(
-			'singular' => __( 'Singular', PO_LANG ),
-			'plural'   => __( 'Archive', PO_LANG ),
+			'singular' => __( 'Singular', 'popover' ),
+			'plural'   => __( 'Archive', 'popover' ),
 		);
 	}
 
@@ -116,8 +116,8 @@ class IncPopupRule_Posttype extends IncPopupRule {
 	protected function form_posttype( $data ) {
 		$this->render_form(
 			'posttype',
-			__( 'Show for these Post Types:', PO_LANG ),
-			__( 'Show on these Post Type URLs:', PO_LANG ),
+			__( 'Show for these Post Types:', 'popover' ),
+			__( 'Show on these Post Type URLs:', 'popover' ),
 			$data
 		);
 	}
@@ -130,7 +130,7 @@ class IncPopupRule_Posttype extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_posttype( $data ) {
-		lib2()->array->equip( $data, 'posttype' );
+		lib3()->array->equip( $data, 'posttype' );
 		return $data['posttype'];
 	}
 
@@ -166,8 +166,8 @@ class IncPopupRule_Posttype extends IncPopupRule {
 	protected function form_no_posttype( $data ) {
 		$this->render_form(
 			'no_posttype',
-			__( 'Hide for these Post Types:', PO_LANG ),
-			__( 'Hide on these Post Type URLs:', PO_LANG ),
+			__( 'Hide for these Post Types:', 'popover' ),
+			__( 'Hide on these Post Type URLs:', 'popover' ),
 			$data
 		);
 	}
@@ -180,7 +180,7 @@ class IncPopupRule_Posttype extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_posttype( $data ) {
-		lib2()->array->equip( $data, 'no_posttype' );
+		lib3()->array->equip( $data, 'no_posttype' );
 		return $data['no_posttype'];
 	}
 

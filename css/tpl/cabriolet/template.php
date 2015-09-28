@@ -38,7 +38,7 @@
 			</div>
 
 			<div class="wdpu-message-wrap resize" data-reduce-height=".wdpu-head">
-				<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
+				<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', 'popover' ); ?>"></a>
 				<div class="wdpu-message resize" data-reduce-height=".wdpu-head">
 
 					<?php if ( $img_is_left ) : ?>

@@ -28,10 +28,10 @@ class IncPopupRule_Datetime extends IncPopupRule {
 		// 'date_from' rule.
 		$this->add_rule(
 			'date_from',
-			__( 'Show PopUp on Date', PO_LANG ),
+			__( 'Show PopUp on Date', 'popover' ),
 			sprintf(
-				__( 'Shows the PopUp only when the specified date is reached.', PO_LANG ) . '<br />' .
-				__( 'Values in %sUTC%s. Current UTC time: %s', PO_LANG ),
+				__( 'Shows the PopUp only when the specified date is reached.', 'popover' ) . '<br />' .
+				__( 'Values in %sUTC%s. Current UTC time: %s', 'popover' ),
 				'<a heref="https://en.wikipedia.org/wiki/Coordinated_Universal_Time" target="_blank">',
 				'</a>',
 				'<tt>' . gmdate( 'Y-m-d H:i' ) . '</tt>'
@@ -43,10 +43,10 @@ class IncPopupRule_Datetime extends IncPopupRule {
 		// 'date_until' rule.
 		$this->add_rule(
 			'date_until',
-			__( 'Hide PopUp on Date', PO_LANG ),
+			__( 'Hide PopUp on Date', 'popover' ),
 			sprintf(
-				__( 'Hide the PopUp once a specific date is reached.', PO_LANG ) . '<br />' .
-				__( 'Values in %sUTC%s. Current UTC time: %s', PO_LANG ),
+				__( 'Hide the PopUp once a specific date is reached.', 'popover' ) . '<br />' .
+				__( 'Values in %sUTC%s. Current UTC time: %s', 'popover' ),
 				'<a heref="https://en.wikipedia.org/wiki/Coordinated_Universal_Time" target="_blank">',
 				'</a>',
 				'<tt>' . gmdate( 'Y-m-d H:i' ) . '</tt>'
@@ -99,7 +99,7 @@ class IncPopupRule_Datetime extends IncPopupRule {
 		?>
 		<div>
 			<label for="po-date-from">
-				<?php _e( 'Display when date is reached:', PO_LANG ); ?>
+				<?php _e( 'Display when date is reached:', 'popover' ); ?>
 			</label>
 			<input type="date"
 				id="po-date-from"
@@ -109,7 +109,7 @@ class IncPopupRule_Datetime extends IncPopupRule {
 		</div>
 		<div>
 			<label for="po-time-from">
-				<?php _e( 'After this time:', PO_LANG ); ?>
+				<?php _e( 'After this time:', 'popover' ); ?>
 			</label>
 			<input type="time"
 				id="po-time-from"
@@ -128,7 +128,7 @@ class IncPopupRule_Datetime extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_date_from( $data ) {
-		lib2()->array->equip( $data, 'date_from', 'date_from_time' );
+		lib3()->array->equip( $data, 'date_from', 'date_from_time' );
 
 		$date_str = $data['date_from'] . ' ' . $data['date_from_time'];
 		$date_from = strtotime( $date_str );
@@ -177,7 +177,7 @@ class IncPopupRule_Datetime extends IncPopupRule {
 		?>
 		<div>
 			<label for="po-date-until">
-				<?php _e( 'Hide when date is reached:', PO_LANG ); ?>
+				<?php _e( 'Hide when date is reached:', 'popover' ); ?>
 			</label>
 			<input type="date"
 				id="po-date-until"
@@ -187,7 +187,7 @@ class IncPopupRule_Datetime extends IncPopupRule {
 		</div>
 		<div>
 			<label for="po-time-until">
-				<?php _e( 'After this time:', PO_LANG ); ?>
+				<?php _e( 'After this time:', 'popover' ); ?>
 			</label>
 			<input type="time"
 				id="po-time-until"
@@ -206,7 +206,7 @@ class IncPopupRule_Datetime extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_date_until( $data ) {
-		lib2()->array->equip( $data, 'date_until', 'date_until_time' );
+		lib3()->array->equip( $data, 'date_until', 'date_until_time' );
 
 		$date_str = $data['date_until'] . ' ' . $data['date_until_time'];
 		$date_until = strtotime( $date_str );

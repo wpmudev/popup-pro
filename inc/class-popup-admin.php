@@ -85,36 +85,36 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6.0
 	 */
 	static public function setup_module_specific( $hook ) {
-		lib2()->array->equip( $hook, 'post_type', 'base' );
-		lib2()->array->equip_request( 'post_status' );
+		lib3()->array->equip( $hook, 'post_type', 'base' );
+		lib3()->array->equip_request( 'post_status' );
 
 		if ( IncPopupItem::POST_TYPE === $hook->post_type ) {
 			// WordPress core scripts
-			lib2()->ui->js( 'jquery-ui-slider' );
-			lib2()->ui->js( 'jquery-ui-sortable' );
+			lib3()->ui->js( 'jquery-ui-slider' );
+			lib3()->ui->js( 'jquery-ui-sortable' );
 
-			lib2()->ui->add( 'core' );
-			lib2()->ui->add( 'select' );
+			lib3()->ui->add( 'core' );
+			lib3()->ui->add( 'select' );
+			lib3()->ui->add( 'animate' ); // For Preview.
 
-			lib2()->ui->add( PO_CSS_URL . 'popup-admin.min.css' );
-			lib2()->ui->add( PO_JS_URL . 'popup-admin.min.js' );
-			lib2()->ui->add( PO_JS_URL . 'ace.js' ); // CSS editor.
-			lib2()->ui->add( PO_JS_URL . 'public.min.js' ); // For Preview.
-			lib2()->ui->add( PO_CSS_URL . 'animate.min.css' ); // For Preview.
+			lib3()->ui->add( PO_CSS_URL . 'popup-admin.min.css' );
+			lib3()->ui->add( PO_JS_URL . 'popup-admin.min.js' );
+			lib3()->ui->add( PO_JS_URL . 'ace.js' ); // CSS editor.
+			lib3()->ui->add( PO_JS_URL . 'public.min.js' ); // For Preview.
 
 			if ( 'trash' != $_REQUEST['post_status'] ) {
-				lib2()->ui->data(
+				lib3()->ui->data(
 					'po_bulk',
 					array(
-						'activate' => __( 'Activate', PO_LANG ),
-						'deactivate' => __( 'Deactivate', PO_LANG ),
-						'toggle' => __( 'Toggle activation', PO_LANG ),
+						'activate' => __( 'Activate', 'popover' ),
+						'deactivate' => __( 'Deactivate', 'popover' ),
+						'toggle' => __( 'Toggle activation', 'popover' ),
 					)
 				);
 			}
 
 			// For Preview
-			lib2()->ui->data(
+			lib3()->ui->data(
 				'_popup_data',
 				array(
 					'ajaxurl' => admin_url( 'admin-ajax.php' ),
@@ -203,8 +203,8 @@ class IncPopup extends IncPopupBase {
 			// -- PopUp EDITOR -----------------
 
 			if ( 'post' === $hook->base ) {
-				lib2()->ui->css( 'wp-color-picker' ); // WordPress core script
-				lib2()->ui->js( 'wp-color-picker' ); // WordPress core script
+				lib3()->ui->css( 'wp-color-picker' ); // WordPress core script
+				lib3()->ui->js( 'wp-color-picker' ); // WordPress core script
 
 				// See if a custom action should be executed (e.g. duplicate)
 				self::form_check_actions();
@@ -255,7 +255,7 @@ class IncPopup extends IncPopupBase {
 		if ( ! self::correct_level() ) { return; }
 
 		if ( is_network_admin() ) {
-			lib2()->array->equip_request( 'popup_network' );
+			lib3()->array->equip_request( 'popup_network' );
 			if ( 'hide' === $_REQUEST['popup_network'] ) {
 				IncPopupDatabase::set_flag( 'network_dismiss', true );
 				wp_safe_redirect( admin_url( 'network' ) );
@@ -269,8 +269,8 @@ class IncPopup extends IncPopupBase {
 			}
 
 			add_menu_page(
-				__( 'PopUp', PO_LANG ),
-				__( 'PopUp', PO_LANG ),
+				__( 'PopUp', 'popover' ),
+				__( 'PopUp', 'popover' ),
 				IncPopupPosttype::$perms,
 				IncPopupItem::POST_TYPE . '-list',
 				array( 'IncPopup', 'network_menu_notice' ),
@@ -280,8 +280,8 @@ class IncPopup extends IncPopupBase {
 
 			add_submenu_page(
 				IncPopupItem::POST_TYPE . '-list',
-				__( 'Add New', PO_LANG ),
-				__( 'Add New', PO_LANG ),
+				__( 'Add New', 'popover' ),
+				__( 'Add New', 'popover' ),
 				IncPopupPosttype::$perms,
 				IncPopupItem::POST_TYPE . '-create',
 				array( 'IncPopup', 'network_menu_notice' )
@@ -289,19 +289,19 @@ class IncPopup extends IncPopupBase {
 
 			add_submenu_page(
 				IncPopupItem::POST_TYPE . '-list',
-				__( 'Settings', PO_LANG ),
-				__( 'Settings', PO_LANG ),
+				__( 'Settings', 'popover' ),
+				__( 'Settings', 'popover' ),
 				IncPopupPosttype::$perms,
 				IncPopupItem::POST_TYPE . '-settings',
 				array( 'IncPopup', 'network_menu_notice' )
 			);
 
-			$submenu[IncPopupItem::POST_TYPE . '-list'][0][0] = _x( 'Global PopUps', 'Post Type General Name', PO_LANG );
+			$submenu[IncPopupItem::POST_TYPE . '-list'][0][0] = _x( 'Global PopUps', 'Post Type General Name', 'popover' );
 		} else {
 			add_submenu_page(
 				'edit.php?post_type=' . IncPopupItem::POST_TYPE,
-				__( 'Settings', PO_LANG ),
-				__( 'Settings', PO_LANG ),
+				__( 'Settings', 'popover' ),
+				__( 'Settings', 'popover' ),
 				IncPopupPosttype::$perms,
 				'settings',
 				array( 'IncPopup', 'handle_settings_page' )
@@ -325,7 +325,7 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6.0
 	 */
 	static public function handle_ajax() {
-		lib2()->array->equip_post( 'do', 'order' );
+		lib3()->array->equip_post( 'do', 'order' );
 
 		$action = $_POST['do'];
 
@@ -377,7 +377,7 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6.0
 	 */
 	static public function handle_settings_update() {
-		lib2()->array->equip_post( 'action', 'po_option' );
+		lib3()->array->equip_post( 'action', 'po_option' );
 
 		if ( 'updatesettings' == $_POST['action'] ) {
 			check_admin_referer( 'update-popup-settings' );
@@ -399,10 +399,10 @@ class IncPopup extends IncPopupBase {
 			// When the Lookup-source was changed we want to clear the cache.
 			if ( $old_settings['geo_lookup'] != $settings['geo_lookup'] ) {
 				IncPopupDatabase::clear_ip_cache();
-				lib2()->ui->admin_message( __( 'Country Lookup changed: The lookup-cache was cleared.', PO_LANG ) );
+				lib3()->ui->admin_message( __( 'Country Lookup changed: The lookup-cache was cleared.', 'popover' ) );
 			}
 
-			lib2()->ui->admin_message( __( 'Your settings have been updated.', PO_LANG ) );
+			lib3()->ui->admin_message( __( 'Your settings have been updated.', 'popover' ) );
 			$redirect_url = esc_url_raw(
 				remove_query_arg( array( 'message', 'count' ), wp_get_referer() )
 			);
@@ -429,7 +429,7 @@ class IncPopup extends IncPopupBase {
 	 * @return array
 	 */
 	static public function post_columns( $post_columns ) {
-		lib2()->array->equip_request( 'post_status' );
+		lib3()->array->equip_request( 'post_status' );
 
 		$new_columns = array();
 
@@ -439,12 +439,12 @@ class IncPopup extends IncPopupBase {
 		}
 
 		$new_columns['cb'] = $post_columns['cb'];
-		$new_columns['po_name'] = __( 'PopUp Name', PO_LANG );
-		$new_columns['po_cond'] = __( 'Conditions', PO_LANG );
+		$new_columns['po_name'] = __( 'PopUp Name', 'popover' );
+		$new_columns['po_cond'] = __( 'Conditions', 'popover' );
 
 		if ( 'trash' !== $_REQUEST['post_status'] ) {
-			$new_columns['po_pos'] = __( 'Order', PO_LANG );
-			$new_columns['po_state'] = __( 'Active', PO_LANG );
+			$new_columns['po_pos'] = __( 'Order', 'popover' );
+			$new_columns['po_state'] = __( 'Active', 'popover' );
 		}
 
 		return $new_columns;
@@ -493,9 +493,9 @@ class IncPopup extends IncPopupBase {
 				if ( $can_edit ) {
 					$actions['edit'] = array(
 						'url' => get_edit_post_link( $post_id ),
-						'title' => __( 'Edit this PopUp', PO_LANG ),
+						'title' => __( 'Edit this PopUp', 'popover' ),
 						'attr' => '',
-						'label' => __( 'Edit', PO_LANG )
+						'label' => __( 'Edit', 'popover' )
 					);
 				}
 
@@ -505,9 +505,9 @@ class IncPopup extends IncPopupBase {
 					$the_url = wp_nonce_url( $the_url, 'deactivate-post_' . $post_id );
 					$actions['deactivate'] = array(
 						'url' => $the_url,
-						'title' => __( 'Deactivate this PopUp', PO_LANG ),
+						'title' => __( 'Deactivate this PopUp', 'popover' ),
 						'attr' => '',
-						'label' => __( 'Deactivate', PO_LANG )
+						'label' => __( 'Deactivate', 'popover' )
 					);
 				}
 
@@ -517,17 +517,17 @@ class IncPopup extends IncPopupBase {
 					$the_url = wp_nonce_url( $the_url, 'activate-post_' . $post_id );
 					$actions['activate'] = array(
 						'url' => $the_url,
-						'title' => __( 'Activate this PopUp', PO_LANG ),
+						'title' => __( 'Activate this PopUp', 'popover' ),
 						'attr' => '',
-						'label' => __( 'Activate', PO_LANG )
+						'label' => __( 'Activate', 'popover' )
 					);
 				}
 
 				$actions['popup_preview'] = array(
 					'url' => '#',
-					'title' => __( 'Preview this PopUp', PO_LANG ),
+					'title' => __( 'Preview this PopUp', 'popover' ),
 					'attr' => 'class="po-preview" data-id="' . $post_id . '"',
-					'label' => __( 'Preview', PO_LANG )
+					'label' => __( 'Preview', 'popover' )
 				);
 
 				if ( current_user_can( 'delete_post', $post_id ) ) {
@@ -537,31 +537,31 @@ class IncPopup extends IncPopupBase {
 						$the_url = wp_nonce_url( $the_url, 'untrash-post_' . $post_id );
 						$actions['untrash'] = array(
 							'url' => $the_url,
-							'title' => __( 'Restore this PopUp from the Trash', PO_LANG ),
+							'title' => __( 'Restore this PopUp from the Trash', 'popover' ),
 							'attr' => '',
-							'label' => __( 'Restore', PO_LANG )
+							'label' => __( 'Restore', 'popover' )
 						);
 					} elseif ( EMPTY_TRASH_DAYS ) {
 						$actions['trash'] = array(
 							'url' => get_delete_post_link( $post_id ),
-							'title' => __( 'Move this PopUp to the Trash', PO_LANG ),
+							'title' => __( 'Move this PopUp to the Trash', 'popover' ),
 							'attr' => 'class="submitdelete"',
-							'label' => __( 'Trash', PO_LANG )
+							'label' => __( 'Trash', 'popover' )
 						);
 					}
 					if ( 'trash' === $popup->status || ! EMPTY_TRASH_DAYS ) {
 						$actions['delete'] = array(
 							'url' => get_delete_post_link( $post_id, '', true ),
-							'title' => __( 'Delete this PopUp permanently', PO_LANG ),
+							'title' => __( 'Delete this PopUp permanently', 'popover' ),
 							'attr' => 'class="submitdelete"',
-							'label' => __( 'Delete Permanently', PO_LANG )
+							'label' => __( 'Delete Permanently', 'popover' )
 						);
 					}
 				}
 
 				if ( $can_edit ) : ?>
 					<a href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>"
-						title="<?php _e( 'Edit this PopUp', PO_LANG ); ?>">
+						title="<?php _e( 'Edit this PopUp', 'popover' ); ?>">
 						<span class="the-title"><?php echo esc_html( $popup->name ); ?></span>
 					</a>
 				<?php else : ?>
@@ -599,7 +599,7 @@ class IncPopup extends IncPopupBase {
 					<span class="rule"><?php echo esc_html( $label ); ?></span>
 				<?php endforeach; ?>
 				<?php if ( ! $rule_count ) : ?>
-					<span class="rule-always"><?php _e( 'Always Show PopUp', PO_LANG ); ?></span>
+					<span class="rule-always"><?php _e( 'Always Show PopUp', 'popover' ); ?></span>
 				<?php endif; ?>
 				</div>
 				<?php
@@ -638,10 +638,10 @@ class IncPopup extends IncPopupBase {
 	static public function post_views( $views ) {
 		$new_views = array();
 		$stati = array(
-			'all' => __( 'All <span class="count">(%1$s)</span>', PO_LANG ),
-			'publish' => __( 'Active <span class="count">(%1$s)</span>', PO_LANG ),
-			'draft' => __( 'Inactive <span class="count">(%1$s)</span>', PO_LANG ),
-			'trash' => __( 'Trash <span class="count">(%1$s)</span>', PO_LANG ),
+			'all' => __( 'All <span class="count">(%1$s)</span>', 'popover' ),
+			'publish' => __( 'Active <span class="count">(%1$s)</span>', 'popover' ),
+			'draft' => __( 'Inactive <span class="count">(%1$s)</span>', 'popover' ),
+			'trash' => __( 'Trash <span class="count">(%1$s)</span>', 'popover' ),
 		);
 		$post_type = IncPopupItem::POST_TYPE;
 		$num_posts = wp_count_posts( $post_type, 'readable' );
@@ -728,7 +728,7 @@ class IncPopup extends IncPopupBase {
 		$wp_list_table = _get_list_table( 'WP_Posts_List_Table' );
 		$action = $wp_list_table->current_action();
 
-		lib2()->array->equip_request( 'mode' );
+		lib3()->array->equip_request( 'mode' );
 
 		if ( $action ) {
 			if ( 'list' === $_REQUEST['mode'] ) {
@@ -771,29 +771,29 @@ class IncPopup extends IncPopupBase {
 				switch ( $action ) {
 					case 'activate':
 						1 === $count ?
-						$msg = __( 'One PopUp activated', PO_LANG ) :
-						$msg = __( '%1$s PopUps activated', PO_LANG );
+						$msg = __( 'One PopUp activated', 'popover' ) :
+						$msg = __( '%1$s PopUps activated', 'popover' );
 						break;
 
 					case 'deactivate':
 						1 === $count ?
-						$msg = __( 'One PopUp deactivated', PO_LANG ) :
-						$msg = __( '%1$s PopUps deactivated', PO_LANG );
+						$msg = __( 'One PopUp deactivated', 'popover' ) :
+						$msg = __( '%1$s PopUps deactivated', 'popover' );
 						break;
 
 					case 'toggle':
 						1 === $count ?
-						$msg = __( 'One PopUp toggled', PO_LANG ) :
-						$msg = __( '%1$s PopUps toggled', PO_LANG );
+						$msg = __( 'One PopUp toggled', 'popover' ) :
+						$msg = __( '%1$s PopUps toggled', 'popover' );
 						break;
 				}
 
 				if ( $count > 0 && ! empty( $msg ) ) {
-					lib2()->ui->admin_message( sprintf( $msg, $count ) );
+					lib3()->ui->admin_message( sprintf( $msg, $count ) );
 				}
 			}
 			else {
-				lib2()->array->equip_request( '_wpnonce', 'post_id' );
+				lib3()->array->equip_request( '_wpnonce', 'post_id' );
 
 				// ----- Custom row-action.
 				$nonce = $_REQUEST['_wpnonce'];
@@ -943,7 +943,7 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6.0
 	 */
 	static protected function form_check_actions() {
-		lib2()->array->equip_request( 'post', 'do' );
+		lib3()->array->equip_request( 'post', 'do' );
 
 		$popup_id = absint( $_REQUEST['post'] );
 		$action = $_REQUEST['do'];
@@ -988,7 +988,7 @@ class IncPopup extends IncPopupBase {
 		);
 
 		$meta_order = get_user_option( 'meta-box-order_' . IncPopupItem::POST_TYPE );
-		$meta_order = lib2()->array->get( $meta_order );
+		$meta_order = lib3()->array->get( $meta_order );
 		if ( empty( $meta_order['side'] ) ) { $meta_order['side'] = ''; }
 		if ( empty( $meta_order['normal'] ) ) { $meta_order['normal'] = ''; }
 		if ( empty( $meta_order['advanced'] ) ) { $meta_order['advanced'] = ''; }
@@ -1004,7 +1004,7 @@ class IncPopup extends IncPopupBase {
 		// Add our own meta boxes.
 		add_meta_box(
 			'meta-content',
-			__( 'PopUp Contents', PO_LANG ),
+			__( 'PopUp Contents', 'popover' ),
 			array( 'IncPopup', 'meta_content' ),
 			IncPopupItem::POST_TYPE,
 			'normal',
@@ -1013,7 +1013,7 @@ class IncPopup extends IncPopupBase {
 
 		add_meta_box(
 			'meta-appearance',
-			__( 'Appearance', PO_LANG ),
+			__( 'Appearance', 'popover' ),
 			array( 'IncPopup', 'meta_appearance' ),
 			IncPopupItem::POST_TYPE,
 			'normal',
@@ -1022,7 +1022,7 @@ class IncPopup extends IncPopupBase {
 
 		add_meta_box(
 			'meta-behavior',
-			__( 'Behavior', PO_LANG ),
+			__( 'Behavior', 'popover' ),
 			array( 'IncPopup', 'meta_behavior' ),
 			IncPopupItem::POST_TYPE,
 			'normal',
@@ -1031,7 +1031,7 @@ class IncPopup extends IncPopupBase {
 
 		add_meta_box(
 			'meta-rules',
-			__( 'Displaying Conditions (optional)', PO_LANG ),
+			__( 'Displaying Conditions (optional)', 'popover' ),
 			array( 'IncPopup', 'meta_rules' ),
 			IncPopupItem::POST_TYPE,
 			'advanced',
@@ -1040,7 +1040,7 @@ class IncPopup extends IncPopupBase {
 
 		add_meta_box(
 			'meta-customcss',
-			__( 'Custom CSS (optional)', PO_LANG ),
+			__( 'Custom CSS (optional)', 'popover' ),
 			array( 'IncPopup', 'meta_customcss' ),
 			IncPopupItem::POST_TYPE,
 			'advanced',
@@ -1049,7 +1049,7 @@ class IncPopup extends IncPopupBase {
 
 		add_meta_box(
 			'submitdiv',
-			__( 'Save PopUp', PO_LANG ),
+			__( 'Save PopUp', 'popover' ),
 			array( 'IncPopup', 'meta_submitdiv' ),
 			IncPopupItem::POST_TYPE,
 			'side',
@@ -1071,10 +1071,10 @@ class IncPopup extends IncPopupBase {
 		?>
 		<div id="titlediv">
 			<div id="titlewrap">
-				<label for="po_name"><?php _e( 'PopUp Name (not displayed on the PopUp)', PO_LANG ); ?></label>
+				<label for="po_name"><?php _e( 'PopUp Name (not displayed on the PopUp)', 'popover' ); ?></label>
 				<input type="text" id="po_name" name="po_name" required
 					value="<?php echo esc_attr( $popup->name ); ?>"
-					placeholder="<?php _e( 'Name this PopUp', PO_LANG ); ?>" />
+					placeholder="<?php _e( 'Name this PopUp', 'popover' ); ?>" />
 			</div>
 		</div>
 		<?php
@@ -1158,7 +1158,7 @@ class IncPopup extends IncPopupBase {
 		$popup = IncPopupDatabase::get( $post_id );
 
 		// Make sure the POST collection contains all required fields.
-		if ( 0 !== lib2()->array->equip_post( 'popup-nonce', 'post_type', 'po-action' ) ) { return; }
+		if ( 0 !== lib3()->array->equip_post( 'popup-nonce', 'post_type', 'po-action' ) ) { return; }
 
 		// Autosave is not processed.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) { return; }

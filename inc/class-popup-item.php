@@ -416,7 +416,7 @@ class IncPopupItem {
 		// Very rough validation that makes sure that the field does not close
 		// the <style> tag manually.
 		$this->custom_css = str_replace( '</s', 's', $this->custom_css );
-		$this->class = lib2()->array->get( $this->class );
+		$this->class = lib3()->array->get( $this->class );
 
 		$this->script_data['html_id'] = $this->code->id;
 		$this->script_data['popup_id'] = $this->id;
@@ -438,7 +438,7 @@ class IncPopupItem {
 		if ( ! $this->is_upfront && is_admin() && $this->id >= 0 ) {
 			// Name.
 			if ( empty( $this->name ) ) {
-				$this->name = __( 'New PopUp', PO_LANG );
+				$this->name = __( 'New PopUp', 'popover' );
 			}
 
 			// Order.
@@ -618,29 +618,29 @@ class IncPopupItem {
 		if ( $show_message ) {
 			if ( ! empty( $res ) ) {
 				if ( $this->orig_status === $this->status ) {
-					$msg = __( 'Saved PopUp "<strong>%1$s</strong>"', PO_LANG );
+					$msg = __( 'Saved PopUp "<strong>%1$s</strong>"', 'popover' );
 				} else {
 					switch ( $status ) {
 						case 'publish':
-							$msg = __( 'Activated PopUp "<strong>%1$s</strong>".', PO_LANG );
+							$msg = __( 'Activated PopUp "<strong>%1$s</strong>".', 'popover' );
 							break;
 
 						case 'draft':
-							$msg = __( 'Deactivated PopUp "<strong>%1$s</strong>".', PO_LANG );
+							$msg = __( 'Deactivated PopUp "<strong>%1$s</strong>".', 'popover' );
 							break;
 
 						case 'trash':
-							$msg = __( 'Moved PopUp "<strong>%1$s</strong>" to trash.', PO_LANG );
+							$msg = __( 'Moved PopUp "<strong>%1$s</strong>" to trash.', 'popover' );
 							break;
 
 						default:
-							$msg = __( 'Saved PopUp "<strong>%1$s</strong>".', PO_LANG );
+							$msg = __( 'Saved PopUp "<strong>%1$s</strong>".', 'popover' );
 							break;
 					}
 				}
-				lib2()->ui->admin_message( sprintf( $msg, $this->name ) );
+				lib3()->ui->admin_message( sprintf( $msg, $this->name ) );
 			} else {
-				lib2()->ui->admin_message( __( 'Could not save PopUp.', PO_LANG ), 'err' );
+				lib3()->ui->admin_message( __( 'Could not save PopUp.', 'popover' ), 'err' );
 			}
 		}
 
@@ -667,9 +667,9 @@ class IncPopupItem {
 		if ( 'footer' !== $method
 			&& preg_match( '#\[gravityforms?(\s.*?\]|\])#', $content )
 		) {
-			lib2()->ui->admin_message(
+			lib3()->ui->admin_message(
 				sprintf(
-					__( 'You are using Gravity Forms inside this PopUp. It is best to switch to the <a href="%s">loading method</a> "Page Footer" to ensure the form works as expected.', PO_LANG ),
+					__( 'You are using Gravity Forms inside this PopUp. It is best to switch to the <a href="%s">loading method</a> "Page Footer" to ensure the form works as expected.', 'popover' ),
 					'edit.php?post_type=' . IncPopupItem::POST_TYPE . '&page=settings'
 				),
 				'err'
@@ -687,9 +687,9 @@ class IncPopupItem {
 				foreach ( $check->shortcodes as $code ) {
 					$match = array();
 					if ( preg_match( '#\[' . $code . '(\s.*?\]|\])#', $content, $match ) ) {
-						lib2()->ui->admin_message(
+						lib3()->ui->admin_message(
 							sprintf(
-								__( 'Shortcode <code>%s</code> requires a different <a href="%s">loading method</a> to work.<br />Try "Page Footer", though sometimes the method "Custom AJAX" also works (please test the result)', PO_LANG ),
+								__( 'Shortcode <code>%s</code> requires a different <a href="%s">loading method</a> to work.<br />Try "Page Footer", though sometimes the method "Custom AJAX" also works (please test the result)', 'popover' ),
 								$match[0],
 								'edit.php?post_type=' . IncPopupItem::POST_TYPE . '&page=settings'
 							),
@@ -705,7 +705,7 @@ class IncPopupItem {
 				break;
 
 			default:
-				//lib2()->ui->admin_message( 'Shortcode-Check not defined for: ' . $method );
+				//lib3()->ui->admin_message( 'Shortcode-Check not defined for: ' . $method );
 		}
 	}
 
@@ -762,7 +762,7 @@ class IncPopupItem {
 		if ( $this->can_hide ) {
 			$hide_forever_tag = sprintf(
 				'<a href="#" class="wdpu-hide-forever">%s</a>',
-				__( 'Never see this message again.', PO_LANG )
+				__( 'Never see this message again.', 'popover' )
 			);
 		} else {
 			$hide_forever_tag = '';
@@ -774,6 +774,7 @@ class IncPopupItem {
 
 		$outer_class[] = 'wdpu-container';
 		$outer_class[] = 'wdpu-background';
+		$inner_class[] = 'popup';
 		$inner_class[] = 'wdpu-msg';
 		$inner_class[] = 'move';
 
@@ -1087,8 +1088,8 @@ class IncPopupItem {
 	 */
 	public function output( $name ) {
 		// Make sure the JS/CSS files are enqueued.
-		lib2()->ui->add( PO_JS_URL . 'public.min.js' );
-		lib2()->ui->add( PO_CSS_URL . 'animate.min.css' );
+		lib3()->ui->add( PO_JS_URL . 'public.min.js' );
+		lib3()->ui->add( 'animate' );
 
 		// Sanitize the variable name.
 		$name = sanitize_html_class( $name );
@@ -1099,8 +1100,8 @@ class IncPopupItem {
 		$js_data = $this->get_script_data();
 		$script = 'jQuery(function() { window.' . $name . ' = wdev_popup(' . $data_name . '); });';
 
-		lib2()->ui->data( $data_name, $js_data );
-		lib2()->ui->script( $script );
+		lib3()->ui->data( $data_name, $js_data );
+		lib3()->ui->script( $script );
 	}
 
 
@@ -1122,18 +1123,18 @@ class IncPopupItem {
 	 */
 	static public function condition_label( $key = null ) {
 		switch ( $key ) {
-			case 'login':        return __( 'Visitor is logged in', PO_LANG );
-			case 'no_login':     return __( 'Visitor is not logged in', PO_LANG );
-			case 'url':          return __( 'On specific URL', PO_LANG );
-			case 'no_url':       return __( 'Not on specific URL', PO_LANG );
-			case 'country':      return __( 'In a specific country', PO_LANG );
-			case 'no_country':   return __( 'Not in a specific country', PO_LANG );
-			case 'prosite':      return __( 'Site is not a Pro-site', PO_LANG );
-			case 'searchengine': return __( 'Visit via a search engine', PO_LANG );
-			case 'no_comment':   return __( 'Visitor has never commented', PO_LANG );
-			case 'no_internal':  return __( 'Visit not via an Internal link', PO_LANG );
-			case 'referrer':     return __( 'Visit via specific referer', PO_LANG );
-			case 'count':        return __( 'Popover shown less than x times', PO_LANG );
+			case 'login':        return __( 'Visitor is logged in', 'popover' );
+			case 'no_login':     return __( 'Visitor is not logged in', 'popover' );
+			case 'url':          return __( 'On specific URL', 'popover' );
+			case 'no_url':       return __( 'Not on specific URL', 'popover' );
+			case 'country':      return __( 'In a specific country', 'popover' );
+			case 'no_country':   return __( 'Not in a specific country', 'popover' );
+			case 'prosite':      return __( 'Site is not a Pro-site', 'popover' );
+			case 'searchengine': return __( 'Visit via a search engine', 'popover' );
+			case 'no_comment':   return __( 'Visitor has never commented', 'popover' );
+			case 'no_internal':  return __( 'Visit not via an Internal link', 'popover' );
+			case 'referrer':     return __( 'Visit via specific referer', 'popover' );
+			case 'count':        return __( 'Popover shown less than x times', 'popover' );
 			default:             return apply_filters( 'popup-rule-label', $key, $key );
 		}
 	}
@@ -1147,9 +1148,9 @@ class IncPopupItem {
 	 */
 	static public function status_label( $key ) {
 		switch ( $key ) {
-			case 'active':    return __( 'Active', PO_LANG );
-			case 'inactive':  return __( 'Inactive', PO_LANG );
-			case 'trash':     return __( 'Trashed', PO_LANG );
+			case 'active':    return __( 'Active', 'popover' );
+			case 'inactive':  return __( 'Inactive', 'popover' );
+			case 'trash':     return __( 'Trashed', 'popover' );
 			default:          return $key;
 		}
 	}

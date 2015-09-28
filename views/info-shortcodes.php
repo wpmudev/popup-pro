@@ -50,7 +50,7 @@ _e(
 	'however some Plugins or Themes might provide shortcodes that ' .
 	'only work with the loading method "Page Footer".<br /> ' .
 	'This list explains which shortcodes can be used with each ' .
-	'loading method:', PO_LANG
+	'loading method:', 'popover'
 );
 echo '</p>';
 
@@ -62,7 +62,7 @@ if ( IncPopup::use_global() ) :
 		'PopUps</strong>:<br />' .
 		'Shortcodes can be provided by a plugin or theme, so ' .
 		'each blog can have a different list of shortcodes. The ' .
-		'following list is valid for the current blog only!', PO_LANG
+		'following list is valid for the current blog only!', 'popover'
 	);
 	?></em></p>
 	<?php
@@ -76,32 +76,32 @@ endif;
 		<tr>
 			<th width="40%">
 				<div>
-				<?php _e( 'Shortcode', PO_LANG ); ?>
+				<?php _e( 'Shortcode', 'popover' ); ?>
 				</div>
 			</th>
 			<th class="flag load-footer">
-				<div data-tooltip="<?php _e( 'Loading method \'Page Footer\'', PO_LANG ); ?>">
-				<?php _e( 'Page Footer', PO_LANG ); ?>
+				<div data-tooltip="<?php _e( 'Loading method \'Page Footer\'', 'popover' ); ?>">
+				<?php _e( 'Page Footer', 'popover' ); ?>
 				</div>
 			</th>
 			<th class="flag load-ajax">
-				<div data-tooltip="<?php _e( 'Loading method \'WordPress AJAX\'', PO_LANG ); ?>">
-				<?php _e( 'WP AJAX', PO_LANG ); ?>
+				<div data-tooltip="<?php _e( 'Loading method \'WordPress AJAX\'', 'popover' ); ?>">
+				<?php _e( 'WP AJAX', 'popover' ); ?>
 				</div>
 			</th>
 			<th class="flag load-front">
-				<div data-tooltip="<?php _e( 'Loading method \'Custom AJAX\'', PO_LANG ); ?>">
-				<?php _e( 'Cust AJAX', PO_LANG ); ?>
+				<div data-tooltip="<?php _e( 'Loading method \'Custom AJAX\'', 'popover' ); ?>">
+				<?php _e( 'Cust AJAX', 'popover' ); ?>
 				</div>
 			</th>
 			<th class="flag load-anonymous">
-				<div data-tooltip="<?php _e( 'Loading method \'Anonymous Script\'', PO_LANG ); ?>">
-				<?php _e( 'Script', PO_LANG ); ?>
+				<div data-tooltip="<?php _e( 'Loading method \'Anonymous Script\'', 'popover' ); ?>">
+				<?php _e( 'Script', 'popover' ); ?>
 				</div>
 			</th>
 			<th class="flag">
-				<div data-tooltip="<?php _e( 'When opening a PopUp-Preview in the Editor', PO_LANG ); ?>">
-				<?php _e( 'Preview', PO_LANG ); ?>
+				<div data-tooltip="<?php _e( 'When opening a PopUp-Preview in the Editor', 'popover' ); ?>">
+				<?php _e( 'Preview', 'popover' ); ?>
 				</div>
 			</th>
 		</tr>
@@ -121,14 +121,14 @@ endif;
 </table>
 <div class="legend shortcode sc-admin">
 	<span class="sc-admin load-ajax"><i class="icon dashicons"></i></span>
-	<?php _e( 'Shortcode supported', PO_LANG ); ?>
+	<?php _e( 'Shortcode supported', 'popover' ); ?>
 </div>
 <div class="legend shortcode sc-admin sc-limited">
 	<span class="sc-admin load-ajax"><i class="icon dashicons"></i></span>
-	<?php _e( 'Might have issues', PO_LANG ); ?>
+	<?php _e( 'Might have issues', 'popover' ); ?>
 </div>
 <div class="legend shortcode sc-admin">
 	<span class="sc-front load-footer"><i class="icon dashicons"></i></span>
-	<?php _e( 'Shortcode does not work', PO_LANG ); ?>
+	<?php _e( 'Shortcode does not work', 'popover' ); ?>
 </div>
 </div>

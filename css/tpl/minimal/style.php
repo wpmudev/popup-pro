@@ -1,3 +1,3 @@
 <?php
-$info->name = __( 'Minimal', PO_LANG );
+$info->name = __( 'Minimal', 'popover' );
 $info->pro = true;

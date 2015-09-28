@@ -1,3 +1,3 @@
 <?php
-$info->name = __( 'Default Fixed', PO_LANG );
+$info->name = __( 'Default Fixed', 'popover' );
 $info->deprecated = true;

@@ -27,8 +27,8 @@ class IncPopupRule_Popup extends IncPopupRule {
 		// 'count' rule.
 		$this->add_rule(
 			'count',
-			__( 'PopUp shown less than', PO_LANG ),
-			__( 'Shows the PopUp if the user has only seen it less than a specific number of times.', PO_LANG ),
+			__( 'PopUp shown less than', 'popover' ),
+			__( 'Shows the PopUp if the user has only seen it less than a specific number of times.', 'popover' ),
 			'',
 			5
 		);
@@ -69,7 +69,7 @@ class IncPopupRule_Popup extends IncPopupRule {
 		if ( $count < 1 ) { $count = 1; }
 		?>
 		<label for="po-max-count">
-			<?php _e( 'Display PopUp this often:', PO_LANG ); ?>
+			<?php _e( 'Display PopUp this often:', 'popover' ); ?>
 		</label>
 		<input type="number"
 			id="po-max-count"
@@ -91,7 +91,7 @@ class IncPopupRule_Popup extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_count( $data ) {
-		lib2()->array->equip( $data, 'count' );
+		lib3()->array->equip( $data, 'count' );
 
 		$count = absint( $data['count'] );
 		if ( $count < 1 ) { $count = 1; }

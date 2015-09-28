@@ -1,8 +1,12 @@
 Plugin Name: PopUp Pro
-Author: Barry (Incsub), Marko Miljus (Incsub), Philipp Stracker (Incsub)
+Author: Philipp Stracker (Incsub), Barry (Incsub), Marko Miljus (Incsub)
 
 Change Log:
 ----------------------------------------------------------------------
+
+4.7.2
+----------------------------------------------------------------------
+- Update and clean up background code
 
 4.7.1.1
 ----------------------------------------------------------------------

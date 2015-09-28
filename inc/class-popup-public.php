@@ -152,10 +152,10 @@ class IncPopup extends IncPopupBase {
 			$the_name = $options['name'];
 		}
 
-		$this->script_data['popup'] = lib2()->array->get( $this->script_data['popup'] );
+		$this->script_data['popup'] = lib3()->array->get( $this->script_data['popup'] );
 
 		$popup = new IncPopupItem();
-		$data = lib2()->array->get( $options );
+		$data = lib3()->array->get( $options );
 		$data['content'] = $contents;
 		$popup->populate( $data );
 		$popup->script_data['manual'] = true;
@@ -184,16 +184,16 @@ class IncPopup extends IncPopupBase {
 		if ( ! $Loaded ) {
 			if ( is_array( $this->script_data ) && ! empty( $this->script_data ) ) {
 				$popup_data = apply_filters( 'popup-ajax-data', $this->script_data );
-				lib2()->ui->data( '_popup_data', $popup_data, 'front' );
+				lib3()->ui->data( '_popup_data', $popup_data, 'front' );
 
-				$popup_data['popup'] = lib2()->array->get( $popup_data['popup'] );
+				$popup_data['popup'] = lib3()->array->get( $popup_data['popup'] );
 				foreach ( $popup_data['popup'] as $item ) {
 					$this->enqueued[] = $item['html_id'];
 				}
 			}
 
-			lib2()->ui->add( PO_JS_URL . 'public.min.js', 'front' );
-			lib2()->ui->add( PO_CSS_URL . 'animate.min.css', 'front' );
+			lib3()->ui->add( PO_JS_URL . 'public.min.js', 'front' );
+			lib3()->ui->add( 'animate', 'front' );
 		} else {
 			if ( is_array( $this->script_data ) && is_array( $this->script_data['popup'] ) ) {
 				foreach ( $this->script_data['popup'] as $popup ) {
@@ -202,7 +202,7 @@ class IncPopup extends IncPopupBase {
 					}
 
 					$script = 'window._popup_data.popup.push(' . json_encode( $popup ) . ')';
-					lib2()->ui->script( $script );
+					lib3()->ui->script( $script );
 					$this->enqueued[] = $popup['html_id'];
 				}
 			}
@@ -288,7 +288,7 @@ class IncPopup extends IncPopupBase {
 		 * In an ajax request they would already be defined by the ajax url.
 		 */
 		$_REQUEST['thereferrer'] = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
-		$_REQUEST['thefrom'] = lib2()->net->current_url();
+		$_REQUEST['thefrom'] = lib3()->net->current_url();
 
 		// Populates $this->popups
 		$this->select_popup();
@@ -325,7 +325,7 @@ class IncPopup extends IncPopupBase {
 		 * In an ajax request they would already be defined by the ajax url.
 		 */
 		$_REQUEST['thereferrer'] = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
-		$_REQUEST['thefrom'] = lib2()->net->current_url();
+		$_REQUEST['thefrom'] = lib3()->net->current_url();
 
 		// Populates $this->popups
 		$this->select_popup();

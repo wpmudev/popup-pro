@@ -301,7 +301,7 @@ class IncPopupDatabase {
 		dbDelta( $sql );
 
 		if ( $count > 0 ) {
-			lib2()->ui->admin_message(
+			lib3()->ui->admin_message(
 				sprintf(
 					__(
 						'<strong>PopUp Pro</strong><br />' .
@@ -309,7 +309,7 @@ class IncPopupDatabase {
 						'latest version of the plugin!<br />' .
 						'<em>Note: Some PopUp options changed or were replaced. ' .
 						'You should have a look at your <a href="%s">PopUps</a> ' .
-						'to see if they still look as intended.</em>', PO_LANG
+						'to see if they still look as intended.</em>', 'popover'
 					),
 					admin_url( 'edit.php?post_type=' . IncPopupItem::POST_TYPE )
 				)
@@ -581,29 +581,29 @@ class IncPopupDatabase {
 
 			$Loading_methods[] = (object) array(
 				'id'    => 'footer',
-				'label' => __( 'Page Footer', PO_LANG ),
+				'label' => __( 'Page Footer', 'popover' ),
 				'info'  => __(
 					'Include PopUp as part of your site\'s HTML (no AJAX call).',
-					PO_LANG
+					'popover'
 				),
 			);
 
 			$Loading_methods[] = (object) array(
 				'id'    => 'ajax',
-				'label' => __( 'WordPress AJAX', PO_LANG ),
+				'label' => __( 'WordPress AJAX', 'popover' ),
 				'info'  => __(
 					'Load PopUp separately from the page via a WordPress AJAX call. ' .
 					'This is the best option if you use caching.',
-					PO_LANG
+					'popover'
 				),
 			);
 
 			$Loading_methods[] = (object) array(
 				'id'    => 'front',
-				'label' => __( 'Custom AJAX', PO_LANG ),
+				'label' => __( 'Custom AJAX', 'popover' ),
 				'info'  => __(
 					'Load PopUp separately from the page via a custom front-end AJAX call.',
-					PO_LANG
+					'popover'
 				),
 			);
 

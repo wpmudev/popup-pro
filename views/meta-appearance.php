@@ -14,7 +14,7 @@ $animations = IncPopup::get_animations();
 	<div class="col-12">
 		<label for="po-style">
 			<strong>
-				<?php _e( 'Select which style you want to use:', PO_LANG ); ?>
+				<?php _e( 'Select which style you want to use:', 'popover' ); ?>
 			</strong>
 		</label>
 	</div>
@@ -48,7 +48,7 @@ $animations = IncPopup::get_animations();
 			<input type="checkbox"
 				name="po_no_round_corners"
 				<?php checked( $popup->round_corners, false ); ?> />
-			<?php _e( 'No rounded corners', PO_LANG ); ?>
+			<?php _e( 'No rounded corners', 'popover' ); ?>
 		</label>
 	</div>
 </div>
@@ -63,7 +63,7 @@ $animations = IncPopup::get_animations();
 				'Once you save your PopUp with a new style you cannot ' .
 				'revert to this style!<br />' .
 				'Tipp: Use the Preview function to test this PopUp with one ' .
-				'of the new styles before saving it.', PO_LANG
+				'of the new styles before saving it.', 'popover'
 			);
 			?></em></p>
 		</div>
@@ -79,7 +79,7 @@ endif; ?>
 				id="po-custom-colors"
 				data-toggle=".chk-custom-colors"
 				<?php checked( $popup->custom_colors ); ?> />
-			<?php _e( 'Use custom colors', PO_LANG ); ?>
+			<?php _e( 'Use custom colors', 'popover' ); ?>
 		</label>
 	</div>
 </div>
@@ -90,7 +90,7 @@ endif; ?>
 			name="po_color[col1]"
 			value="<?php echo esc_attr( $popup->color['col1'] ); ?>" />
 		<br />
-		<?php _e( 'Links, button background, heading and subheading', PO_LANG ); ?>
+		<?php _e( 'Links, button background, heading and subheading', 'popover' ); ?>
 	</div>
 	<div class="col-colorpicker inp-row">
 		<input type="text"
@@ -98,7 +98,7 @@ endif; ?>
 			name="po_color[col2]"
 			value="<?php echo esc_attr( $popup->color['col2'] ); ?>" />
 		<br />
-		<?php _e( 'Button text', PO_LANG ); ?>
+		<?php _e( 'Button text', 'popover' ); ?>
 	</div>
 </div>
 
@@ -110,13 +110,13 @@ endif; ?>
 				id="po-custom-size"
 				data-toggle=".chk-custom-size"
 				<?php checked( $popup->custom_size ); ?> />
-			<?php _e( 'Use custom size (if selected the PopUp won\'t be responsive)', PO_LANG ); ?>
+			<?php _e( 'Use custom size (if selected the PopUp won\'t be responsive)', 'popover' ); ?>
 		</label>
 	</div>
 </div>
 <div class="wpmui-grid-12 chk-custom-size">
 	<div class="col-5 inp-row">
-		<label for="po-size-width"><?php _e( 'Width:', PO_LANG ); ?></label>
+		<label for="po-size-width"><?php _e( 'Width:', 'popover' ); ?></label>
 		<input type="text"
 			id="po-size-width"
 			name="po_size_width"
@@ -125,7 +125,7 @@ endif; ?>
 			placeholder="600px" />
 	</div>
 	<div class="col-5 inp-row">
-		<label for="po-size-height"><?php _e( 'Height:', PO_LANG ); ?></label>
+		<label for="po-size-height"><?php _e( 'Height:', 'popover' ); ?></label>
 		<input type="text"
 			id="po-size-height"
 			name="po_size_height"
@@ -143,7 +143,7 @@ endif; ?>
 				id="po-scroll-body"
 				data-toggle=".chk-scroll-body"
 				<?php checked( $popup->scroll_body ); ?> />
-			<?php _e( 'Allow page to be scrolled while PopUp is visible', PO_LANG ); ?>
+			<?php _e( 'Allow page to be scrolled while PopUp is visible', 'popover' ); ?>
 		</label>
 	</div>
 </div>
@@ -153,12 +153,12 @@ endif; ?>
 <div class="wpmui-grid-12">
 	<div class="col-6 inp-row">
 		<label for="po-animation-in">
-			<?php _e( 'PopUp display animation', PO_LANG ); ?>
+			<?php _e( 'PopUp display animation', 'popover' ); ?>
 		</label>
 	</div>
 	<div class="col-6 inp-row">
 		<label for="po-animation-out">
-			<?php _e( 'PopUp closing animation', PO_LANG ); ?>
+			<?php _e( 'PopUp closing animation', 'popover' ); ?>
 		</label>
 	</div>
 	<div class="col-6 inp-row">

@@ -28,8 +28,8 @@ class IncPopupRule_Prosite extends IncPopupRule {
 		// 'no_prosite' rule.
 		$this->add_rule(
 			'no_prosite',
-			__( 'Site is not a Pro Site', PO_LANG ),
-			__( 'Shows the PopUp if the site is not a Pro Site.', PO_LANG ),
+			__( 'Site is not a Pro Site', 'popover' ),
+			__( 'Shows the PopUp if the site is not a Pro Site.', 'popover' ),
 			'',
 			20
 		);
@@ -94,7 +94,7 @@ class IncPopupRule_Prosite extends IncPopupRule {
 			<?php printf(
 				__(
 					'This condition requires that the <a href="%s" target="_blank">' .
-					'Pro Sites Plugin</a> is installed and activated.', PO_LANG
+					'Pro Sites Plugin</a> is installed and activated.', 'popover'
 				),
 				'http://premium.wpmudev.org/project/pro-sites/'
 			);?>

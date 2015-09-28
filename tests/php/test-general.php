@@ -27,7 +27,6 @@ class Popup_Test_General extends WP_UnitTestCase {
 	 * Check if all constants are defined.
 	 */
 	function test_constants() {
-		$this->assertTrue( defined( 'PO_LANG' ), 'Const not defined: PO_LANG' );
 		$this->assertTrue( defined( 'PO_VERSION' ), 'Const not defined: PO_VERSION' );
 		$this->assertTrue( defined( 'PO_BUILD' ), 'Const not defined: PO_BUILD' );
 		$this->assertTrue( defined( 'PO_LANG_DIR' ), 'Const not defined: PO_LANG_DIR' );
@@ -45,12 +44,12 @@ class Popup_Test_General extends WP_UnitTestCase {
 	}
 
 	/**
-	 * See if the lib2() function is available.
+	 * See if the lib3() function is available.
 	 *
 	 * @depends test_constants
 	 */
 	function test_wpmulib() {
-		$this->assertTrue( function_exists( 'lib2' ), 'Missing: lib2()' );
+		$this->assertTrue( function_exists( 'lib2' ), 'Missing: lib3()' );
 		$this->assertTrue( class_exists( 'TheLib2Wrap' ), 'Missing: TheLib2Wrap' );
 
 		$this->assertNotEquals( TheLib2Wrap::$version, '0.0.0', 'Lib Version not set' );

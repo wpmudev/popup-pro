@@ -28,8 +28,8 @@ class IncPopupRule_XProfile extends IncPopupRule {
 		// 'xprofile' rule.
 		$this->add_rule(
 			'xprofile',
-			__( 'On XProfile match', PO_LANG ),
-			__( 'Shows the PopUp if the users XProfile field matches the condition.', PO_LANG ),
+			__( 'On XProfile match', 'popover' ),
+			__( 'Shows the PopUp if the users XProfile field matches the condition.', 'popover' ),
 			'no_xprofile',
 			10
 		);
@@ -37,8 +37,8 @@ class IncPopupRule_XProfile extends IncPopupRule {
 		// 'no_xprofile' rule.
 		$this->add_rule(
 			'no_xprofile',
-			__( 'Not on XProfile match', PO_LANG ),
-			__( 'Shows the PopUp if the users XProfile field does not match the condition.', PO_LANG ),
+			__( 'Not on XProfile match', 'popover' ),
+			__( 'Shows the PopUp if the users XProfile field does not match the condition.', 'popover' ),
 			'xprofile',
 			10
 		);
@@ -91,7 +91,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_xprofile( $data ) {
-		lib2()->array->equip( $data, 'xprofile' );
+		lib3()->array->equip( $data, 'xprofile' );
 		return $this->sanitize_values( $data['xprofile'] );
 	}
 
@@ -142,7 +142,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_xprofile( $data ) {
-		lib2()->array->equip( $data, 'no_xprofile' );
+		lib3()->array->equip( $data, 'no_xprofile' );
 		return $this->sanitize_values( $data['no_xprofile'] );
 	}
 
@@ -164,7 +164,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	 * @return array
 	 */
 	protected function sanitize_values( $data ) {
-		$data = lib2()->array->get( $data );
+		$data = lib3()->array->get( $data );
 		if ( ! isset( $data['field'] ) ) { $data['field'] = ''; }
 		if ( ! isset( $data['correlation'] ) ) { $data['correlation'] = ''; }
 		if ( ! isset( $data['value'] ) ) { $data['value'] = ''; }
@@ -182,7 +182,7 @@ class IncPopupRule_XProfile extends IncPopupRule {
 	protected function render_form( $name, $data ) {
 		if ( ! class_exists( 'BP_XProfile_Group' ) ) {
 			echo '<div class="error below-h2"><p>' .
-				__( 'This condition requires that the BuddyPress Extended Profile component is active.', PO_LANG ) .
+				__( 'This condition requires that the BuddyPress Extended Profile component is active.', 'popover' ) .
 			'</p></div>';
 			return;
 		}
@@ -197,12 +197,12 @@ class IncPopupRule_XProfile extends IncPopupRule {
 		}
 
 		if ( empty( $xfields ) ) {
-			_e( 'No XProfile fields found.', PO_LANG );
+			_e( 'No XProfile fields found.', 'popover' );
 		}
 
 		?>
 		<label for="po-rule-data-<?php echo esc_attr( $name ); ?>-field">
-			<?php _e( 'Field:', PO_LANG ); ?>
+			<?php _e( 'Field:', 'popover' ); ?>
 		</label>
 
 		<select name="po_rule_data[<?php echo esc_attr( $name ); ?>][field]"
@@ -222,16 +222,16 @@ class IncPopupRule_XProfile extends IncPopupRule {
 
 		<select name="po_rule_data[<?php echo esc_attr( $name ); ?>][correlation]">
 		<option value="" <?php selected( $data['correlation'], '' ); ?>>
-			<?php _e( 'equals', PO_LANG ); ?>
+			<?php _e( 'equals', 'popover' ); ?>
 		</option>
 		<option value="reverse" <?php selected( $data['correlation'], 'reverse' ); ?>>
-			<?php _e( 'is not', PO_LANG ); ?>
+			<?php _e( 'is not', 'popover' ); ?>
 		</option>
 		<option value="regex_is" <?php selected( $data['correlation'], 'regex_is' ); ?>>
-			<?php _e( 'matches regex', PO_LANG ); ?>
+			<?php _e( 'matches regex', 'popover' ); ?>
 		</option>
 		<option value="regex_not" <?php selected( $data['correlation'], 'regex_not' ); ?>>
-			<?php _e( 'does not match regex', PO_LANG ); ?>
+			<?php _e( 'does not match regex', 'popover' ); ?>
 		</option>
 		</select>
 

@@ -29,8 +29,8 @@ class IncPopupRule_Membership extends IncPopupRule {
 		// 'membership_lvl' rule.
 		$this->add_rule(
 			'membership_lvl',
-			__( 'By Membership Level', PO_LANG ),
-			__( 'Shows the PopUp if the user has a certain Membership Level.', PO_LANG ),
+			__( 'By Membership Level', 'popover' ),
+			__( 'Shows the PopUp if the user has a certain Membership Level.', 'popover' ),
 			'',
 			25
 		);
@@ -38,8 +38,8 @@ class IncPopupRule_Membership extends IncPopupRule {
 		// 'membership_sub' rule.
 		$this->add_rule(
 			'membership_sub',
-			__( 'By Membership Subscription', PO_LANG ),
-			__( 'Shows the PopUp if the user does not have a certain Membership Level.', PO_LANG ),
+			__( 'By Membership Subscription', 'popover' ),
+			__( 'Shows the PopUp if the user does not have a certain Membership Level.', 'popover' ),
 			'membership',
 			25
 		);
@@ -100,7 +100,7 @@ class IncPopupRule_Membership extends IncPopupRule {
 	protected function form_membership_lvl( $data ) {
 		$this->render_level_form(
 			'membership_lvl',
-			__( 'Show to users that have one of these Membership Levels:', PO_LANG ),
+			__( 'Show to users that have one of these Membership Levels:', 'popover' ),
 			$data
 		);
 	}
@@ -113,7 +113,7 @@ class IncPopupRule_Membership extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_membership_lvl( $data ) {
-		lib2()->array->equip( $data, 'membership_lvl' );
+		lib3()->array->equip( $data, 'membership_lvl' );
 		return $data['membership_lvl'];
 	}
 
@@ -147,7 +147,7 @@ class IncPopupRule_Membership extends IncPopupRule {
 	protected function form_membership_sub( $data ) {
 		$this->render_subscription_form(
 			'membership_sub',
-			__( 'Show to users that do not have one of these memberships:', PO_LANG ),
+			__( 'Show to users that do not have one of these memberships:', 'popover' ),
 			$data
 		);
 	}
@@ -160,7 +160,7 @@ class IncPopupRule_Membership extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_membership_sub( $data ) {
-		lib2()->array->equip( $data, 'membership_sub' );
+		lib3()->array->equip( $data, 'membership_sub' );
 		return $data['membership_sub'];
 	}
 
@@ -183,9 +183,9 @@ class IncPopupRule_Membership extends IncPopupRule {
 	 * @param  array $data
 	 */
 	protected function render_level_form( $name, $label, $data ) {
-		$data = lib2()->array->get( $data );
-		lib2()->array->equip( $data, 'membership_lvl' );
-		$data['membership_lvl'] = lib2()->array->get( $data['membership_lvl'] );
+		$data = lib3()->array->get( $data );
+		lib3()->array->equip( $data, 'membership_lvl' );
+		$data['membership_lvl'] = lib3()->array->get( $data['membership_lvl'] );
 
 		if ( ! $this->is_active ) {
 			$this->render_plugin_inactive();
@@ -216,9 +216,9 @@ class IncPopupRule_Membership extends IncPopupRule {
 	 * @param  array $data
 	 */
 	protected function render_subscription_form( $name, $label, $data ) {
-		$data = lib2()->array->get( $data );
-		lib2()->array->equip( $data, 'membership_sub' );
-		$data['membership_sub'] = lib2()->array->get( $data['membership_sub'] );
+		$data = lib3()->array->get( $data );
+		lib3()->array->equip( $data, 'membership_sub' );
+		$data['membership_sub'] = lib3()->array->get( $data['membership_sub'] );
 
 		if ( ! $this->is_active ) {
 			$this->render_plugin_inactive();
@@ -252,7 +252,7 @@ class IncPopupRule_Membership extends IncPopupRule {
 			printf(
 				__(
 					'This condition requires that the <a href="%s" target="_blank">' .
-					'Membership Plugin</a> is installed and activated.', PO_LANG
+					'Membership Plugin</a> is installed and activated.', 'popover'
 				),
 				'http://premium.wpmudev.org/project/membership/'
 			);
@@ -272,9 +272,9 @@ class IncPopupRule_Membership extends IncPopupRule {
 		$result = false;
 
 		if ( $this->is_active ) {
-			$data = lib2()->array->get( $data );
-			lib2()->array->equip( $data, 'membership_lvl' );
-			$data['membership_lvl'] = lib2()->array->get( $data['membership_lvl'] );
+			$data = lib3()->array->get( $data );
+			lib3()->array->equip( $data, 'membership_lvl' );
+			$data['membership_lvl'] = lib3()->array->get( $data['membership_lvl'] );
 
 			foreach ( $data['membership_lvl'] as $level ) {
 				if ( current_user_on_level( $level ) ) {
@@ -298,9 +298,9 @@ class IncPopupRule_Membership extends IncPopupRule {
 		$result = false;
 
 		if ( $this->is_active ) {
-			$data = lib2()->array->get( $data );
-			lib2()->array->equip( $data, 'membership_sub' );
-			$data['membership_sub'] = lib2()->array->get( $data['membership_sub'] );
+			$data = lib3()->array->get( $data );
+			lib3()->array->equip( $data, 'membership_sub' );
+			$data['membership_sub'] = lib3()->array->get( $data['membership_sub'] );
 
 			foreach ( $data['membership_sub'] as $subscription ) {
 				if ( current_user_on_subscription( $subscription ) ) {

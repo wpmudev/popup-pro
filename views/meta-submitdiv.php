@@ -15,7 +15,7 @@ $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 	<div id="minor-publishing">
 		<?php // Hidden submit button early on so that the browser chooses the right button when form is submitted with Return key ?>
 		<div style="display:none;">
-			<?php submit_button( __( 'Save', PO_LANG ), 'button', 'save', false ); ?>
+			<?php submit_button( __( 'Save', 'popover' ), 'button', 'save', false ); ?>
 		</div>
 
 		<div id="minor-publishing-actions" class="non-sticky">
@@ -27,8 +27,8 @@ $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 						<?php checked( $popup->status, 'active' ); ?>/>
 					<label class="status-box" for="po-status">
 						<span class="indicator"></span>
-						<span class="label-active"><?php _e( 'Status: <strong>Active</strong>', PO_LANG ); ?></span>
-						<span class="label-inactive"><?php _e( 'Status: Inactive', PO_LANG ); ?></span>
+						<span class="label-active"><?php _e( 'Status: <strong>Active</strong>', 'popover' ); ?></span>
+						<span class="label-inactive"><?php _e( 'Status: Inactive', 'popover' ); ?></span>
 					</label>
 				</div>
 			</div>
@@ -36,7 +36,7 @@ $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 			<div class="preview-action">
 				<button type="button" class="preview button">
 				<i class="dashicons dashicons-visibility"></i>
-				<?php _e( 'Preview PopUp', PO_LANG ); ?>
+				<?php _e( 'Preview PopUp', 'popover' ); ?>
 				</button>
 			</div>
 
@@ -49,7 +49,7 @@ $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 		<div class="delete-action">
 		<?php if ( current_user_can( 'delete_post', $post->ID ) ) : ?>
 			<a class="submitdelete deletion" href="<?php echo esc_url( $delete_url ); ?>">
-			<?php _e( 'Move to Trash', PO_LANG ); ?>
+			<?php _e( 'Move to Trash', 'popover' ); ?>
 			</a>
 		<?php endif; ?>
 		</div>
@@ -58,12 +58,12 @@ $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 			<span class="spinner"></span>
 			<?php if ( ! empty( $popup->id ) ) : ?>
 				<a href="<?php echo esc_url( $duplicate_url ); ?>" class="do-duplicate">
-					<?php _e( 'Duplicate', PO_LANG ); ?>
+					<?php _e( 'Duplicate', 'popover' ); ?>
 				</a>
 			<?php endif; ?>
 			<input type="hidden" name="po-action" value="save" />
 			<button class="button-primary" id="publish" name="publish">
-			<?php _e( 'Save', PO_LANG ); ?>
+			<?php _e( 'Save', 'popover' ); ?>
 			</button>
 		</div>
 
@@ -75,7 +75,7 @@ $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 		<div class="delete-action">
 		<?php if ( current_user_can( 'delete_post', $post->ID ) ) : ?>
 			<a class="submitdelete deletion" href="<?php echo esc_url( $delete_url ); ?>">
-			<?php _e( 'Move to Trash', PO_LANG ); ?>
+			<?php _e( 'Move to Trash', 'popover' ); ?>
 			</a>
 		<?php endif; ?>
 		</div>
@@ -83,14 +83,14 @@ $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 		<div class="publishing-action">
 			<input type="hidden" name="po-action" value="save" />
 			<button class="button-primary" id="publish" name="publish">
-			<?php _e( 'Save', PO_LANG ); ?>
+			<?php _e( 'Save', 'popover' ); ?>
 			</button>
 		</div>
 
 		<div class="preview-action">
 			<button type="button" class="preview button">
 			<i class="dashicons dashicons-visibility"></i>
-			<?php _e( 'Preview PopUp', PO_LANG ); ?>
+			<?php _e( 'Preview PopUp', 'popover' ); ?>
 			</button>
 		</div>
 
@@ -98,7 +98,7 @@ $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 			<span class="spinner"></span>
 			<?php if ( ! empty( $popup->id ) ) : ?>
 				<a href="<?php echo esc_url( $duplicate_url ); ?>" class="do-duplicate">
-					<?php _e( 'Duplicate', PO_LANG ); ?>
+					<?php _e( 'Duplicate', 'popover' ); ?>
 				</a>
 			<?php endif; ?>
 		</div>

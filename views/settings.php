@@ -34,7 +34,7 @@ if ( ! IncPopupAddon_GeoDB::table_exists() ) {
 				'no geo-data table was found in your database. For details, ' .
 				'read the "Using a Local Geo-Database" in the ' .
 				'<a href="%1$s" target="_blank">PopUp usage guide</a>.',
-				PO_LANG
+				'popover'
 			),
 			'http://premium.wpmudev.org/project/the-pop-over-plugin/#usage'
 		).
@@ -49,7 +49,7 @@ if ( defined( 'PO_REMOTE_IP_URL' ) && strlen( PO_REMOTE_IP_URL ) > 5 ) {
 			'lookup service in <tt>wp-config.php</tt> via the constant ' .
 			'"<tt>PO_REMOTE_IP_URL</tt>". To use one of the default services ' .
 			'you have to remove that constant from wp-config.php.',
-			PO_LANG
+			'popover'
 		).
 	'</p>';
 }
@@ -68,7 +68,7 @@ $ordered_rules = array();
 ?>
 <div class="wrap nosubsub">
 
-	<h2><?php _e( 'PopUp Settings', PO_LANG ); ?></h2>
+	<h2><?php _e( 'PopUp Settings', 'popover' ); ?></h2>
 
 	<div id="poststuff" class="metabox-holder m-settings">
 	<form method="post" action="<?php echo esc_url( $form_url ); ?>">
@@ -79,13 +79,13 @@ $ordered_rules = array();
 
 		<div class="wpmui-box static">
 			<h3>
-				<span><?php _e( 'PopUp Loading Method', PO_LANG ); ?></span>
+				<span><?php _e( 'PopUp Loading Method', 'popover' ); ?></span>
 			</h3>
 
 			<div class="inside">
 				<p><?php
 				_e(
-					'Select how you would like to load PopUp.', PO_LANG
+					'Select how you would like to load PopUp.', 'popover'
 				);
 				?></p>
 
@@ -95,7 +95,7 @@ $ordered_rules = array();
 					<?php /* === LOADING METHOD === */ ?>
 					<tr valign="top">
 						<th scope="row">
-							<?php _e( 'Load PopUp using', PO_LANG ); ?>
+							<?php _e( 'Load PopUp using', 'popover' ); ?>
 						</th>
 						<td>
 							<select name="po_option[loadingmethod]" id="loadingmethod">
@@ -104,7 +104,7 @@ $ordered_rules = array();
 										value="<?php echo esc_attr( $item->id ); ?>"
 										<?php if ( ! empty( $item->disabled ) ) { echo 'disabled="disabled"'; } ?>
 										<?php selected( $cur_method, $item->id ); ?>>
-										<?php _e( $item->label, PO_LANG ); ?>
+										<?php _e( $item->label, 'popover' ); ?>
 									</option>
 								<?php endforeach; ?>
 							</select>
@@ -115,9 +115,9 @@ $ordered_rules = array();
 										<?php if ( $cur_method == $item->id ) : ?>
 											<strong><i class="dashicons dashicons-yes"
 											style="margin-left:-20px">
-											</i><?php _e( $item->label, PO_LANG ); ?></strong>:
+											</i><?php _e( $item->label, 'popover' ); ?></strong>:
 										<?php else : ?>
-											<?php _e( $item->label, PO_LANG ); ?>:
+											<?php _e( $item->label, 'popover' ); ?>:
 										<?php endif; ?>
 										<em><?php echo '' . $item->info; ?>
 									</em></li>
@@ -128,19 +128,19 @@ $ordered_rules = array();
 
 					<?php /* === GEO DB SETTING === */ ?>
 					<tr>
-						<th><?php _e( 'Country Lookup', PO_LANG ); ?></th>
+						<th><?php _e( 'Country Lookup', 'popover' ); ?></th>
 						<td>
 							<select
 								name="po_option[geo_lookup]"
 								class="po-option-geo-lookup" >
 								<?php if ( $custom_geo ) : ?>
-								<optgroup label="<?php _e( 'Custom Webservice', PO_LANG ); ?>">
+								<optgroup label="<?php _e( 'Custom Webservice', 'popover' ); ?>">
 									<option value="" selected="selected">
 										wp-config.php
 									</option>
 								</optgroup>
 								<?php endif; ?>
-								<optgroup label="<?php _e( 'Webservices', PO_LANG ); ?>">
+								<optgroup label="<?php _e( 'Webservices', 'popover' ); ?>">
 									<?php foreach ( $geo_service as $key => $service ) : ?>
 										<option value="<?php echo esc_attr( $key ); ?>"
 											<?php if ( $custom_geo ) : ?>disabled<?php endif; ?>
@@ -149,16 +149,16 @@ $ordered_rules = array();
 										</option>
 									<?php endforeach; ?>
 								</optgroup>
-								<optgroup label="<?php _e( 'Local Database', PO_LANG ); ?>">
+								<optgroup label="<?php _e( 'Local Database', 'popover' ); ?>">
 									<option value="geo_db"
 										<?php if ( $no_ip_cache ) : ?>disabled<?php endif; ?>
 										<?php selected( $settings['geo_db'] ); ?>>
-										<?php _e( 'Local IP Lookup Table', PO_LANG ); ?>
+										<?php _e( 'Local IP Lookup Table', 'popover' ); ?>
 									</option>
 								</optgroup>
 							</select>
 							<button type="button" class="button test-location">
-								<?php _e( 'Test my location', PO_LANG ); ?>
+								<?php _e( 'Test my location', 'popover' ); ?>
 							</button>
 							<script>
 							jQuery(function() {
@@ -184,7 +184,7 @@ $ordered_rules = array();
 							_e(
 								'This option is relevant for the ' .
 								'"Visitor Location" condition.',
-								PO_LANG
+								'popover'
 							);
 							?></em></p>
 							<?php echo '' . $geo_msg; ?>
@@ -199,14 +199,14 @@ $ordered_rules = array();
 		<div class="wpmui-box <?php echo esc_attr( $theme_compat->okay ? 'closed' : '' ); ?>">
 			<h3>
 				<a href="#" class="toggle" title="<?php _e( 'Click to toggle' ); ?>"><br></a>
-				<span><?php _e( 'Theme compatibility', PO_LANG ); ?></span>
+				<span><?php _e( 'Theme compatibility', 'popover' ); ?></span>
 			</h3>
 
 			<div class="inside">
 				<?php
 				_e(
 					'Here you can see if your theme is compatible with the ' .
-					'"Page Footer" loading method.', PO_LANG
+					'"Page Footer" loading method.', 'popover'
 				);
 				?>
 				<div class="<?php echo esc_attr( $theme_class ); ?>">
@@ -221,7 +221,7 @@ $ordered_rules = array();
 		<div class="wpmui-box closed">
 			<h3>
 				<a href="#" class="toggle" title="<?php _e( 'Click to toggle' ); ?>"><br></a>
-				<span><?php _e( 'Supported Shortcodes', PO_LANG ); ?></span>
+				<span><?php _e( 'Supported Shortcodes', 'popover' ); ?></span>
 			</h3>
 
 			<div class="inside">
@@ -231,11 +231,11 @@ $ordered_rules = array();
 
 		<p class="submit">
 			<button class="button-primary">
-				<?php _e( 'Save All Changes', PO_LANG ) ?>
+				<?php _e( 'Save All Changes', 'popover' ) ?>
 			</button>
 		</p>
 
-		<h2><?php _e( 'Available Conditions', PO_LANG ); ?></h2>
+		<h2><?php _e( 'Available Conditions', 'popover' ); ?></h2>
 
 		<?php /* === ACTIVE RULES === */ ?>
 		<table class="widefat tbl-addons">
@@ -246,10 +246,10 @@ $ordered_rules = array();
 						<input type="checkbox" />
 					</th>
 					<th class="manage-column column-name" scope="col">
-						<?php _e( 'Name', PO_LANG ); ?>
+						<?php _e( 'Name', 'popover' ); ?>
 					</th>
 					<th class="manage-column column-items" scope="col">
-						<?php _e( 'Activated Rules', PO_LANG ); ?>
+						<?php _e( 'Activated Rules', 'popover' ); ?>
 					</th>
 				</tr>
 				</<?php echo esc_attr( $tag ); ?>>
@@ -266,21 +266,21 @@ $ordered_rules = array();
 				$data['limit'] = explode( ',', $data['limit'] );
 				$data['limit'] = array_map( 'trim', $data['limit'] );
 
-				$name = __( trim( $data['name'] ), PO_LANG );
+				$name = __( trim( $data['name'] ), 'popover' );
 
 				$ordered_rules[ $name ] = $data;
 				$ordered_rules[ $name ]['key'] = $rule;
 				$ordered_rules[ $name ]['name'] = $name;
 				$ordered_rules[ $name ]['active'] = $is_active;
-				$ordered_rules[ $name ]['desc'] = __( trim( $data['desc'] ), PO_LANG );
+				$ordered_rules[ $name ]['desc'] = __( trim( $data['desc'] ), 'popover' );
 
 				if ( 'pro' != PO_VERSION && in_array( 'pro', $data['limit'] ) ) {
 					$ordered_rules[ $name ]['disabled'] = sprintf(
-						__( 'Available in the <a href="%s" target="_blank">PRO version</a>', PO_LANG ),
+						__( 'Available in the <a href="%s" target="_blank">PRO version</a>', 'popover' ),
 						'http://premium.wpmudev.org/project/the-pop-over-plugin/'
 					);
 				} else if ( IncPopup::use_global() && in_array( 'no global', $data['limit'] ) ) {
-					$ordered_rules[ $name ]['disabled'] = __( 'Not available for global PopUps', PO_LANG );
+					$ordered_rules[ $name ]['disabled'] = __( 'Not available for global PopUps', 'popover' );
 				} else if ( ! IncPopup::use_global() && in_array( 'global', $data['limit'] ) ) {
 					$ordered_rules[ $name ]['disabled'] = true;
 				} else {
@@ -320,7 +320,7 @@ $ordered_rules = array();
 					<?php foreach ( $data['rules'] as $rule_name ) : ?>
 						<?php $rule_name = trim( $rule_name ); ?>
 						<?php if ( empty( $rule_name ) ) { continue; } ?>
-						<code><?php _e( trim( $rule_name ), PO_LANG ); ?></code><br />
+						<code><?php _e( trim( $rule_name ), 'popover' ); ?></code><br />
 					<?php endforeach; ?>
 					</td>
 				</tr>
@@ -329,7 +329,7 @@ $ordered_rules = array();
 
 		<p class="submit">
 			<button class="button-primary">
-				<?php _e( 'Save All Changes', PO_LANG ) ?>
+				<?php _e( 'Save All Changes', 'popover' ) ?>
 			</button>
 		</p>
 

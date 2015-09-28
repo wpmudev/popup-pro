@@ -28,8 +28,8 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 		// 'url' rule.
 		$this->add_rule(
 			'adv_url',
-			__( 'On approximate URL', PO_LANG ),
-			__( 'Shows the PopUp if the user is on a certain URL.', PO_LANG ),
+			__( 'On approximate URL', 'popover' ),
+			__( 'Shows the PopUp if the user is on a certain URL.', 'popover' ),
 			'no_adv_url',
 			30
 		);
@@ -37,8 +37,8 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 		// 'no_url' rule.
 		$this->add_rule(
 			'no_adv_url',
-			__( 'Not on approximate URL', PO_LANG ),
-			__( 'Shows the PopUp if the user is not on a certain URL.', PO_LANG ),
+			__( 'Not on approximate URL', 'popover' ),
+			__( 'Shows the PopUp if the user is not on a certain URL.', 'popover' ),
 			'adv_url',
 			30
 		);
@@ -81,7 +81,7 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 		else { $urls = ''; }
 		?>
 		<label for="po-rule-data-adv-url">
-			<?php _e( 'URL regex (one per line):', PO_LANG ); ?>
+			<?php _e( 'URL regex (one per line):', 'popover' ); ?>
 		</label>
 		<textarea name="po_rule_data[adv_url]" id="po-rule-data-adv-url" class="block"><?php
 			echo esc_html( $urls );
@@ -97,7 +97,7 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_adv_url( $data ) {
-		lib2()->array->equip( $data, 'adv_url' );
+		lib3()->array->equip( $data, 'adv_url' );
 		return explode( "\n", $data['adv_url'] );
 	}
 
@@ -138,7 +138,7 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 		else { $urls = ''; }
 		?>
 		<label for="po-rule-data-no-adv-url">
-			<?php _e( 'URL regex (one per line):', PO_LANG ); ?>
+			<?php _e( 'URL regex (one per line):', 'popover' ); ?>
 		</label>
 		<textarea name="po_rule_data[no_adv_url]" id="po-rule-data-no-adv-url" class="block"><?php
 			echo esc_html( $urls );
@@ -154,7 +154,7 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_adv_url( $data ) {
-		lib2()->array->equip( $data, 'no_adv_url' );
+		lib3()->array->equip( $data, 'no_adv_url' );
 		return explode( "\n", $data['no_adv_url'] );
 	}
 
@@ -179,7 +179,7 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 		$current_url = '';
 
 		if ( empty( $_REQUEST['thefrom'] ) ) {
-			$current_url = lib2()->net->current_url();
+			$current_url = lib3()->net->current_url();
 		} else {
 			$current_url = strtok( $_REQUEST['thefrom'], '#' );
 		}

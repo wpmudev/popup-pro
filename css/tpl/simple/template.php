@@ -31,7 +31,7 @@
 <div id="%id%" class="%outer_class%" style="%outer_style%">
 	<div class="resize %inner_class%" style="%inner_style%">
 
-		<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
+		<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', 'popover' ); ?>"></a>
 
 		<div class="wdpu-msg-inner resize">
 			<?php if ( $img_is_left ) : ?>

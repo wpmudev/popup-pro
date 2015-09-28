@@ -10,10 +10,10 @@
 <div class="wpmui-loading init-loading">
 	<div class="wpmui-grid-12">
 		<div class="col-all-rules">
-			<strong><?php _e( 'Available Conditions', PO_LANG ); ?></strong>
+			<strong><?php _e( 'Available Conditions', 'popover' ); ?></strong>
 		</div>
 		<div class="col-active-rules">
-			<strong><?php _e( 'Show this PopUp if all of the following conditions are met', PO_LANG ); ?></strong>
+			<strong><?php _e( 'Show this PopUp if all of the following conditions are met', 'popover' ); ?></strong>
 		</div>
 	</div>
 	<div class="wpmui-grid-12">

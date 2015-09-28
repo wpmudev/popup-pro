@@ -78,7 +78,7 @@ class IncPopupRule_Events extends IncPopupRule {
 					value="leave"
 					data-toggle=".opt-display-leave"
 					<?php checked( $popup->display, 'leave' ); ?> />
-				<?php _e( 'Appear when the mouse leaves the browser window', PO_LANG ); ?>
+				<?php _e( 'Appear when the mouse leaves the browser window', 'popover' ); ?>
 			</label>
 		</div>
 		<?php
@@ -94,7 +94,7 @@ class IncPopupRule_Events extends IncPopupRule {
 	 * @return array Modified data collection.
 	 */
 	public function append_data_on_exit( $script_data, $popup ) {
-		$script_data = lib2()->array->get( $script_data );
+		$script_data = lib3()->array->get( $script_data );
 
 		if ( 'leave' == $popup->display ) {
 			if ( ! isset( $script_data['script'] ) ) {
@@ -161,21 +161,21 @@ class IncPopupRule_Events extends IncPopupRule {
 					value="click"
 					data-toggle=".opt-display-click"
 					<?php checked( $popup->display, 'click' ); ?> />
-				<?php _e( 'Appear when user clicks on a CSS selector', PO_LANG ); ?>
+				<?php _e( 'Appear when user clicks on a CSS selector', 'popover' ); ?>
 			</label>
 			<span class="opt-display-click">
 				<input type="text"
 					maxlength="50"
 					name="po_display_data[click]"
 					value="<?php echo esc_attr( @$popup->display_data['click'] ); ?>"
-					placeholder="<?php _e( '.class or #id', PO_LANG ); ?>" />
+					placeholder="<?php _e( '.class or #id', 'popover' ); ?>" />
 			</span>
 			<span class="opt-display-click">
 				<label data-tooltip="Repeated: The PopUp will be displayed on every click. Otherwise it will be opened only once (on the first click)" data-pos="top" data-width="200">
 					<input type="checkbox"
 						name="po_display_data[click_multi]"
 						<?php checked( ! empty( $popup->display_data['click_multi'] ) ); ?>/>
-					<?php _e( 'Repeated', PO_LANG ); ?>
+					<?php _e( 'Repeated', 'popover' ); ?>
 				</label>
 			</span>
 		</div>
@@ -191,7 +191,7 @@ class IncPopupRule_Events extends IncPopupRule {
 	 * @return array Modified data collection.
 	 */
 	public function append_data_on_click( $script_data, $popup ) {
-		$script_data = lib2()->array->get( $script_data );
+		$script_data = lib3()->array->get( $script_data );
 
 		if ( 'click' == $popup->display ) {
 			if ( ! isset( $script_data['script'] ) ) {

@@ -28,8 +28,8 @@ class IncPopupRule_UserRole extends IncPopupRule {
 		// 'role' rule.
 		$this->add_rule(
 			'role',
-			__( 'Visitor has role', PO_LANG ),
-			__( 'Shows the PopUp if the user is logged in and is assigned to a certain role.', PO_LANG ),
+			__( 'Visitor has role', 'popover' ),
+			__( 'Shows the PopUp if the user is logged in and is assigned to a certain role.', 'popover' ),
 			'no_role',
 			15
 		);
@@ -37,8 +37,8 @@ class IncPopupRule_UserRole extends IncPopupRule {
 		// 'no_role' rule.
 		$this->add_rule(
 			'no_role',
-			__( 'Visitor does not have role', PO_LANG ),
-			__( 'Shows the PopUp if the user is logged in and is not assigned to a certain role.', PO_LANG ),
+			__( 'Visitor does not have role', 'popover' ),
+			__( 'Shows the PopUp if the user is logged in and is not assigned to a certain role.', 'popover' ),
 			'role',
 			15
 		);
@@ -79,7 +79,7 @@ class IncPopupRule_UserRole extends IncPopupRule {
 	protected function form_role( $data ) {
 		$this->render_role_form(
 			'role',
-			__( 'Show to users that have one of these roles:', PO_LANG ),
+			__( 'Show to users that have one of these roles:', 'popover' ),
 			$data
 		);
 	}
@@ -92,7 +92,7 @@ class IncPopupRule_UserRole extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_role( $data ) {
-		lib2()->array->equip( $data, 'role' );
+		lib3()->array->equip( $data, 'role' );
 		return $data['role'];
 	}
 
@@ -126,7 +126,7 @@ class IncPopupRule_UserRole extends IncPopupRule {
 	protected function form_no_role( $data ) {
 		$this->render_role_form(
 			'no_role',
-			__( 'Show to users that do not have one of these roles:', PO_LANG ),
+			__( 'Show to users that do not have one of these roles:', 'popover' ),
 			$data
 		);
 	}
@@ -139,7 +139,7 @@ class IncPopupRule_UserRole extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_no_role( $data ) {
-		lib2()->array->equip( $data, 'no_role' );
+		lib3()->array->equip( $data, 'no_role' );
 		return $data['no_role'];
 	}
 

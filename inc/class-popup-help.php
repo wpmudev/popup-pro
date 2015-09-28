@@ -57,7 +57,7 @@ class IncPopupHelp {
 		$screen->add_help_tab(
 			array(
 				'id'       => 'help_shortcodes',
-				'title'    => __( 'Shortcodes', PO_LANG ),
+				'title'    => __( 'Shortcodes', 'popover' ),
 				'callback' => array( $this, 'content_shortcodes' ),
 			)
 		);

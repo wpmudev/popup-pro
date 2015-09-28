@@ -117,7 +117,7 @@ class IncPopupAddon_HeaderFooter {
 			// Grab the response code and make sure the request was sucessful
 			$code = (int) wp_remote_retrieve_response_code( $response );
 			if ( is_wp_error( $response ) ) {
-				lib2()->ui->admin_message( $response->get_error_message() );
+				lib3()->ui->admin_message( $response->get_error_message() );
 				return $Resp;
 			}
 
@@ -134,7 +134,7 @@ class IncPopupAddon_HeaderFooter {
 				// wp_head is missing
 				$Resp->msg[] = __(
 					'Critical: Call to <code>wp_head();</code> is missing! It ' .
-					'should appear directly before <code>&lt;/head&gt;</code>', PO_LANG
+					'should appear directly before <code>&lt;/head&gt;</code>', 'popover'
 				);
 			}
 
@@ -142,7 +142,7 @@ class IncPopupAddon_HeaderFooter {
 				// wp_footer is missing.
 				$Resp->msg[] = __(
 					'Critical: Call to <code>wp_footer();</code> is missing! It ' .
-					'should appear directly before <code>&lt;/body&gt;</code>', PO_LANG
+					'should appear directly before <code>&lt;/body&gt;</code>', 'popover'
 				);
 			}
 
@@ -158,7 +158,7 @@ class IncPopupAddon_HeaderFooter {
 				$Resp->okay = true;
 				$Resp->msg[] = __(
 					'Okay: Your current theme uses <code>wp_head();</code> and ' .
-					'<code>wp_footer();</code> correctly!', PO_LANG
+					'<code>wp_footer();</code> correctly!', 'popover'
 				);
 			}
 		}

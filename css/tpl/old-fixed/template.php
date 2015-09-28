@@ -21,7 +21,7 @@ if ( defined( 'PO_ALLOW_CONTENT_FILTERING' ) && PO_ALLOW_CONTENT_FILTERING ) {
 	class="<?php echo esc_attr( $msg_class ); ?>"
 	style="left: -1000px; top: 100px; display: none;">
 
-	<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', PO_LANG ); ?>"></a>
+	<a href="#" class="wdpu-close" title="<?php _e( 'Close this box', 'popover' ); ?>"></a>
 	<div id="message" class="wdpu-msg resize" style="<?php echo esc_attr( $this->code->colors ); ?>">
 
 		<?php echo '' . do_shortcode( $content ); ?>
@@ -30,7 +30,7 @@ if ( defined( 'PO_ALLOW_CONTENT_FILTERING' ) && PO_ALLOW_CONTENT_FILTERING ) {
 		<?php if ( $this->can_hide ) : ?>
 			<div class="claimbutton hide">
 				<a href="#" class="wdpu-hide-forever">
-					<?php _e( 'Never see this message again.', PO_LANG ); ?>
+					<?php _e( 'Never see this message again.', 'popover' ); ?>
 				</a>
 			</div>
 		<?php endif; ?>

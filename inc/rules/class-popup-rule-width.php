@@ -28,12 +28,12 @@ class IncPopupRule_Width extends IncPopupRule {
 		// 'width' rule.
 		$this->add_rule(
 			'width',
-			__( 'Depending on screen size', PO_LANG ),
+			__( 'Depending on screen size', 'popover' ),
 			__(
 				'Shows the PopUp if the window-width is within the defined ' .
 				'limits. Note: The window size is checked upon page load! ' .
 				'when the user resizes the window after the page is loaded it ' .
-				'will not affect this rule.', PO_LANG
+				'will not affect this rule.', 'popover'
 			),
 			'',
 			30
@@ -89,7 +89,7 @@ class IncPopupRule_Width extends IncPopupRule {
 	 */
 	public function append_data_width( $script_data, $popup ) {
 		if ( $popup->uses_rule( 'width' ) ) {
-			lib2()->array->equip( $popup->rule_data, 'width' );
+			lib3()->array->equip( $popup->rule_data, 'width' );
 			$data = $this->sanitize_values( $popup->rule_data['width'] );
 
 			if ( $data['max'] >= $this->max_width ) { $data['max'] = 0; }
@@ -128,7 +128,7 @@ class IncPopupRule_Width extends IncPopupRule {
 		<div class="slider-wrap">
 			<div class="slider-data">
 				<label for="po-rule-data-width-min">
-					<?php _e( 'At least:', PO_LANG ); ?>
+					<?php _e( 'At least:', 'popover' ); ?>
 				</label>
 
 				<span class="slider-min-input">
@@ -144,11 +144,11 @@ class IncPopupRule_Width extends IncPopupRule {
 				<input type="text"
 					class="slider-min-ignore inp-small"
 					readonly="readonly"
-					value="<?php _e( 'Any size', PO_LANG ); ?>" />
+					value="<?php _e( 'Any size', 'popover' ); ?>" />
 				<br />
 
 				<label for="po-rule-data-width-max">
-					<?php _e( 'At most:', PO_LANG ); ?>
+					<?php _e( 'At most:', 'popover' ); ?>
 				</label>
 
 				<span class="slider-max-input">
@@ -164,7 +164,7 @@ class IncPopupRule_Width extends IncPopupRule {
 				<input type="text"
 					class="slider-max-ignore inp-small"
 					readonly="readonly"
-					value="<?php _e( 'Any size', PO_LANG ); ?>" />
+					value="<?php _e( 'Any size', 'popover' ); ?>" />
 			</div>
 			<div class="slider"
 				data-min="0"
@@ -183,7 +183,7 @@ class IncPopupRule_Width extends IncPopupRule {
 	 * @return mixed Data collection of this rule.
 	 */
 	protected function save_width( $data ) {
-		lib2()->array->equip( $data, 'width' );
+		lib3()->array->equip( $data, 'width' );
 		return $this->sanitize_values( $data['width'] );
 	}
 
