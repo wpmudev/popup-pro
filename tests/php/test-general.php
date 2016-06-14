@@ -39,8 +39,6 @@ class Popup_Test_General extends WP_UnitTestCase {
 		$this->assertTrue( defined( 'PO_JS_URL' ), 'Const not defined: PO_JS_URL' );
 		$this->assertTrue( defined( 'PO_CSS_URL' ), 'Const not defined: PO_CSS_URL' );
 		$this->assertTrue( defined( 'PO_IMG_URL' ), 'Const not defined: PO_IMG_URL' );
-
-		$this->assertEquals( PO_VERSION, 'pro', 'PO_VERSION has wrong value' );
 	}
 
 	/**
@@ -49,13 +47,13 @@ class Popup_Test_General extends WP_UnitTestCase {
 	 * @depends test_constants
 	 */
 	function test_wpmulib() {
-		$this->assertTrue( function_exists( 'lib2' ), 'Missing: lib3()' );
-		$this->assertTrue( class_exists( 'TheLib2Wrap' ), 'Missing: TheLib2Wrap' );
+		$this->assertTrue( function_exists( 'lib3' ), 'Missing: lib3()' );
+		$this->assertTrue( class_exists( 'TheLib3_Wrap' ), 'Missing: TheLib3_Wrap' );
 
-		$this->assertNotEquals( TheLib2Wrap::$version, '0.0.0', 'Lib Version not set' );
-		$this->assertNotNull( TheLib2Wrap::$object, 'Lib Object not set' );
+		$this->assertNotEquals( TheLib3_Wrap::$version, '0.0.0', 'Lib Version not set' );
+		$this->assertNotNull( TheLib3_Wrap::$object, 'Lib Object not set' );
 
 		// Check for minimum required version.
-		$this->assertTrue( version_compare( TheLib2Wrap::$version, '2.0.0', '>=' ), 'Lib Version too low' );
+		$this->assertTrue( version_compare( TheLib3_Wrap::$version, '3.0.0', '>=' ), 'Lib Version too low' );
 	}
 }

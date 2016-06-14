@@ -18,6 +18,7 @@ $theme_compat = IncPopupAddon_HeaderFooter::check();
 $theme_class = $theme_compat->okay ? 'msg-ok' : 'msg-err';
 
 
+/* start:pro */
 // START: Geo Lookup
 $geo_service = IncPopupDatabase::get_geo_services();
 
@@ -54,6 +55,7 @@ if ( defined( 'PO_REMOTE_IP_URL' ) && strlen( PO_REMOTE_IP_URL ) > 5 ) {
 	'</p>';
 }
 // ----- END: Geo Lookup
+/* end:pro */
 
 
 $rules = IncPopup::get_rules();
@@ -119,14 +121,14 @@ $ordered_rules = array();
 										<?php else : ?>
 											<?php _e( $item->label, 'popover' ); ?>:
 										<?php endif; ?>
-										<em><?php echo '' . $item->info; ?>
+										<em><?php echo $item->info; ?>
 									</em></li>
 								<?php endforeach; ?>
 							</ul>
 						</td>
 					</tr>
 
-					<?php /* === GEO DB SETTING === */ ?>
+					<?php /* start:pro */ /* === GEO DB SETTING === */ ?>
 					<tr>
 						<th><?php _e( 'Country Lookup', 'popover' ); ?></th>
 						<td>
@@ -187,9 +189,9 @@ $ordered_rules = array();
 								'popover'
 							);
 							?></em></p>
-							<?php echo '' . $geo_msg; ?>
+							<?php echo $geo_msg; ?>
 						</td>
-					</tr>
+					</tr> <?php /* end:pro */ ?>
 				</tbody>
 				</table>
 			</div>
@@ -210,9 +212,11 @@ $ordered_rules = array();
 				);
 				?>
 				<div class="<?php echo esc_attr( $theme_class ); ?>">
-					<?php foreach ( $theme_compat->msg as $row ) {
+					<?php
+					foreach ( $theme_compat->msg as $row ) {
 						echo '<p>' . $row . '</p>';
-					} ?>
+					}
+					?>
 				</div>
 			</div>
 		</div>
@@ -255,7 +259,8 @@ $ordered_rules = array();
 				</<?php echo esc_attr( $tag ); ?>>
 			<?php endforeach; ?>
 
-			<?php foreach ( $rules as $rule ) {
+			<?php
+			foreach ( $rules as $rule ) {
 				$data = get_file_data(
 					PO_INC_DIR . 'rules/' . $rule,
 					$rule_headers,
@@ -286,7 +291,8 @@ $ordered_rules = array();
 				} else {
 					$ordered_rules[ $name ]['disabled'] = false;
 				}
-			} ?>
+			}
+			?>
 			<?php ksort( $ordered_rules ); ?>
 
 			<?php foreach ( $ordered_rules as $data ) {
@@ -309,10 +315,10 @@ $ordered_rules = array();
 						<label for="<?php echo esc_attr( $rule_id ); ?>">
 							<strong><?php echo esc_html( $data['name'] ); ?></strong>
 						</label>
-						<div><em><?php echo '' . $data['desc']; ?></em></div>
+						<div><em><?php echo $data['desc']; ?></em></div>
 						<?php if ( $data['disabled'] ) : ?>
 							<div class="locked-msg">
-								<?php echo '' . $data['disabled']; ?>
+								<?php echo $data['disabled']; ?>
 							</div>
 						<?php endif; ?>
 					</td>

@@ -15,6 +15,7 @@ This filename is saved as metadata with each popup that uses these rules.
 Renaming the file will DISABLE the rules, which is very bad!
 */
 
+/* start:pro */
 class IncPopupRule_Prosite extends IncPopupRule {
 
 	/**
@@ -101,7 +102,7 @@ class IncPopupRule_Prosite extends IncPopupRule {
 		</p></div>
 		<?php
 	}
-
 };
 
 IncPopupRules::register( 'IncPopupRule_Prosite' );
+/* end:pro */

@@ -43,7 +43,6 @@ module.exports = function( grunt ) {
 			'css/tpl/old-default/style.css':        'css/src/tpl/old-default/style.scss',
 			'css/tpl/old-fixed/style.css':          'css/src/tpl/old-fixed/style.scss',
 			'css/tpl/old-fullbackground/style.css': 'css/src/tpl/old-fullbackground/style.scss',
-			'css/animate.css':                      'css/vendor/animate.scss',
 		},
 
 		// BUILD branches.

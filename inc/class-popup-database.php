@@ -51,7 +51,7 @@ class IncPopupDatabase {
 			IncPopupDatabase::set_flag( 'network_dismiss', true );
 		}
 
-		return $cur_version == PO_BUILD;
+		return PO_BUILD == $cur_version;
 	}
 
 	/**
@@ -78,7 +78,7 @@ class IncPopupDatabase {
 		}
 
 		if ( ! isset( $Prefixed[ $blog_id ][ $table ] ) ) {
-			$Prefixed[$table] = $table;
+			$Prefixed[ $table ] = $table;
 
 			if ( defined( 'PO_GLOBAL' ) && true == PO_GLOBAL ) {
 				if ( ! empty( $wpdb->base_prefix ) ) {
@@ -152,13 +152,20 @@ class IncPopupDatabase {
 
 			// Name mapping of conditions/rules from build 5 -> 6.
 			$mapping = array(
-				'isloggedin' => 'login', 'loggedin' => 'no_login',
-				'onurl' => 'url', 'notonurl' => 'no_url',
-				'incountry' => 'country', 'notincountry' => 'no_country',
-				'advanced_urls' => 'adv_url', 'not-advanced_urls' => 'no_adv_url',
-				'categories' => 'category', 'not-categories' => 'no_category',
-				'post_types' => 'posttype', 'not-post_types' => 'no_posttype',
-				'xprofile_value' => 'xprofile', 'not-xprofile_value' => 'no_xprofile',
+				'isloggedin' => 'login',
+				'loggedin' => 'no_login',
+				'onurl' => 'url',
+				'notonurl' => 'no_url',
+				'incountry' => 'country',
+				'notincountry' => 'no_country',
+				'advanced_urls' => 'adv_url',
+				'not-advanced_urls' => 'no_adv_url',
+				'categories' => 'category',
+				'not-categories' => 'no_category',
+				'post_types' => 'posttype',
+				'not-post_types' => 'no_posttype',
+				'xprofile_value' => 'xprofile',
+				'not-xprofile_value' => 'no_xprofile',
 				'supporter' => 'no_prosite',
 				'searchengine' => 'searchengine',
 				'commented' => 'no_comment',
@@ -195,10 +202,10 @@ class IncPopupDatabase {
 				$raw = maybe_unserialize( $item->popover_settings );
 				$checks = explode( ',', @$raw['popover_check']['order'] );
 				foreach ( $checks as $ind => $key ) {
-					if ( isset( $mapping[$key] ) ) {
-						$checks[$ind] = $mapping[$key];
+					if ( isset( $mapping[ $key ] ) ) {
+						$checks[ $ind ] = $mapping[ $key ];
 					} else {
-						unset( $checks[$ind] );
+						unset( $checks[ $ind ] );
 					}
 				}
 
@@ -265,7 +272,7 @@ class IncPopupDatabase {
 						'width' => array(
 							'min'        => @$raw['max_width']['width'],
 						),
-					)
+					),
 				);
 
 				// Save the popup as custom posttype.
@@ -301,17 +308,21 @@ class IncPopupDatabase {
 		dbDelta( $sql );
 
 		if ( $count > 0 ) {
+			/* start:pro */$plugin_name = 'PopUp Pro';/* end:pro */
+			/* start:free */$plugin_name = 'WordPress PopUp';/* end:free */
 			lib3()->ui->admin_message(
 				sprintf(
 					__(
-						'<strong>PopUp Pro</strong><br />' .
+						'<strong>%s</strong><br />' .
 						'Your installation was successfully updated to use the ' .
 						'latest version of the plugin!<br />' .
 						'<em>Note: Some PopUp options changed or were replaced. ' .
-						'You should have a look at your <a href="%s">PopUps</a> ' .
+						'You should have a look at your %sPopUps%s ' .
 						'to see if they still look as intended.</em>', 'popover'
 					),
-					admin_url( 'edit.php?post_type=' . IncPopupItem::POST_TYPE )
+					$plugin_name,
+					'<a href="' . admin_url( 'edit.php?post_type=' . IncPopupItem::POST_TYPE ) . '">',
+					'</a>'
 				)
 			);
 		}
@@ -640,15 +651,15 @@ class IncPopupDatabase {
 				'class-popup-rule-url.php',
 				'class-popup-rule-user.php',
 				'class-popup-rule-prosite.php',
-			)
+			),
 		);
 
 		$data = (array) self::_get_option( 'inc_popup-config', array() );
 
 		if ( ! is_array( $data ) ) { $data = array(); }
 		foreach ( $defaults as $key => $def_value ) {
-			if ( ! isset( $data[$key] ) ) {
-				$data[$key] = $def_value;
+			if ( ! isset( $data[ $key ] ) ) {
+				$data[ $key ] = $def_value;
 			}
 		}
 
@@ -678,7 +689,7 @@ class IncPopupDatabase {
 		if ( is_object( $data ) ) { $data = (array) $data; }
 		if ( ! is_array( $data ) ) { $data = array(); }
 
-		return isset( $data[$key] ) ? $data[$key] : '';
+		return isset( $data[ $key ] ) ? $data[ $key ] : '';
 	}
 
 	/**
@@ -693,7 +704,7 @@ class IncPopupDatabase {
 		$data = get_user_meta( get_current_user_id(), 'po_data', true );
 		if ( is_object( $data ) ) { $data = (array) $data; }
 		if ( ! is_array( $data ) ) { $data = array(); }
-		$data[$key] = $value;
+		$data[ $key ] = $value;
 
 		update_user_meta( get_current_user_id(), 'po_data', $data );
 	}
@@ -780,7 +791,7 @@ class IncPopupDatabase {
 		global $wpdb;
 		$Country = array();
 
-		if ( ! isset( $Country[$ip] ) ) {
+		if ( ! isset( $Country[ $ip ] ) ) {
 			$ip_table = self::db_prefix( self::IP_TABLE );
 			$sql = "
 				SELECT country
@@ -788,12 +799,12 @@ class IncPopupDatabase {
 				WHERE IP = %s
 			";
 			$sql = $wpdb->prepare( $sql, $ip );
-			$Country[$ip] = $wpdb->get_var( $sql );
+			$Country[ $ip ] = $wpdb->get_var( $sql );
 
-			if ( null === $Country[$ip] ) { $Country[$ip] = ''; }
+			if ( null === $Country[ $ip ] ) { $Country[ $ip ] = ''; }
 		}
 
-		return $Country[$ip];
+		return $Country[ $ip ];
 	}
 
 	/**
@@ -880,5 +891,4 @@ class IncPopupDatabase {
 
 		return $Geo_service;
 	}
-
 }

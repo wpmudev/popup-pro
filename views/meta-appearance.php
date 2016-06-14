@@ -30,15 +30,27 @@ $animations = IncPopup::get_animations();
 			name="po_orig_style_old"
 			value="<?php echo esc_attr( $popup->deprecated_style ); ?>" />
 		<select class="block" id="po-style" name="po_style">
-			<?php foreach ( $styles as $key => $data ) :
+			<?php
+			$disabled_items = array();
+			foreach ( $styles as $key => $data ) :
 				if ( ! isset( $data->deprecated ) ) { $data->deprecated = false; }
 				if ( $data->deprecated && $popup->style != $key ) { continue; }
-				?>
-				<option value="<?php echo esc_attr( $key ); ?>"
-					data-old="<?php echo esc_attr( $data->deprecated ); ?>"
-					<?php selected( $key, $popup->style ); ?>>
-					<?php echo esc_attr( $data->name ); ?>
-					<?php if ( $data->deprecated ) : ?>*)<?php endif; ?>
+				if ( ! $data->pro ) { ?>
+					<option value="<?php echo esc_attr( $key ); ?>"
+						data-old="<?php echo esc_attr( $data->deprecated ); ?>"
+						<?php selected( $key, $popup->style ); ?>>
+						<?php echo esc_attr( $data->name ); ?>
+						<?php if ( $data->deprecated ) : ?>*)<?php endif; ?>
+					</option>
+				<?php
+				} else {
+					$disabled_items[] = $data;
+				}
+			endforeach;
+			foreach ( $disabled_items as $data ) : ?>
+				<option disabled="disabled">
+					<?php echo esc_attr( $data->name ); ?> -
+					<?php _e( 'PRO Version only', PO_LANG ); ?>
 				</option>
 			<?php endforeach; ?>
 		</select>
@@ -168,14 +180,7 @@ endif; ?>
 				<optgroup label="<?php echo esc_attr( $group ); ?>">
 				<?php endif; ?>
 
-				<?php foreach ( $items as $key => $label ) {
-					printf(
-						'<option value="%2$s" %3$s>%1$s</option>',
-						esc_attr( $label ),
-						esc_attr( $key ),
-						selected( $key, $popup->animation_in, false )
-					);
-				} ?>
+				<?php inc_popup_show_options( $items, $popup->animation_in ); ?>
 
 				<?php if ( ! empty( $group ) ) : ?>
 				</optgroup>
@@ -191,14 +196,7 @@ endif; ?>
 				<optgroup label="<?php echo esc_attr( $group ); ?>">
 				<?php endif; ?>
 
-				<?php foreach ( $items as $key => $label ) {
-					printf(
-						'<option value="%2$s" %3$s>%1$s</option>',
-						esc_attr( $label ),
-						esc_attr( $key ),
-						selected( $key, $popup->animation_out, false )
-					);
-				} ?>
+				<?php inc_popup_show_options( $items, $popup->animation_out ); ?>
 
 				<?php if ( ! empty( $group ) ) : ?>
 				</optgroup>
@@ -207,3 +205,24 @@ endif; ?>
 		</select>
 	</div>
 </div>
+
+<?php
+function inc_popup_show_options( $items, $selected = false ) {
+	$pro_only = ' - ' . __( 'PRO Version', 'popover' );
+
+	foreach ( $items as $key => $label ) {
+		if ( strpos( $label, $pro_only ) ) {
+			printf(
+				'<option disabled>%1$s</option>',
+				esc_attr( $label )
+			);
+		} else {
+			printf(
+				'<option value="%2$s" %3$s>%1$s</option>',
+				esc_attr( $label ),
+				esc_attr( $key ),
+				selected( $key, $selected, false )
+			);
+		}
+	}
+}

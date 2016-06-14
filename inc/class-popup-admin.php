@@ -335,9 +335,11 @@ class IncPopup extends IncPopupBase {
 				self::post_order( $order );
 				break;
 
+			/* start:pro */
 			case 'test-geo':
 				require_once PO_INC_DIR . 'rules/class-popup-rule-geo.php';
 				// No break! We want to trigger the "popup-ajax-" action.
+			/* end:pro */
 
 			default:
 				/**
@@ -387,8 +389,10 @@ class IncPopup extends IncPopupBase {
 			$settings = array();
 			$settings['loadingmethod'] = $_POST['po_option']['loadingmethod'];
 
-			$settings['geo_lookup'] = $_POST['po_option']['geo_lookup'];
-			$settings['geo_db'] = ( 'geo_db' === $settings['geo_lookup'] );
+			if ( isset( $_POST['po_option']['geo_lookup'] ) ) {
+				$settings['geo_lookup'] = $_POST['po_option']['geo_lookup'];
+				$settings['geo_db'] = ( 'geo_db' == $settings['geo_lookup'] );
+			}
 
 			$rules = $_POST['po_option']['rules'];
 			if ( ! is_array( $rules ) ) { $rules = array(); }
@@ -396,11 +400,13 @@ class IncPopup extends IncPopupBase {
 
 			IncPopupDatabase::set_settings( $settings );
 
+			/* start:pro*/
 			// When the Lookup-source was changed we want to clear the cache.
 			if ( $old_settings['geo_lookup'] != $settings['geo_lookup'] ) {
 				IncPopupDatabase::clear_ip_cache();
 				lib3()->ui->admin_message( __( 'Country Lookup changed: The lookup-cache was cleared.', 'popover' ) );
 			}
+			/* end:pro*/
 
 			lib3()->ui->admin_message( __( 'Your settings have been updated.', 'popover' ) );
 			$redirect_url = esc_url_raw(

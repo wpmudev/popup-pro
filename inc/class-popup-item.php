@@ -376,7 +376,7 @@ class IncPopupItem {
 		if ( ! is_array( $this->rule ) ) { $this->rule = array(); }
 		$this->rule_files = array();
 		foreach ( $this->rule as $ind => $key ) {
-			if ( empty( $key ) ) { unset( $this->rule[$ind] ); }
+			if ( empty( $key ) ) { unset( $this->rule[ $ind ] ); }
 
 			// Set rule-files.
 			$file = IncPopupRules::file_for_rule( $key );
@@ -386,7 +386,7 @@ class IncPopupItem {
 		}
 		if ( ! is_array( $this->rule_data ) ) { $this->rule_data = array(); }
 		foreach ( $this->rule_data as $ind => $key ) {
-			if ( empty( $key ) ) { unset( $this->rule_data[$ind] ); }
+			if ( empty( $key ) ) { unset( $this->rule_data[ $ind ] ); }
 		}
 
 		// Generate unique ID.
@@ -402,12 +402,12 @@ class IncPopupItem {
 		}
 
 		// Display data.
-		if ( ! $this->custom_colors || empty ( $this->color['col1'] ) ) {
+		if ( ! $this->custom_colors || empty( $this->color['col1'] ) ) {
 			$this->code->color1 = '#488CFD';
 		} else {
 			$this->code->color1 = $this->color['col1'];
 		}
-		if ( ! $this->custom_colors || empty ( $this->color['col2'] ) ) {
+		if ( ! $this->custom_colors || empty( $this->color['col2'] ) ) {
 			$this->code->color2 = '#FFFFFF';
 		} else {
 			$this->code->color2 = $this->color['col2'];
@@ -556,6 +556,32 @@ class IncPopupItem {
 			case 'trash':    $status = 'trash'; break;
 			default:         $status = 'draft'; break;
 		}
+
+		/* start:free */
+		if ( 'publish' == $status ) {
+			// Limit the number of active PopUps.
+			if ( 3 <= IncPopupDatabase::count_active( $this->id ) ) {
+				$status = 'draft';
+				$show_message = false;
+
+				lib3()->ui->admin_message(
+					sprintf(
+						__(
+							'In the free version you can activate 3 PopUps. ' .
+							'You can activate this PopUp when you first ' .
+							'deactivate another PopUp.<br>' .
+							'The PRO Version allows you to have unlimited ' .
+							'active PopUps! ' .
+							'<a href="%1$s" target="_blank">Find out more &raquo;</a>',
+							'popover'
+						),
+						'http://premium.wpmudev.org/project/the-pop-over-plugin/'
+					),
+					'err'
+				);
+			}
+		}
+		/* end:free */
 
 		// When the content changed make sure to only allow valid code!
 		if ( $this->content != $this->orig_content
@@ -852,10 +878,16 @@ class IncPopupItem {
 		 * @since 4.6.1.2
 		 */
 		if ( $this->inline ) { $outer_class[] = 'inline'; }
-		if ( $has_title ) { $outer_class[] = 'with-title'; }
-		else { $outer_class[] = 'no-title'; }
-		if ( $has_subtitle ) { $outer_class[] = 'with-subtitle'; }
-		else { $outer_class[] = 'no-subtitle'; }
+		if ( $has_title ) {
+			$outer_class[] = 'with-title';
+		} else {
+			$outer_class[] = 'no-title';
+		}
+		if ( $has_subtitle ) {
+			$outer_class[] = 'with-subtitle';
+		} else {
+			$outer_class[] = 'no-subtitle';
+		}
 
 		$outer_class = implode(
 			' ',
@@ -935,7 +967,7 @@ class IncPopupItem {
 
 		if ( ! isset( $Html[ $this->id ] ) ) {
 			$styles = apply_filters( 'popup-styles', array() );
-			$details = $styles[$this->style];
+			$details = $styles[ $this->style ];
 
 			$vars = $this->prepare_template_vars();
 			extract( $vars );
@@ -1003,7 +1035,7 @@ class IncPopupItem {
 
 		if ( ! isset( $Code[ $this->id ] ) ) {
 			$styles = apply_filters( 'popup-styles', array() );
-			$details = $styles[$this->style];
+			$details = $styles[ $this->style ];
 
 			$Code[ $this->id ] = '';
 			$tpl_file = $details->dir . 'style.css';
@@ -1154,6 +1186,4 @@ class IncPopupItem {
 			default:          return $key;
 		}
 	}
-
-
 }

@@ -15,6 +15,7 @@ This filename is saved as metadata with each popup that uses these rules.
 Renaming the file will DISABLE the rules, which is very bad!
 */
 
+/* start:pro */
 class IncPopupRule_Membership extends IncPopupRule {
 
 	/**
@@ -312,7 +313,7 @@ class IncPopupRule_Membership extends IncPopupRule {
 
 		return $result;
 	}
-
 };
 
 IncPopupRules::register( 'IncPopupRule_Membership' );
+/* end:pro */

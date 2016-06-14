@@ -1,6 +1,6 @@
-/*! PopUp Pro - v4.7.2
+/*! PopUp - v4.7.3
  * http://premium.wpmudev.org/project/the-pop-over-plugin/
- * Copyright (c) 2015; * Licensed GPLv2+ */
+ * Copyright (c) 2016; * Licensed GPLv2+ */
 ace.define("ace/theme/chrome", ["require", "exports", "module", "ace/lib/dom"], function(require, exports, module) {
 
     exports.isDark = false;

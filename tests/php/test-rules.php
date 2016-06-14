@@ -24,51 +24,21 @@ class Popup_Test_Rules extends WP_UnitTestCase {
 	}
 
 	protected $rules = array(
-		array(
-			'file' => 'class-popup-rule-advurl.php',     'class' => 'IncPopupRule_AdvUrl',     'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-browser.php',    'class' => 'IncPopupRule_Browser',    'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-category.php',   'class' => 'IncPopupRule_Category',   'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-events.php',     'class' => 'IncPopupRule_Events',     'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-geo.php',        'class' => 'IncPopupRule_Geo',        'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-membership.php', 'class' => 'IncPopupRule_Membership', 'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-popup.php',      'class' => 'IncPopupRule_Popup',      'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-posttype.php',   'class' => 'IncPopupRule_Posttype',   'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-prosite.php',    'class' => 'IncPopupRule_Prosite',    'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-referrer.php',   'class' => 'IncPopupRule_Referrer',   'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-role.php',       'class' => 'IncPopupRule_UserRole',   'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-url.php',        'class' => 'IncPopupRule_Url',        'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-user.php',       'class' => 'IncPopupRule_User',       'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-width.php',      'class' => 'IncPopupRule_Width',      'available' => true,
-		),
-		array(
-			'file' => 'class-popup-rule-xprofile.php',   'class' => 'IncPopupRule_XProfile',   'available' => true,
-		),
+		array( 'file' => 'class-popup-rule-advurl.php',     'class' => 'IncPopupRule_AdvUrl' ),
+		array( 'file' => 'class-popup-rule-browser.php',    'class' => 'IncPopupRule_Browser' ),
+		array( 'file' => 'class-popup-rule-category.php',   'class' => 'IncPopupRule_Category' ),
+		array( 'file' => 'class-popup-rule-events.php',     'class' => 'IncPopupRule_Events' ),
+		array( 'file' => 'class-popup-rule-geo.php',        'class' => 'IncPopupRule_Geo' ),
+		array( 'file' => 'class-popup-rule-membership.php', 'class' => 'IncPopupRule_Membership' ),
+		array( 'file' => 'class-popup-rule-popup.php',      'class' => 'IncPopupRule_Popup' ),
+		array( 'file' => 'class-popup-rule-posttype.php',   'class' => 'IncPopupRule_Posttype' ),
+		array( 'file' => 'class-popup-rule-prosite.php',    'class' => 'IncPopupRule_Prosite' ),
+		array( 'file' => 'class-popup-rule-referrer.php',   'class' => 'IncPopupRule_Referrer' ),
+		array( 'file' => 'class-popup-rule-role.php',       'class' => 'IncPopupRule_UserRole' ),
+		array( 'file' => 'class-popup-rule-url.php',        'class' => 'IncPopupRule_Url' ),
+		array( 'file' => 'class-popup-rule-user.php',       'class' => 'IncPopupRule_User' ),
+		array( 'file' => 'class-popup-rule-width.php',      'class' => 'IncPopupRule_Width' ),
+		array( 'file' => 'class-popup-rule-xprofile.php',   'class' => 'IncPopupRule_XProfile' ),
 	);
 
 	/**
@@ -84,11 +54,7 @@ class Popup_Test_Rules extends WP_UnitTestCase {
 			$this->assertTrue( file_exists( $path ), 'Rule not found: ' . $path );
 
 			include_once $path;
-			if ( $info['available'] ) {
-				$this->assertTrue( class_exists( $info['class'] ), 'Class not found: ' . $info['class'] );
-			} else {
-				$this->assertFalse( class_exists( $info['class'] ), 'Class should not exist: ' . $info['class'] );
-			}
+			$this->assertTrue( class_exists( $info['class'] ), 'Class not found: ' . $info['class'] );
 		}
 
 		// Check if all rules are loaded.

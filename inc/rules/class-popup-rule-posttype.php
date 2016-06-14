@@ -15,6 +15,7 @@ This filename is saved as metadata with each popup that uses these rules.
 Renaming the file will DISABLE the rules, which is very bad!
 */
 
+/* start:pro */
 class IncPopupRule_Posttype extends IncPopupRule {
 
 	/**
@@ -266,8 +267,7 @@ class IncPopupRule_Posttype extends IncPopupRule {
 			} else {
 				$response = in_array( $cur_type, $posttype ); // We have the post type!
 			}
-		}
-		else if ( ! $cur_single && in_array( 'plural', $url_types ) ) {
+		} elseif ( ! $cur_single && in_array( 'plural', $url_types ) ) {
 			if ( empty( $posttype ) ) {
 				$response = true; // Any posttype, archive
 			} else {
@@ -277,7 +277,7 @@ class IncPopupRule_Posttype extends IncPopupRule {
 
 		return $response;
 	}
-
 };
 
 IncPopupRules::register( 'IncPopupRule_Posttype' );
+/* end:pro */

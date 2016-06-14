@@ -15,6 +15,7 @@ This filename is saved as metadata with each popup that uses these rules.
 Renaming the file will DISABLE the rules, which is very bad!
 */
 
+/* start:pro */
 class IncPopupRule_AdvUrl extends IncPopupRule {
 
 	/**
@@ -76,9 +77,13 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 	 * @param  mixed $data Rule-data which was saved via the save_() handler.
 	 */
 	protected function form_adv_url( $data ) {
-		if ( is_string( $data ) ) { $urls = $data; }
-		else if ( is_array( $data ) ) { $urls = implode( "\n", $data ); }
-		else { $urls = ''; }
+		if ( is_string( $data ) ) {
+			$urls = $data;
+		} elseif ( is_array( $data ) ) {
+			$urls = implode( "\n", $data );
+		} else {
+			$urls = '';
+		}
 		?>
 		<label for="po-rule-data-adv-url">
 			<?php _e( 'URL regex (one per line):', 'popover' ); ?>
@@ -212,7 +217,7 @@ class IncPopupRule_AdvUrl extends IncPopupRule {
 
 		return $response;
 	}
-
 };
 
 IncPopupRules::register( 'IncPopupRule_AdvUrl' );
+/* end:pro */
