@@ -50,24 +50,24 @@ class IncPopupAddon_AnonyousLoading {
 				array( __CLASS__, 'settings' )
 			);
 		} else {
-			/* start:pro */
+			
 			// Called when initializing custom loading method in the Front-End.
 			add_action(
 				'popup-init-loading-method',
 				array( __CLASS__, 'init_public' ),
 				10, 2
 			);
-			/* end:pro */
+			
 		}
 
-		/* start:pro */
+		
 		// Modify the HTML/CSS code of the ajax response.
 		add_filter(
 			'popup-output-data',
 			array( __CLASS__, 'filter_script_data' ),
 			10, 2
 		);
-		/* end:pro */
+		
 	}
 
 	/**
@@ -79,8 +79,8 @@ class IncPopupAddon_AnonyousLoading {
 	 * @return array
 	 */
 	static public function settings( $loading_methods ) {
-		/* start:free */$pro_only = ' - ' . __( 'PRO Verson', 'popover' );/* end:free */
-		/* start:pro */$pro_only = '';/* end:pro */
+		
+		$pro_only = '';
 
 		$loading_methods[] = (object) array(
 			'id'    => self::METHOD,
@@ -95,7 +95,7 @@ class IncPopupAddon_AnonyousLoading {
 		return $loading_methods;
 	}
 
-	/* start:pro */
+	
 	/**
 	 * Enqueue the anonymous script.
 	 * Action: `popup-init-loading-method`
@@ -309,7 +309,7 @@ class IncPopupAddon_AnonyousLoading {
 		$shifted = substr( $letters, $offset ) . substr( $letters, 0, $offset );
 		return strtr( $str, $letters, $shifted );
 	}
-	/* end:pro */
+	
 }
 
 IncPopupAddon_AnonyousLoading::init();

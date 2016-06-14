@@ -18,7 +18,7 @@ $theme_compat = IncPopupAddon_HeaderFooter::check();
 $theme_class = $theme_compat->okay ? 'msg-ok' : 'msg-err';
 
 
-/* start:pro */
+
 // START: Geo Lookup
 $geo_service = IncPopupDatabase::get_geo_services();
 
@@ -55,7 +55,7 @@ if ( defined( 'PO_REMOTE_IP_URL' ) && strlen( PO_REMOTE_IP_URL ) > 5 ) {
 	'</p>';
 }
 // ----- END: Geo Lookup
-/* end:pro */
+
 
 
 $rules = IncPopup::get_rules();
@@ -128,7 +128,7 @@ $ordered_rules = array();
 						</td>
 					</tr>
 
-					<?php /* start:pro */ /* === GEO DB SETTING === */ ?>
+					<?php  /* === GEO DB SETTING === */ ?>
 					<tr>
 						<th><?php _e( 'Country Lookup', 'popover' ); ?></th>
 						<td>
@@ -191,7 +191,7 @@ $ordered_rules = array();
 							?></em></p>
 							<?php echo $geo_msg; ?>
 						</td>
-					</tr> <?php /* end:pro */ ?>
+					</tr> <?php  ?>
 				</tbody>
 				</table>
 			</div>

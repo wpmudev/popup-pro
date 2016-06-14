@@ -9,9 +9,7 @@
 $delete_url = get_delete_post_link( $post->ID );
 $duplicate_url = esc_url_raw( add_query_arg( 'do', 'duplicate' ) );
 
-/* start:free */
-$warn = ( 0 != IncPopupDatabase::count_active( $post->ID ) );
-/* end:free */
+
 
 ?>
 <div class="submitbox" id="submitpost">
@@ -24,12 +22,7 @@ $warn = ( 0 != IncPopupDatabase::count_active( $post->ID ) );
 
 		<div id="minor-publishing-actions" class="non-sticky">
 			<div class="status"
-				<?php /* start:free */ if ( $warn ) : ?>
-				data-tooltip="<?php _e( 'In the free version you can activate 1 PopUp. When you activate this PopUp then all other PopUps will be deactivated ', 'popover' ); ?>"
-				data-class="status-hint"
-				data-pos="left"
-				data-width="250"
-				<?php endif; /* end:free */ ?>
+				<?php  ?>
 				>
 				<div class="status-switch">
 					<input type="checkbox"

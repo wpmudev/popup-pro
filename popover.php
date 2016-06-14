@@ -1,12 +1,9 @@
 <?php
-/* start:pro *//**
+/**
  * Plugin Name: PopUp Pro
  * Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
- *//* end:pro */
-/* start:free *//**
- * Plugin Name: WordPress PopUp
- * Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
- */ /* end:free */
+ */
+
 /**
  * Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of  * advertising a mailing list, special offer or running a plain old ad.
  * Version:     4.7.2-beta
@@ -50,8 +47,8 @@ function inc_popup_init() {
 
 	define(
 		'PO_VERSION'
-		/* start:pro */,'pro'/* end:pro */
-		/* start:free */,'free'/* end:free */
+		,'pro'
+		
 	);
 
 	/**
@@ -100,7 +97,7 @@ function inc_popup_init() {
 	IncPopup::instance();
 }
 
-/* start:pro */
+
 inc_popup_init();
 
 // Pro: Integrate WPMU Dev Dashboard
@@ -120,13 +117,6 @@ if ( is_admin() ) {
 		require_once PO_INC_DIR . 'external/wpmudev-dashboard/wpmudev-dash-notification.php';
 	}
 }
-/* end:pro */
 
-/* start:free */
-// Init free after all plugins are loaded, in case both
-// Pro and Free versions are installed.
-add_action(
-	'plugins_loaded',
-	'inc_popup_init'
-);
-/* end:free */
+
+

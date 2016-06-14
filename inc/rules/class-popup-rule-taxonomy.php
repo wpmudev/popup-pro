@@ -15,7 +15,7 @@ This filename is saved as metadata with each popup that uses these rules.
 Renaming the file will DISABLE the rules, which is very bad!
 */
 
-/* start:pro */
+
 class IncPopupRule_Taxonomy extends IncPopupRule {
 
 
@@ -329,4 +329,4 @@ class IncPopupRule_Taxonomy extends IncPopupRule {
 };
 
 IncPopupRules::register( 'IncPopupRule_Taxonomy' );
-/* end:pro */
+
