@@ -381,7 +381,7 @@ module.exports = function( grunt ) {
 					cwd: '',
 					domainPath: conf.translation.pot_dir,
 					exclude: conf.translation.ignore_files,
-					mainFile: conf.plugin_file,
+					mainFile: conf.dev_plugin_file,
 					potFilename: conf.translation.textdomain + '.pot',
 					potHeaders: {
 						poedit: true, // Includes common Poedit headers.
