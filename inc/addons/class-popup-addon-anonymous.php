@@ -41,8 +41,6 @@ class IncPopupAddon_AnonyousLoading {
 	 * @since  4.6
 	 */
 	static public function init() {
-		self::$_slug = self::_generate_slug();
-
 		if ( is_admin() ) {
 			// Called from the PopUp Settings screen.
 			add_filter(
@@ -61,6 +59,8 @@ class IncPopupAddon_AnonyousLoading {
 		}
 
 		/* start:pro */
+		self::$_slug = self::_generate_slug();
+
 		// Modify the HTML/CSS code of the ajax response.
 		add_filter(
 			'popup-output-data',

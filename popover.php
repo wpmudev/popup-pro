@@ -9,7 +9,7 @@
  */ /* end:free */
 /**
  * Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of  * advertising a mailing list, special offer or running a plain old ad.
- * Version:     4.7.2-beta
+ * Version:     4.7.2.0
  * Author:      WPMU DEV
  * Author URI:  http://premium.wpmudev.org
  * Textdomain:  popover
