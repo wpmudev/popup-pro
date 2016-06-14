@@ -18,44 +18,7 @@ $theme_compat = IncPopupAddon_HeaderFooter::check();
 $theme_class = $theme_compat->okay ? 'msg-ok' : 'msg-err';
 
 
-/* start:pro */
-// START: Geo Lookup
-$geo_service = IncPopupDatabase::get_geo_services();
 
-$no_ip_cache = false;
-$custom_geo = false;
-$geo_msg = '';
-if ( ! IncPopupAddon_GeoDB::table_exists() ) {
-	$no_ip_cache = true;
-	$settings['geo_db'] = false;
-	$geo_msg .= '<p class="locked-msg">' .
-		sprintf(
-			__(
-				'<strong>Local IP Lookup Table</strong>: This is unavailable because ' .
-				'no geo-data table was found in your database. For details, ' .
-				'read the "Using a Local Geo-Database" in the ' .
-				'<a href="%1$s" target="_blank">PopUp usage guide</a>.',
-				'popover'
-			),
-			'http://premium.wpmudev.org/project/the-pop-over-plugin/#usage'
-		).
-	'</p>';
-}
-if ( defined( 'PO_REMOTE_IP_URL' ) && strlen( PO_REMOTE_IP_URL ) > 5 ) {
-	$custom_geo = true;
-	$settings['geo_lookup'] = '';
-	$geo_msg .= '<p class="locked-msg">' .
-		__(
-			'<strong>Custom Webservice</strong>: You have configured a custom ' .
-			'lookup service in <tt>wp-config.php</tt> via the constant ' .
-			'"<tt>PO_REMOTE_IP_URL</tt>". To use one of the default services ' .
-			'you have to remove that constant from wp-config.php.',
-			'popover'
-		).
-	'</p>';
-}
-// ----- END: Geo Lookup
-/* end:pro */
 
 
 $rules = IncPopup::get_rules();
@@ -128,70 +91,7 @@ $ordered_rules = array();
 						</td>
 					</tr>
 
-					<?php /* start:pro */ /* === GEO DB SETTING === */ ?>
-					<tr>
-						<th><?php _e( 'Country Lookup', 'popover' ); ?></th>
-						<td>
-							<select
-								name="po_option[geo_lookup]"
-								class="po-option-geo-lookup" >
-								<?php if ( $custom_geo ) : ?>
-								<optgroup label="<?php _e( 'Custom Webservice', 'popover' ); ?>">
-									<option value="" selected="selected">
-										wp-config.php
-									</option>
-								</optgroup>
-								<?php endif; ?>
-								<optgroup label="<?php _e( 'Webservices', 'popover' ); ?>">
-									<?php foreach ( $geo_service as $key => $service ) : ?>
-										<option value="<?php echo esc_attr( $key ); ?>"
-											<?php if ( $custom_geo ) : ?>disabled<?php endif; ?>
-											<?php selected( $key, $settings['geo_lookup'] ); ?>>
-											<?php echo esc_html( $service->label ); ?>
-										</option>
-									<?php endforeach; ?>
-								</optgroup>
-								<optgroup label="<?php _e( 'Local Database', 'popover' ); ?>">
-									<option value="geo_db"
-										<?php if ( $no_ip_cache ) : ?>disabled<?php endif; ?>
-										<?php selected( $settings['geo_db'] ); ?>>
-										<?php _e( 'Local IP Lookup Table', 'popover' ); ?>
-									</option>
-								</optgroup>
-							</select>
-							<button type="button" class="button test-location">
-								<?php _e( 'Test my location', 'popover' ); ?>
-							</button>
-							<script>
-							jQuery(function() {
-								function show_result(res, okay) {
-									alert( res );
-								}
-
-								function test_geo() {
-									wpmUi.ajax( null, 'po-ajax' )
-										.data({
-											'do': 'test-geo',
-											'type': jQuery('.po-option-geo-lookup').val()
-										})
-										.ondone( show_result )
-										.load_text();
-								}
-
-								jQuery('.test-location').click( test_geo );
-							});
-							</script>
-
-							<p><em><?php
-							_e(
-								'This option is relevant for the ' .
-								'"Visitor Location" condition.',
-								'popover'
-							);
-							?></em></p>
-							<?php echo $geo_msg; ?>
-						</td>
-					</tr> <?php /* end:pro */ ?>
+					<?php  ?>
 				</tbody>
 				</table>
 			</div>

@@ -43,7 +43,7 @@
 		</span>
 	</div>
 
-	<?php /* start:free */ ?><div class="pro-only"><?php /* end:free */ ?>
+	<?php  ?><div class="pro-only"><?php  ?>
 	<div class="col-12 inp-row">
 		<label>
 			<input type="radio"
@@ -51,7 +51,7 @@
 				id="po-display-scroll"
 				value="scroll"
 				data-toggle=".opt-display-scroll"
-				<?php /* start:free */ ?>style="display:none"<?php /* end:free */ ?>
+				<?php  ?>style="display:none"<?php  ?>
 				<?php checked( $popup->display, 'scroll' ); ?> />
 			<i class="pro-icon"></i>
 			<?php _e( 'Appear after', 'popover' ); ?>
@@ -62,7 +62,7 @@
 				max="9999"
 				maxlength="4"
 				name="po_display_data[scroll]"
-				<?php /* start:free */ ?>readonly="readonly"<?php /* end:free */ ?>
+				<?php  ?>readonly="readonly"<?php  ?>
 				class="inp-small"
 				value="<?php echo esc_attr( $popup->display_data['scroll'] ); ?>"
 				placeholder="25" />
@@ -84,7 +84,7 @@
 				id="po-display-anchor"
 				value="anchor"
 				data-toggle=".opt-display-anchor"
-				<?php /* start:free */ ?>style="display:none"<?php /* end:free */ ?>
+				<?php  ?>style="display:none"<?php  ?>
 				<?php checked( $popup->display, 'anchor' ); ?> />
 			<i class="pro-icon"></i>
 			<?php _e( 'Appear after user scrolled until CSS selector', 'popover' ); ?>
@@ -93,13 +93,13 @@
 			<input type="text"
 				maxlength="50"
 				name="po_display_data[anchor]"
-				<?php /* start:free */ ?>readonly="readonly"<?php /* end:free */ ?>
+				<?php  ?>readonly="readonly"<?php  ?>
 				value="<?php echo esc_attr( $popup->display_data['anchor'] ); ?>"
 				placeholder="<?php _e( '.class or #id', 'popover' ); ?>" />
 		</span>
 	</div>
 	<?php do_action( 'popup-display-behavior', $popup ); ?>
-	<?php /* start:free */ ?>
+	<?php  ?>
 	<div class="pro-note">
 		<i class="pro-icon"></i>
 		<span class="text">
@@ -112,7 +112,7 @@
 		</span>
 	</div>
 	</div>
-	<?php /* end:free */ ?>
+	<?php  ?>
 </div>
 
 <hr />
@@ -134,7 +134,7 @@
 			<?php _e( 'Add "Never see this message again" link', 'popover' ); ?>
 		</label>
 	</div>
-	<?php /* start:free */ ?><div class="pro-only"><?php /* end:free */ ?>
+	<?php  ?><div class="pro-only"><?php  ?>
 	<div class="col-12 inp-row">
 		<label>
 			<input type="checkbox"
@@ -142,7 +142,7 @@
 				id="po-close-hides"
 				data-toggle=".chk-can-hide"
 				data-or="#po-can-hide,#po-close-hides"
-				<?php /* start:free */ ?>style="display:none"<?php /* end:free */ ?>
+				<?php  ?>style="display:none"<?php  ?>
 				<?php checked( $popup->close_hides ); ?>/>
 			<i class="pro-icon"></i>
 			<?php _e( 'Close button acts as "Never see this message again" link', 'popover' ); ?>
@@ -153,7 +153,7 @@
 			<?php _e( 'Expiry time', 'popover' ); ?>
 			<input type="number"
 				name="po_hide_expire"
-				<?php /* start:free */ ?>readonly="readonly"<?php /* end:free */ ?>
+				<?php  ?>readonly="readonly"<?php  ?>
 				id="po-hide-expire"
 				class="inp-small"
 				value="<?php echo esc_attr( $popup->hide_expire ); ?>"
@@ -162,7 +162,7 @@
 			<?php _e( '(upon expiry, user will see this PopUp again)', 'popover' ); ?>
 		</label>
 	</div>
-	<?php /* start:free */ ?>
+	<?php  ?>
 	<div class="pro-note">
 		<i class="pro-icon"></i>
 		<span class="text">
@@ -175,7 +175,7 @@
 		</span>
 	</div>
 	</div>
-	<?php /* end:free */ ?>
+	<?php  ?>
 </div>
 
 <hr />
