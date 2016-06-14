@@ -59,20 +59,11 @@ class Popup_Test_Rules extends WP_UnitTestCase {
 
 		// Check if all rules are loaded.
 		foreach ( $this->rules as $info ) {
-
-			if ( $info['available'] ) {
-				$this->assertArrayHasKey(
-					$info['class'],
-					IncPopupRules::$classes,
-					'Rule not registered: ' . $info['class']
-				);
-			} else {
-				$this->assertArrayNotHasKey(
-					$info['class'],
-					IncPopupRules::$classes,
-					'Rule should not be registered: ' . $info['class']
-				);
-			}
+			$this->assertArrayHasKey(
+				$info['class'],
+				IncPopupRules::$classes,
+				'Rule not registered: ' . $info['class']
+			);
 		}
 	}
 

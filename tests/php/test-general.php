@@ -49,11 +49,5 @@ class Popup_Test_General extends WP_UnitTestCase {
 	function test_wpmulib() {
 		$this->assertTrue( function_exists( 'lib3' ), 'Missing: lib3()' );
 		$this->assertTrue( class_exists( 'TheLib3_Wrap' ), 'Missing: TheLib3_Wrap' );
-
-		$this->assertNotEquals( TheLib3_Wrap::$version, '0.0.0', 'Lib Version not set' );
-		$this->assertNotNull( TheLib3_Wrap::$object, 'Lib Object not set' );
-
-		// Check for minimum required version.
-		$this->assertTrue( version_compare( TheLib3_Wrap::$version, '3.0.0', '>=' ), 'Lib Version too low' );
 	}
 }
