@@ -30,7 +30,10 @@ class IncPopupRule_Taxonomy extends IncPopupRule {
 		if ( IncPopup::use_global() ) { return; }
 
 		if ( ! defined( 'POP_UP_TAXONOMY' ) ) {
-			lib3()->ui->admin_message( __( 'Please define pop up taxonomy by adding <code>define("POP_UP_TAXONOMY", "custom_taxonomy_name");</code> in your wpconfig.php file.' ), 'err' );
+			lib3()->ui->admin_message(
+				__( 'Please define the PopUp taxonomy by adding <code>define("POP_UP_TAXONOMY", "<em>&lt;taxonomy_name&gt;</em>");</code> in your wpconfig.php file.<br>Note: Instead of "&lt;taxonomy_name&gt;" you need to define the exact taxonomy-name you want to use.', 'popover' ),
+				'err'
+			);
 		}
 
 		// 'taxonomy' rule.

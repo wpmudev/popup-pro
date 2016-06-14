@@ -25,22 +25,6 @@ $geo_service = IncPopupDatabase::get_geo_services();
 $no_ip_cache = false;
 $custom_geo = false;
 $geo_msg = '';
-if ( ! IncPopupAddon_GeoDB::table_exists() ) {
-	$no_ip_cache = true;
-	$settings['geo_db'] = false;
-	$geo_msg .= '<p class="locked-msg">' .
-		sprintf(
-			__(
-				'<strong>Local IP Lookup Table</strong>: This is unavailable because ' .
-				'no geo-data table was found in your database. For details, ' .
-				'read the "Using a Local Geo-Database" in the ' .
-				'<a href="%1$s" target="_blank">PopUp usage guide</a>.',
-				'popover'
-			),
-			'http://premium.wpmudev.org/project/the-pop-over-plugin/#usage'
-		).
-	'</p>';
-}
 if ( defined( 'PO_REMOTE_IP_URL' ) && strlen( PO_REMOTE_IP_URL ) > 5 ) {
 	$custom_geo = true;
 	$settings['geo_lookup'] = '';
@@ -151,6 +135,7 @@ $ordered_rules = array();
 										</option>
 									<?php endforeach; ?>
 								</optgroup>
+								<?php if ( $custom_geo ) : /* deprecated */ ?>
 								<optgroup label="<?php _e( 'Local Database', 'popover' ); ?>">
 									<option value="geo_db"
 										<?php if ( $no_ip_cache ) : ?>disabled<?php endif; ?>
@@ -158,6 +143,7 @@ $ordered_rules = array();
 										<?php _e( 'Local IP Lookup Table', 'popover' ); ?>
 									</option>
 								</optgroup>
+								<?php endif; ?>
 							</select>
 							<button type="button" class="button test-location">
 								<?php _e( 'Test my location', 'popover' ); ?>

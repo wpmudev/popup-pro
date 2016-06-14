@@ -41,6 +41,14 @@ $break_phone:     $break_small;
 			content: "\f182";
 		}
 	}
+
+	.wpmui-grid-12.chk-custom-colors {
+		overflow: visible;
+	}
+
+	.wpmui-grid-12.chk-custom-colors.inactive {
+		overflow: hidden;
+	}
 }
 
 select.block,

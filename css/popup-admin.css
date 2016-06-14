@@ -27,6 +27,12 @@
 .post-type-inc_popup .status-trash .status-icon:before {
   content: "\f182";
 }
+.post-type-inc_popup .wpmui-grid-12.chk-custom-colors {
+  overflow: visible;
+}
+.post-type-inc_popup .wpmui-grid-12.chk-custom-colors.inactive {
+  overflow: hidden;
+}
 
 select.block,
 textarea.block,

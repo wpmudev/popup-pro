@@ -61,6 +61,7 @@ function inc_popup_init() {
 	 */
 	define( 'PO_BUILD', 6 );
 
+	$externals = array();
 	$plugin_dir = trailingslashit( dirname( __FILE__ ) );
 	$plugin_dir_rel = trailingslashit( dirname( plugin_basename( __FILE__ ) ) );
 	$plugin_url = plugin_dir_url( __FILE__ );
@@ -78,23 +79,56 @@ function inc_popup_init() {
 	define( 'PO_IMG_URL', $plugin_url . 'img/' );
 
 	// Include function library.
-	require_once PO_INC_DIR . 'external/wpmu-lib/core.php';
-
-	// Translation.
-	function inc_popup_translate() {
-		load_plugin_textdomain( 'popover', false, PO_LANG_DIR );
-	}
-	add_action( 'plugins_loaded', 'inc_popup_translate' );
-
-	require_once( PO_INC_DIR . 'config-defaults.php' );
+	$modules[] = PO_INC_DIR . 'external/wpmu-lib/core.php';
+	$modules[] = PO_INC_DIR . 'external/wdev-frash/module.php';
+	$modules[] = PO_INC_DIR . 'config-defaults.php';
 
 	if ( is_admin() ) {
 		// Defines class 'IncPopup'.
-		require_once PO_INC_DIR . 'class-popup-admin.php';
+		$modules[] = PO_INC_DIR . 'class-popup-admin.php';
 	} else {
 		// Defines class 'IncPopup'.
-		require_once PO_INC_DIR . 'class-popup-public.php';
+		$modules[] = PO_INC_DIR . 'class-popup-public.php';
 	}
+
+	/* start:free */
+	// Free-version configuration
+	$cta_label = __( 'Get Tips!', 'popover' );
+	$drip_param = 'Popup';
+	/* end:free */
+
+	/* start:pro */
+	// Pro-Only configuration.
+	$cta_label = false;
+	$drip_param = false;
+	$modules[] = PO_INC_DIR . 'external/wpmudev-dashboard/wpmudev-dash-notification.php';
+
+	// WPMUDEV Dashboard.
+	global $wpmudev_notices;
+	$wpmudev_notices[] = array(
+		'id' => 123,
+		'name' => 'PopUp Pro',
+		'screens' => array(
+			'edit-inc_popup',
+			'inc_popup',
+			'inc_popup_page_settings',
+		),
+	);
+	/* end:pro */
+
+	foreach ( $modules as $path ) {
+		if ( file_exists( $path ) ) { require_once $path; }
+	}
+
+	// Register the current plugin, for pro and free plugins!
+	do_action(
+		'wdev-register-plugin',
+		/*             Plugin ID */ plugin_basename( __FILE__ ),
+		/*          Plugin Title */ 'PopUp',
+		/* https://wordpress.org */ '/plugins/wordpress-popup/',
+		/*      Email Button CTA */ $cta_label,
+		/*  getdrip Plugin param */ $drip_param
+	);
 
 	// Initialize the plugin as soon as we have identified the current user.
 	IncPopup::instance();
@@ -103,24 +137,6 @@ function inc_popup_init() {
 /* start:pro */
 inc_popup_init();
 
-// Pro: Integrate WPMU Dev Dashboard
-if ( is_admin() ) {
-	if ( file_exists( PO_INC_DIR . 'external/wpmudev-dashboard/wpmudev-dash-notification.php' ) ) {
-		global $wpmudev_notices;
-		is_array( $wpmudev_notices ) || $wpmudev_notices = array();
-		$wpmudev_notices[] = array(
-			'id' => 123,
-			'name' => 'PopUp Pro',
-			'screens' => array(
-				'edit-inc_popup',
-				'inc_popup',
-				'inc_popup_page_settings',
-			),
-		);
-		require_once PO_INC_DIR . 'external/wpmudev-dashboard/wpmudev-dash-notification.php';
-	}
-}
-/* end:pro */
 
 /* start:free */
 // Init free after all plugins are loaded, in case both
@@ -130,3 +146,15 @@ add_action(
 	'inc_popup_init'
 );
 /* end:free */
+
+// Translation.
+function inc_popup_init_translation() {
+	if ( defined( 'PO_LANG_DIR' ) ) {
+		load_plugin_textdomain(
+			'popover',
+			false,
+			PO_LANG_DIR
+		);
+	}
+}
+add_action( 'plugins_loaded', 'inc_popup_init_translation' );
