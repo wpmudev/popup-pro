@@ -4,3 +4,6 @@
 [submodule "inc/external/wpmu-lib"]
 	path = inc/external/wpmu-lib
 	url = git@bitbucket.org:incsub/wpmu-lib.git
+[submodule "inc/external/wdev-frash"]
+	path = inc/external/wdev-frash
+	url = git@bitbucket.org:incsub/free-dashboard.git
