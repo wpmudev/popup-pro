@@ -54,7 +54,7 @@ module.exports = function( grunt ) {
 			],
 			exclude_free: [
 				'./README.MD',
-				'./lib/wpmudev-dashboard',
+				'./inc/external/wpmudev-dashboard',
 			],
 			include_files: [
 				'**',
@@ -459,6 +459,7 @@ module.exports = function( grunt ) {
 				files: { src: ['.'] }
 			},
 		},
+
 	} );
 
 	// Test task.
