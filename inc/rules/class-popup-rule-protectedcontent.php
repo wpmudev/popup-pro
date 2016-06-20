@@ -74,6 +74,7 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 		$this->is_active = class_exists( 'MS_Plugin' );
 
 		if ( ! $this->is_active ) { return; }
+		if ( ! empty( $_REQUEST['ms_ajax'] ) ) { return; }
 
 		$args = array(
 			'include_base' => false,
