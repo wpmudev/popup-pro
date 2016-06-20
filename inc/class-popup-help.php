@@ -71,7 +71,6 @@ class IncPopupHelp {
 	 * @since  4.6.1.1
 	 */
 	public function content_shortcodes() {
-		include PO_VIEWS_DIR . 'info-shortcodes.php';
+		IncPopup::load_view( 'info-shortcodes.php' );
 	}
-
 };

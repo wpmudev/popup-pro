@@ -2,19 +2,24 @@
 /* start:pro *//**
  * Plugin Name: PopUp Pro
  * Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
- *//* end:pro */
-/* start:free *//**
- * Plugin Name: WordPress PopUp
- * Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
- */ /* end:free */
-/**
  * Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of  * advertising a mailing list, special offer or running a plain old ad.
  * Version:     4.7.2.0
  * Author:      WPMU DEV
  * Author URI:  http://premium.wpmudev.org
  * Textdomain:  popover
  * WDP ID:      123
- */
+ *//* end:pro */
+/* start:free *//**
+ * Plugin Name: WordPress PopUp
+ * Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
+ * Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of  * advertising a mailing list, special offer or running a plain old ad.
+ * Version:     4.7.2.0
+ * Author:      WPMU DEV
+ * Author URI:  http://premium.wpmudev.org
+ * Textdomain:  popover
+ * WDP ID:      123
+ */ /* end:free */
+
 /**
 
 /**
@@ -67,11 +72,11 @@ function inc_popup_init() {
 	$plugin_url = plugin_dir_url( __FILE__ );
 
 	define( 'PO_LANG_DIR', $plugin_dir_rel . 'lang/' );
+	define( 'PO_DIR', $plugin_dir );
 	define( 'PO_TPL_DIR', $plugin_dir . 'css/tpl/' );
 	define( 'PO_INC_DIR', $plugin_dir . 'inc/' );
 	define( 'PO_JS_DIR', $plugin_dir . 'js/' );
 	define( 'PO_CSS_DIR', $plugin_dir . 'css/' );
-	define( 'PO_VIEWS_DIR', $plugin_dir . 'views/' );
 
 	define( 'PO_TPL_URL', $plugin_url . 'css/tpl/' );
 	define( 'PO_JS_URL', $plugin_url . 'js/' );

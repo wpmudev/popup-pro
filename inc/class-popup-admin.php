@@ -316,7 +316,7 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6.0
 	 */
 	static public function network_menu_notice() {
-		include PO_VIEWS_DIR . 'network.php';
+		self::load_view( 'network' );
 	}
 
 	/**
@@ -370,7 +370,7 @@ class IncPopup extends IncPopupBase {
 	 * @since  4.6.0
 	 */
 	static public function handle_settings_page() {
-		include PO_VIEWS_DIR . 'settings.php';
+		self::load_view( 'settings' );
 	}
 
 	/**
@@ -1094,7 +1094,7 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function meta_content( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
-		include PO_VIEWS_DIR . 'meta-content.php';
+		self::load_view( 'meta-content', compact( 'popup' ) );
 	}
 
 	/**
@@ -1105,7 +1105,7 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function meta_appearance( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
-		include PO_VIEWS_DIR . 'meta-appearance.php';
+		self::load_view( 'meta-appearance', compact( 'popup' ) );
 	}
 
 	/**
@@ -1116,7 +1116,7 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function meta_behavior( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
-		include PO_VIEWS_DIR . 'meta-behavior.php';
+		self::load_view( 'meta-behavior', compact( 'popup' ) );
 	}
 
 	/**
@@ -1127,7 +1127,7 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function meta_rules( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
-		include PO_VIEWS_DIR . 'meta-rules.php';
+		self::load_view( 'meta-rules', compact( 'popup' ) );
 	}
 
 	/**
@@ -1138,7 +1138,7 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function meta_customcss( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
-		include PO_VIEWS_DIR . 'meta-customcss.php';
+		self::load_view( 'meta-customcss', compact( 'popup' ) );
 	}
 
 	/**
@@ -1149,7 +1149,7 @@ class IncPopup extends IncPopupBase {
 	 */
 	static public function meta_submitdiv( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
-		include PO_VIEWS_DIR . 'meta-submitdiv.php';
+		self::load_view( 'meta-submitdiv', compact( 'popup' ) );
 	}
 
 	/**

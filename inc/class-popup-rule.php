@@ -17,7 +17,7 @@ class IncPopupRules {
 	 * @param  string $classname Class-name (not object!)
 	 */
 	static public function register( $classname ) {
-		self::$classes[$classname] = new $classname();
+		self::$classes[ $classname ] = new $classname();
 	}
 
 	/**
@@ -59,7 +59,7 @@ class IncPopupRules {
 			self::$rules[ $priority ] = array();
 		}
 
-		self::$rules[$priority][$id] = (object) array(
+		self::$rules[ $priority ][ $id ] = (object) array(
 			'obj' => $obj,
 			'filename' => $filename,
 			'label' => $label,
@@ -336,8 +336,8 @@ abstract class IncPopupRule {
 
 		$method = 'apply_' . $key;
 		if ( method_exists( $this, $method ) ) {
-			if ( isset( $popup->rule_data[$key] ) ) {
-				$data = $popup->rule_data[$key];
+			if ( isset( $popup->rule_data[ $key ] ) ) {
+				$data = $popup->rule_data[ $key ];
 			} else {
 				$data = '';
 			}
@@ -360,8 +360,8 @@ abstract class IncPopupRule {
 	public function _form( $popup, $key ) {
 		$method = 'form_' . $key;
 		if ( method_exists( $this, $method ) ) {
-			if ( isset( $popup->rule_data[$key] ) ) {
-				$data = $popup->rule_data[$key];
+			if ( isset( $popup->rule_data[ $key ] ) ) {
+				$data = $popup->rule_data[ $key ];
 			} else {
 				$data = '';
 			}
@@ -384,7 +384,7 @@ abstract class IncPopupRule {
 		$data = lib3()->array->get( $data );
 
 		if ( method_exists( $this, $method ) ) {
-			$data[$key] = $this->$method($data);
+			$data[ $key ] = $this->$method( $data );
 		}
 
 		return $data;
@@ -447,5 +447,4 @@ abstract class IncPopupRule {
 		</li>
 		<?php
 	}
-
 };

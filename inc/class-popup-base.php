@@ -672,7 +672,30 @@ abstract class IncPopupBase {
 		$name = 'po_h-' . $id;
 		$name_old = 'popover_never_view_' . $id;
 
-		return isset( $_COOKIE[$name] ) || isset( $_COOKIE[$name_old] );
+		return isset( $_COOKIE[ $name ] ) || isset( $_COOKIE[ $name_old ] );
+	}
+
+	/**
+	 * Loads the specified view (template from views/ directory).
+	 * The list of args is extracted so the view can access the variables.
+	 *
+	 * @since  4.7.2.0
+	 * @param  string $name Name of the view (filename without extension).
+	 * @param  array  $args Optional list of variables to provide.
+	 */
+	static public function load_view( $name, $args = array() ) {
+		if ( is_array( $args ) ) {
+			extract( $args );
+		}
+
+		$path = PO_DIR . 'views/' . strtolower( $name );
+		if ( 'pro' == PO_VERSION ) {
+			if ( file_exists( $path . '-premium.php' ) ) {
+				$path .= '-premium';
+			}
+		}
+
+		include $path . '.php';
 	}
 
 

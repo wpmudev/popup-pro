@@ -43,7 +43,6 @@
 		</span>
 	</div>
 
-	<div class="pro-only">
 	<div class="col-12 inp-row">
 		<label>
 			<input type="radio"
@@ -51,8 +50,7 @@
 				id="po-display-scroll"
 				value="scroll"
 				data-toggle=".opt-display-scroll"
-				style="display:none" />
-			<i class="pro-icon"></i>
+				<?php checked( $popup->display, 'scroll' ); ?> />
 			<?php _e( 'Appear after', 'popover' ); ?>
 		</label>
 		<span class="opt-display-scroll">
@@ -61,7 +59,6 @@
 				max="9999"
 				maxlength="4"
 				name="po_display_data[scroll]"
-				readonly="readonly"
 				class="inp-small"
 				value="<?php echo esc_attr( $popup->display_data['scroll'] ); ?>"
 				placeholder="25" />
@@ -83,34 +80,18 @@
 				id="po-display-anchor"
 				value="anchor"
 				data-toggle=".opt-display-anchor"
-				style="display:none" />
-			<i class="pro-icon"></i>
+				<?php checked( $popup->display, 'anchor' ); ?> />
 			<?php _e( 'Appear after user scrolled until CSS selector', 'popover' ); ?>
 		</label>
 		<span class="opt-display-anchor">
 			<input type="text"
 				maxlength="50"
 				name="po_display_data[anchor]"
-				readonly="readonly"
 				value="<?php echo esc_attr( $popup->display_data['anchor'] ); ?>"
 				placeholder="<?php _e( '.class or #id', 'popover' ); ?>" />
 		</span>
 	</div>
 	<?php do_action( 'popup-display-behavior', $popup ); ?>
-
-	<div class="pro-note">
-		<i class="pro-icon"></i>
-		<span class="text">
-		<?php
-		printf(
-			__( 'Pro feature. <a href="%1$s" target="_blank">Find out more &raquo;</a>', PO_LANG ),
-			'http://premium.wpmudev.org/project/the-pop-over-plugin/'
-		);
-		?>
-		</span>
-	</div>
-	</div>
-
 </div>
 
 <hr />
@@ -132,7 +113,6 @@
 			<?php _e( 'Add "Never see this message again" link', 'popover' ); ?>
 		</label>
 	</div>
-	<div class="pro-only">
 	<div class="col-12 inp-row">
 		<label>
 			<input type="checkbox"
@@ -140,8 +120,7 @@
 				id="po-close-hides"
 				data-toggle=".chk-can-hide"
 				data-or="#po-can-hide,#po-close-hides"
-				style="display:none" />
-			<i class="pro-icon"></i>
+				<?php checked( $popup->close_hides ); ?>/>
 			<?php _e( 'Close button acts as "Never see this message again" link', 'popover' ); ?>
 		</label>
 	</div>
@@ -150,7 +129,6 @@
 			<?php _e( 'Expiry time', 'popover' ); ?>
 			<input type="number"
 				name="po_hide_expire"
-				readonly="readonly"
 				id="po-hide-expire"
 				class="inp-small"
 				value="<?php echo esc_attr( $popup->hide_expire ); ?>"
@@ -159,20 +137,6 @@
 			<?php _e( '(upon expiry, user will see this PopUp again)', 'popover' ); ?>
 		</label>
 	</div>
-
-	<div class="pro-note">
-		<i class="pro-icon"></i>
-		<span class="text">
-		<?php
-		printf(
-			__( 'Pro feature. <a href="%1$s" target="_blank">Find out more &raquo;</a>', PO_LANG ),
-			'http://premium.wpmudev.org/project/the-pop-over-plugin/'
-		);
-		?>
-		</span>
-	</div>
-	</div>
-
 </div>
 
 <hr />
