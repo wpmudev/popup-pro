@@ -215,7 +215,7 @@ $ordered_rules = array();
 			</h3>
 
 			<div class="inside">
-				<?php include PO_VIEWS_DIR . 'info-shortcodes.php'; ?>
+				<?php IncPopup::load_view( 'info-shortcodes' ); ?>
 			</div>
 		</div>
 

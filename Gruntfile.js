@@ -31,7 +31,7 @@ module.exports = function( grunt ) {
 			'js/worker-css.js':   ['js/vendor/worker-css.js'],
 			'js/theme-chrome.js': ['js/vendor/theme-chrome.js'],
 			'js/popup-admin.js':  ['js/src/popup-admin.js'],
-			'js/public.js':       ['js/src/public.js'],
+			'js/public.js':       ['js/src/public-incpopup.js', 'js/src/public.js'],
 		},
 
 		// SASS files to process. Resulting CSS files will be minified as well.

@@ -915,7 +915,6 @@ class IncPopupItem {
 		 * @var   bool
 		 * @since 4.8.0.0
 		 */
-		$layer_style = 'display:none;';
 		if ( $this->inline ) {
 			$layer_style = '';
 		}

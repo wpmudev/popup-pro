@@ -111,7 +111,7 @@ class IncPopupPosttype {
 			'exclude_from_search' => true,
 			'publicly_queryable'  => false,
 			'rewrite'             => false,
-			'capability_type'     => array(
+			'capabilities'        => array(
 				'edit_post'          => self::$perms,
 				'read_post'          => self::$perms,
 				'delete_posts'       => self::$perms,
@@ -123,5 +123,4 @@ class IncPopupPosttype {
 		);
 		register_post_type( IncPopupItem::POST_TYPE, $args );
 	}
-
 };

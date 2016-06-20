@@ -30,11 +30,11 @@ class Popup_Test_General extends WP_UnitTestCase {
 		$this->assertTrue( defined( 'PO_VERSION' ), 'Const not defined: PO_VERSION' );
 		$this->assertTrue( defined( 'PO_BUILD' ), 'Const not defined: PO_BUILD' );
 		$this->assertTrue( defined( 'PO_LANG_DIR' ), 'Const not defined: PO_LANG_DIR' );
+		$this->assertTrue( defined( 'PO_DIR' ), 'Const not defined: PO_DIR' );
 		$this->assertTrue( defined( 'PO_TPL_DIR' ), 'Const not defined: PO_TPL_DIR' );
 		$this->assertTrue( defined( 'PO_INC_DIR' ), 'Const not defined: PO_INC_DIR' );
 		$this->assertTrue( defined( 'PO_JS_DIR' ), 'Const not defined: PO_JS_DIR' );
 		$this->assertTrue( defined( 'PO_CSS_DIR' ), 'Const not defined: PO_CSS_DIR' );
-		$this->assertTrue( defined( 'PO_VIEWS_DIR' ), 'Const not defined: PO_VIEWS_DIR' );
 		$this->assertTrue( defined( 'PO_TPL_URL' ), 'Const not defined: PO_TPL_URL' );
 		$this->assertTrue( defined( 'PO_JS_URL' ), 'Const not defined: PO_JS_URL' );
 		$this->assertTrue( defined( 'PO_CSS_URL' ), 'Const not defined: PO_CSS_URL' );

@@ -38,22 +38,39 @@ jQuery(function init_admin() {
 		if ( ! submitdiv.length ) { return; }
 		top_offset = submitdiv.position().top;
 
-		var small_make_sticky = function() {
-			if ( ! body.hasClass( 'sticky-submit' ) ) {
-				body.addClass( 'sticky-submit' );
-				submitdiv.css({ 'marginTop': 0 } );
-				submitdiv.find( '.sticky-actions' ).show();
-				submitdiv.find( '.non-sticky' ).hide();
-			}
-		};
+		function make_sticky() {
+			if ( postbody.hasClass( 'columns-1' ) || body.hasClass( 'po-small' ) ) {
+				// 1-column view:
+				// The div stays as sticky toolbar when scrolling down.
 
-		var small_remove_sticky = function() {
+				if ( ! body.hasClass( 'sticky-submit' ) ) {
+					body.addClass( 'sticky-submit' );
+					body.removeClass( 'floating-submit' );
+					submitdiv.css({ 'marginTop': 0 } );
+					submitdiv.find( '.sticky-actions' ).show();
+					submitdiv.find( '.non-sticky' ).hide();
+				}
+			} else {
+				// 2-column view:
+				// The div scrolls with the page to stay visible.
+
+				if ( ! body.hasClass( 'floating-submit' ) ) {
+					body.addClass( 'floating-submit' );
+					body.removeClass( 'sticky-submit' );
+				}
+			}
+		}
+
+		function remove_sticky() {
 			if ( body.hasClass( 'sticky-submit' ) ) {
 				body.removeClass( 'sticky-submit' );
 				submitdiv.find( '.sticky-actions' ).hide();
 				submitdiv.find( '.non-sticky' ).show();
 			}
-		};
+			if ( body.hasClass( 'floating-submit' ) ) {
+				body.removeClass( 'floating-submit' );
+			}
+		}
 
 		jQuery( window ).resize(function() {
 			var is_small = jQuery( window ).width() <= 850;
@@ -65,32 +82,16 @@ jQuery(function init_admin() {
 			} else {
 				if ( body.hasClass( 'po-small' ) ) {
 					body.removeClass( 'po-small' );
-					small_remove_sticky();
+					remove_sticky();
 				}
 			}
 		}).scroll(function(){
-			if ( postbody.hasClass( 'columns-1' ) || body.hasClass( 'po-small' ) ) {
-				// 1-column view:
-				// The div stays as sticky toolbar when scrolling down.
+			scroll_top = jQuery( window ).scrollTop() - top_offset + padding;
 
-				scroll_top = jQuery( window ).scrollTop() - top_offset;
-
-				if ( scroll_top > 0 ) {
-					small_make_sticky();
-				} else {
-					small_remove_sticky();
-				}
+			if ( scroll_top > 0 ) {
+				make_sticky();
 			} else {
-				// 2-column view:
-				// The div scrolls with the page to stay visible.
-
-				scroll_top = jQuery( window ).scrollTop() - top_offset + padding;
-
-				if ( scroll_top > 0 ) {
-					submitdiv.css({ 'marginTop': scroll_top } );
-				} else {
-					submitdiv.css({ 'marginTop': 0 } );
-				}
+				remove_sticky();
 			}
 		});
 
@@ -510,6 +511,7 @@ jQuery(function init_admin() {
 
 			data = ajax.extract_data( form );
 			body.addClass( 'wpmui-loading' );
+
 			window.inc_popup.load( 0, data );
 			return false;
 		};
