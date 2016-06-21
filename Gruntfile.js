@@ -320,6 +320,8 @@ module.exports = function( grunt ) {
 					'**/*.tmp',
 					'**/.afpDeleted*',
 					'**/.DS_Store',
+					'!node_modules/.*',
+					'!release/.*',
 				],
 				dot: true,
 				filter: 'isFile'
