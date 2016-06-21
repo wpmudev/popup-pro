@@ -1,4 +1,4 @@
-/*! PopUp - v4.7.3
+/*! PopUp - v4.8.0
  * http://premium.wpmudev.org/project/the-pop-over-plugin/
  * Copyright (c) 2016; * Licensed GPLv2+ */
 /*global window:false */
@@ -174,25 +174,6 @@ window.IncPopup = function IncPopup( _options ) {
 	 * If it is ready then it is displayed.
 	 */
 	me.prepare = function prepare() {
-		me.fetch_dom();
-
-		// Move the PopUp out of the viewport but make it visible.
-		// This way the browser will start to render the contents and there
-		// will be no delay when the PopUp is made visible later.
-		/*
-		me.elements.div.css({
-			'opacity': 0,
-			'z-index': -1,
-			'position': 'fixed',
-			'left': -1000,
-			'width': 100,
-			'right': 'auto',
-			'top': -1000,
-			'height': 100,
-			'bottom': 'auto'
-		}).show();
-		*/
-
 		jQuery( document ).trigger( 'popup-init', [me, me.data] );
 
 		if ( me.have_popup ) {
@@ -321,77 +302,9 @@ window.IncPopup = function IncPopup( _options ) {
 		return true;
 	};
 
-	/**
-	 * Add event handlers to the PopUp controls.
-	 */
-	me.setup_popup = function setup_popup() {
-		/*
-		me.elements.msg.hover(function() {
-			jQuery( '.claimbutton' ).removeClass( 'hide' );
-		}, function() {
-			jQuery( '.claimbutton' ).addClass( 'hide' );
-		});
-
-		jQuery( document ).trigger( 'popup-displayed', [me.data, me] );
-		// Legacy trigger.
-		jQuery( document ).trigger( 'popover-displayed', [me.data, me] );
-
-		me.elements.div.off( 'submit', 'form', me.form_submit )
-			.on( 'submit', 'form', me.form_submit );
-
-		me.elements.msg.off( 'click', '.wdpu-cta', me.cta_click )
-			.on( 'click', '.wdpu-cta', me.cta_click );
-		*/
-	};
-
 
 	/*-----  Dynamically load PopUps  ------*/
 
-
-	/**
-	 * Finds the PopUp DOM elements and stores them in protected member
-	 * variables for easy access.
-	 */
-	me.fetch_dom = function fetch_dom() {
-		// The top container of the PopUp.
-	//	me.elements.div = jQuery( '#' + me.data['html_id'] );
-
-		// Reject this PopUp if the HTML element is missing.
-	//	if ( ! me.elements.div.length ) { me.reject(); }
-
-		// The container that should be resized (custom size).
-	//	me.elements.resize = me.elements.div.find( '.resize' );
-
-		// The container that should be moved (centered on screen).
-	//	me.elements.move = me.elements.div.find( '.move' );
-
-		// The container that holds the message:
-		// For new styles this is same as me.elements.resize.
-		// For old popup styles this is a different contianer...
-	//	me.elements.msg = me.elements.div.find( '.wdpu-msg' );
-
-		// Close button.
-	//	me.elements.close = me.elements.div.find( '.wdpu-close' );
-
-		// Featured image.
-	//	me.elements.img = me.elements.div.find( '.wdpu-image > img' );
-
-		// The modal background.
-		/*
-		if ( me.elements.div.hasClass( 'wdpu-background' ) ) {
-			me.elements.back = me.elements.div;
-		} else {
-			me.elements.back = me.elements.div.find( '.wdpu-background' );
-
-			if ( ! me.elements.back.length ) {
-				me.elements.back = me.elements.div.parents( '.wdpu-background' );
-			}
-		}
-		*/
-
-	//	if ( ! me.elements.move.length ) { me.elements.move = me.elements.div; }
-	//	if ( ! me.elements.resize.length ) { me.elements.resize = me.elements.div; }
-	};
 
 	/**
 	 * Load popup data via ajax.
@@ -505,14 +418,6 @@ window.IncPopup = function IncPopup( _options ) {
 			if ( undefined !== subtitle ) {
 				el_subtitle.html( subtitle );
 			}
-
-			//me.move_popup();
-			//me.setup_popup();
-
-			//do_close_popup();
-
-			//me.fetch_dom();
-			//me.setup_popup();
 
 			// Re-initialize the local DOM cache.
 			jQuery( document ).trigger( 'popup-init', [me, me.data] );
