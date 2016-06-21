@@ -335,11 +335,11 @@ class IncPopup extends IncPopupBase {
 				self::post_order( $order );
 				break;
 
-			/* start:pro */
+			
 			case 'test-geo':
 				require_once PO_INC_DIR . 'rules/class-popup-rule-geo.php';
 				// No break! We want to trigger the "popup-ajax-" action.
-				/* end:pro */
+				
 
 			default:
 				/**
