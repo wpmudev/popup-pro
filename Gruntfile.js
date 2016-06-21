@@ -326,13 +326,13 @@ module.exports = function( grunt ) {
 				dot: true,
 				filter: 'isFile'
 			},
-			pro: {
+			release_pro: {
 				src: [
 					'release/<%= pkg.version %>-pro/',
 					'release/<%= pkg.version %>-pro-<%= pkg.version %>.zip',
 				],
 			},
-			free: {
+			release_free: {
 				src: [
 					'release/<%= pkg.version %>-free/',
 					'release/<%= pkg.version %>-free-<%= pkg.version %>.zip',
@@ -502,6 +502,7 @@ module.exports = function( grunt ) {
 
 			// Remove code and files that does not belong to this version.
 			grunt.task.run( 'replace:' + branch );
+			grunt.task.run( 'clean:release_' + branch );
 			grunt.task.run( 'clean:' + branch );
 
 			// Add the processes/cleaned files to the target branch.
