@@ -13,7 +13,7 @@ $padding_phone:       10px;
 $col_primary: #000001;
 $col_secondary: #000002;
 
-.has-popup.no-scroll {
+html.no-scroll {
 	overflow: hidden;
 
 	body {
@@ -46,7 +46,7 @@ $col_secondary: #000002;
 	bottom: 0;
 	overflow: auto;
 	background: rgba(0, 0, 0, 0.5);
-	padding: 0 $padding_tablet 0 $padding_tablet;
+	padding: 0;
 
 	&.custom-size {
 		padding: 0;
@@ -93,7 +93,7 @@ $col_secondary: #000002;
 	.wdpu-msg {
 		position: relative;
 		display: block;
-		margin: 0 auto 30px;
+		margin: 0;
 		text-align: left;
 		box-shadow: 0 2px 40px rgba(0,0,0,0.3);
 		font-size: $font_size;
@@ -339,7 +339,7 @@ $col_secondary: #000002;
 
 @media screen and (max-width: $break_point_tablet) and (min-width: $break_point_phone) {
 	#messagebox {
-		padding: 0 $padding_tablet 0 $padding_tablet;
+		padding: 0;
 
 		&,
 		&.img-right,
@@ -396,7 +396,7 @@ $col_secondary: #000002;
 
 @media screen and (max-width: $break_point_phone) {
 	#messagebox {
-		padding: 0 $padding_phone 0 $padding_phone;
+		padding: 0;
 
 		&,
 		&.img-right,

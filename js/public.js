@@ -77,6 +77,7 @@ window.IncPopup = function IncPopup( _options ) {
 			_el_reduce = null,
 			_el_resize = wnd.find( '.resize' ),
 			_el_move = wnd.find( '.move' ),
+			_el_img = wnd.find( '.wdpu-image img' ),
 			_el_wnd = wnd.find( '.popup' );
 
 		// Resize, if custom-size is active.
@@ -110,7 +111,7 @@ window.IncPopup = function IncPopup( _options ) {
 					msg_left = (win_width - msg_width) / 2;
 
 				// Move window horizontally.
-				if ( msg_left < 10 ) { msg_left = 10; }
+				if ( msg_left < 0 ) { msg_left = 0; }
 				_el_move.css({ 'left': msg_left });
 			}
 
@@ -120,40 +121,38 @@ window.IncPopup = function IncPopup( _options ) {
 					msg_top = (win_height - msg_height) / 2;
 
 				// Move window vertically.
-				if ( msg_top < 10 ) { msg_top = 10; }
+				if ( msg_top < 0 ) { msg_top = 0; }
 				_el_move.css({ 'top': msg_top });
 			}
 
-			/*
 			// Move the image.
-			if ( me.elements.img.length ) {
+			if ( _el_img.length ) {
 				var offset_x, offset_y,
-					img_width = me.elements.img.width(),
-					img_height = me.elements.img.height(),
-					box_width = me.elements.img.parent().width(),
-					box_height = me.elements.img.parent().height();
+					img_width = _el_img.width(),
+					img_height = _el_img.height(),
+					box_width = _el_img.parent().width(),
+					box_height = _el_img.parent().height();
 
 				// Center horizontally.
 				if ( img_width > box_width ) {
 					// Center image.
 					offset_x = (box_width - img_width) / 2;
-					me.elements.img.css({ 'margin-left': offset_x });
+					_el_img.css({ 'margin-left': offset_x });
 				} else {
 					// Align image according to layout.
-					me.elements.img.css({ 'margin-left': 0 });
+					_el_img.css({ 'margin-left': 0 });
 				}
 
 				// Center vertially.
 				if ( img_height > box_height ) {
 					// Center image.
 					offset_y = (box_height - img_height) / 2;
-					me.elements.img.css({ 'margin-top': offset_y });
+					_el_img.css({ 'margin-top': offset_y });
 				} else {
 					// Align image according to layout.
-					me.elements.img.css({ 'margin-top': 0 });
+					_el_img.css({ 'margin-top': 0 });
 				}
 			}
-			*/
 		};
 
 		// Short delay before positioning the popup to give the browser time
@@ -212,9 +211,7 @@ window.IncPopup = function IncPopup( _options ) {
 						delay *= 60;
 					}
 
-					window.setTimeout( function() {
-						jQuery( document ).trigger( 'popup-open', [ me ] );
-					}, delay );
+					window.setTimeout( me.show_popup, delay );
 					break;
 
 				default:
@@ -224,8 +221,8 @@ window.IncPopup = function IncPopup( _options ) {
 							me.custom_handler( me );
 						}
 					}, 20);
+					break;
 			}
-
 		} else {
 			// PopUp was rejected during popup-init event. Do not display.
 		}
@@ -242,7 +239,7 @@ window.IncPopup = function IncPopup( _options ) {
 		if ( 'px' === me.data.display_data.scroll_type ) {
 			if ( top >= me.data.display_data.scroll ) {
 				jQuery( window ).off( 'scroll', me.show_at_position );
-				jQuery( document ).trigger( 'popup-open', [ me ] );
+				me.show_popup();
 			}
 		} else { // this handles '%'
 			height = jQuery( document ).height() - jQuery( window ).height();
@@ -250,7 +247,7 @@ window.IncPopup = function IncPopup( _options ) {
 
 			if ( perc >= me.data.display_data.scroll ) {
 				jQuery( window ).off( 'scroll', me.show_at_position );
-				jQuery( document ).trigger( 'popup-open', [ me ] );
+				me.show_popup();
 			}
 		}
 	};
@@ -270,7 +267,7 @@ window.IncPopup = function IncPopup( _options ) {
 		// When 10px of the element are visible show the PopUp.
 		if ( offset > 10 ) {
 			jQuery( window ).off( 'scroll', me.show_at_element );
-			jQuery( document ).trigger( 'popup-open', [ me ] );
+			me.show_popup();
 		}
 	};
 
@@ -755,25 +752,26 @@ window.IncPopup = function IncPopup( _options ) {
 
 	/*-----  Finished  ------*/
 
-	// Instantly display preview popups.
-	if ( me.data && me.data.preview ) {
-		me.init();
-	}
-
 	// Only expose required functions of the PopUp.
-	var expose = {
-		init: me.init,
-		load: me.load_popup,
-		extend: me
-	};
+	var expose = {};
+	expose.extend = me;
 
-	if ( _options.dynamic ) {
+	if ( me.data && me.data.preview ) {
+		// Preview: The popup is displayed by popup-admin.js
+		expose.init = me.init;
+		expose.load = me.load_popup;
+	} else if ( _options.dynamic ) {
+		// Experimental feature to dynamically spawn popups via code.
+		// Handles the WP action hook `wdev-popup`.
 		me.init();
 
 		expose.open = me.show_popup;
 		expose.close = me.close_popup;
 		expose.status = me.status;
-		delete expose.load;
+	} else {
+		// Default behavior: Simply return the exposed interface.
+		expose.init = me.init;
+		expose.load = me.load_popup;
 	}
 
 	return expose;
@@ -905,6 +903,8 @@ function initialize( popup_data ) {
 		// inc_popups .. collection of all Popup objects on current page.
 		window.inc_popups[window.inc_popups.length] = window.inc_popup;
 
+		// Fires when the popup is fully initialized;
+		// On admin we use this event to display the preview.
 		jQuery( document ).trigger( 'popup-initialized', [window.inc_popup] );
 
 		if ( data['noinit'] || data['preview'] ) { return; }

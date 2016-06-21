@@ -4,10 +4,12 @@ Author: Philipp Stracker (Incsub), Barry (Incsub), Marko Miljus (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
-4.7.2
+4.8.0.0
 ----------------------------------------------------------------------
-- Update and clean up background code
-- Fix permissions of the Popup custom post type
+- Improve the popup javascript to display popups.
+- Update and clean up background code.
+- Fix issue with extra "\" slashes in admin preview.
+- Fix permissions of the Popup custom post type.
 
 4.7.1.1
 ----------------------------------------------------------------------

@@ -765,7 +765,7 @@ class IncPopupItem {
 	 * @return array List of variables
 	 */
 	protected function prepare_template_vars() {
-		$has_title = ! empty( $this->title );
+		$has_title = strlen( $this->title );
 		$has_subtitle = ! empty( $this->subtitle );
 		$has_cta = ! empty( $this->cta_label ) && ! empty( $this->cta_link );
 		$cta_target = empty( $this->cta_target ) ? '_self' : $this->cta_target;
@@ -798,6 +798,7 @@ class IncPopupItem {
 		$inner_class = array();
 		$img_left = false;
 
+		$outer_class[] = 'wpmui-popup';
 		$outer_class[] = 'wdpu-container';
 		$outer_class[] = 'wdpu-background';
 		$inner_class[] = 'popup';
@@ -864,11 +865,7 @@ class IncPopupItem {
 					$inner_class[] = 'no-move-y';
 					$pos_style .= 'margin-top:0;margin-bottom:0;';
 				}
-			} else {
-				$inner_class[] = 'no-move-x';
 			}
-		} else {
-			$inner_class[] = 'no-move-x';
 		}
 
 		/**
@@ -910,18 +907,14 @@ class IncPopupItem {
 		);
 
 		/**
-		 * This determines if the PopUp is initially hidden on the page.
+		 * Add custom styles to the popup.
 		 *
-		 * @var   bool
+		 * @var   string
 		 * @since 4.8.0.0
 		 */
-		if ( $this->inline ) {
-			$layer_style = '';
-		}
-
-		$layer_style = apply_filters(
+		$pos_style = apply_filters(
 			'popup-layer-style',
-			$layer_style,
+			$pos_style,
 			$this->id,
 			$this
 		);
@@ -946,7 +939,6 @@ class IncPopupItem {
 			'inner_class' => $inner_class,
 			'pos' => $pos,
 			'pos_style' => $pos_style,
-			'layer_style' => $layer_style,
 			'content' => $content,
 			'cta_button_tag' => $cta_button_tag,
 			'hide_forever_tag' => $hide_forever_tag,
@@ -1012,7 +1004,7 @@ class IncPopupItem {
 						$hide_forever_tag,
 						esc_attr( $outer_class ),
 						esc_attr( $inner_class ),
-						esc_attr( $layer_style ),
+						'', // @deprecated since 4.8.0.0
 						esc_attr( $pos_style ),
 					),
 					$Html[ $this->id ]

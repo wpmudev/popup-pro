@@ -3,7 +3,7 @@
  * Plugin Name: PopUp Pro
  * Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
  * Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of  * advertising a mailing list, special offer or running a plain old ad.
- * Version:     4.7.2.0
+ * Version:     4.8.0.0
  * Author:      WPMU DEV
  * Author URI:  http://premium.wpmudev.org
  * Textdomain:  popover
@@ -13,7 +13,7 @@
  * Plugin Name: WordPress PopUp
  * Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
  * Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of  * advertising a mailing list, special offer or running a plain old ad.
- * Version:     4.7.2.0
+ * Version:     4.8.0.0
  * Author:      WPMU DEV
  * Author URI:  http://premium.wpmudev.org
  * Textdomain:  popover

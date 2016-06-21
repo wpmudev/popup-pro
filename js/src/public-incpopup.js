@@ -75,6 +75,7 @@ window.IncPopup = function IncPopup( _options ) {
 			_el_reduce = null,
 			_el_resize = wnd.find( '.resize' ),
 			_el_move = wnd.find( '.move' ),
+			_el_img = wnd.find( '.wdpu-image img' ),
 			_el_wnd = wnd.find( '.popup' );
 
 		// Resize, if custom-size is active.
@@ -108,7 +109,7 @@ window.IncPopup = function IncPopup( _options ) {
 					msg_left = (win_width - msg_width) / 2;
 
 				// Move window horizontally.
-				if ( msg_left < 10 ) { msg_left = 10; }
+				if ( msg_left < 0 ) { msg_left = 0; }
 				_el_move.css({ 'left': msg_left });
 			}
 
@@ -118,40 +119,38 @@ window.IncPopup = function IncPopup( _options ) {
 					msg_top = (win_height - msg_height) / 2;
 
 				// Move window vertically.
-				if ( msg_top < 10 ) { msg_top = 10; }
+				if ( msg_top < 0 ) { msg_top = 0; }
 				_el_move.css({ 'top': msg_top });
 			}
 
-			/*
 			// Move the image.
-			if ( me.elements.img.length ) {
+			if ( _el_img.length ) {
 				var offset_x, offset_y,
-					img_width = me.elements.img.width(),
-					img_height = me.elements.img.height(),
-					box_width = me.elements.img.parent().width(),
-					box_height = me.elements.img.parent().height();
+					img_width = _el_img.width(),
+					img_height = _el_img.height(),
+					box_width = _el_img.parent().width(),
+					box_height = _el_img.parent().height();
 
 				// Center horizontally.
 				if ( img_width > box_width ) {
 					// Center image.
 					offset_x = (box_width - img_width) / 2;
-					me.elements.img.css({ 'margin-left': offset_x });
+					_el_img.css({ 'margin-left': offset_x });
 				} else {
 					// Align image according to layout.
-					me.elements.img.css({ 'margin-left': 0 });
+					_el_img.css({ 'margin-left': 0 });
 				}
 
 				// Center vertially.
 				if ( img_height > box_height ) {
 					// Center image.
 					offset_y = (box_height - img_height) / 2;
-					me.elements.img.css({ 'margin-top': offset_y });
+					_el_img.css({ 'margin-top': offset_y });
 				} else {
 					// Align image according to layout.
-					me.elements.img.css({ 'margin-top': 0 });
+					_el_img.css({ 'margin-top': 0 });
 				}
 			}
-			*/
 		};
 
 		// Short delay before positioning the popup to give the browser time
@@ -173,25 +172,6 @@ window.IncPopup = function IncPopup( _options ) {
 	 * If it is ready then it is displayed.
 	 */
 	me.prepare = function prepare() {
-		me.fetch_dom();
-
-		// Move the PopUp out of the viewport but make it visible.
-		// This way the browser will start to render the contents and there
-		// will be no delay when the PopUp is made visible later.
-		/*
-		me.elements.div.css({
-			'opacity': 0,
-			'z-index': -1,
-			'position': 'fixed',
-			'left': -1000,
-			'width': 100,
-			'right': 'auto',
-			'top': -1000,
-			'height': 100,
-			'bottom': 'auto'
-		}).show();
-		*/
-
 		jQuery( document ).trigger( 'popup-init', [me, me.data] );
 
 		if ( me.have_popup ) {
@@ -210,9 +190,7 @@ window.IncPopup = function IncPopup( _options ) {
 						delay *= 60;
 					}
 
-					window.setTimeout( function() {
-						jQuery( document ).trigger( 'popup-open', [ me ] );
-					}, delay );
+					window.setTimeout( me.show_popup, delay );
 					break;
 
 				default:
@@ -222,8 +200,8 @@ window.IncPopup = function IncPopup( _options ) {
 							me.custom_handler( me );
 						}
 					}, 20);
+					break;
 			}
-
 		} else {
 			// PopUp was rejected during popup-init event. Do not display.
 		}
@@ -240,7 +218,7 @@ window.IncPopup = function IncPopup( _options ) {
 		if ( 'px' === me.data.display_data.scroll_type ) {
 			if ( top >= me.data.display_data.scroll ) {
 				jQuery( window ).off( 'scroll', me.show_at_position );
-				jQuery( document ).trigger( 'popup-open', [ me ] );
+				me.show_popup();
 			}
 		} else { // this handles '%'
 			height = jQuery( document ).height() - jQuery( window ).height();
@@ -248,7 +226,7 @@ window.IncPopup = function IncPopup( _options ) {
 
 			if ( perc >= me.data.display_data.scroll ) {
 				jQuery( window ).off( 'scroll', me.show_at_position );
-				jQuery( document ).trigger( 'popup-open', [ me ] );
+				me.show_popup();
 			}
 		}
 	};
@@ -268,7 +246,7 @@ window.IncPopup = function IncPopup( _options ) {
 		// When 10px of the element are visible show the PopUp.
 		if ( offset > 10 ) {
 			jQuery( window ).off( 'scroll', me.show_at_element );
-			jQuery( document ).trigger( 'popup-open', [ me ] );
+			me.show_popup();
 		}
 	};
 
@@ -322,77 +300,9 @@ window.IncPopup = function IncPopup( _options ) {
 		return true;
 	};
 
-	/**
-	 * Add event handlers to the PopUp controls.
-	 */
-	me.setup_popup = function setup_popup() {
-		/*
-		me.elements.msg.hover(function() {
-			jQuery( '.claimbutton' ).removeClass( 'hide' );
-		}, function() {
-			jQuery( '.claimbutton' ).addClass( 'hide' );
-		});
-
-		jQuery( document ).trigger( 'popup-displayed', [me.data, me] );
-		// Legacy trigger.
-		jQuery( document ).trigger( 'popover-displayed', [me.data, me] );
-
-		me.elements.div.off( 'submit', 'form', me.form_submit )
-			.on( 'submit', 'form', me.form_submit );
-
-		me.elements.msg.off( 'click', '.wdpu-cta', me.cta_click )
-			.on( 'click', '.wdpu-cta', me.cta_click );
-		*/
-	};
-
 
 	/*-----  Dynamically load PopUps  ------*/
 
-
-	/**
-	 * Finds the PopUp DOM elements and stores them in protected member
-	 * variables for easy access.
-	 */
-	me.fetch_dom = function fetch_dom() {
-		// The top container of the PopUp.
-	//	me.elements.div = jQuery( '#' + me.data['html_id'] );
-
-		// Reject this PopUp if the HTML element is missing.
-	//	if ( ! me.elements.div.length ) { me.reject(); }
-
-		// The container that should be resized (custom size).
-	//	me.elements.resize = me.elements.div.find( '.resize' );
-
-		// The container that should be moved (centered on screen).
-	//	me.elements.move = me.elements.div.find( '.move' );
-
-		// The container that holds the message:
-		// For new styles this is same as me.elements.resize.
-		// For old popup styles this is a different contianer...
-	//	me.elements.msg = me.elements.div.find( '.wdpu-msg' );
-
-		// Close button.
-	//	me.elements.close = me.elements.div.find( '.wdpu-close' );
-
-		// Featured image.
-	//	me.elements.img = me.elements.div.find( '.wdpu-image > img' );
-
-		// The modal background.
-		/*
-		if ( me.elements.div.hasClass( 'wdpu-background' ) ) {
-			me.elements.back = me.elements.div;
-		} else {
-			me.elements.back = me.elements.div.find( '.wdpu-background' );
-
-			if ( ! me.elements.back.length ) {
-				me.elements.back = me.elements.div.parents( '.wdpu-background' );
-			}
-		}
-		*/
-
-	//	if ( ! me.elements.move.length ) { me.elements.move = me.elements.div; }
-	//	if ( ! me.elements.resize.length ) { me.elements.resize = me.elements.div; }
-	};
 
 	/**
 	 * Load popup data via ajax.
@@ -506,14 +416,6 @@ window.IncPopup = function IncPopup( _options ) {
 			if ( undefined !== subtitle ) {
 				el_subtitle.html( subtitle );
 			}
-
-			//me.move_popup();
-			//me.setup_popup();
-
-			//do_close_popup();
-
-			//me.fetch_dom();
-			//me.setup_popup();
 
 			// Re-initialize the local DOM cache.
 			jQuery( document ).trigger( 'popup-init', [me, me.data] );
@@ -753,25 +655,26 @@ window.IncPopup = function IncPopup( _options ) {
 
 	/*-----  Finished  ------*/
 
-	// Instantly display preview popups.
-	if ( me.data && me.data.preview ) {
-		me.init();
-	}
-
 	// Only expose required functions of the PopUp.
-	var expose = {
-		init: me.init,
-		load: me.load_popup,
-		extend: me
-	};
+	var expose = {};
+	expose.extend = me;
 
-	if ( _options.dynamic ) {
+	if ( me.data && me.data.preview ) {
+		// Preview: The popup is displayed by popup-admin.js
+		expose.init = me.init;
+		expose.load = me.load_popup;
+	} else if ( _options.dynamic ) {
+		// Experimental feature to dynamically spawn popups via code.
+		// Handles the WP action hook `wdev-popup`.
 		me.init();
 
 		expose.open = me.show_popup;
 		expose.close = me.close_popup;
 		expose.status = me.status;
-		delete expose.load;
+	} else {
+		// Default behavior: Simply return the exposed interface.
+		expose.init = me.init;
+		expose.load = me.load_popup;
 	}
 
 	return expose;

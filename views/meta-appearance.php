@@ -35,7 +35,7 @@ $animations = IncPopup::get_animations();
 			foreach ( $styles as $key => $data ) :
 				if ( ! isset( $data->deprecated ) ) { $data->deprecated = false; }
 				if ( $data->deprecated && $popup->style != $key ) { continue; }
-				if ( ! $data->pro ) { ?>
+				if ( 'pro' == PO_VERSION || $data->pro ) { ?>
 					<option value="<?php echo esc_attr( $key ); ?>"
 						data-old="<?php echo esc_attr( $data->deprecated ); ?>"
 						<?php selected( $key, $popup->style ); ?>>

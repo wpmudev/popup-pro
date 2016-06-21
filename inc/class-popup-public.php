@@ -192,8 +192,9 @@ class IncPopup extends IncPopupBase {
 				}
 			}
 
-			lib3()->ui->add( PO_JS_URL . 'public.min.js', 'front' );
+			lib3()->ui->add( 'core', 'front' );
 			lib3()->ui->add( 'animate', 'front' );
+			lib3()->ui->add( PO_JS_URL . 'public.min.js', 'front' );
 		} else {
 			if ( is_array( $this->script_data ) && is_array( $this->script_data['popup'] ) ) {
 				foreach ( $this->script_data['popup'] as $popup ) {
@@ -300,13 +301,9 @@ class IncPopup extends IncPopupBase {
 			if ( ! empty( $item['manual'] ) ) { continue; }
 			if ( in_array( $item['html_id'], $this->enqueued ) ) { continue; }
 
-			unset( $item['html'] );
-			unset( $item['styles'] );
 			$this->script_data['popup'][] = $item;
 		}
 		$this->load_scripts();
-
-		$this->enqueue_footer();
 	}
 
 	/**
@@ -327,7 +324,7 @@ class IncPopup extends IncPopupBase {
 		$_REQUEST['thereferrer'] = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
 		$_REQUEST['thefrom'] = lib3()->net->current_url();
 
-		// Populates $this->popups
+		// Populate list: $this->popups
 		$this->select_popup();
 
 		if ( empty( $this->popups ) ) { die(); }
@@ -347,60 +344,4 @@ class IncPopup extends IncPopupBase {
 	==                                      ==
 	==========================================
 	\*======================================*/
-
-
-	/**
-	 * Adds the wp_header/wp_footer actions to the action queue.
-	 *
-	 * @since  4.7.1
-	 */
-	protected function enqueue_footer() {
-		static $Did_Enqueue = false;
-
-		if ( $Did_Enqueue ) { return; }
-		$Did_Enqueue = true;
-
-		add_action(
-			'wp_head',
-			array( $this, 'show_header')
-		);
-
-		add_action(
-			'wp_footer',
-			array( $this, 'show_footer')
-		);
-	}
-
-	/**
-	 * Used by "load_method_footer" to print the popup CSS styles.
-	 *
-	 * @since  4.6
-	 */
-	public function show_header() {
-		if ( empty( $this->popups ) ) { return; }
-
-		$code = '';
-		$data = $this->get_popup_data();
-		foreach ( $data as $ind => $item ) {
-			$code .= $item['styles'];
-		}
-		echo '<style type="text/css">' . $code . '</style>';
-	}
-
-	/**
-	 * Used by "load_method_footer" to print the popup HTML code.
-	 *
-	 * @since  4.6
-	 */
-	public function show_footer() {
-		if ( empty( $this->popups ) ) { return; }
-
-		$code = '';
-		$data = $this->get_popup_data();
-		foreach ( $data as $ind => $item ) {
-			$code .= $item['html'];
-		}
-		echo $code;
-	}
-
 };

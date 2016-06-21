@@ -1,10 +1,10 @@
 /**
  * Style: Cabriolet
  */
-.has-popup.no-scroll {
+html.no-scroll {
   overflow: hidden;
 }
-.has-popup.no-scroll body {
+html.no-scroll body {
   overflow: hidden;
 }
 
@@ -33,7 +33,7 @@
   bottom: 0;
   overflow: auto;
   background: rgba(0, 0, 0, 0.7);
-  padding: 0 54px 0 50px;
+  padding: 0;
   /* Default: Image on right side */
 }
 #messagebox.custom-size {
@@ -66,9 +66,10 @@
 #messagebox .wdpu-msg {
   position: relative;
   display: block;
-  margin: 0 auto 30px;
+  margin: 0;
   text-align: left;
   font-size: 15px;
+  background-color: transparent;
   /* Size / responsiveness */
   max-width: 800px;
   min-width: 100px;
@@ -246,7 +247,7 @@
 
 @media screen and (max-width: 770px) and (min-width: 480px) {
   #messagebox {
-    padding: 0 54px 0 50px;
+    padding: 0;
   }
   #messagebox .wdpu-image, #messagebox.img-right .wdpu-image, #messagebox.img-left .wdpu-image, #messagebox.no-img .wdpu-image {
     width: 100%;
@@ -286,7 +287,7 @@
 }
 @media screen and (max-width: 480px) {
   #messagebox {
-    padding: 0 14px 0 10px;
+    padding: 0;
   }
   #messagebox .wdpu-image, #messagebox.img-right .wdpu-image, #messagebox.img-left .wdpu-image, #messagebox.no-img .wdpu-image {
     width: 100%;

@@ -123,6 +123,7 @@ class IncPopupAddon_AnonyousLoading {
 
 		// Enable animations in 'Anonymous Script'
 		lib3()->ui->add( 'animate', 'front' );
+		lib3()->ui->add( 'core', 'front' );
 
 		// This checks if the current URL contains the special URL-param.
 		// If the param is found then the PopUp details are output instead of the page.

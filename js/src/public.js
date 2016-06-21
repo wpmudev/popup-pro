@@ -125,6 +125,8 @@ function initialize( popup_data ) {
 		// inc_popups .. collection of all Popup objects on current page.
 		window.inc_popups[window.inc_popups.length] = window.inc_popup;
 
+		// Fires when the popup is fully initialized;
+		// On admin we use this event to display the preview.
 		jQuery( document ).trigger( 'popup-initialized', [window.inc_popup] );
 
 		if ( data['noinit'] || data['preview'] ) { return; }

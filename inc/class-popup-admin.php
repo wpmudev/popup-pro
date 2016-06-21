@@ -296,7 +296,7 @@ class IncPopup extends IncPopupBase {
 				array( 'IncPopup', 'network_menu_notice' )
 			);
 
-			$submenu[IncPopupItem::POST_TYPE . '-list'][0][0] = _x( 'Global PopUps', 'Post Type General Name', 'popover' );
+			$submenu[ IncPopupItem::POST_TYPE . '-list' ][0][0] = _x( 'Global PopUps', 'Post Type General Name', 'popover' );
 		} else {
 			add_submenu_page(
 				'edit.php?post_type=' . IncPopupItem::POST_TYPE,
@@ -339,7 +339,7 @@ class IncPopup extends IncPopupBase {
 			case 'test-geo':
 				require_once PO_INC_DIR . 'rules/class-popup-rule-geo.php';
 				// No break! We want to trigger the "popup-ajax-" action.
-			/* end:pro */
+				/* end:pro */
 
 			default:
 				/**
@@ -501,7 +501,7 @@ class IncPopup extends IncPopupBase {
 						'url' => get_edit_post_link( $post_id ),
 						'title' => __( 'Edit this PopUp', 'popover' ),
 						'attr' => '',
-						'label' => __( 'Edit', 'popover' )
+						'label' => __( 'Edit', 'popover' ),
 					);
 				}
 
@@ -513,7 +513,7 @@ class IncPopup extends IncPopupBase {
 						'url' => $the_url,
 						'title' => __( 'Deactivate this PopUp', 'popover' ),
 						'attr' => '',
-						'label' => __( 'Deactivate', 'popover' )
+						'label' => __( 'Deactivate', 'popover' ),
 					);
 				}
 
@@ -525,7 +525,7 @@ class IncPopup extends IncPopupBase {
 						'url' => $the_url,
 						'title' => __( 'Activate this PopUp', 'popover' ),
 						'attr' => '',
-						'label' => __( 'Activate', 'popover' )
+						'label' => __( 'Activate', 'popover' ),
 					);
 				}
 
@@ -533,7 +533,7 @@ class IncPopup extends IncPopupBase {
 					'url' => '#',
 					'title' => __( 'Preview this PopUp', 'popover' ),
 					'attr' => 'class="po-preview" data-id="' . $post_id . '"',
-					'label' => __( 'Preview', 'popover' )
+					'label' => __( 'Preview', 'popover' ),
 				);
 
 				if ( current_user_can( 'delete_post', $post_id ) ) {
@@ -545,14 +545,14 @@ class IncPopup extends IncPopupBase {
 							'url' => $the_url,
 							'title' => __( 'Restore this PopUp from the Trash', 'popover' ),
 							'attr' => '',
-							'label' => __( 'Restore', 'popover' )
+							'label' => __( 'Restore', 'popover' ),
 						);
 					} elseif ( EMPTY_TRASH_DAYS ) {
 						$actions['trash'] = array(
 							'url' => get_delete_post_link( $post_id ),
 							'title' => __( 'Move this PopUp to the Trash', 'popover' ),
 							'attr' => 'class="submitdelete"',
-							'label' => __( 'Trash', 'popover' )
+							'label' => __( 'Trash', 'popover' ),
 						);
 					}
 					if ( 'trash' === $popup->status || ! EMPTY_TRASH_DAYS ) {
@@ -560,7 +560,7 @@ class IncPopup extends IncPopupBase {
 							'url' => get_delete_post_link( $post_id, '', true ),
 							'title' => __( 'Delete this PopUp permanently', 'popover' ),
 							'attr' => 'class="submitdelete"',
-							'label' => __( 'Delete Permanently', 'popover' )
+							'label' => __( 'Delete Permanently', 'popover' ),
 						);
 					}
 				}
@@ -681,7 +681,7 @@ class IncPopup extends IncPopupBase {
 				$class = ' class="current"';
 			}
 
-			$new_views[$status] =
+			$new_views[ $status ] =
 				"<a href='edit.php?post_status=$status&amp;post_type=$post_type'$class>" .
 					sprintf( $label, number_format_i18n( $num_posts->$status ) ) .
 				'</a>';
@@ -715,7 +715,7 @@ class IncPopup extends IncPopupBase {
 	 * @return array The modified $messages array
 	 */
 	static public function post_update_messages( $messages, $counts ) {
-		$messages[IncPopupItem::POST_TYPE] = array(
+		$messages[ IncPopupItem::POST_TYPE ] = array(
 			'updated'   => _n( 'One PopUp updated.', '%s PopUps updated.', $counts['updated'] ),
 			'locked'    => _n( 'One PopUp not updated, somebody is editing it.', '%s PopUps not updated, somebody is editing them.', $counts['locked'] ),
 			'deleted'   => _n( 'One PopUp permanently deleted.', '%s PopUps permanently deleted.', $counts['deleted'] ),
@@ -797,8 +797,7 @@ class IncPopup extends IncPopupBase {
 				if ( $count > 0 && ! empty( $msg ) ) {
 					lib3()->ui->admin_message( sprintf( $msg, $count ) );
 				}
-			}
-			else {
+			} else {
 				lib3()->array->equip_request( '_wpnonce', 'post_id' );
 
 				// ----- Custom row-action.
@@ -854,7 +853,7 @@ class IncPopup extends IncPopupBase {
 	 * @return int Customized value
 	 */
 	static public function post_item_per_page( $value, $post_type ) {
-		if ( $post_type == IncPopupItem::POST_TYPE ) {
+		if ( IncPopupItem::POST_TYPE == $post_type ) {
 			// Setting to -1 works, but will not display text "17 items" in the top/right corner.
 			$value = 100000;
 		}
@@ -1246,5 +1245,5 @@ class IncPopup extends IncPopupBase {
 	static public function form_redirect( $url, $post_id ) {
 		return esc_url_raw( remove_query_arg( 'message', $url ) );
 	}
-
 };
+

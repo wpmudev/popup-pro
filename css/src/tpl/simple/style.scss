@@ -13,7 +13,7 @@ $padding_phone:       10px;
 $col_primary: #000001;   // Color code is replaced by plugin.
 $col_secondary: #000002; // Color code is replaced by plugin.
 
-.has-popup.no-scroll {
+html.no-scroll {
 	overflow: hidden;
 
 	body {
@@ -46,7 +46,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 	bottom: 0;
 	overflow: auto;
 	background: rgba(0, 0, 0, 0.5);
-	padding: 0 $padding_tablet+4px 0 $padding_tablet;
+	padding: 0;
 
 	&.custom-size {
 		padding: 0;
@@ -94,7 +94,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 	.wdpu-msg {
 		position: relative;
 		display: block;
-		margin: 0 auto 30px;
+		margin: 0;
 		text-align: left;
 		padding: 5px;
 		background-color: rgba(255, 255, 255, 0.5);
@@ -311,7 +311,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 
 @media screen and (max-width: $break_point_tablet) and (min-width: $break_point_phone) {
 	#messagebox {
-		padding: 0 $padding_tablet+4px 0 $padding_tablet;
+		padding: 0;
 
 		&,
 		&.img-right,
@@ -355,7 +355,7 @@ $col_secondary: #000002; // Color code is replaced by plugin.
 
 @media screen and (max-width: $break_point_phone) {
 	#messagebox {
-		padding: 0 $padding_phone+4px 0 $padding_phone;
+		padding: 0;
 
 		&,
 		&.img-right,

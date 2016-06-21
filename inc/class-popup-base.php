@@ -328,20 +328,20 @@ abstract class IncPopupBase {
 
 		$data = array(
 			// Meta: Content
-			'name' => $form['po_name'],
-			'content' => $form['po_content'],
-			'title' => $form['po_heading'],
-			'subtitle' => $form['po_subheading'],
-			'cta_label' => $form['po_cta'],
-			'cta_link' => $form['po_cta_link'],
-			'cta_target' => $form['po_cta_target'],
-			'image' => $form['po_image'],
+			'name' => stripslashes( $form['po_name'] ),
+			'content' => stripslashes( $form['po_content'] ),
+			'title' => stripslashes( $form['po_heading'] ),
+			'subtitle' => stripslashes( $form['po_subheading'] ),
+			'cta_label' => stripslashes( $form['po_cta'] ),
+			'cta_link' => stripslashes( $form['po_cta_link'] ),
+			'cta_target' => stripslashes( $form['po_cta_target'] ),
+			'image' => stripslashes( $form['po_image'] ),
 			'image_pos' => $form['po_image_pos'],
 			'image_mobile' => ! isset( $form['po_image_no_mobile'] ),
 			'active' => isset( $form['po_active'] ),
 
 			// Meta: Appearance
-			'style' => $form['po_style'],
+			'style' => stripslashes( $form['po_style'] ),
 			'round_corners' => ! isset( $form['po_no_round_corners'] ),
 			'scroll_body' => isset( $form['po_scroll_body'] ),
 			'custom_colors' => isset( $form['po_custom_colors'] ),
@@ -351,7 +351,7 @@ abstract class IncPopupBase {
 				'width' => $form['po_size_width'],
 				'height' => $form['po_size_height'],
 			),
-			'custom_css' => $form['po_custom_css'],
+			'custom_css' => stripslashes( $form['po_custom_css'] ),
 			'animation_in' => $form['po_animation_in'],
 			'animation_out' => $form['po_animation_out'],
 
