@@ -62,17 +62,17 @@ module.exports = function( grunt ) {
 			],
 			include_files: [
 				'**',
-				'!./css/src/**',
-				'!./js/src/**',
-				'!./js/vendor/**',
-				'!./img/src/**',
-				'!./node_modules/**',
+				'!css/src/**',
+				'!js/src/**',
+				'!js/vendor/**',
+				'!img/src/**',
+				'!node_modules/**',
 				'!.sass-cache/**',
-				'!./release/**',
+				'!release/**',
 				'!Gruntfile.js',
 				'!package.json',
-				'!./build/**',
-				'!./tests/**',
+				'!build/**',
+				'!tests/**',
 				'!.git/**',
 				'!.git',
 				'!.log'
@@ -123,11 +123,11 @@ module.exports = function( grunt ) {
 		// Regex patterns to exclude from transation.
 		translation: {
 			ignore_files: [
-				'node_modules/.*',
+				'node_modules/**',
 				'(^.php)',         // Ignore non-php files.
-				'inc/external/.*', // External libraries.
-				'release/.*',      // Temp release files.
-				'tests/.*',        // Unit testing.
+				'inc/external/**', // External libraries.
+				'release/**',      // Temp release files.
+				'tests/**',        // Unit testing.
 			],
 			pot_dir: 'lang/', // With trailing slash.
 			textdomain: 'popover',
