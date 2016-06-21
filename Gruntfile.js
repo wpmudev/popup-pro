@@ -123,11 +123,11 @@ module.exports = function( grunt ) {
 		// Regex patterns to exclude from transation.
 		translation: {
 			ignore_files: [
-				'node_modules/**',
+				'node_modules/.*',
 				'(^.php)',         // Ignore non-php files.
-				'inc/external/**', // External libraries.
-				'release/**',      // Temp release files.
-				'tests/**',        // Unit testing.
+				'inc/external/.*', // External libraries.
+				'release/.*',      // Temp release files.
+				'tests/.*',        // Unit testing.
 			],
 			pot_dir: 'lang/', // With trailing slash.
 			textdomain: 'popover',
@@ -324,13 +324,13 @@ module.exports = function( grunt ) {
 				dot: true,
 				filter: 'isFile'
 			},
-			release_pro: {
+			pro: {
 				src: [
 					'release/<%= pkg.version %>-pro/',
 					'release/<%= pkg.version %>-pro-<%= pkg.version %>.zip',
 				],
 			},
-			release_free: {
+			free: {
 				src: [
 					'release/<%= pkg.version %>-free/',
 					'release/<%= pkg.version %>-free-<%= pkg.version %>.zip',
@@ -507,7 +507,6 @@ module.exports = function( grunt ) {
 			grunt.task.run( 'gitcommit:' + branch );
 
 			// Create a distributable zip-file of the plugin branch.
-			grunt.task.run( 'clean:release_' + branch );
 			grunt.task.run( 'copy:' + branch );
 			grunt.task.run( 'compress:' + branch );
 
