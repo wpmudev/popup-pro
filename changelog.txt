@@ -7,12 +7,11 @@ Change Log:
 4.8.0.0
 ----------------------------------------------------------------------
 - Improve the popup javascript to display popups.
-- Update and clean up background code.
 - Fix issue, that prevented users from deleting popups.
 - Fix issue with extra "\" slashes in admin preview.
 - Fix permissions of the Popup custom post type.
 - Fix issues with twentysixteen theme.
-- Many small bugfixes in the background.
+- Many small bugfixes, clean up code, improve plugin behind the scenes.kground.
 
 4.7.1.1
 ----------------------------------------------------------------------
