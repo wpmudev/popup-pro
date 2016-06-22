@@ -256,11 +256,11 @@ class IncPopup extends IncPopupBase {
 
 		if ( is_network_admin() ) {
 			lib3()->array->equip_request( 'popup_network' );
-			if ( 'hide' === $_REQUEST['popup_network'] ) {
+			if ( 'hide' == $_REQUEST['popup_network'] ) {
 				IncPopupDatabase::set_flag( 'network_dismiss', true );
 				wp_safe_redirect( admin_url( 'network' ) );
 				die();
-			} else if ( 'show' === $_REQUEST['popup_network'] ) {
+			} elseif ( 'show' == $_REQUEST['popup_network'] ) {
 				IncPopupDatabase::set_flag( 'network_dismiss', false );
 			}
 

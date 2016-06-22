@@ -111,15 +111,6 @@ class IncPopupPosttype {
 			'exclude_from_search' => true,
 			'publicly_queryable'  => false,
 			'rewrite'             => false,
-			'capabilities'        => array(
-				'edit_post'          => self::$perms,
-				'read_post'          => self::$perms,
-				'delete_posts'       => self::$perms,
-				'edit_posts'         => self::$perms,
-				'edit_others_posts'  => self::$perms,
-				'publish_posts'      => self::$perms,
-				'read_private_posts' => self::$perms,
-			),
 		);
 		register_post_type( IncPopupItem::POST_TYPE, $args );
 	}
