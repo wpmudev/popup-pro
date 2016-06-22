@@ -2,7 +2,7 @@
 Contributors: WPMUDEV
 Tags: Popup, Pop-up, Pop Over, popover, Responsive Popup, Advertise, Promotion, Marketing, Lightbox, Mailing list pop-up
 Requires at least: 3.1
-Tested up to: 4.2.2
+Tested up to: 4.5.3
 Stable tag: trunk
 
 WordPress PopUp is the smart, responsive, customizable and beautifully coded pop-up and pop-over plugin for WordPress and Multisite.
@@ -71,6 +71,15 @@ For network wide control - add the line define('PO_GLOBAL', true); to your wp-co
 3. Some of the settings options
 
 == Changelog ==
+
+= 4.8.0.0 =
+* Improve the popup javascript to display popups.
+* Update and clean up background code.
+* Fix issue, that prevented users from deleting popups.
+* Fix issue with extra "\" slashes in admin preview.
+* Fix permissions of the Popup custom post type.
+* Fix issues with twentysixteen theme.
+* Many small bugfixes in the background.
 
 = 4.7.1.1 =
 * Fix compatibility issues caused by WordPress 4.3 changes
