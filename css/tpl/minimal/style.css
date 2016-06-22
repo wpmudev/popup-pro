@@ -36,6 +36,9 @@ html.no-scroll body {
   padding: 0;
   /* Default: Image on right side */
 }
+#messagebox *, #messagebox *:before, #messagebox *:after {
+  box-sizing: content-box;
+}
 #messagebox.custom-size {
   padding: 0;
 }
@@ -142,6 +145,7 @@ html.no-scroll body {
   height: 100%;
   width: auto;
   position: relative;
+  max-width: none;
 }
 #messagebox .wdpu-middle {
   position: relative;

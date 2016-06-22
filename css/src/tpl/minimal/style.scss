@@ -48,6 +48,10 @@ html.no-scroll {
 	background: rgba(0, 0, 0, 0.5);
 	padding: 0;
 
+	*, *:before, *:after {
+		box-sizing: content-box;
+	}
+
 	&.custom-size {
 		padding: 0;
 	}
@@ -183,6 +187,7 @@ html.no-scroll {
 			height: 100%;
 			width: auto;
 			position: relative;
+			max-width: none;
 		}
 	}
 
