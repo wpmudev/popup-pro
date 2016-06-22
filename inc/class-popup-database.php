@@ -308,8 +308,8 @@ class IncPopupDatabase {
 		dbDelta( $sql );
 
 		if ( $count > 0 ) {
-			/* start:pro */$plugin_name = 'PopUp Pro';/* end:pro */
-			/* start:free */$plugin_name = 'WordPress PopUp';/* end:free */
+			
+			$plugin_name = 'WordPress PopUp';
 			lib3()->ui->admin_message(
 				sprintf(
 					__(

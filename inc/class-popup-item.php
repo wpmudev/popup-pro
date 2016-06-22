@@ -557,7 +557,7 @@ class IncPopupItem {
 			default:         $status = 'draft'; break;
 		}
 
-		/* start:free */
+		
 		if ( 'publish' == $status ) {
 			// Limit the number of active PopUps.
 			if ( 3 <= IncPopupDatabase::count_active( $this->id ) ) {
@@ -581,7 +581,7 @@ class IncPopupItem {
 				);
 			}
 		}
-		/* end:free */
+		
 
 		// When the content changed make sure to only allow valid code!
 		if ( $this->content != $this->orig_content
