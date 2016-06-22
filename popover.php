@@ -1,5 +1,5 @@
 <?php
-/* start:pro *//**
+/**
  * Plugin Name: PopUp Pro
  * Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
  * Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of  * advertising a mailing list, special offer or running a plain old ad.
@@ -8,17 +8,8 @@
  * Author URI:  http://premium.wpmudev.org
  * Textdomain:  popover
  * WDP ID:      123
- *//* end:pro */
-/* start:free *//**
- * Plugin Name: WordPress PopUp
- * Plugin URI:  http://premium.wpmudev.org/project/the-pop-over-plugin/
- * Description: Allows you to display a fancy PopUp to visitors sitewide or per blog. A *very* effective way of  * advertising a mailing list, special offer or running a plain old ad.
- * Version:     4.8.0.0
- * Author:      WPMU DEV
- * Author URI:  http://premium.wpmudev.org
- * Textdomain:  popover
- * WDP ID:      123
- */ /* end:free */
+ */
+
 
 /**
 
@@ -55,8 +46,8 @@ function inc_popup_init() {
 
 	define(
 		'PO_VERSION'
-		/* start:pro */,'pro'/* end:pro */
-		/* start:free */,'free'/* end:free */
+		,'pro'
+		
 	);
 
 	/**
@@ -96,13 +87,9 @@ function inc_popup_init() {
 		$modules[] = PO_INC_DIR . 'class-popup-public.php';
 	}
 
-	/* start:free */
-	// Free-version configuration
-	$cta_label = __( 'Get Tips!', 'popover' );
-	$drip_param = 'Popup';
-	/* end:free */
+	
 
-	/* start:pro */
+	
 	// Pro-Only configuration.
 	$cta_label = false;
 	$drip_param = false;
@@ -119,7 +106,7 @@ function inc_popup_init() {
 			'inc_popup_page_settings',
 		),
 	);
-	/* end:pro */
+	
 
 	foreach ( $modules as $path ) {
 		if ( file_exists( $path ) ) { require_once $path; }
@@ -139,18 +126,11 @@ function inc_popup_init() {
 	IncPopup::instance();
 }
 
-/* start:pro */
+
 inc_popup_init();
 
 
-/* start:free */
-// Init free after all plugins are loaded, in case both
-// Pro and Free versions are installed.
-add_action(
-	'plugins_loaded',
-	'inc_popup_init'
-);
-/* end:free */
+
 
 // Translation.
 function inc_popup_init_translation() {

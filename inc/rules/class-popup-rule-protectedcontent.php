@@ -18,7 +18,7 @@ This rule is called PROTECTED CONTENT but it actually handles the MEMBERSHIP 2
 integration since the plugin was re-branded as M2.
 */
 
-/* start:pro */
+
 class IncPopupRule_ProtectedContent extends IncPopupRule {
 
 	/**
@@ -273,4 +273,4 @@ class IncPopupRule_ProtectedContent extends IncPopupRule {
 };
 
 IncPopupRules::register( 'IncPopupRule_ProtectedContent' );
-/* end:pro */
+

@@ -17,7 +17,7 @@ class IncPopupAddon_GeoDB {
 	 * @since  4.6
 	 */
 	static public function init() {
-		/* start:pro */
+		
 		static $Done = false;
 
 		if ( ! $Done && self::table_exists() ) {
@@ -29,10 +29,10 @@ class IncPopupAddon_GeoDB {
 				10, 2
 			);
 		}
-		/* end:pro */
+		
 	}
 
-	/* start:pro */
+	
 	/**
 	 * Checks if the lookup-table exists in local WordPress database.
 	 *
@@ -96,5 +96,5 @@ class IncPopupAddon_GeoDB {
 
 		return $country;
 	}
-	/* end:pro */
+	
 };
