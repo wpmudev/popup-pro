@@ -1,45 +1,72 @@
-=== WordPress PopUp ===
+=== WordPress PopUp - Popover Maker ===
 Contributors: WPMUDEV
 Tags: Popup, Pop-up, Pop Over, popover, Responsive Popup, Advertise, Promotion, Marketing, Lightbox, Mailing list pop-up
 Requires at least: 3.1
 Tested up to: 4.5.3
 Stable tag: trunk
 
-WordPress PopUp is the smart, responsive, customizable and beautifully coded pop-up and pop-over plugin for WordPress and Multisite.
+Fully-responsive, 100% customizable popups for your WordPress site or network.
 
 == Description ==
 
-WordPress PopUp brings a proven solution for effective advertising to your site or network. Introduce mailing lists, exclusive offers and other advertisements to your clients, users or visitors with a polished pop-up ad.
+<strong>Create targeted marketing campaigns, keep customers from leaving your site, and build your mailing list with WordPress PopUp – it’s an incredibly easy to use and completely free popup plugin for WordPress.</strong>
+
+Use the WordPress PopUp builder and create beautiful popups without touching a line of code. Choose style, color, and position, select your target audience, embed images and signup forms, and set when your popup should appear.
 
 [youtube  https://www.youtube.com/watch?v=lxyomzQkQKc]
 
-Because the WordPress PopUp interface provides a simple, flexible design template in a familiar workspace, you can spend more time creating and less time building. Plus, with this fully-responsive plugin, your pop-ups will look fantastic on every device.
+Create an unlimited number of popups with different looks and configurations. Run up to 3 different popups at a time.
 
 ★★★★★<br />
-“The plugin works great on Multisite. It is amazingly fast, easy to install and very flexible.” - <a href="http://profiles.wordpress.org/spkane">spkane</a>
+“The plugin works great! It is amazingly fast, easy to install and very flexible.” - <a href="http://profiles.wordpress.org/spkane">spkane</a>
 
-<strong>Need More?</strong>
+★★★★★<br />
+“Just awesome! Easy to use, simple install, and great support.” - <a href="https://profiles.wordpress.org/josblo">JosBlo</a>
+
+With over 20 included display conditions and behaviors to work with, you can target just about any audience – create special deals for logged in users, referral link discounts, first time visitor promotions – build the perfect popup for every audience.
+
+Plus, with the "Never see this message again" option, there’s no need to worry about annoying regular visitors with the same signup prompt or ads over-and-over again.
+
+If you are looking to build your mailing list, increase sales, or promote an event, use WordPress PopUp.
 
 <blockquote>
-While WordPress PopUp is feature-rich and flexible, you may need more - so we created <a href="http://premium.wpmudev.org/project/the-pop-over-plugin/">PopUp Pro</a>. PopUp Pro takes everything you love about the free version and adds more templates, greater design control and an unlimited number of pop-ups with extended powerful behaviors for setting specific times, locations and who the pop-ups are displayed to.<br /><br />
-</blockquote>
-
-<strong>See What WordPress PopUp and PopUp Pro Can Do For You:</strong>
+<strong>See What WordPress PopUp Can Do For You:</strong>
 
 <ul>
-<li>Design pop-ups from a familiar intuitive interface</li>
-<li>Unlimited pop-ups that display across an entire network, on individual sites or on specific URLs - limited to 3 active pop-ups in free version</li>
-<li>Both responsive and fixed design options mean your pop-ups look great on every device</li>
-<li>3 built-in modern templates for displaying clean, simple or sophisticated pop-ups - 1 easy-to-use layout in the free version</li>
-<li>Choose to hide pop-ups from mobile devices - pro version only</li>
-<li>Control who sees a pop-up including logged out users, visitors who have never commented and search engine visitors - limited with free version</li>
-<li>Set when a pop-up appears based on time, location, CSS markers and clicks - limited on free version</li>
+<li>Design popups in minutes with the builder</li>
+<li>Popup preview see your design without leaving the builder</li>
+<li>Create unlimited popup styles</li>
+<li>8 included reveal and hide animations</li>
+<li>Fully-responsive design options for popups on any device</li>
+<li>Included customizable popup template</li>
+<li>20+ conditions and behaviors to control who see popups</li>
+<li>Set when a popup appears based on time</li>
 <li>Allow visitors to hide a pop-up from ever displaying again</li>
-<li>Display your pop-ups to visitors from specific geographic locations - pro version only</li>
-<li>Access to our brilliant fast 24/7 support team</li>
+<li>3 load methods to optimize performance</li>
+</ul>
+</blockquote>
+
+<strong>Want even more power?</strong><br />
+If you like WordPress PopUp, you’ll love WordPress PopUp Pro. Get everything in the free version plus:
+
+<ul>
+<li>Unlimited active popups</li>
+<li>2 additional popup templates</li>
+<li>Scroll location and CSS selector popup triggers</li>
+<li>Extended reveal and hide animation set</li>
+<li>Popup blocker expiration control</li>
+<li>Special integration with Membership 2 and Pro Sites</li>
+<li>Post type, category, and taxonomy condition triggers</li>
+<li>Stop popups from triggering on mobile devices</li>
+<li>Location-based triggers</li>
+<li>Display popups based on user role</li>
+<li>Bypass ad-blockers with URL masking</li>
+<li>Reach an entire Multisite network</li>
+<li>24/7/365 support from the best WordPress support team on the planet</li>
+<li>100+ other premium plugins, services and themes included with a WPMU DEV membership</li>
 </ul>
 
-If you are looking to build your mailing list, increase sales or even promote an event, use WordPress PopUp or <a href="http://premium.wpmudev.org/project/the-pop-over-plugin/">PopUp Pro</a> - it just works.
+Upgrade to <a href="http://premium.wpmudev.org/project/the-pop-over-plugin/">WordPress PopUp Pro</a> and get access to greater design controls to help you reach your target market.
 
 == Installation ==
 
@@ -66,9 +93,9 @@ For network wide control - add the line define('PO_GLOBAL', true); to your wp-co
 
 == Screenshots ==
 
-1. The PopUp in action
-2. PopUp produces double the number of pages and twice the length of stay compared to visitors that come via Adwords
-3. Some of the settings options
+1. The PopUp Builder lets you design and preview popups as they are being made. 
+2. Quickly add display conditions for targeted marketing.
+3. Edit content, style, behaviors, and conditions using the builder.
 
 == Changelog ==
 
