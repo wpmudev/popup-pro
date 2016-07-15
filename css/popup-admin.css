@@ -1173,3 +1173,52 @@ div.msg-err {
 .pro-only:hover .pro-icon {
   opacity: 0.3;
 }
+
+/*===================================*\
+=======================================
+==                                   ==
+==           FREE SIDE ADS           ==
+==                                   ==
+=======================================
+\*===================================*/
+#meta-side-ads button.handlediv.button-link {
+  display: none;
+}
+#meta-side-ads h2.hndle {
+  text-transform: uppercase;
+}
+#meta-side-ads .inside {
+  background-image: url("../img/dev-team.png");
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin: 20px 0 0;
+  padding-bottom: 130px;
+  text-align: center;
+}
+#meta-side-ads .inside p {
+  margin: 0 0 20px;
+}
+#meta-side-ads .button-cta {
+  background: #1abc9c;
+  border: 0;
+  border-radius: 3px;
+  box-shadow: 0 3px 0 0 #148f77;
+  color: #fff;
+  display: inline-block;
+  cursor: pointer;
+  margin-top: -3px;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s, background 0.3s, box-shadow 0.3s, border-color 0.3s;
+  vertical-align: middle;
+}
+#meta-side-ads .button-cta:hover, #meta-side-ads .button-cta:visited, #meta-side-ads .button-cta:active, #meta-side-ads .button-cta:focus {
+  color: #fff;
+}
+#meta-side-ads .button-cta:hover {
+  background: #148f77;
+  box-shadow: 0 3px 0 0 #0a6550;
+}
