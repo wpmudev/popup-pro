@@ -330,6 +330,14 @@ div.msg-err {
   box-sizing: border-box;
 }
 
+.floating-submit #meta-side-ads {
+  position: fixed;
+  top: 191px;
+  width: 280px;
+  right: 20px;
+  box-sizing: border-box;
+}
+
 /* Submit-Div sticks to the top of the window, whole width (does not scroll) */
 .sticky-submit #submitdiv.closed,
 .sticky-submit #submitdiv {
