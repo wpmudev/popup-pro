@@ -48,12 +48,12 @@ module.exports = function( grunt ) {
 		// BUILD branches.
 		plugin_branches: {
 			exclude_pro: [
-				'./README.MD',
+				'./README.md',
 				'./readme.txt',
 				'./screenshot-*',
 			],
 			exclude_free: [
-				'./README.MD',
+				'./README.md',
 				'./inc/external/wpmudev-dashboard',
 				'./css/tpl/cabriolet/template.php',
 				'./css/tpl/cabriolet/style.css',
@@ -212,6 +212,7 @@ module.exports = function( grunt ) {
 
 
 		// TEST - Run the PHPUnit tests.
+		/*
 		phpunit: {
 			classes: {
 				dir: ''
@@ -229,6 +230,7 @@ module.exports = function( grunt ) {
 				noGlobalsBackup: false
 			}
 		},
+		*/
 
 
 		// CSS - Compile a .scss file into a normal .css file.
@@ -489,7 +491,7 @@ module.exports = function( grunt ) {
 		}
 
 		// First run unit tests.
-		grunt.task.run( 'phpunit' );
+		//grunt.task.run( 'phpunit' ); // DISABLED. NO REAL UNIT TESTS EXIST HERE
 
 		// Run the default tasks (js/css/php validation).
 		grunt.task.run( 'default' );
@@ -523,7 +525,6 @@ module.exports = function( grunt ) {
 
 	// Development tasks.
 	grunt.registerTask( 'default', ['clean:temp', 'jshint', 'concat', 'uglify', 'sass', 'autoprefixer', 'cssmin'] );
-	grunt.registerTask( 'test', ['phpunit', 'jshint'] );
 
 	grunt.task.run( 'clear' );
 	grunt.util.linefeed = '\n';
