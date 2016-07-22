@@ -212,14 +212,18 @@ $ git config user.name "<your name>"
 
 5.a) **PRO**: Simply upload the zip file from the `release/` folder. The `popup-pro` branch is not even needed.
 
-5.b) **FREE**: Easiest solution is to have the wp.org svg repo at the exact same path as the bitbucket git repo. As effect you will have both .git and .svg version files in the folder. After you built the free version, switch to the `popup-free` branch and then commit those files to wp.org repository using SVG.
+5.b) **FREE**: (First set up a mixed repo as described below) After you built the free version, switch to the `popup-free` branch and then commit those files to wp.org repository using SVG.
 
 
 ##### Setting up the mixed repo in same folder (SVG + GIT)
 
+For wp.org releases I found the easiest solution is to have a "mixed" working copy, that contains both .git and .svg files. This way we only have one place where code is stored. Bitbucket is our main version control. SVG is only used/updated when a new version of the free version should be published.
+
+This is the one-time setup routine I used to create this mixed working copy:
+
 1. Get a working copy of the GIT repo in local folder `.../popup`
 2. Get a working copy of the SVG repo in local folder `.../popup-svg`
 3. Now copy all files/folders (also hidden ones) from `popup-svg` into `popup`. Important: Only add/overwrite files. Do not delete the .git folder/files!!
-4. Verify in SVG that the popup folder now is a valid SVG repo.
+4. Verify in SVG that the popup folder now is a valid SVG repo. Now you can delete the poup-svg folder again.
 5. Now make sure that the .gitignore file contians the entry `.svg`
 6. When .gitignore is correct then revert all files in git to restore the master-branch. This will cause a lot of edits show up in SVG, but ignore those. The only time you want to use SVG is after you switched to the `popup-free` branch. ONLY THEN commit changes to SVG/wp.org!!
