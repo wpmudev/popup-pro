@@ -48,6 +48,7 @@ As mentioned, we will only update the master branch with all changes, even if th
 There is one way to add code that is specific to a single product only:
 
 1. Wrap code in product conditions.
+2. Pro-Version of /views template.
 
 ### Product conditions
 
@@ -66,6 +67,18 @@ echo 'This is only in popup-free';
 /* end:free */
 ```
 
+### Pro-Version of /views template
+
+All direct output of the admin UI is made by files inside the /views folder.
+Those templates are loaded by the popup plugin and have a built in condition:
+
+If a "template-premium.php" file exists, the pro version will load this file (instead of "template.php").
+
+So to create custom layout for free version make sure that both "whatever.php" and "whatever-premium.php" exist, and then modify the according file to make the changes.
+
+* whatever.php ... Always loaded by free version; loaded by pro version if no -premium.php is found.
+* whatever-premiu.php ... Loaded by pro version; grunt removes this file in the free plugin.
+* 
 
 ## Working with the branches
 
