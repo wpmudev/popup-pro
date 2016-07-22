@@ -198,3 +198,28 @@ $ cd <path-to-wordpress>/wp-content/plugins/popover
 $ git config user.email "<your email>"
 $ git config user.name "<your name>"
 ```
+
+
+### Release workflow
+
+1.) Switch to `master` branch.
+
+2.) Make sure the version number in **main plugin file** is correct and that the version in file `pacakge.json` matches the plugin version. (in package.json you have x.y.z format, so "1.2.3.4" becomes "1.2.34" here)
+
+3.) Then run `grunt build` (or `grunt build:pro` / free). This will create a .zip archive of the release files and update the `popup-pro`/`-free` branches.
+
+4.) Only in `master` branch: There is a folder called `release/` which contains the release files as .zip archive.
+
+5.a) **PRO**: Simply upload the zip file from the `release/` folder. The `popup-pro` branch is not even needed.
+
+5.b) **FREE**: Easiest solution is to have the wp.org svg repo at the exact same path as the bitbucket git repo. As effect you will have both .git and .svg version files in the folder. After you built the free version, switch to the `popup-free` branch and then commit those files to wp.org repository using SVG.
+
+
+##### Setting up the mixed repo in same folder (SVG + GIT)
+
+1. Get a working copy of the GIT repo in local folder `.../popup`
+2. Get a working copy of the SVG repo in local folder `.../popup-svg`
+3. Now copy all files/folders (also hidden ones) from `popup-svg` into `popup`. Important: Only add/overwrite files. Do not delete the .git folder/files!!
+4. Verify in SVG that the popup folder now is a valid SVG repo.
+5. Now make sure that the .gitignore file contians the entry `.svg`
+6. When .gitignore is correct then revert all files in git to restore the master-branch. This will cause a lot of edits show up in SVG, but ignore those. The only time you want to use SVG is after you switched to the `popup-free` branch. ONLY THEN commit changes to SVG/wp.org!!
