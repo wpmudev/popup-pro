@@ -288,6 +288,7 @@ window.IncPopup = function IncPopup( _options ) {
 			.on( 'click', '.wdpu-hide-forever', me.close_popup_forever )
 			.on( 'click', '.wdpu-close', me.close_popup )
 			.on( 'click', '.close', me.close_popup )
+			.on( 'click', '.wdpu-cta', me.cta_click )
 			.show()
 		;
 
@@ -296,6 +297,8 @@ window.IncPopup = function IncPopup( _options ) {
 		} else {
 			jQuery( 'html' ).addClass( 'no-scroll' );
 		}
+
+		jQuery( document ).trigger( 'popup-show', [ me ] );
 
 		return true;
 	};
@@ -321,6 +324,8 @@ window.IncPopup = function IncPopup( _options ) {
 	 * via the popup.extend object to customize behavior.
 	 */
 	me.cta_click = function cta_click() {
+		jQuery( document ).trigger( 'popup-cta-click', [ me ] );
+
 		// Default: do nothing.
 		return true;
 	};
