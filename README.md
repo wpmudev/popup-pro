@@ -77,7 +77,7 @@ If a "template-premium.php" file exists, the pro version will load this file (in
 So to create custom layout for free version make sure that both "whatever.php" and "whatever-premium.php" exist, and then modify the according file to make the changes.
 
 * whatever.php ... Always loaded by free version; loaded by pro version if no -premium.php is found.
-* whatever-premiu.php ... Loaded by pro version; grunt removes this file in the free plugin.
+* whatever-premium.php ... Loaded by pro version; grunt removes this file in the free plugin.
 * 
 
 ## Working with the branches
@@ -124,7 +124,7 @@ Many tasks as well as basic quality control are done via grunt. Below is a list 
 
 ### Grunt Task Runner  
 
-**ALWAYS** use Grunt to build M2 production branches. Use the following commands:  
+**ALWAYS** use Grunt to build production branches. Use the following commands:  
 
 Category | Command | Action
 ---------| ------- | ------
@@ -174,11 +174,11 @@ $ npm install -g grunt-cli
 
 #### 3. Setup project
 
-In command line switch to the `plugins/popover` plugin folder. Run this command to set up grunt for the M2 plugin:
+In command line switch to the `plugins/popover` plugin folder. Run this command to set up grunt for the plugin:
 
 ```
 #!bash 
-# Install automation tools for M2:
+# Install automation tools:
 $ cd <path-to-wordpress>/wp-content/plugins/popover
 $ npm install
 
@@ -212,18 +212,18 @@ $ git config user.name "<your name>"
 
 5.a) **PRO**: Simply upload the zip file from the `release/` folder. The `popup-pro` branch is not even needed.
 
-5.b) **FREE**: (First set up a mixed repo as described below) After you built the free version, switch to the `popup-free` branch and then commit those files to wp.org repository using SVG.
+5.b) **FREE**: (First set up a mixed repo as described below) After you built the free version, switch to the `popup-free` branch and then commit those files to wp.org repository using SVN.
 
 
-##### Setting up the mixed repo in same folder (SVG + GIT)
+##### Setting up the mixed repo in same folder (SVN + GIT)
 
-For wp.org releases I found the easiest solution is to have a "mixed" working copy, that contains both .git and .svg files. This way we only have one place where code is stored. Bitbucket is our main version control. SVG is only used/updated when a new version of the free version should be published.
+For wp.org releases I found the easiest solution is to have a "mixed" working copy, that contains both .git and .svn files. This way we only have one place where code is stored. Bitbucket is our main version control. SVN is only used/updated when a new version of the free version should be published.
 
 This is the one-time setup routine I used to create this mixed working copy:
 
 1. Get a working copy of the GIT repo in local folder `.../popup`
-2. Get a working copy of the SVG repo in local folder `.../popup-svg`
-3. Now copy all files/folders (also hidden ones) from `popup-svg` into `popup`. Important: Only add/overwrite files. Do not delete the .git folder/files!!
-4. Verify in SVG that the popup folder now is a valid SVG repo. Now you can delete the poup-svg folder again.
-5. Now make sure that the .gitignore file contians the entry `.svg`
-6. When .gitignore is correct then revert all files in git to restore the master-branch. This will cause a lot of edits show up in SVG, but ignore those. The only time you want to use SVG is after you switched to the `popup-free` branch. ONLY THEN commit changes to SVG/wp.org!!
+2. Get a working copy of the SVN repo in local folder `.../popup-svn`
+3. Now copy all files/folders (also hidden ones) from `popup-svn` into `popup`. Important: Only add/overwrite files. Do not delete the .git folder/files!!
+4. Verify in SVN that the popup folder now is a valid SVG repo. Now you can delete the popup-svg folder again.
+5. Now make sure that the .gitignore file contains the entry `.svn`
+6. When .gitignore is correct then revert all files in git to restore the master-branch. This will cause a lot of edits show up in SVN, but ignore those. The only time you want to use SVN is after you switched to the `popup-free` branch. ONLY THEN commit changes to SVN/wp.org!!
