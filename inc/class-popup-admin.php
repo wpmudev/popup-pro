@@ -1164,6 +1164,17 @@ class IncPopup extends IncPopupBase {
 	}
 
 	/**
+	 * Renders the metabox: Side Ads
+	 *
+	 * @since  4.8.0
+	 * @param  WP_Post $post The PopUp being edited.
+	 */
+	static public function meta_sideads( $post ) {
+		$popup = IncPopupDatabase::get( $post->ID );
+		self::load_view( 'meta-side-ads', compact( 'popup' ) );
+	}
+
+	/**
 	 * Save the popup data to database
 	 *
 	 * @since  4.6.0
