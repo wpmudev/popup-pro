@@ -335,11 +335,7 @@ class IncPopup extends IncPopupBase {
 				self::post_order( $order );
 				break;
 
-			/* start:pro */
-			case 'test-geo':
-				require_once PO_INC_DIR . 'rules/class-popup-rule-geo.php';
-				// No break! We want to trigger the "popup-ajax-" action.
-				/* end:pro */
+			
 
 			default:
 				/**
@@ -1061,7 +1057,7 @@ class IncPopup extends IncPopupBase {
 			'side',
 			'low'
 		);
-		/* start:free */
+		
 		add_meta_box(
 			'meta-side-ads',
 			__( 'Want More PopUp Power?', 'popover' ),
@@ -1070,7 +1066,7 @@ class IncPopup extends IncPopupBase {
 			'side',
 			'low'
 		);
-		/* end:free */
+		
 
 	}
 
