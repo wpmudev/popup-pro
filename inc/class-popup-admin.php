@@ -990,6 +990,7 @@ class IncPopup extends IncPopupBase {
 			'meta_behavior',
 			'meta-rules',
 			'meta-customcss',
+			'meta-side-ads',
 		);
 
 		$meta_order = get_user_option( 'meta-box-order_' . IncPopupItem::POST_TYPE );
@@ -1060,6 +1061,17 @@ class IncPopup extends IncPopupBase {
 			'side',
 			'low'
 		);
+		/* start:free */
+		add_meta_box(
+			'meta-side-ads',
+			__( 'Want More PopUp Power?', 'popover' ),
+			array( 'IncPopup', 'meta_sideads' ),
+			IncPopupItem::POST_TYPE,
+			'side',
+			'low'
+		);
+		/* end:free */
+
 	}
 
 	/**
@@ -1149,6 +1161,17 @@ class IncPopup extends IncPopupBase {
 	static public function meta_submitdiv( $post ) {
 		$popup = IncPopupDatabase::get( $post->ID );
 		self::load_view( 'meta-submitdiv', compact( 'popup' ) );
+	}
+
+	/**
+	 * Renders the metabox: Side Ads
+	 *
+	 * @since  4.8.0
+	 * @param  WP_Post $post The PopUp being edited.
+	 */
+	static public function meta_sideads( $post ) {
+		$popup = IncPopupDatabase::get( $post->ID );
+		self::load_view( 'meta-side-ads', compact( 'popup' ) );
 	}
 
 	/**

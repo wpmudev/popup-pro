@@ -368,7 +368,7 @@ div.msg-err {
 		}
 
 		tr.ui-sortable-helper {
-			box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+			box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
 		}
 
 		.ui-sortable-placeholder {
@@ -407,6 +407,14 @@ div.msg-err {
 	#submitdiv {
 		position: fixed;
 		top: 52px;
+		width: 280px;
+		right: 20px;
+		box-sizing: border-box;
+	}
+
+	#meta-side-ads {
+		position: fixed;
+		top: 191px;
 		width: 280px;
 		right: 20px;
 		box-sizing: border-box;
@@ -1372,3 +1380,65 @@ div.msg-err {
 		}
 	}
 }
+
+	/*===================================*\
+    =======================================
+    ==                                   ==
+    ==           FREE SIDE ADS           ==
+    ==                                   ==
+    =======================================
+    \*===================================*/
+
+	#meta-side-ads {
+
+		button.handlediv.button-link {
+			display: none;
+		}
+
+		h2.hndle {
+			text-transform: uppercase;
+		}
+
+		.inside {
+			background-image: url('../img/dev-team.png');
+			background-position: bottom;
+			background-repeat: no-repeat;
+			background-size: contain;
+			margin: 20px 0 0;
+			padding-bottom: 130px;
+			text-align: center;
+
+			p {
+				margin: 0 0 20px;
+			}
+		}
+
+		.button-cta {
+			background: #1abc9c;
+			border: 0;
+			border-radius: 3px;
+			box-shadow: 0 3px 0 0 #148f77;
+			color: #fff;
+			display: inline-block;
+			cursor: pointer;
+			margin-top: -3px;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			text-transform: uppercase;
+			transition: color 0.3s, background 0.3s, box-shadow 0.3s, border-color 0.3s;
+			vertical-align: middle;
+
+			&:hover,
+			&:visited,
+			&:active,
+			&:focus {
+				color:#fff;
+			}
+
+			&:hover {
+				background: #148f77;
+				box-shadow: 0 3px 0 0 #0a6550;
+			}
+		}
+	}
