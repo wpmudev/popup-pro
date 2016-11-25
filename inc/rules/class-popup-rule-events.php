@@ -166,7 +166,6 @@ class IncPopupRule_Events extends IncPopupRule {
 			</label>
 			<span class="opt-display-click">
 				<input type="text"
-					maxlength="50"
 					name="po_display_data[click]"
 					value="<?php echo esc_attr( @$popup->display_data['click'] ); ?>"
 					placeholder="<?php _e( '.class or #id', 'popover' ); ?>" />
