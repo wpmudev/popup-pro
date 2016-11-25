@@ -237,7 +237,7 @@ class IncPopup extends IncPopupBase {
 
 		if ( ! in_array( $pagenow, array( 'wp-login.php', 'wp-register.php' ) ) ) {
 			// Data is loaded via a normal WordPress ajax request.
-			$this->script_data['ajaxurl'] = admin_url( 'admin-ajax.php' );
+			$this->script_data['ajaxurl'] = ( is_multisite() && PO_GLOBAL ) ? get_admin_url( BLOG_ID_CURRENT_SITE, 'admin-ajax.php' ) : admin_url( 'admin-ajax.php' );
 			$this->script_data['ajax_data']['orig_request_uri'] = $_SERVER['REQUEST_URI'];
 			$this->load_scripts();
 		}
