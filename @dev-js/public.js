@@ -260,6 +260,10 @@
 		 * because the element may be hidden or not present at page load.
 		 */
 		this.show_at_element = function show_at_element( ev ) {
+			
+			if( !jQuery( me.data.display_data.anchor ).length )
+				return false; 
+			
 			var anchor = jQuery( me.data.display_data.anchor ),
 				view_top = $win.scrollTop(),
 				view_bottom = view_top + $win.height(),
