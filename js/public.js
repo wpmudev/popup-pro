@@ -1,6 +1,6 @@
 /*! PopUp - v4.8.0
  * http://premium.wpmudev.org/project/the-pop-over-plugin/
- * Copyright (c) 2016; * Licensed GPLv2+ */
+ * Copyright (c) 2017; * Licensed GPLv2+ */
 /*global window:false */
 /*global document:false */
 /*global wpmUi:false */
@@ -291,6 +291,8 @@ window.IncPopup = function IncPopup( _options ) {
 			.on( 'click', '.wdpu-close', me.close_popup )
 			.on( 'click', '.close', me.close_popup )
 			.on( 'click', '.wdpu-cta', me.cta_click )
+			.off( 'submit', 'form', me.form_submit ) //was missing
+			.on( 'submit', 'form', me.form_submit ) //was missing
 			.show()
 		;
 

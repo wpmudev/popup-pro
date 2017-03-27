@@ -335,6 +335,24 @@ class IncPopup extends IncPopupBase {
 
 		die();
 	}
+	
+	
+	/**
+	 * Used by "load_method_footer" to print the popup HTML code.
+	 * This function was missing in 4.8.0.0 - Paul Kevin
+	 *
+	 * @since  4.6
+	 */
+	public function show_footer() {
+		if ( empty( $this->popups ) ) { return; }
+
+		$code = '';
+		$data = $this->get_popup_data();
+		foreach ( $data as $ind => $item ) {
+			$code .= $item['html'];
+		}
+		echo $code;
+	}
 
 
 	/*======================================*\
