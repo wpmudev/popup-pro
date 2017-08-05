@@ -50,7 +50,7 @@ $animations = IncPopup::get_animations();
 			foreach ( $disabled_items as $data ) : ?>
 				<option disabled="disabled">
 					<?php echo esc_attr( $data->name ); ?> -
-					<?php _e( 'PRO Version only', PO_LANG ); ?>
+					<?php _e( 'PRO Version only', 'popover' ); ?>
 				</option>
 			<?php endforeach; ?>
 		</select>

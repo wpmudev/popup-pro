@@ -438,7 +438,7 @@ abstract class IncPopupBase {
 	 * }
 	 */
 	public static function get_animations() {
-		/* start:free */$pro_only = ' - ' . __( 'PRO Version', PO_LANG );/* end:free */
+		/* start:free */$pro_only = ' - ' . __( 'PRO Version', 'popover' );/* end:free */
 		/* start:pro */$pro_only = '';/* end:pro */
 
 		$animations_in = array(
