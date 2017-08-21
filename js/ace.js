@@ -1,6 +1,6 @@
 /*! PopUp - v4.8.0
  * http://premium.wpmudev.org/project/the-pop-over-plugin/
- * Copyright (c) 2016; * Licensed GPLv2+ */
+ * Copyright (c) 2017; * Licensed GPLv2+ */
 /**
  * Define a module along with a payload
  * @param module a name for the payload

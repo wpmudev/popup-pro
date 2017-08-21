@@ -289,6 +289,8 @@ window.IncPopup = function IncPopup( _options ) {
 			.on( 'click', '.wdpu-close', me.close_popup )
 			.on( 'click', '.close', me.close_popup )
 			.on( 'click', '.wdpu-cta', me.cta_click )
+			.off( 'submit', 'form', me.form_submit ) //was missing
+			.on( 'submit', 'form', me.form_submit ) //was missing
 			.show()
 		;
 
