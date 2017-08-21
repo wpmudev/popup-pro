@@ -103,7 +103,7 @@
 		<span class="text">
 		<?php
 		printf(
-			__( 'Pro feature. <a href="%1$s" target="_blank">Find out more &raquo;</a>', PO_LANG ),
+			__( 'Pro feature. <a href="%1$s" target="_blank">Find out more &raquo;</a>', 'popover' ),
 			'http://premium.wpmudev.org/project/the-pop-over-plugin/'
 		);
 		?>
@@ -165,7 +165,7 @@
 		<span class="text">
 		<?php
 		printf(
-			__( 'Pro feature. <a href="%1$s" target="_blank">Find out more &raquo;</a>', PO_LANG ),
+			__( 'Pro feature. <a href="%1$s" target="_blank">Find out more &raquo;</a>', 'popover' ),
 			'http://premium.wpmudev.org/project/the-pop-over-plugin/'
 		);
 		?>
