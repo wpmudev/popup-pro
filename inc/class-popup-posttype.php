@@ -93,6 +93,18 @@ class IncPopupPosttype {
 			$labels['all_items']     = __( 'Global PopUps', 'popover' );
 		}
 
+		$capabilities = array(
+			'read_post'          => self::$perms,
+			'edit_post'          => self::$perms,
+			'edit_posts'         => self::$perms,
+			'delete_post'        => self::$perms,
+			'delete_posts'       => self::$perms,
+			'publish_posts'      => self::$perms,
+			'edit_others_posts'  => self::$perms,
+			'read_private_posts' => self::$perms,
+			'create_posts'       => self::$perms,
+		);
+
 		$args = array(
 			'label'               => __( 'PopUp', 'popover' ),
 			'description'         => __( 'Display PopUp messages on your website!', 'popover' ),
@@ -111,6 +123,7 @@ class IncPopupPosttype {
 			'exclude_from_search' => true,
 			'publicly_queryable'  => false,
 			'rewrite'             => false,
+			'capabilities'        => $capabilities,
 		);
 		register_post_type( IncPopupItem::POST_TYPE, $args );
 	}
