@@ -75,6 +75,8 @@ class IncPopup extends IncPopupBase {
 			array( $this, 'show_popup' ),
 			10, 2
 		);
+
+		add_filter('script_loader_tag', array( $this, 'defer_specific_scripts'), 10, 2);
 	}
 
 	/**
@@ -352,6 +354,25 @@ class IncPopup extends IncPopupBase {
 			$code .= $item['html'];
 		}
 		echo $code;
+	}
+
+	/**
+	 * Defer specific scripts to prevent undefined errors.
+	 *
+	 * @since  4.8.0.1
+	 */
+	public function defer_specific_scripts($tag, $handle) {
+		$scripts = array(
+			'nf-front-end-deps',
+			'nf-front-end',
+		);
+
+		foreach($scripts as $script) {
+			if ($script === $handle) {
+				return str_replace(' src', ' defer="defer" src', $tag);
+    		}
+		}
+		return $tag;
 	}
 
 
