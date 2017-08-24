@@ -199,7 +199,7 @@ $ git config user.name "<your name>"
 
 1.) Switch to `master` branch.
 
-2.) Make sure the version number in **main plugin file** is correct and that the version in file `pacakge.json` matches the plugin version. (in package.json you have x.y.z format, so "1.2.3.4" becomes "1.2.34" here)
+2.) Make sure the version number in **main plugin file** is correct and that the version in file `package.json` matches the plugin version. (in package.json you have x.y.z format, so "1.2.3.4" becomes "1.2.34" here)
 
 3.) Then run `grunt build` (or `grunt build:pro` / free). This will create a .zip archive of the release files and update the `popup-pro`/`-free` branches.
 

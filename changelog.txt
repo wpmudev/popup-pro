@@ -4,6 +4,14 @@ Author: Philipp Stracker (Incsub), Barry (Incsub), Marko Miljus (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 
+4.8.0.1
+----------------------------------------------------------------------
+- Fix issue with submitting forms.
+- Fix undefined constant error PO_LANG.
+- Remove editor role's ability to see UI for popup editing (role requirements can be changed
+manually).
+- Defer Ninja Forms scripts to prevent JS errors when placed within popups.
+
 4.8.0.0
 ----------------------------------------------------------------------
 - Improve the popup javascript to display popups.
